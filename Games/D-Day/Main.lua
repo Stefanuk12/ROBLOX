@@ -126,8 +126,11 @@ if not getgenv().bypassAC2 then
     end)
     mt.__namecall = newcclosure(function(...)
         local method = getnamecallmethod()
-        if tostring(method) == 'GetRealPhysicsFPS' then
+        if method == 'GetRealPhysicsFPS' then
             return 71
+        end
+        if method == "Destroy" and args[1] == Character.Head then
+            return nil
         end
         return backupnamecall(...)
     end)
@@ -143,7 +146,6 @@ getgenv().TeleportDDay = function(cfr)
         wait()
     end
 end
-getgenv().TeleportDDay(CFrame.new(0, 0, 0))
 --[[ //
 
 for i,v in pairs(getgc()) do 
