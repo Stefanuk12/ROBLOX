@@ -130,8 +130,11 @@ if not getgenv().bypassAC2 then
     end)
     mt.__namecall = newcclosure(function(...)
         local method = getnamecallmethod()
-        if tostring(method) == 'GetRealPhysicsFPS' then
+        if method == 'GetRealPhysicsFPS' then
             return 71
+        end
+        if method == 'Destroy' and args[1] == char.Head then
+            return nil
         end
         return backupnamecall(...)
     end)
