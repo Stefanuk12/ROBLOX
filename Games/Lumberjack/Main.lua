@@ -23,7 +23,7 @@ local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
 setreadonly(mt, false)
 
--- // Anti Kick + Anti Freeze
+-- // Anti Kick
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
 mt.__namecall = newcclosure(function(...)
@@ -31,12 +31,6 @@ mt.__namecall = newcclosure(function(...)
     local args = {...}
     if string.lower(method) == "kick" then
         return nil
-    end
-    if method == "FireServer" then
-        if tostring(args[1]) == "FreezeChar" and args[2] == LocalPlayer then
-            backupnamecall(ARemoteEvents["ThawChar"], LocalPlayer)
-            return nil
-        end
     end
     return backupnamecall(...)
 end)
