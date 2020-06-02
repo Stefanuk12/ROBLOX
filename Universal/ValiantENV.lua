@@ -39,7 +39,7 @@ function valiantENV()
         "TestService",
         "PolicyService",
         "RbxAnalyticsService",
-        "VirtualUser"
+        "VirtualUser",
     }
 
     local exploitlist = {
@@ -61,7 +61,7 @@ function valiantENV()
     end
     for i,v in pairs(Valiant.Services) do
         local ServiceName = tostring(v):gsub(" ","")
-        getgenv()[vServiceName] = v
+        getgenv()[ServiceName] = v
     end
 
     -- // Valiant ENV: Exploit Check
