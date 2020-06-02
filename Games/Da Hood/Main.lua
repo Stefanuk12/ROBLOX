@@ -139,7 +139,7 @@ local function removeAnimationSlowdowns()
     Character:WaitForChild("BodyEffects").Movement.DescendantAdded:Connect(function(descendant)
         wait()
         descendant:Destroy()
-    end
+    end)
 end
 
 local function removeRagdolls()
