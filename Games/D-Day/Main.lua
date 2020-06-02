@@ -114,16 +114,16 @@ bypassACPart1()
 
 if not getgenv().bypassAC2 then
     mt.__newindex = newcclosure(function(t, i, v)
-        if humspoof[i] then
+        if getgenv().DDayHax.SpoofedValues[i] then
             return backupnewindex(t, i, getgenv().DDayHax.SpoofedValues[tostring(i)]["Spoof"])
         end
         return backupnewindex(t, i, v)
     end)
 
     mt.__index = newcclosure(function(t, k)
-        if t == hrp and tostring(k) == "Anchored" then
+        if t == game:GetService("Players").LocalPlayer.Character.HumanoidRootPart and tostring(k) == "Anchored" then
             return false
-        elseif t == humanoid and tostring(k) == 'PlatformStand' then
+        elseif t == game:GetService("Players").LocalPlayer.Character.Humanoid and tostring(k) == 'PlatformStand' then
             return false
         end
         if getgenv().DDayHax.SpoofedValues[tostring(k)] then
