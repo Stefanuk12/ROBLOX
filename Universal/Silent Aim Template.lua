@@ -62,7 +62,7 @@ function checkTable(Item, Table)
 	return Passed
 end
 
-local getClosestPlayerToCursor = function()
+local function getClosestPlayerToCursor()
     local ClosestPlayer = nil
     local Chance = math.chance(AimHacks["HitChance"])
     local ShortestDistance = math.huge
