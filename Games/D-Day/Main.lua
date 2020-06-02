@@ -16,14 +16,6 @@ local humanoid = char.WaitForChild(char, "Humanoid")
 local hrp = char.WaitForChild(char, "HumanoidRootPart")
 setreadonly(mt, false)
 getgenv().humspoof = {
-    ["Health"] = {
-		["Spoof"] = 150,
-		["Def"] = 100,
-	},
-    ["MaxHealth"] = {
-		["Spoof"] = 150,
-		["Def"] = 100,
-	},
     ["WalkSpeed"] = {
 		["Spoof"] = 30,
 		["Def"] = 16
