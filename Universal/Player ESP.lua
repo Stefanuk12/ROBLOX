@@ -1,5 +1,5 @@
 -- // Valiant ENV
-loadstring(game.HttpGet(game, "https://pastebin.com/raw/MWss4FBj", true))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
 
 -- // Vars
 local ValiantESP = {}
