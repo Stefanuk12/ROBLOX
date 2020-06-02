@@ -1,42 +1,38 @@
--- // Game: https://www.roblox.com/games/901793731
+local reps = game.GetService(game, "ReplicatedStorage")
+local weapons = reps.Weapons  
+local clientbullet = reps.Modules.Client["Client_Bullet"]
 
--- // Valiant ENV
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
-
--- // Vars
-local RenderStepped = RunService.RenderStepped
-local Heartbeat = RunService.Heartbeat
-local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
-local Humanoid = Character.WaitForChild(Character, "Humanoid")
-local CurrentCamera = Workspace.CurrentCamera
-local Mouse = LocalPlayer.GetMouse(LocalPlayer)
-local Weapons = ReplicatedStorage.Weapons
-local ClientBullet = ReplicatedStorage.Modules.Client["Client_Bullet"]
-
--- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
 local backupnamecall = mt.__namecall
 local backupnewindex = mt.__newindex
-local backupindex = mt.__index 
+local backupindex = mt .__index
+local localplayer = game.GetService(game, "Players").LocalPlayer
+local char = localplayer.Character or localplayer.CharacterAdded.wait(localplayer.CharacterAdded)
+local humanoid = char.WaitForChild(char, "Humanoid")
+local hrp = char.WaitForChild(char, "HumanoidRootPart")
 setreadonly(mt, false)
-
-getgenv().DDayHax = {}
-DDayHax.SpoofedValues = {
-    Walkspeed = {
-        Spoof = 30,
-        Default = 16,
-    },
-    JumpPower = {
-        Spoof = 50,
-        Default = 50,
-    },
+getgenv().humspoof = {
+    ["Health"] = {
+		["Spoof"] = 150,
+		["Def"] = 100,
+	},
+    ["MaxHealth"] = {
+		["Spoof"] = 150,
+		["Def"] = 100,
+	},
+    ["WalkSpeed"] = {
+		["Spoof"] = 30,
+		["Def"] = 16
+	},
+    ["JumpPower"] = {
+		["Spoof"] = 50,
+		["Def"] = 50
+	},
 }
 
--- // Bypassing the Anti Cheat
-
-local function bypassACPart1()
-    for i,v in pairs(Weapons:GetChildren()) do
+-- // AC Bypass
+local function bypassAC1()
+    for i,v in pairs(weapons:GetChildren()) do
         for _,connection in pairs(getconnections(v.ChildAdded)) do 
             connection:Disable()
         end
@@ -77,8 +73,8 @@ local function bypassACPart1()
         end
     end
 
-    local map = Workspace.Map
-    local veggie = Workspace.Vegetation
+    local map = game.GetService(game, "Workspace").Map
+    local veggie = game.GetService(game, "Workspace").Vegetation
     for _, connection in pairs(getconnections(map.AncestryChanged)) do
         connection:Disable()
     end
@@ -110,46 +106,69 @@ local function bypassACPart1()
     print('AC Part 1: Done!')
     return true
 end
-bypassACPart1()
-
+bypassAC1()
 if not getgenv().bypassAC2 then
+
     mt.__newindex = newcclosure(function(t, i, v)
-        if getgenv().DDayHax.SpoofedValues[i] then
-            return backupnewindex(t, i, getgenv().DDayHax.SpoofedValues[tostring(i)]["Spoof"])
+        if humspoof[i] then
+            return backupnewindex(t, i, getgenv().humspoof[tostring(i)]["Spoof"])
         end
         return backupnewindex(t, i, v)
     end)
 
     mt.__index = newcclosure(function(t, k)
-        if t == game:GetService("Players").LocalPlayer.Character.HumanoidRootPart and tostring(k) == "Anchored" then
+        if t == hrp and tostring(k) == "Anchored" then
             return false
-        elseif t == game:GetService("Players").LocalPlayer.Character.Humanoid and tostring(k) == 'PlatformStand' then
+        elseif t == humanoid and tostring(k) == 'PlatformStand' then
             return false
         end
-        if getgenv().DDayHax.SpoofedValues[tostring(k)] then
-            return getgenv().DDayHax.SpoofedValues[k]["Def"]
+        if getgenv().humspoof[tostring(k)] then
+            return getgenv().humspoof[k]["Def"]
         end
 
         return backupindex(t, k)
     end)
     mt.__namecall = newcclosure(function(...)
         local method = getnamecallmethod()
-        if method == 'GetRealPhysicsFPS' then
+        if tostring(method) == 'GetRealPhysicsFPS' then
             return 71
-        end
-        if method == "Destroy" and args[1] == Character.Head then
-            return nil
         end
         return backupnamecall(...)
     end)
     print('AC Part 2 done!')
     getgenv().bypassAC2 = true
 end
-
-function TeleportDDay(cfr)
-    local hrp = Character.WaitForChild(Character, "HumanoidRootPart")
+getgenv().TeleportDDay = function(cfr)
+    local localplayer = game.GetService(game, "Players").LocalPlayer
+    local char = localplayer.Character or localplayer.CharacterAdded.wait(localplayer.CharacterAdded)
+    local hrp = char.WaitForChild(char, "HumanoidRootPart")
     for i = 0, 1, 0.1 do
         hrp.CFrame = hrp.CFrame:lerp(cfr, i)
         wait()
     end
 end
+getgenv().TeleportDDay(CFrame.new(0, 0, 0))
+--[[ //
+
+for i,v in pairs(getgc()) do 
+    if getfenv(v).script == clientbullet then 
+		for a,x in pairs(debug.getconstants(v)) do 
+            print(a, x)
+            
+			if tostring(x) == "Actual_Helmet" then
+				debug.setconstant(v, a, "no")
+			end
+		end
+		for a,x in pairs(weapons:GetDescendants()) do 
+			if x:IsA("ModuleScript") then 
+                local req = require(x)
+                req.ReloadTime = 0
+				IdleAnimationSpeed = 100
+				FireAnimationSpeed = 100
+				BoltAnimationSpeed = 100
+				ReloadAnimationSpeed = 100
+			end
+		end
+	end
+end
+]]
