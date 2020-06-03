@@ -30,10 +30,10 @@ DDayHax.SpoofedValues = {
 }
 
 DDayHax.Connections = {
-    LocalPlayer.PlayerScripts["Client_Second"].AncestryChanged = true,
-    LocalPlayer.PlayerScripts["Client_Second"].Changed = true,
-    Map.AncestryChanged = true,
-    Vegetation.AncestryChanged = true,
+    LocalPlayer.PlayerScripts["Client_Second"].AncestryChanged,
+    LocalPlayer.PlayerScripts["Client_Second"].Changed,
+    Map.AncestryChanged,
+    Vegetation.AncestryChanged,
 }
 
 
@@ -63,7 +63,7 @@ for i,v in pairs(Weapons:GetChildren()) do
 end
 
 for i,v in pairs(DDayHax.Connections) do
-    disableConnections(i)
+    disableConnections(v)
 end
 
 for _,connection in pairs(getconnections(LocalPlayer.PlayerGui.ChildAdded)) do
