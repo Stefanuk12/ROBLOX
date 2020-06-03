@@ -125,5 +125,3 @@ if not DDayHax.Part2 then
     end)
     DDayHax.Part2 = true
 end
-
-
