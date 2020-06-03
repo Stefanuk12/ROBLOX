@@ -39,7 +39,6 @@ function valiantENV()
         "TestService",
         "PolicyService",
         "RbxAnalyticsService",
-        "VirtualUser",
     }
 
     local exploitlist = {
