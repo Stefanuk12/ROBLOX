@@ -38,7 +38,7 @@ getgenv().AimHacks = {
 
 -- // Show FOV
 local circle = Drawing.new("Circle")
-function updateCircle()
+function AimHacks.updateCircle()
     if circle then
         circle.Transparency = 1
         circle.Visible = AimHacks["ShowFOV"]
@@ -56,7 +56,7 @@ setreadonly(math, false); math.chance = function(percentage) local percentage = 
 setreadonly(table, false); table.loopforeach = function(tbl, func) for index, value in pairs(tbl) do if type(value) == 'table' then table.loopforeach(value, func); elseif type(value) == 'function' then table.loopforeach(debug.getupvalues(value)); else func(index, value); end; end; end; setreadonly(table, true);
 
 -- // Silent Aim Function
-local function getClosestPlayerToCursor()
+local function AimHacks.getClosestPlayerToCursor()
     local ClosestPlayer = nil
     local Chance = math.chance(AimHacks["HitChance"])
     local ShortestDistance = math.huge
@@ -113,32 +113,10 @@ end
 
 -- // Heartbeat Function
 local HBFuncs = function()
-    updateCircle()
-    getClosestPlayerToCursor()
+    AimHacks.updateCircle()
+    AimHacks.getClosestPlayerToCursor()
 end
 Heartbeat.Connect(Heartbeat, HBFuncs)
-
--- // Silent Aim 
---[[
-mt.__index = newcclosure(function(t, k)
-    if t:IsA("Mouse") and AimHacks["SilentAimEnabled"] and (AimHacks["Selected"] ~= game:GetService("Players").LocalPlayer) and (tostring(k) == "Hit" or tostring(k) == "Target") then
-		local CPlayer = AimHacks["Selected"] 
-		return (tostring(k) == "Target" and CPlayer.Character.Head or CPlayer.Character.Head.CFrame)	
-	end
-    return backupindex(t, k)
-end)
-]]
---[[
-mt.__namecall = newcclosure(function(...)
-    local args = {...}
-    if tostring(args[1]) == "RenderBull" and AimHacks["Selected"] ~= LocalPlayer then
-        local CPlayer = AimHacks["Selected"]
-        args[2] = CPlayer.Character.Head.Position
-        args[3] = CPlayer.Character.Head.Position
-       	return backupnamecall(unpack(args))
-    end
-    return backupnamecall(...)
-end)
-]]
-
 setreadonly(mt, true)
+
+return AimHacks
