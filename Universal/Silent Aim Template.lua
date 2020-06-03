@@ -83,8 +83,16 @@ local function getClosestPlayerToCursor()
         end
         return false
     end
+    function checkPlayer(targetPlayer)
+        for i,v in pairs(AimHacks.BlacklistedPlayers) do
+            if v ~= targetPlayer then
+                return true
+            end
+        end
+        return false
+    end
     for _,plr in pairs(Players.GetPlayers(Players)) do
-        if plr ~= LocalPlayer and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
+        if checkPlayer(plr) and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
             if (AimHacks["TeamCheck"] and not checkTeam(LocalPlayer, plr)) then break end
             local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
