@@ -21,11 +21,11 @@ getgenv().DDayHax = {}
 DDayHax.SpoofedValues = {
     ["WalkSpeed"] = {
 		["Spoof"] = 30,
-		["Def"] = 16
+		["Default"] = 16
 	},
     ["JumpPower"] = {
 		["Spoof"] = 50,
-		["Def"] = 50
+		["Default"] = 50
 	},
 }
 
