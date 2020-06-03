@@ -28,7 +28,7 @@ getgenv().AimHacks = {
     HitChance = 100,
     Selected = LocalPlayer,
     BlacklistedPlayers = {game:GetService("Players").LocalPlayer.Name},
-    BlacklistedTeams = {tostring(game:GetService("Players").LocalPlayer.Team)},
+    BlacklistedTeams = {game:GetService("Players").LocalPlayer.Team},
 }
 
 -- // Show FOV
@@ -53,7 +53,6 @@ setreadonly(table, false); table.loopforeach = function(tbl, func) for index, va
 -- // Silent Aim Function
 function checkTable(Item, Table)
     local Passed = false
-    if type(Item) ~= "string" then Item = tostring(Item) end
 	for i,v in pairs(Table) do 
 		if Table[i] then 
 			Passed = true
@@ -81,7 +80,7 @@ local function getClosestPlayerToCursor()
     end
     for _,plr in pairs(Players.GetPlayers(Players)) do
         if plr ~= LocalPlayer and plr.Character and plr.Character.FindFirstChild(plr.Character, "Humanoid") and plr.Character.Humanoid.Health > 0 and not checkTable(plr.Name, AimHacks["BlacklistedPlayers"]) then
-            if (AimHacks["TeamCheck"] and plr.Team ~= LocalPlayer.Team and not checkTable(tostring(plr.Team), AimHacks["BlacklistedTeams"])) then
+            if (AimHacks["TeamCheck"] and plr.Team ~= LocalPlayer.Team and not checkTable(plr.Team), AimHacks["BlacklistedTeams"])) then
                 local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
                 local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
                 if (Magnitude < (AimHacks["FOV"] * 6 - 8)) and (Magnitude < ShortestDistance) then
