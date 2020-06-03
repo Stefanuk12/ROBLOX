@@ -1,3 +1,5 @@
+-- made with crishoux's esp module
+
 -- // Valiant ENV
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
 
