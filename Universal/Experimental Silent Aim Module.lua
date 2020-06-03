@@ -118,5 +118,3 @@ local HBFuncs = function()
 end
 Heartbeat.Connect(Heartbeat, HBFuncs)
 setreadonly(mt, true)
-
-return AimHacks
