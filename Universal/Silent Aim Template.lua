@@ -33,7 +33,7 @@ getgenv().AimHacks = {
             TeamColor = LocalPlayer.TeamColor,
         },
     },
-    BlacklistedPlayers = {game:GetService("Players").LocalPlayer.Name},
+    BlacklistedPlayers = {game:GetService("Players").LocalPlayer},
 }
 
 -- // Show FOV
