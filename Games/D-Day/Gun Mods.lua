@@ -14,6 +14,25 @@ local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 local GetCameraAim = ReplicatedStorage.Modules.Client["Get_Camera_Aim"]
 local backupweapons = ReplicatedStorage.Weapons.Clone(ReplicatedStorage.Weapons)
 getgenv().DDayHax = {}
+if not DDayHax.WeaponSpoof then 
+    DDayHax.BackupWeapons = ReplicatedStorage.Weapons.Clone(ReplicatedStorage.Weapons)
+    if not DDayHax.WeaponSpoof then
+        mt.__namecall = newcclosure(function(...)
+            local method = getnamecallmethod()
+            local args = {...}
+            if method == "FireServer" and tostring(args[1]) == "Attempt_Fire" then
+                local req = require(DDayHax.BackupWeapons[args[2].Name]["Setting"])
+                args[9] = req["AmmoPerClip"] 
+                args[10] = req["AmmoPerClip"] 
+                args[11] = req["FireRate"] 
+                return backupnamecall(unpack(args))
+            end
+            
+            return backupnamecall(...)
+        end)
+        DDayHax.WeaponSpoof = true
+    end
+end
 DDayHax.SpoofValuesForWeapon = {
     FireRate = 0.07, -- doesnt actually register
     ReloadTime = 0,
@@ -33,31 +52,15 @@ local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
 setreadonly(mt, false)
 
-if not DDayHax.WeaponSpoof then
-    for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
-        if v:IsA("ModuleScript") then
-            local req = require(v)
-            for a,x in pairs(DDayHax.SpoofValuesForWeapon) do
-                if req[a] then
-                    req[a] = x
-                    print(req[a].." = "..x)
-                end
+
+for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
+    if v:IsA("ModuleScript") then
+        local req = require(v)
+        for a,x in pairs(DDayHax.SpoofValuesForWeapon) do
+            if req[a] then
+                req[a] = x
+                print(req[a].." = "..x)
             end
         end
     end
-
-    mt.__namecall = newcclosure(function(...)
-        local method = getnamecallmethod()
-        local args = {...}
-        if method == "FireServer" and tostring(args[1]) == "Attempt_Fire" then
-            local req = require(backupweapons[args[2].Name]["Setting"])
-            args[9] = req["AmmoPerClip"] 
-            args[10] = req["AmmoPerClip"] 
-            args[11] = req["FireRate"] 
-            return backupnamecall(unpack(args))
-        end
-        
-        return backupnamecall(...)
-    end)
-    DDayHax.WeaponSpoof = true
 end
