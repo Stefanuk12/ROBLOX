@@ -48,6 +48,7 @@ function AimHacks.updateCircle()
         circle.Radius = (AimHacks["FOV"] * 6) / 2
         circle.Filled = false
         circle.Position = Vector2.new(Mouse.X, Mouse.Y + (GuiService.GetGuiInset(GuiService).Y))
+        return circle
     end
 end
 
@@ -56,7 +57,7 @@ setreadonly(math, false); math.chance = function(percentage) local percentage = 
 setreadonly(table, false); table.loopforeach = function(tbl, func) for index, value in pairs(tbl) do if type(value) == 'table' then table.loopforeach(value, func); elseif type(value) == 'function' then table.loopforeach(debug.getupvalues(value)); else func(index, value); end; end; end; setreadonly(table, true);
 
 -- // Silent Aim Function
-local function AimHacks.getClosestPlayerToCursor()
+function AimHacks.getClosestPlayerToCursor()
     local ClosestPlayer = nil
     local Chance = math.chance(AimHacks["HitChance"])
     local ShortestDistance = math.huge
