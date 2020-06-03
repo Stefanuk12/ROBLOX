@@ -92,7 +92,7 @@ end
 
 -- // Disable Functions
 for i,v in ipairs(getgc()) do
-    if debug.getinfo(v).name == "DetectBodyStuff" then
+    if debug.getinfo(v).name == "DetectBodyStuff" or debug.getinfo(v).name == "AnotherLayer" then
         hookfunction(v, function() return end)
     end
 
@@ -121,10 +121,6 @@ if not DDayHax.Part2 then
         if method == 'GetRealPhysicsFPS' then
             return 71
         end
-        if method == "Destroy" and args[1] == Character.Head then
-            return nil
-        end
-
         return backupnamecall(...)
     end)
     DDayHax.Part2 = true
