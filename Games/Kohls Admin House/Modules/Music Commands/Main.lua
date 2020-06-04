@@ -17,8 +17,8 @@ end
 
 function updateMusicTable()
 	for i,v in pairs(musicTable) do
-		if testContentDeleted(musicTable[i].SoundId) == false then
-			musicTable[i] = nil
+		if testContentDeleted(v.SoundId) == false then
+			v = nil
 		end
 	end
 end
@@ -51,7 +51,7 @@ end
 function playMusic(num)
     updateMusicTable()
     if musicTable[num] then
-        game:GetService("Players"):Chat(":music ".. tostring(musicTable[num].SoundId))
+        game:GetService("Players"):Chat(":music ".. musicTable[num].SoundId)
         print('Now playing:', musicTable[num].Name)
         return musicTable[num].Name
     end
@@ -59,12 +59,8 @@ end
 
 function getMusic()
     updateMusicTable()
-
-    for i=1, #musicTable do
-        if musicTable[i] then
-            wait()
-            print(i, "|", musicTable[i].Name)
-        end
+    for i,v in pairs(musicTable) do
+        print(i, "|", v.Name)
     end
 end
 
