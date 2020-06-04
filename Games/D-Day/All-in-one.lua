@@ -24,11 +24,9 @@ if not DDayHax.WeaponSpoof then
 end
 DDayHax.SpoofedValues = {
     ["WalkSpeed"] = {
-		["Spoof"] = 30,
 		["Default"] = 16
 	},
     ["JumpPower"] = {
-		["Spoof"] = 50,
 		["Default"] = 50
 	},
 }
