@@ -16,11 +16,12 @@ local Weapons = ReplicatedStorage.Weapons
 local ClientBullet = ReplicatedStorage.Modules.Client["Client_Bullet"]
 local Map = Workspace.Map
 local Vegetation = Workspace.Vegetation
-if not DDayHax.WeaponSpoof then 
-    DDayHax.BackupWeapons = ReplicatedStorage.Weapons.Clone(ReplicatedStorage.Weapons)
-end
 
 getgenv().DDayHax = {}
+if not DDayHax.WeaponSpoof then 
+    DDayHax.BackupWeapons = ReplicatedStorage.Weapons.Clone(ReplicatedStorage.Weapons)
+    print('Made Weapon Spoof.')
+end
 DDayHax.SpoofedValues = {
     ["WalkSpeed"] = {
 		["Spoof"] = 30,
@@ -32,7 +33,7 @@ DDayHax.SpoofedValues = {
 	},
 }
 DDayHax.SpoofValuesForWeapon = {
-    FireRate = 0.07, -- doesnt actually register
+    FireRate = 0.07,
     ReloadTime = 0,
     Spread = 0,
     ReloadTime = 0,
@@ -121,11 +122,10 @@ for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
         for a,x in pairs(DDayHax.SpoofValuesForWeapon) do
             if req[a] then
                 req[a] = x
-                print(req[a].." = "..x)
             end
         end
     end
-end#
+end
 
 -- // Anti Mine
 for i,v in pairs(Workspace:GetDescendants()) do
@@ -135,8 +135,8 @@ for i,v in pairs(Workspace:GetDescendants()) do
 end
 
 -- // MT Stuff
-if not DDayHax.Part2 then
-    mt.__index = newcclosure(function(t, k)
+mt.__index = newcclosure(function(t, k)
+    if not DDayHax.Part2 then
         if t == HumanoidRootPart and k == "Anchored" then
             return false
         elseif t == Humanoid and k == "PlatformStand" then
@@ -145,27 +145,27 @@ if not DDayHax.Part2 then
         if DDayHax.SpoofedValues[k] then
             return DDayHax.SpoofedValues[k]["Default"]
         end
+    end
+    return backupindex(t, k)
+end)
 
-        return backupindex(t, k)
-    end)
 
-    mt.__namecall = newcclosure(function(...)
-        local method = getnamecallmethod()
-        if method == 'GetRealPhysicsFPS' then
-            return 71
+mt.__namecall = newcclosure(function(...)
+    local method = getnamecallmethod()
+    local args = {...}
+    if method == 'GetRealPhysicsFPS' then
+        return 71
+    end
+    if method == "FireServer" then
+        if tostring(args[1]) == "Attempt_Fire" and not DDayHax["WeaponSpoof"] then
+            local req = require(DDayHax.BackupWeapons[args[2].Name]["Setting"])
+            args[9] = req["AmmoPerClip"] 
+            args[10] = req["AmmoPerClip"] 
+            args[11] = req["FireRate"] 
+            return backupnamecall(unpack(args))
         end
-        if method == "FireServer" then
-            if tostring(args[1]) == "Attempt_Fire" and not DDayHax.WeaponSpoof then
-                local req = require(DDayHax.BackupWeapons[args[2].Name]["Setting"])
-                args[9] = req["AmmoPerClip"] 
-                args[10] = req["AmmoPerClip"] 
-                args[11] = req["FireRate"] 
-                return backupnamecall(unpack(args))
-            end
-        end
-        return backupnamecall(...)
-    end)
-    DDayHax.Part2 = true
-end
-
+    end
+    return backupnamecall(...)
+end)
+DDayHax.Part2 = true
 DDayHax.WeaponSpoof = true
