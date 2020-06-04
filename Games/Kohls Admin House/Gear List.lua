@@ -23,7 +23,7 @@ Player.Chatted:Connect(function(msg)
     end
     for i,v in pairs(gearList) do
         if string.match(msg, prefix) and string.match(msg, i) then
-            Players:Chat(tostring(":gear", splitmessage[2], v))
+            Players:Chat(":gear "..splitmessage[2].." "..v)
         end
     end
 end)
