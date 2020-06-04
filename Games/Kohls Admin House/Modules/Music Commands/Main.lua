@@ -1,0 +1,2 @@
+local MusicTable = game:HttpGetAsync("https://github.com/Stefanuk12/ROBLOX/tree/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.js")
+local MusicTable = game:JSONDecode(MusicTable)
