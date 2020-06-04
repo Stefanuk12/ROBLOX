@@ -1,4 +1,15 @@
--- Game: https://roblox.com/games/5061412825
+--[[
+    Game: https://roblox.com/games/5061412825
+
+    Features:
+    > AC Bypass
+    > Anti Kick
+    > Anti Mine
+    > Gun Mods
+    
+    Coming Soon: 
+    > Silent Aim
+]]
 
 -- // Valiant ENV
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
