@@ -34,7 +34,6 @@ if not DDayHax.WeaponSpoof then
     end
 end
 DDayHax.SpoofValuesForWeapon = {
-    FireRate = 0.07, -- doesnt actually register
     ReloadTime = 0,
     Spread = 0,
     ReloadTime = 0,

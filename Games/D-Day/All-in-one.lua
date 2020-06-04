@@ -32,7 +32,6 @@ DDayHax.SpoofedValues = {
 }
 
 DDayHax.SpoofValuesForWeapon = {
-    FireRate = 0.07,
     ReloadTime = 0,
     Spread = 0,
     ReloadTime = 0,
