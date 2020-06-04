@@ -56,3 +56,5 @@ function getMusic()
         print("You can play", namex, "- Index =", i)
     end
 end
+
+print(getMusic())
