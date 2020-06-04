@@ -1,1 +1,3 @@
-[{}]
+[
+    {"Name": "Placeholder", "SoundId": "Placeholder"},
+]
