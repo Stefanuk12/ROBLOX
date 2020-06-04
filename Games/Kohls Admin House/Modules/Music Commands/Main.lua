@@ -1,5 +1,5 @@
-local musicTable = game:GetService('HttpService'):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.js'))
 
+local musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
 function testContentDeleted(songid)
 	local sound = Instance.new("Sound", game:GetService("Lighting"))
 	sound.SoundId = "rbxassetid://"..songid
@@ -48,13 +48,47 @@ function removeMusicTable(Index)
     table.remove(musicTable, Index)
 end
 
-function getMusic()
+function playMusic(num)
     updateMusicTable()
-
-	for i=1, #musicTable do
-        local namex = musicTable[i].Name
-        print(i, "|", namex)
+    if musicTable[num] then
+        game:GetService("Players"):Chat(":music ".. tostring(musicTable[num].SoundId))
+        print('Now playing:', musicTable[num].Name)
+        return musicTable[num].Name
     end
 end
 
-getMusic()
+function getMusic()
+    updateMusicTable()
+
+    for i=1, #musicTable do
+        if musicTable[i] then
+            wait()
+            print(i, "|", musicTable[i].Name)
+        end
+    end
+end
+
+local prefix = ":"
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+    if string.sub(msg, 1, 6) == (prefix.."play ") then
+        if musicTable[tonumber(string.sub(msg, 7))] then
+            playMusic(tonumber(string.sub(msg, 7)))
+        end
+    end
+end)
+
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+    if string.sub(msg, 1) == (prefix.."getmusic") then
+        getMusic()
+    end
+end)
+
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+    if string.sub(msg, 1) == (prefix.."getmusichelp") then
+        print([[*Make sure you have admin*
+        
+            :getmusic - gets all of the playable music
+            :play [number] - plays a certain song from the playable music list
+        ]])
+    end
+end)
