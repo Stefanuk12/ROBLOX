@@ -126,11 +126,17 @@ for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
 end
 
 -- // Anti Mine
-for i,v in pairs(Workspace:GetDescendants()) do
-    if v:IsA("TouchTransmitter") and (v.Parent.Name == "Static_Landmine" or v.Parent.Name == "Land Mine") then
+for i,v in pairs(Map:GetChildren()) do
+    if (v.Name == "Static_Landmine" or v.Name == "Land Mine") then
         v:Destroy()
     end
 end
+Map.DescendantAdded:Connect(function(Descendant)
+    if (Descendant.Name == "Static_Landmine" or Descendant.Name == "Land Mine") then
+        v:Destroy()
+    end
+end)
+
 
 -- // MT Stuff
 mt.__index = newcclosure(function(t, k)
