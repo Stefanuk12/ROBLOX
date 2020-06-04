@@ -1,4 +1,4 @@
-local musicTable = game:GetService('HttpService'):JSONDecode(game:HttpGetAsync('https://github.com/Stefanuk12/ROBLOX/blob/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.js'))
+local musicTable = game:GetService('HttpService'):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.js'))
 
 function testContentDeleted(songid)
 	local sound = Instance.new("Sound", game:GetService("Lighting"))
@@ -52,9 +52,9 @@ function getMusic()
     updateMusicTable()
 
 	for i=1, #musicTable do
-		local namex = musicTable[i].Name
-        print("You can play", namex, "- Index =", i)
+        local namex = musicTable[i].Name
+        print(i, "|", namex)
     end
 end
 
-print(getMusic())
+getMusic()
