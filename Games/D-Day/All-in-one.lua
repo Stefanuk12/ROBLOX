@@ -115,7 +115,7 @@ function disableACPart1()
     end
 end
 disableACPart1()
-Character.CharacterAdded:Connect(disableACPart1)
+LocalPlayer.CharacterAdded:Connect(disableACPart1)
 
 -- // Gun Mods
 for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
@@ -166,11 +166,11 @@ mt.__namecall = newcclosure(function(...)
         return 71
     end
     if method == "FireServer" then
-        if tostring(args[1]) == "Attempt_Fire" and not DDayHax["WeaponSpoof"] then
+        if tostring(args[1]) == "Attempt_Fire" then
             local req = require(DDayHax.BackupWeapons[args[2].Name]["Setting"])
             args[9] = req["AmmoPerClip"] 
             args[10] = req["AmmoPerClip"] 
-            args[11] = req["FireRate"] 
+            args[11] = req["FireRate"]
             return backupnamecall(unpack(args))
         end
     end
