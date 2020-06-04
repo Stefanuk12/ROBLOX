@@ -141,6 +141,10 @@ Map.DescendantAdded:Connect(function(Descendant)
     end
 end)
 
+-- // Anti Kick
+hookfunction(LocalPlayer.Kick, warn)
+hookfunction(LocalPlayer.kick, warn)
+
 -- // MT Stuff
 if not DDayHax.Part2 then
     mt.__index = newcclosure(function(t, k)
@@ -172,6 +176,9 @@ mt.__namecall = newcclosure(function(...)
             args[11] = req["FireRate"]
             return backupnamecall(unpack(args))
         end
+    end
+    if string.lower(method) == "kick" then
+        return nil
     end
     return backupnamecall(...)
 end)

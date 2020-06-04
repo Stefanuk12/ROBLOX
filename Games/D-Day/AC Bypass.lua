@@ -103,6 +103,8 @@ disableACPart1()
 Character.CharacterAdded:Connect(disableACPart1)
 
 -- // MT Stuff
+hookfunction(LocalPlayer.Kick, warn)
+hookfunction(LocalPlayer.kick, warn)
 if not DDayHax.Part2 then
     mt.__index = newcclosure(function(t, k)
         if t == HumanoidRootPart and k == "Anchored" then
@@ -121,6 +123,9 @@ if not DDayHax.Part2 then
         local method = getnamecallmethod()
         if method == 'GetRealPhysicsFPS' then
             return 71
+        end
+        if string.lower(method) == "kick" then
+            return nil
         end
         return backupnamecall(...)
     end)
