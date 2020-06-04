@@ -1,6 +1,7 @@
 
 local musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
 function testAllSounds()
+    print('--~~--Commencing Audio Testing--~~--')
     for i,v in pairs(musicTable) do
         local Sound = Instance.new("Sound", game:GetService("Lighting"))
         Sound.SoundId = v.SoundId
@@ -11,6 +12,7 @@ function testAllSounds()
         end
         Sound:Destroy()
     end
+    print('--~~--Audio Testing Finished!--~~--')
 end
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
