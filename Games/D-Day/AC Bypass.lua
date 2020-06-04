@@ -42,62 +42,65 @@ local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
 setreadonly(mt, false)
 
-
-function disableConnections(connection)
-    for _,v in pairs(getconnections(connection)) do
-        v:Disable()
+function disableACPart1()
+    function disableConnections(connection)
+        for _,v in pairs(getconnections(connection)) do
+            v:Disable()
+        end
     end
-end
 
--- // Disable AC Connections
-for i,v in pairs(Weapons:GetChildren()) do
-    disableConnections(v.ChildAdded)
+    -- // Disable AC Connections
+    for i,v in pairs(Weapons:GetChildren()) do
+        disableConnections(v.ChildAdded)
 
-    for _,x in pairs(v:GetChildren()) do
-        if x:IsA("ModuleScript") then
+        for _,x in pairs(v:GetChildren()) do
+            if x:IsA("ModuleScript") then
+                disableConnections(v.AncestryChanged)
+            end
+        end
+    end
+
+    for i,v in pairs(DDayHax.Connections) do
+        disableConnections(v)
+    end
+
+    for _,connection in pairs(getconnections(LocalPlayer.PlayerGui.ChildAdded)) do
+        for i,v in pairs(debug.getconstants(connection.Function)) do
+            if tostring(v) == 'DDAY' then
+                connection:Disable()
+            end
+        end
+    end
+
+    for i,v in pairs(Map:GetChildren()) do
+        if v.Name == "Sandbags" then
             disableConnections(v.AncestryChanged)
         end
-    end
-end
-
-for i,v in pairs(DDayHax.Connections) do
-    disableConnections(v)
-end
-
-for _,connection in pairs(getconnections(LocalPlayer.PlayerGui.ChildAdded)) do
-    for i,v in pairs(debug.getconstants(connection.Function)) do
-        if tostring(v) == 'DDAY' then
-            connection:Disable()
+        for a,x in pairs(v:GetChildren()) do
+            if x:IsA("BasePart") then
+                disableConnections(x.AncestryChanged)
+                disableConnections(x.Changed)
+            end
         end
     end
-end
 
-for i,v in pairs(Map:GetChildren()) do
-    if v.Name == "Sandbags" then
+    for i,v in pairs(Vegetation:GetChildren()) do
         disableConnections(v.AncestryChanged)
     end
-    for a,x in pairs(v:GetChildren()) do
-        if x:IsA("BasePart") then
-            disableConnections(x.AncestryChanged)
-            disableConnections(x.Changed)
+
+    -- // Disable Functions
+    for i,v in ipairs(getgc()) do
+        if debug.getinfo(v).name == "DetectBodyStuff" or debug.getinfo(v).name == "AnotherLayer" then
+            hookfunction(v, function() return end)
+        end
+
+        if debug.getfenv(v).script ~= nil and debug.getfenv(v).script.Name == "_Client_Main_" then 
+            disableConnections(getfenv(v).script.AncestryChanged)
         end
     end
 end
-
-for i,v in pairs(Vegetation:GetChildren()) do
-    disableConnections(v.AncestryChanged)
-end
-
--- // Disable Functions
-for i,v in ipairs(getgc()) do
-    if debug.getinfo(v).name == "DetectBodyStuff" or debug.getinfo(v).name == "AnotherLayer" then
-        hookfunction(v, function() return end)
-    end
-
-    if debug.getfenv(v).script ~= nil and debug.getfenv(v).script.Name == "_Client_Main_" then 
-        disableConnections(getfenv(v).script.AncestryChanged)
-    end
-end
+disableACPart1()
+Character.CharacterAdded:Connect(disableACPart1)
 
 -- // MT Stuff
 if not DDayHax.Part2 then

@@ -30,6 +30,7 @@ DDayHax.SpoofedValues = {
 		["Default"] = 50
 	},
 }
+
 DDayHax.SpoofValuesForWeapon = {
     FireRate = 0.07,
     ReloadTime = 0,
@@ -48,7 +49,6 @@ DDayHax.Connections = {
     Vegetation.AncestryChanged,
 }
 
-
 -- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
 local backupnamecall = mt.__namecall
@@ -57,61 +57,65 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 
-function disableConnections(connection)
-    for _,v in pairs(getconnections(connection)) do
-        v:Disable()
+function disableACPart1()
+    function disableConnections(connection)
+        for _,v in pairs(getconnections(connection)) do
+            v:Disable()
+        end
     end
-end
 
--- // Disable AC Connections
-for i,v in pairs(Weapons:GetChildren()) do
-    disableConnections(v.ChildAdded)
+    -- // Disable AC Connections
+    for i,v in pairs(Weapons:GetChildren()) do
+        disableConnections(v.ChildAdded)
 
-    for _,x in pairs(v:GetChildren()) do
-        if x:IsA("ModuleScript") then
+        for _,x in pairs(v:GetChildren()) do
+            if x:IsA("ModuleScript") then
+                disableConnections(v.AncestryChanged)
+            end
+        end
+    end
+
+    for i,v in pairs(DDayHax.Connections) do
+        disableConnections(v)
+    end
+
+    for _,connection in pairs(getconnections(LocalPlayer.PlayerGui.ChildAdded)) do
+        for i,v in pairs(debug.getconstants(connection.Function)) do
+            if tostring(v) == 'DDAY' then
+                connection:Disable()
+            end
+        end
+    end
+
+    for i,v in pairs(Map:GetChildren()) do
+        if v.Name == "Sandbags" then
             disableConnections(v.AncestryChanged)
         end
-    end
-end
-
-for i,v in pairs(DDayHax.Connections) do
-    disableConnections(v)
-end
-
-for _,connection in pairs(getconnections(LocalPlayer.PlayerGui.ChildAdded)) do
-    for i,v in pairs(debug.getconstants(connection.Function)) do
-        if tostring(v) == 'DDAY' then
-            connection:Disable()
+        for a,x in pairs(v:GetChildren()) do
+            if x:IsA("BasePart") then
+                disableConnections(x.AncestryChanged)
+                disableConnections(x.Changed)
+            end
         end
     end
-end
 
-for i,v in pairs(Map:GetChildren()) do
-    if v.Name == "Sandbags" then
+    for i,v in pairs(Vegetation:GetChildren()) do
         disableConnections(v.AncestryChanged)
     end
-    for a,x in pairs(v:GetChildren()) do
-        if x:IsA("BasePart") then
-            disableConnections(x.AncestryChanged)
-            disableConnections(x.Changed)
+
+    -- // Disable Functions
+    for i,v in ipairs(getgc()) do
+        if debug.getinfo(v).name == "DetectBodyStuff" or debug.getinfo(v).name == "AnotherLayer" then
+            hookfunction(v, function() return end)
+        end
+
+        if debug.getfenv(v).script ~= nil and debug.getfenv(v).script.Name == "_Client_Main_" then 
+            disableConnections(getfenv(v).script.AncestryChanged)
         end
     end
 end
-
-for i,v in pairs(Vegetation:GetChildren()) do
-    disableConnections(v.AncestryChanged)
-end
-
--- // Disable Functions
-for i,v in ipairs(getgc()) do
-    if debug.getinfo(v).name == "DetectBodyStuff" or debug.getinfo(v).name == "AnotherLayer" then
-        hookfunction(v, function() return end)
-    end
-
-    if debug.getfenv(v).script ~= nil and debug.getfenv(v).script.Name == "_Client_Main_" then 
-        disableConnections(getfenv(v).script.AncestryChanged)
-    end
-end
+disableACPart1()
+Character.CharacterAdded:Connect(disableACPart1)
 
 -- // Gun Mods
 for i,v in pairs(ReplicatedStorage.Weapons:GetDescendants()) do
@@ -133,14 +137,14 @@ for i,v in pairs(Map:GetChildren()) do
 end
 Map.DescendantAdded:Connect(function(Descendant)
     if (Descendant.Name == "Static_Landmine" or Descendant.Name == "Land Mine") then
+        print(Descendant, "destroyed")
         v:Destroy()
     end
 end)
 
-
 -- // MT Stuff
-mt.__index = newcclosure(function(t, k)
-    if not DDayHax.Part2 then
+if not DDayHax.Part2 then
+    mt.__index = newcclosure(function(t, k)
         if t == HumanoidRootPart and k == "Anchored" then
             return false
         elseif t == Humanoid and k == "PlatformStand" then
@@ -149,10 +153,11 @@ mt.__index = newcclosure(function(t, k)
         if DDayHax.SpoofedValues[k] then
             return DDayHax.SpoofedValues[k]["Default"]
         end
-    end
-    return backupindex(t, k)
-end)
-
+        return backupindex(t, k)
+    end)
+    DDayHax.Part2 = true
+    print("DDayHax: AC Bypass Part2 - Bypassed:", DDayHax.Part2)
+end
 
 mt.__namecall = newcclosure(function(...)
     local method = getnamecallmethod()
@@ -171,5 +176,5 @@ mt.__namecall = newcclosure(function(...)
     end
     return backupnamecall(...)
 end)
-DDayHax.Part2 = true
+
 DDayHax.WeaponSpoof = true
