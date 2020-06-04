@@ -13,7 +13,7 @@ local gearList = {
 local prefix = ":give "
 Player.Chatted:Connect(function(msg)
     local splitmessage = string.split(msg, " ")
-    if string.sub(msg, 1) == (prefix.."help") then
+    if string.match(msg, prefix.."help") then
         print('Welcome to Gear Giver - for Kohls Admin House. Prefix is :give - You need admin! All of the available gears will be listed below.')
         for i,v in pairs(gearList) do
             local itemName = game:GetService("MarketplaceService"):GetProductInfo(v).Name
