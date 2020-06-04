@@ -25,6 +25,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         end
     end
     if string.match(message, ":play ") and musicTable[id] then
+        testAllSounds()
         game:GetService("Players"):Chat(":music "..musicTable[id].SoundId)
     end
 end)
