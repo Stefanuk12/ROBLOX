@@ -20,11 +20,9 @@ local Vegetation = Workspace.Vegetation
 getgenv().DDayHax = {}
 DDayHax.SpoofedValues = {
     ["WalkSpeed"] = {
-		["Spoof"] = 30,
 		["Default"] = 16
 	},
     ["JumpPower"] = {
-		["Spoof"] = 50,
 		["Default"] = 50
 	},
 }
