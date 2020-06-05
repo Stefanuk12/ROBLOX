@@ -1,5 +1,5 @@
 
-local musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
+getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
 local badstuff = {
     'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059',
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
@@ -47,6 +47,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         game:GetService("Players"):Chat(":music "..musicTableHolder[id].SoundId)
     end
     if string.match(message, ":refreshmusic") then
+        getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
         testAllSounds()
     end
 end)
