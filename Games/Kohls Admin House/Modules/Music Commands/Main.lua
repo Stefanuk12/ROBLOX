@@ -14,7 +14,7 @@ function checkBadSound(url, SoundId)
         end
     end
     if SoundId then
-        return (game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset).Name == '(Removed for copyright)')
+        return (game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset).Description == '(Removed for copyright)' or game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset).Description == '[ Content Deleted ]')
     end
     return false
 end
