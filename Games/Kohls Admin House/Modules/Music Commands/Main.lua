@@ -19,7 +19,7 @@ function checkBadSound(url, SoundId)
     return false
 end
 
-function testAllSounds()
+function testAllSounds(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     for i,v in pairs(musicTable) do
         coroutine.wrap(function()
@@ -27,13 +27,15 @@ function testAllSounds()
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
             wait(1)
             if checkBadSound(url, v.SoundId) then
-                table.remove(musicTable, i)
+                musicTable[i] = nil
                 print('Removed:', v.Name)
             end
         end)()
     end
+    wait(10)
+    if mode then print(musicTable) end
 end
-testAllSounds()
+testAllSounds(true)
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     local id
@@ -45,6 +47,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     end
     if string.match(message, ":play ") and musicTable[id] then
         game:GetService("Players"):Chat(":music "..musicTable[id].SoundId)
+        print('Now Playing:', musicTable[id].Name)
     end
     if string.match(message, ":refreshmusic") then
         getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
