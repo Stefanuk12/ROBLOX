@@ -56,22 +56,26 @@ end
 
 function partSpamToggle()
     KAHHax.PartSpam = not KAHHax.PartSpam
-    while wait() do
-        if not KAHHax.PartSpam then break end
-        if KAHHax.PartSpam then
-            game:GetService("Players"):Chat("part/10/10/10")
+    coroutine.wrap(function()
+        while wait() do
+            if not KAHHax.PartSpam then break end
+            if KAHHax.PartSpam then
+                game:GetService("Players"):Chat("part/10/10/10")
+            end
         end
-    end
+    end)()
 end
 
 function respawnExplodeToggle()
     KAHHax.RespawnExplode = not KAHHax.RespawnExplode
-    while wait() do
-        if not KAHHax.RespawnExplode then break end
-        if v ~= game:GetService("Players").LocalPlayer then
-            game:GetService("Players"):Chat(":respawn others")
-            wait(0.1)
-            game:GetService("Players"):Chat(":explode others")
+    coroutine.wrap(function()
+        while wait() do
+            if not KAHHax.RespawnExplode then break end
+            if v ~= game:GetService("Players").LocalPlayer then
+                game:GetService("Players"):Chat(":respawn others")
+                wait(0.1)
+                game:GetService("Players"):Chat(":explode others")
+            end
         end
-    end
+    end)()
 end

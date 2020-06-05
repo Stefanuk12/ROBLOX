@@ -15,12 +15,14 @@ function togglePersistantAdmin()
     KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
     if KAHHax.PersistantAdmin then
         regenAdmin()
-        while wait() do 
-            if not KAHHax.PersistantAdmin then break end
-            if KAHHax.PersistantAdmin then
-                local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
-                firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
+        coroutine.wrap(function()
+            while wait() do 
+                if not KAHHax.PersistantAdmin then break end
+                if KAHHax.PersistantAdmin then
+                    local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
+                    firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
+                end
             end
-        end
+        end)()
     end
 end

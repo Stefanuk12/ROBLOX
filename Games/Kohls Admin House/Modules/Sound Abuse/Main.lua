@@ -24,10 +24,12 @@ function stopMusic()
 end
 function earRape(toggle)
     KAHHax.EarRape = not KAHHax.EarRape
-    while wait(0.25) do
-        if not KAHHax.EarRape then break end
-        if KAHHax.EarRape then
-            playAllSounds()
+    coroutine.wrap(function()
+        while wait(0.25) do
+            if not KAHHax.EarRape then break end
+            if KAHHax.EarRape then
+                playAllSounds()
+            end
         end
-    end
+    end)()
 end
