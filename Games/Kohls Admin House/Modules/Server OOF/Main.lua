@@ -50,7 +50,7 @@ getgenv().KAHHax["Server OOF"]["Functions"].paintServer = function(Colour, Secti
     end
 end
 
-function getgenv().KAHHax["Server OOF"]["Functions"].moveBasepate()
+getgenv().KAHHax["Server OOF"]["Functions"].moveBasepate = function()
     local Character = game:GetService("Players").LocalPlayer.Character
     Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").Terrain["_Game"]["Spawn1"].CFrame * CFrame.new(0, 2, 0)
     wait(1)
@@ -63,7 +63,7 @@ function getgenv().KAHHax["Server OOF"]["Functions"].moveBasepate()
     game:GetService("Players"):Chat(":skydive me")
 end
 
-function getgenv().KAHHax["Server OOF"]["Functions"].partSpamToggle()
+getgenv().KAHHax["Server OOF"]["Functions"].partSpamToggle = function()
     getgenv().KAHHax["Server OOF"]["Toggles"].PartSpam = not getgenv().KAHHax["Server OOF"]["Toggles"].PartSpam
     getgenv().KAHHax["Server OOF"]["Coroutines"].partSpamToggle1 = coroutine.wrap(function()
         while wait() do
@@ -75,7 +75,7 @@ function getgenv().KAHHax["Server OOF"]["Functions"].partSpamToggle()
     end)()
 end
 
-function getgenv().KAHHax["Server OOF"]["Functions"].respawnExplodeToggle()
+getgenv().KAHHax["Server OOF"]["Functions"].respawnExplodeToggle = function()
     getgenv().KAHHax["Server OOF"]["Toggles"].RespawnExplode = not getgenv().KAHHax["Server OOF"]["Toggles"].RespawnExplode
     getgenv().KAHHax["Server OOF"]["Coroutines"].respawnExplodeToggle1 = coroutine.wrap(function()
         while wait() do
