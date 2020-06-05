@@ -18,6 +18,9 @@
             Toggles = {TOGGLES},
         },
         Extra = {
+            Coroutines = {COROUTINES},
+            Functions = {FUNCTIONS},
+            Toggles = {TOGGLES},
             Music Commands = {
                 Coroutines = {COROUTINES},
                 Functions = {FUNCTIONS},
