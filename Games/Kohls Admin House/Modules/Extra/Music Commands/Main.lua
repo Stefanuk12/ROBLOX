@@ -1,11 +1,11 @@
-local badstuff = {
+local removedAssets = {
     'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059',
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-function checkBadSound(url, SoundId) 
+function KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, SoundId) 
     if url then
-        for i,v in pairs(badstuff) do
+        for i,v in pairs(removedAssets) do
             if string.match(url, v) then
                 return true
             end
@@ -17,7 +17,7 @@ function checkBadSound(url, SoundId)
     return false
 end
 
-function testAllSounds(mode)
+function KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     getgenv().oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
     for i,v in pairs(oldMusicTable) do
@@ -25,7 +25,7 @@ function testAllSounds(mode)
             wait(1)
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
             wait(1)
-            if checkBadSound(url, v.SoundId) then
+            if KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, v.SoundId) then
                 oldMusicTable[i] = nil
                 print('Removed:', v.Name)
             end
@@ -39,7 +39,7 @@ function testAllSounds(mode)
     if mode then print(musicTable) end
     warn('--~~-- Music Checks Finished! --~~--')
 end
-testAllSounds(false)
+KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(false)
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     local id
@@ -55,6 +55,6 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     end
     if string.match(message, ":refreshmusic") then
         getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
-        testAllSounds()
+        KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds()
     end
 end)
