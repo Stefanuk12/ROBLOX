@@ -22,7 +22,7 @@ function stopMusic()
         game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound"):Stop()
     end
 end
-function earRape(toggle)
+function earRape()
     KAHHax.EarRape = not KAHHax.EarRape
     while wait(0.25) do
         if not KAHHax.EarRape then break end
