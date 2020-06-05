@@ -19,7 +19,8 @@ end
 
 getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds = function(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
-    getgenv().oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
+    getgenv().KAHHax["Extra"]["Music Commands"].oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
+    local oldMusicTable = getgenv().KAHHax["Extra"]["Music Commands"].oldMusicTable
     for i,v in pairs(oldMusicTable) do
         coroutine.wrap(function()
             wait(1)
@@ -32,7 +33,8 @@ getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds = functio
         end)()
     end
     wait(30)
-    getgenv().musicTable = {}
+    getgenv().KAHHax["Extra"]["Music Commands"].musicTable = {}
+    local musicTable = getgenv().KAHHax["Extra"]["Music Commands"].musicTable
     for i,v in pairs(oldMusicTable) do
         table.insert(musicTable, v)
     end
@@ -42,6 +44,7 @@ end
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     local id
+    local musicTable = getgenv().KAHHax["Extra"]["Music Commands"].musicTable
     if string.split(message, " ")[2] then id = tonumber(string.split(message, " ")[2]) end
     if string.match(message, ":getmusic") then
         for i,v in pairs(musicTable) do
@@ -53,7 +56,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         print('Now Playing:', musicTable[id].Name)
     end
     if string.match(message, ":refreshmusic") then
-        getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
+        getgenv().KAHHax["Extra"]["Music Commands"].musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/MusicTable.json'))
         getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds()
     end
 end)
