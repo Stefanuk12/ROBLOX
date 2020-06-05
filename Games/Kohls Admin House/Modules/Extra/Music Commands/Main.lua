@@ -11,7 +11,7 @@ local removedAssets = {
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-checkBadSound = function(url, SoundId) 
+function checkBadSound(url, SoundId)
     if url then
         for i,v in pairs(removedAssets) do
             if string.match(url, v) then
@@ -25,7 +25,7 @@ checkBadSound = function(url, SoundId)
     return false
 end
 
-testAllSounds = function(mode)
+function testAllSounds(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(GHMusicTable))
     for i,v in pairs(oldMusicTable) do

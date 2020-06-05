@@ -3,26 +3,26 @@ if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 getgenv().KAHHax["EarRape"] = false
 
 -- // Script
-playAllSounds = function()
+function playAllSounds()
     for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
         if v:IsA("Sound") then
             v:Play()
         end
     end
 end
-stopAllSounds = function()
+function stopAllSounds()
     for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
         if v:IsA("Sound") then
             v:Stop()
         end
     end
 end
-playMusic = function()
+function playMusic()
     if game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound") then
         game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound"):Play()
     end
 end
-stopMusic = function()
+function stopMusic()
     if game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound") then
         game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound"):Stop()
     end
