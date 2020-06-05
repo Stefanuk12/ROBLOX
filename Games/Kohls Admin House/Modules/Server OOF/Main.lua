@@ -1,3 +1,4 @@
+-- // Paint Server
 function paintServer(Colour, Section)
     -- // Give you the Paint Bucket if you don't have it
     if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
@@ -40,3 +41,29 @@ function paintServer(Colour, Section)
     end
 end
 
+function moveBasepate()
+    local Character = game:GetService("Players").LocalPlayer.Character
+    Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").Terrain["_Game"]["Spawn1"].CFrame * CFrame.new(0, 2, 0)
+    wait(1)
+    Character:WaitForChild("Humanoid").Sit = true
+    wait(0.5)
+    game:GetService("Players"):Chat(":punish me")
+    wait(5)
+    game:GetService("Players"):Chat(":unpunish me")
+    wait(0.5)
+    game:GetService("Players"):Chat(":skydive me")
+end
+
+function partSpamToggle()
+    KAHHax.PartSpam = not KAHHax.PartSpam
+    while wait() do
+        if not KAHHax.PartSpam then break end
+        if KAHHax.PartSpam then
+            game:GetService("Players"):Chat("part/10/10/10")
+        end
+    end
+end
+
+function respawnExplodeToggle()
+
+end
