@@ -28,6 +28,8 @@ function testAllSounds(mode)
             wait(1)
             if checkBadSound(url, v.SoundId) then
                 musicTable[i] = nil
+                wait(0.1)
+                table.remove(musicTable, i)
                 print('Removed:', v.Name)
             end
         end)()
