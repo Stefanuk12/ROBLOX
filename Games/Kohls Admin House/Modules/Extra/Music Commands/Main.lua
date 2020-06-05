@@ -39,7 +39,6 @@ function KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
     if mode then print(musicTable) end
     warn('--~~-- Music Checks Finished! --~~--')
 end
-KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(false)
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     local id
