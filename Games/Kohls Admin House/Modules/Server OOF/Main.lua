@@ -1,4 +1,5 @@
 -- // Int
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 KAHHax["RespawnExplode"] = false
 
 -- // Paint Server

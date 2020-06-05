@@ -1,3 +1,4 @@
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 function regenAdmin()
     local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
     fireclickdetector(Regen.ClickDetector, 0)

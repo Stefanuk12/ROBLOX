@@ -1,4 +1,5 @@
 -- // Initialisation
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 getgenv().KAHHax["EarRape"] = false
 
 -- // Script

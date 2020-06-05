@@ -1,4 +1,5 @@
 -- // Int
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 local GHMusicTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/MusicTable.json'
 KAHHax.musicTable = {}
 KAHHax.oldMusicTable = {}
