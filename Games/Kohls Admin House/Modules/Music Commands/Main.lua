@@ -1,11 +1,9 @@
-
-getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
 local badstuff = {
     'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059',
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-function checkBadSound(url, SoundId)
+function checkBadSound(url, SoundId) 
     if url then
         for i,v in pairs(badstuff) do
             if string.match(url, v) then
@@ -21,23 +19,27 @@ end
 
 function testAllSounds(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
-    for i,v in pairs(musicTable) do
+    getgenv().oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
+    for i,v in pairs(oldMusicTable) do
         coroutine.wrap(function()
             wait(1)
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
             wait(1)
             if checkBadSound(url, v.SoundId) then
-                musicTable[i] = nil
-                wait(0.1)
-                table.remove(musicTable, i)
+                oldMusicTable[i] = nil
                 print('Removed:', v.Name)
             end
         end)()
     end
-    wait(10)
+    wait(30)
+    getgenv().musicTable = {}
+    for i,v in pairs(oldMusicTable) do
+        table.insert(musicTable, v)
+    end
     if mode then print(musicTable) end
+    warn('--~~-- Music Checks Finished! --~~--')
 end
-testAllSounds(true)
+testAllSounds(false)
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     local id
