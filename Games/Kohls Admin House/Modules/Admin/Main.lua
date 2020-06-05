@@ -1,8 +1,16 @@
-function regenAdmin()
+-- // Initialisation
+KAHHax["Admin"] = {}
+KAHHax["Admin"]["Functions"] = {}
+KAHHax["Admin"]["Coroutines"] = {}
+KAHHax["Admin"]["Toggles"] = {}
+KAHHax["Admin"]["Toggles"].PersistantAdmin = false
+
+-- // Script
+function KAHHax["Admin"]["Functions"].regenAdmin()
     local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
     fireclickdetector(Regen.ClickDetector, 0)
 end
-function getAdmin()
+function KAHHax["Admin"]["Functions"].getAdmin()
     regenAdmin()
     wait(0.25)
     local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
@@ -11,14 +19,14 @@ function getAdmin()
     wait(1)
     game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = PreviousPos
 end
-function togglePersistantAdmin()
-    KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
-    if KAHHax.PersistantAdmin then
+function KAHHax["Admin"]["Functions"].togglePersistantAdmin()
+    KAHHax["Admin"]["Toggles"].PersistantAdmin = not KAHHax["Admin"]["Toggles"].PersistantAdmin
+    if KAHHax["Admin"]["Toggles"].PersistantAdmin then
         regenAdmin()
-        coroutine.wrap(function()
+        KAHHax["Admin"]["Coroutines"].togglePersistantAdmin1 = coroutine.wrap(function()
             while wait() do 
-                if not KAHHax.PersistantAdmin then break end
-                if KAHHax.PersistantAdmin then
+                if not KAHHax["Admin"]["Toggles"].PersistantAdmin then break end
+                if KAHHax["Admin"]["Toggles"].PersistantAdmin then
                     local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
                     firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
                 end

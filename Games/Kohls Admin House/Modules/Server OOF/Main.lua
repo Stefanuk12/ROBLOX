@@ -1,5 +1,14 @@
+-- // Initialisation
+KAHHax["Server OOF"] = {}
+KAHHax["Server OOF"]["Functions"] = {}
+KAHHax["Server OOF"]["Coroutines"] = {}
+KAHHax["Server OOF"]["Toggles"] = {}
+KAHHax["Server OOF"]["Toggles"].PartSpam = false
+KAHHax["Server OOF"]["Toggles"].RespawnExplode = false
+
+-- // Script
 -- // Paint Server
-function paintServer(Colour, Section)
+function KAHHax["Server OOF"]["Functions"].paintServer(Colour, Section)
     -- // Give you the Paint Bucket if you don't have it
     if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
         game:GetService("Players"):Chat(":gear me 18474459")
@@ -41,7 +50,7 @@ function paintServer(Colour, Section)
     end
 end
 
-function moveBasepate()
+function KAHHax["Server OOF"]["Functions"].moveBasepate()
     local Character = game:GetService("Players").LocalPlayer.Character
     Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").Terrain["_Game"]["Spawn1"].CFrame * CFrame.new(0, 2, 0)
     wait(1)
@@ -54,23 +63,23 @@ function moveBasepate()
     game:GetService("Players"):Chat(":skydive me")
 end
 
-function partSpamToggle()
-    KAHHax.PartSpam = not KAHHax.PartSpam
-    coroutine.wrap(function()
+function KAHHax["Server OOF"]["Functions"].partSpamToggle()
+    KAHHax["Server OOF"]["Toggles"].PartSpam = not KAHHax["Server OOF"]["Toggles"].PartSpam
+    KAHHax["Server OOF"]["Coroutines"].partSpamToggle1 = coroutine.wrap(function()
         while wait() do
-            if not KAHHax.PartSpam then break end
-            if KAHHax.PartSpam then
+            if not KAHHax["Server OOF"]["Toggles"].PartSpam then break end
+            if KAHHax["Server OOF"]["Toggles"].PartSpam then
                 game:GetService("Players"):Chat("part/10/10/10")
             end
         end
     end)()
 end
 
-function respawnExplodeToggle()
-    KAHHax.RespawnExplode = not KAHHax.RespawnExplode
-    coroutine.wrap(function()
+function KAHHax["Server OOF"]["Functions"].respawnExplodeToggle()
+    KAHHax["Server OOF"]["Toggles"].RespawnExplode = not KAHHax["Server OOF"]["Toggles"].RespawnExplode
+    KAHHax["Server OOF"]["Coroutines"].respawnExplodeToggle1 = coroutine.wrap(function()
         while wait() do
-            if not KAHHax.RespawnExplode then break end
+            if not KAHHax["Server OOF"]["Toggles"].RespawnExplode then break end
             if v ~= game:GetService("Players").LocalPlayer then
                 game:GetService("Players"):Chat(":respawn others")
                 wait(0.1)
