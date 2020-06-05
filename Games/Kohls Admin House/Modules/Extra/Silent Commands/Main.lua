@@ -84,20 +84,20 @@ end)
 
 local silentCMDToggle = false
 Spam.MouseButton1Click:Connect(function()
-    silentCMDToggle = not silentCMDToggle the
-	
-	if silentCMDToggle == true then do
+    silentCMDToggle = not silentCMDToggle
+	if silentCMDToggle then do
 		warn('Silent CMDs: Commencing Spam')
 		Spam.Text = "Stop"
-		while wait() do
-	        if silentCMDToggle == false then break end
-			    game:GetService("Players"):Chat(tostring(TextBox.Text))
-			    wait(0.1)
-		   end
-	    end
-	 end
+		coroutine.wrap(function()
+			while wait() do
+				if not silentCMDToggle then break end
+				game:GetService("Players"):Chat(tostring(TextBox.Text))
+				wait(0.1)
+			end
+		end)()
+	end
 	
-	if silentCMDToggle == false then
+	if not silentCMDToggle then
 		print('Silent CMDs: Ended')
 		Spam.Text = "Spam"
 	end
