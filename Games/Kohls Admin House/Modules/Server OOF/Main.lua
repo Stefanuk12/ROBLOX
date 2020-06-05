@@ -40,7 +40,7 @@ getgenv().KAHHax["Server OOF"]["Functions"].paintServer = function(Colour, Secti
     else
         for i,v in pairs(Terrain.Workspace:GetChildren()) do
             if string.match(v.Name, Section) then
-                for a,x in pairs(v:GetDescendants())
+                for a,x in pairs(v:GetDescendants()) do
                     if x:IsA("Part") then
                         paintRemote:InvokeServer("PaintPart", {["Part"] = x, ["Color"] = rainbowcolour})
                     end
