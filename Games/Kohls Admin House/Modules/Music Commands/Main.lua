@@ -4,7 +4,7 @@ function testAllSounds()
     warn('--~~-- Commencing Music Checks - Please Wait --~~--')
     for i,v in pairs(musicTable) do
         local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
-        if string.match(url, 'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059') then
+        if string.match(url, 'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059') or string.match(url, 'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04') then
             table.remove(musicTable, i)
             print('Removed:', v.Name)
         end
