@@ -23,7 +23,9 @@ function testAllSounds()
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     for i,v in pairs(musicTable) do
         coroutine.wrap(function()
+            wait(1)
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
+            wait(1)
             if checkBadSound(url, v.SoundId) then
                 table.remove(musicTable, i)
                 print('Removed:', v.Name)
