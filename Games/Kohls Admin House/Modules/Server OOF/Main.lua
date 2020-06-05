@@ -1,3 +1,6 @@
+-- // Int
+KAHHax["RespawnExplode"] = false
+
 -- // Paint Server
 function paintServer(Colour, Section)
     -- // Give you the Paint Bucket if you don't have it
@@ -65,5 +68,5 @@ function partSpamToggle()
 end
 
 function respawnExplodeToggle()
-
+    KAHHax.RespawnExplode = not KAHHax.RespawnExplode
 end
