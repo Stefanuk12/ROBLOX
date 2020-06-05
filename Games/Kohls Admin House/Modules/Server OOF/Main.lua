@@ -8,7 +8,7 @@ getgenv().KAHHax["Server OOF"]["Toggles"].RespawnExplode = false
 
 -- // Script
 -- // Paint Server
-function getgenv().KAHHax["Server OOF"]["Functions"].paintServer(Colour, Section)
+getgenv().KAHHax["Server OOF"]["Functions"].paintServer = function(Colour, Section)
     -- // Give you the Paint Bucket if you don't have it
     if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
         game:GetService("Players"):Chat(":gear me 18474459")

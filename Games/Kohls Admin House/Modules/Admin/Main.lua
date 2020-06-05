@@ -6,11 +6,11 @@ getgenv().KAHHax["Admin"]["Toggles"] = {}
 getgenv().KAHHax["Admin"]["Toggles"].PersistantAdmin = false
 
 -- // Script
-function getgenv().KAHHax["Admin"]["Functions"].regenAdmin()
+getgenv().KAHHax["Admin"]["Functions"].regenAdmin = function()
     local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
     fireclickdetector(Regen.ClickDetector, 0)
 end
-function getgenv().KAHHax["Admin"]["Functions"].getAdmin()
+getgenv().KAHHax["Admin"]["Functions"].getAdmin = function()
     regenAdmin()
     wait(0.25)
     local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
@@ -19,7 +19,7 @@ function getgenv().KAHHax["Admin"]["Functions"].getAdmin()
     wait(1)
     game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = PreviousPos
 end
-function getgenv().KAHHax["Admin"]["Functions"].togglePersistantAdmin()
+getgenv().KAHHax["Admin"]["Functions"].togglePersistantAdmin = function()
     getgenv().KAHHax["Admin"]["Toggles"].PersistantAdmin = not getgenv().KAHHax["Admin"]["Toggles"].PersistantAdmin
     if getgenv().KAHHax["Admin"]["Toggles"].PersistantAdmin then
         regenAdmin()

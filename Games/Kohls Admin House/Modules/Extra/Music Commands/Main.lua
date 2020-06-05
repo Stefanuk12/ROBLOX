@@ -3,7 +3,7 @@ local removedAssets = {
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-function getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, SoundId) 
+getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound = function(url, SoundId) 
     if url then
         for i,v in pairs(removedAssets) do
             if string.match(url, v) then
@@ -17,7 +17,7 @@ function getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(
     return false
 end
 
-function getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
+getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds = function(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     getgenv().oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
     for i,v in pairs(oldMusicTable) do
