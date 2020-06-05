@@ -12,14 +12,12 @@ function getAdmin()
     game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = PreviousPos
 end
 function togglePersistantAdmin()
-    getgenv().KAHHax.PersistantAdmin = not getgenv().KAHHax.PersistantAdmin
-    if getgenv().KAHHax.PersistantAdmin then
-        getgenv().KAHHax.PersistantAdmin = false
-        return
-    else
+    KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
+    if KAHHax.PersistantAdmin then
         regenAdmin()
         while wait() do 
-            if getgenv().KAHHax.PersistantAdmin then
+            if not KAHHax.PersistantAdmin then break end
+            if KAHHax.PersistantAdmin then
                 local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
                 firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
             end

@@ -23,15 +23,11 @@ function stopMusic()
     end
 end
 function earRape(toggle)
-    getgenv().KAHHax.EarRape = not getgenv().KAHHax.EarRape
-    if getgenv().KAHHax.EarRape then
-        getgenv().KAHHax.EarRape = false
-        return 
-    else
-        while wait(0.25) do
-            if getgenv().KAHHax.EarRape then
-                playAllSounds()
-            end
+    KAHHax.EarRape = not KAHHax.EarRape
+    while wait(0.25) do
+        if not KAHHax.EarRape then break end
+        if KAHHax.EarRape then
+            playAllSounds()
         end
     end
 end
