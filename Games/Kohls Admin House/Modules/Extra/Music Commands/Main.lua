@@ -3,7 +3,7 @@ local removedAssets = {
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-function KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, SoundId) 
+function getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, SoundId) 
     if url then
         for i,v in pairs(removedAssets) do
             if string.match(url, v) then
@@ -17,7 +17,7 @@ function KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, Sound
     return false
 end
 
-function KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
+function getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
     warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
     getgenv().oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
     for i,v in pairs(oldMusicTable) do
@@ -25,7 +25,7 @@ function KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds(mode)
             wait(1)
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
             wait(1)
-            if KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, v.SoundId) then
+            if getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].checkBadSound(url, v.SoundId) then
                 oldMusicTable[i] = nil
                 print('Removed:', v.Name)
             end
@@ -54,6 +54,6 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     end
     if string.match(message, ":refreshmusic") then
         getgenv().musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync('https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Music%20Commands/MusicTable.json'))
-        KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds()
+        getgenv().KAHHax["Extra"]["Music Commands"]["Functions"].testAllSounds()
     end
 end)
