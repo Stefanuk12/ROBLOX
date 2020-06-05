@@ -1,2 +1,0 @@
--- // Initialisation
-getgenv().KAHHax = {}
