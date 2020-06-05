@@ -5,7 +5,7 @@ function testAllSounds()
     for i,v in pairs(musicTable) do
         coroutine.wrap(function()
             local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
-            if string.match(url, 'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059') or string.match(url, 'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04') or string.match(url, "This audio asset has been blocked due to copyright violations") then
+            if string.match(url, 'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059') or string.match(url, 'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04') or string.match(url, "This audio asset has been blocked due to copyright violations.") then
                 table.remove(musicTable, i)
                 print('Removed:', v.Name)
             end
