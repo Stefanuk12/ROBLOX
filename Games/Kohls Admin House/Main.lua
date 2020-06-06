@@ -62,6 +62,17 @@ function blacklistPhrase(Player, Phrase, Punishment)
     KAHHax["Blacklist"][Player][count + 1] = {["Phrase"] = Phrase, ["Punishment"] = Punishment}
 end
 
+function removeBlacklistedPhrase(Player, Phrase)
+    if KAHHax["Blacklist"][Player] then
+        for i,v in pairs(KAHHax["Blacklist"][Player]) do
+            if v.Phrase == Phrase then
+                table.remove(KAHHax["Blacklist"][Player], i)
+                print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
+            end
+        end
+    end
+end
+
 function intBlacklist(Player)
     if not KAHHax["Blacklist"][Player] then KAHHax["Blacklist"][Player] = {} end
     Player.Chatted:Connect(function(message)
