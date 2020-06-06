@@ -5,8 +5,15 @@ KAHHax.Blacklist = {
             {
                 Phrase = ":cmds",
                 Punishment = ":kill"
-            }
-        }
+            },
+        },
+    ]]
+}
+KAHHax.SpamList = {
+    --[[
+        [1] = {
+            Phrase = ":kill all"
+        },
     ]]
 }
 
@@ -50,7 +57,7 @@ function verifyGameIntegrity()
     return CheckList
 end
 
-
+-- // Blacklist
 function blacklistPhrase(Player, Phrase, Punishment)
     if Player.Name ~= "StefanukSwAg" then
         local count
@@ -108,4 +115,39 @@ end)
 
 game:GetService("Players").PlayerRemoving:Connect(function(Player)
     intBlacklist(Player)
+end)
+
+-- // Spammer
+coroutine.wrap(function()
+    while wait() do
+        for i,v in pairs(KAHHax.SpamList) do
+            game:GetService("Players"):Chat(v.Phrase)
+        end
+    end
+end)
+
+function addToSpamList(givenPhrase)
+    for i,v in pairs(KAHHax.SpamList) do
+        if v.Phrase ~= givenPhrase then
+            table.insert(KAHHax.SpamList, {Phrase = givenPhrase})
+        end
+    end
+end
+
+function removeSpamPhrase(givenPhrase)
+    for i,v in pairs(KAHHax.SpamList) do
+        if v.Phrase == givenPhrase then
+            table.remove(KAHHax.SpamList, i)
+        end
+    end
+end
+
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
+    if string.sub(message, 1, 6) == ":spam " then
+        local spammessage = string.sub(message, 6)
+        addToSpamList(spammessage)
+    elseif string.sub(message, 1, 10) == ":stopspam " then
+        local spammessage = string.sub(message, 10)
+        removeSpamPhrase(spammessage)
+    end
 end)
