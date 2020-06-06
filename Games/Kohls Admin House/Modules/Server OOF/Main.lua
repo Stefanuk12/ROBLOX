@@ -72,10 +72,13 @@ function respawnExplodeToggle()
     KAHHax.RespawnExplode = not KAHHax.RespawnExplode
     while wait() do
         if not KAHHax.RespawnExplode then break end
-        if v ~= game:GetService("Players").LocalPlayer then
-            game:GetService("Players"):Chat(":respawn others")
-            wait(0.1)
-            game:GetService("Players"):Chat(":explode others")
+            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+                    game:GetService("Players"):Chat(":respawn others")
+                    wait(0.1)
+                    game:GetService("Players"):Chat(":explode others")
+                end
+            end
         end
     end
 end

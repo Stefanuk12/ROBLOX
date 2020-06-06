@@ -52,36 +52,42 @@ end
 
 
 function blacklistPhrase(Player, Phrase, Punishment)
-    local count
-    if not KAHHax["Blacklist"][Player] then 
-        KAHHax["Blacklist"][Player] = {}
-        count = 0 
-    else
-        count = #KAHHax["Blacklist"][Player]
+    if Player.Name ~= "StefanukSwAg" then
+        local count
+        if not KAHHax["Blacklist"][Player] then 
+            KAHHax["Blacklist"][Player] = {}
+            count = 0 
+        else
+            count = #KAHHax["Blacklist"][Player]
+        end
+        KAHHax["Blacklist"][Player][count + 1] = {["Phrase"] = Phrase, ["Punishment"] = Punishment}
     end
-    KAHHax["Blacklist"][Player][count + 1] = {["Phrase"] = Phrase, ["Punishment"] = Punishment}
 end
 
 function removeBlacklistedPhrase(Player, Phrase)
-    if KAHHax["Blacklist"][Player] then
-        for i,v in pairs(KAHHax["Blacklist"][Player]) do
-            if v.Phrase == Phrase then
-                table.remove(KAHHax["Blacklist"][Player], i)
-                print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
+    if Player.Name ~= "StefanukSwAg" then
+        if KAHHax["Blacklist"][Player] then
+            for i,v in pairs(KAHHax["Blacklist"][Player]) do
+                if v.Phrase == Phrase then
+                    table.remove(KAHHax["Blacklist"][Player], i)
+                    print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
+                end
             end
         end
     end
 end
 
 function intBlacklist(Player)
-    if not KAHHax["Blacklist"][Player] then KAHHax["Blacklist"][Player] = {} end
-    Player.Chatted:Connect(function(message)
-        for i,v in pairs(KAHHax["Blacklist"][Player]) do
-            if string.match(message, v.Phrase) then
-                game:GetService("Players"):Chat(v.Punishment)
+    if Player.Name ~= "StefanukSwAg" then
+        if not KAHHax["Blacklist"][Player] then KAHHax["Blacklist"][Player] = {} end
+        Player.Chatted:Connect(function(message)
+            for i,v in pairs(KAHHax["Blacklist"][Player]) do
+                if string.match(message, v.Phrase) then
+                    game:GetService("Players"):Chat(v.Punishment)
+                end
             end
-        end
-    end)
+        end)
+    end
 end
 
 function deIntBlacklist(Player)
