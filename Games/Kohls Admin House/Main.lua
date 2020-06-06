@@ -37,7 +37,7 @@ function verifyGameIntegrity()
         end
         for i,v in pairs(Admin.Pads:GetChildren()) do
             count = count + 1
-            if v.Transparency == 0 then
+            if v.Transparency == 1 then
                 CheckList["AdminPads"] = false
                 CheckList["Total"] = false
             end
