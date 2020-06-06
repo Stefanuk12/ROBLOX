@@ -11,7 +11,8 @@ local removedAssets = {
     'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
     'This audio asset has been blocked due to copyright violations.',
 }
-function checkBadSound(url, SoundId)
+function checkBadSound(SoundId)
+    local url = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId)
     if url then
         for i,v in pairs(removedAssets) do
             if string.match(url, v) then
@@ -31,9 +32,8 @@ function testAllSounds(mode)
     for i,v in pairs(oldMusicTable) do
         coroutine.wrap(function()
             wait(1)
-            local url = game:HttpGetAsync('https://www.roblox.com/library/'..v.SoundId)
-            wait(1)
-            if checkBadSound(url, v.SoundId) then
+            if checkBadSound(v.SoundId) then
+                wait(1)
                 oldMusicTable[i] = nil
                 print('Removed:', v.Name)
             end
