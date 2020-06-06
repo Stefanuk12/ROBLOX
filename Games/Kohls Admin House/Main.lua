@@ -1,3 +1,15 @@
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
+KAHHax.Blacklist = {
+    --[[
+        Player = {
+            {
+                Phrase = ":cmds",
+                Punishment = ":kill"
+            }
+        }
+    ]]
+}
+
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
     local _Workspace = _Game.Workspace
@@ -25,7 +37,7 @@ function verifyGameIntegrity()
         end
         for i,v in pairs(Admin.Pads:GetChildren()) do
             count = count + 1
-            if v.Transparency = 0 then
+            if v.Transparency == 0 then
                 CheckList["AdminPads"] = false
                 CheckList["Total"] = false
             end
@@ -34,6 +46,49 @@ function verifyGameIntegrity()
             CheckList["AdminPads"] = false
             CheckList["Total"] = false
         end
-    end
+    end)
     return CheckList
 end
+
+
+function blacklistPhrase(Player, Phrase, Punishment)
+    local count
+    if not KAHHax["Blacklist"][Player] then 
+        KAHHax["Blacklist"][Player] = {}
+        count = 0 
+    else
+        count = #KAHHax["Blacklist"][Player]
+    end
+    KAHHax["Blacklist"][Player][count + 1] = {["Phrase"] = Phrase, ["Punishment"] = Punishment}
+end
+
+function intBlacklist(Player)
+    if not KAHHax["Blacklist"][Player] then KAHHax["Blacklist"][Player] = {} end
+    Player.Chatted:Connect(function(message)
+        for i,v in pairs(KAHHax["Blacklist"][Player]) do
+            if string.match(message, v.Phrase) then
+                game:GetService("Players"):Chat(v.Punishment)
+            end
+        end
+    end)
+end
+
+function deIntBlacklist(Player)
+    for i,v in pairs(KAHHax["Blacklist"]) do
+        if i == Player then
+            table.remove(KAHHax["Blacklist"], i)
+        end
+    end
+end
+
+for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+    intBlacklist(v)
+end
+
+game:GetService("Players").PlayerAdded:Connect(function(Player)
+    intBlacklist(Player)
+end)
+
+game:GetService("Players").PlayerRemoving:Connect(function(Player)
+    intBlacklist(Player)
+end)
