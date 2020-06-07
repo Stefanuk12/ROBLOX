@@ -40,7 +40,7 @@ local earrape = Instance.new("TextButton")
 local blacklistphraseEpicGamer69killallresetall = Instance.new("TextButton")
 local removeblacklistphraseEpicGamer69killall = Instance.new("TextButton")
 local paintareaReallyredObbyBox = Instance.new("TextButton")
-local TextButton = Instance.new("TextButton")
+local ExamplePrompt = Instance.new("TextButton")
 
 --Properties:
 
@@ -103,7 +103,6 @@ CMDFrame.Active = true
 CMDFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 CMDFrame.BorderSizePixel = 0
 CMDFrame.Size = UDim2.new(0, 400, 0, 350)
-CMDFrame.CanvasPosition = Vector2.new(0, 1050)
 CMDFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
 
 UIListLayout.Parent = CMDFrame
@@ -534,17 +533,18 @@ paintareaReallyredObbyBox.TextSize = 14.000
 paintareaReallyredObbyBox.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 paintareaReallyredObbyBox.TextXAlignment = Enum.TextXAlignment.Left
 
-TextButton.Parent = Header
-TextButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-TextButton.BackgroundTransparency = 1.000
-TextButton.BorderSizePixel = 0
-TextButton.Position = UDim2.new(0.38499999, 0, 0, 0)
-TextButton.Size = UDim2.new(0, 200, 0, 50)
-TextButton.AutoButtonColor = false
-TextButton.Font = Enum.Font.Gotham
-TextButton.Text = " click cmds 4 example print"
-TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton.TextSize = 14.000
+ExamplePrompt.Name = "Example Prompt"
+ExamplePrompt.Parent = Header
+ExamplePrompt.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+ExamplePrompt.BackgroundTransparency = 1.000
+ExamplePrompt.BorderSizePixel = 0
+ExamplePrompt.Position = UDim2.new(0.38499999, 0, 0, 0)
+ExamplePrompt.Size = UDim2.new(0, 200, 0, 50)
+ExamplePrompt.AutoButtonColor = false
+ExamplePrompt.Font = Enum.Font.Gotham
+ExamplePrompt.Text = " click cmds 4 example print"
+ExamplePrompt.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExamplePrompt.TextSize = 14.000
 
 -- // Script
 local Dragger = {}; do
