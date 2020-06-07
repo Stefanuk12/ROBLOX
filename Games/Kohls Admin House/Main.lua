@@ -156,7 +156,6 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     end
 end)
 
-
 -- // Chat CMDs
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     -- // Initialise Commands
@@ -240,6 +239,21 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":earrape") then
             print('EarRape Toggle:', (not KAHHax.EarRape and "Disabled." or "Enabled."))
             KAHHax.EarRape = not KAHHax.EarRape
+        end
+    end
+
+    -- // Blacklist Commands
+    local blacklistcommand = string.split(message, " | ")
+    if blacklistcommand[1] and blacklistcommand[2] and blacklistcommand[3] and blacklistcommand[4] then
+        local initialcommmand = blacklistcommand[1]
+        local targetblacklist = blacklistcommand[2]
+        local blacklistedphrase = blacklistcommand[3]
+        local punishmentphrase = blacklistcommand[4]
+
+        if initialcommmand == ":blacklistphrase" then
+            blacklistPhrase(targetblacklist, blacklistedphrase, punishmentphrase)
+        elseif initialcommmand == ":removeblacklistphrase" then
+            removeBlacklistedPhrase(targetblacklist, blacklistedphrase)
         end
     end
 end)
