@@ -10,8 +10,21 @@ KAHHax.Blacklist = {
         },
     ]]
 }
-KAHHax.SpamList = {}
-KAHHax.BlacklistConnections = {}
+KAHHax.SpamList = {
+    --[[
+        [1] = {
+            Phrase = "kill all"
+        }
+    ]]
+}
+KAHHax.BlacklistConnections = {
+    --[[
+        [1] = {
+            Connection = Player.Chatted
+            PlayerName = Player
+        }
+    ]]
+}
 
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
