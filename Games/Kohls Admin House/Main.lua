@@ -175,7 +175,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     elseif string.match(message, ":intsoundabuse") then
         print('Initialised Sound Abuse Module.')
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
-    elseif string.match(message, ":intantimodule") then
+    elseif string.match(message, ":intanti") then
         print('Initalised Anti Module.')
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
     elseif string.match(message, ":intall") then
