@@ -10,6 +10,7 @@ KAHHax.Blacklist = {
     ]]
 }
 KAHHax.SpamList = {}
+KAHHax.BlacklistConnections = {}
 
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
@@ -53,7 +54,8 @@ end
 
 -- // Blacklist
 function blacklistPhrase(Player, Phrase, Punishment)
-    if Player.Name ~= "StefanukSwAg" then
+    local Player = tostring(Player)
+    if Player ~= "StefanukSwAg" then
         local count
         if not KAHHax["Blacklist"][Player] then 
             KAHHax["Blacklist"][Player] = {}
@@ -66,7 +68,8 @@ function blacklistPhrase(Player, Phrase, Punishment)
 end
 
 function removeBlacklistedPhrase(Player, Phrase)
-    if Player.Name ~= "StefanukSwAg" then
+    local Player = tostring(Player)
+    if Player ~= "StefanukSwAg" then
         if KAHHax["Blacklist"][Player] then
             for i,v in pairs(KAHHax["Blacklist"][Player]) do
                 if v.Phrase == Phrase then
@@ -79,22 +82,31 @@ function removeBlacklistedPhrase(Player, Phrase)
 end
 
 function intBlacklist(Player)
-    if Player.Name ~= "StefanukSwAg" then
+    local Player = tostring(Player)
+    if Player ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild(Player) then
         if not KAHHax["Blacklist"][Player] then KAHHax["Blacklist"][Player] = {} end
-        Player.Chatted:Connect(function(message)
+        local aConnection = game:GetService("Players")[Player].Chatted:Connect(function(message)
             for i,v in pairs(KAHHax["Blacklist"][Player]) do
                 if string.match(message, v.Phrase) then
                     game:GetService("Players"):Chat(v.Punishment)
                 end
             end
         end)
+        table.insert(KAHHax.BlacklistConnections, {Connection = aConnection, PlayerName = Player})
     end
 end
 
 function deIntBlacklist(Player)
+    local Player = tostring(Player)
     for i,v in pairs(KAHHax["Blacklist"]) do
         if i == Player then
             table.remove(KAHHax["Blacklist"], i)
+        end
+    end
+    for i,v in pairs(KAHHax.BlacklistConnections) do
+        if v.PlayerName == Player then
+            v.Connection:Disconnect()
+            table.remove(KAHHax.BlacklistConnections, i)
         end
     end
 end
