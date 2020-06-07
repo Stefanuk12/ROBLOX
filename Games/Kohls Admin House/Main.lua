@@ -162,16 +162,22 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     -- // Initialise Commands
     if string.match(message, ":intmusic") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/Main.lua"))() -- // Loadstring Music CMDs
+        print('Initialised Music Commands.')
     elseif string.match(message, ":intadmin") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Admin/Main.lua"))() -- // Loadstring Admin Module
+        print('Initialised Admin Module.')
     elseif string.match(message, ":intgeargiver") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Gear%20Giver/Main.lua"))() -- // Loadstring Gear Giver
+        print('Initialised Gear Giver.')
     elseif string.match(message, ":intserveroof") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Server%20OOF/Main.lua"))() -- // Loadstring Server OOF Module
+        print('Initialised Server OOF Module.')
     elseif string.match(message, ":intsoundabuse") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
+        print('Initialised Sound Abuse Module.')
     elseif string.match(message, ":intantimodule") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
+        print('Initalised Anti Module.')
     elseif string.match(message, ":intall") then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/Main.lua"))() -- // Loadstring Music CMDs
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Admin/Main.lua"))() -- // Loadstring Admin Module
@@ -179,6 +185,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Server%20OOF/Main.lua"))() -- // Loadstring Server OOF Module
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
+        print('Initalised All Modules.')
     end
 
     -- // Admin Commands
@@ -195,11 +202,14 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     -- // Anti Module Commands
     if KAHHax.antiModule then
         if string.match(message, ":antipunish") then
-            KAHHax.AntiPunish = not KAHHax.AntiPunish
+            KAHHax.antiPunish = not KAHHax.AntiPunish
+            print('Anti Punish Toggle:', (not KAHHax.antiPunish and "Disabled." or "Enabled."))
         elseif string.match(message, ":antiblind") then
             KAHHax.antiBlind = not KAHHax.antiBlind
+            print('Anti Blind Toggle:', (not KAHHax.antiBlind and "Disabled." or "Enabled."))
         elseif string.match(message, ":antikill") then
             KAHHax.antiKill = not KAHHax.antiKill
+            print('Anti Kill Toggle:', (not KAHHax.antiKill and "Disabled." or "Enabled."))
         end
     end
 

@@ -57,31 +57,38 @@ if not KAHHax.intServerOOF then
         game:GetService("Players"):Chat(":unpunish me")
         wait(0.5)
         game:GetService("Players"):Chat(":skydive me")
+        print('Moved Baseplate.')
     end
 
     function KAHHax.partSpamToggle()
         KAHHax.PartSpam = not KAHHax.PartSpam
-        while wait() do
-            if not KAHHax.PartSpam then break end
-            if KAHHax.PartSpam then
-                game:GetService("Players"):Chat("part/10/10/10")
+        print('Part Spam Toggle:', (not KAHHax.PartSpam and "Disabled." or "Enabled."))
+        coroutine.wrap(function()
+            while wait() do
+                if not KAHHax.PartSpam then break end
+                if KAHHax.PartSpam then
+                    game:GetService("Players"):Chat("part/10/10/10")
+                end
             end
         end
     end
 
     function KAHHax.respawnExplodeToggle()
         KAHHax.RespawnExplode = not KAHHax.RespawnExplode
-        while wait() do
-            if not KAHHax.RespawnExplode then break end
-                for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                    if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
-                        game:GetService("Players"):Chat(":respawn others")
-                        wait(0.1)
-                        game:GetService("Players"):Chat(":explode others")
+        print('Respawn-Explode Spam Toggle:', (not KAHHax.RespawnExplode and "Disabled." or "Enabled."))
+        coroutine.wrap(function()
+            while wait() do
+                if not KAHHax.RespawnExplode then break end
+                    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                        if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+                            game:GetService("Players"):Chat(":respawn others")
+                            wait(0.1)
+                            game:GetService("Players"):Chat(":explode others")
+                        end
                     end
                 end
             end
-        end
+        end)
     end
     KAHHax.intServerOOF = true
 end

@@ -1,12 +1,12 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not KAHHax.antiModule then
-    KAHHax.AntiPunish = false
+    KAHHax.antiPunish = false
     KAHHax.antiBlind = false
     KAHHax.antiKill = false
     local Character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 
     game:GetService("Lighting").ChildAdded:Connect(function(child) -- // Anti Punish
-        if KAHHax.AntiPunish and child.Name == game:GetService("Players").LocalPlayer.Name then
+        if KAHHax.antiPunish and child.Name == game:GetService("Players").LocalPlayer.Name then
             game:GetService("Players"):Chat(":reset me")
         end
     end)
