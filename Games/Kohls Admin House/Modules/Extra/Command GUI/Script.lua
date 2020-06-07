@@ -11,11 +11,11 @@ local Close = Instance.new("TextButton")
 local Body = Instance.new("Frame")
 local CMDFrame = Instance.new("ScrollingFrame")
 local UIListLayout = Instance.new("UIListLayout")
-local spammessage = Instance.new("TextButton")
-local stopspammessage = Instance.new("TextButton")
+local spamkillall = Instance.new("TextButton")
+local stopspamkillall = Instance.new("TextButton")
 local getmusic = Instance.new("TextButton")
 local refreshmusic = Instance.new("TextButton")
-local playnumber = Instance.new("TextButton")
+local play1 = Instance.new("TextButton")
 local xcmds = Instance.new("TextButton")
 local intall = Instance.new("TextButton")
 local intmusic = Instance.new("TextButton")
@@ -37,8 +37,10 @@ local sallsounds = Instance.new("TextButton")
 local pmusic = Instance.new("TextButton")
 local smusic = Instance.new("TextButton")
 local earrape = Instance.new("TextButton")
-local blacklistphrase = Instance.new("TextButton")
-local removeblacklistphrase = Instance.new("TextButton")
+local blacklistphraseEpicGamer69killallresetall = Instance.new("TextButton")
+local removeblacklistphraseEpicGamer69killall = Instance.new("TextButton")
+local paintareaReallyredObbyBox = Instance.new("TextButton")
+local TextButton = Instance.new("TextButton")
 
 --Properties:
 
@@ -102,38 +104,38 @@ CMDFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 CMDFrame.BorderSizePixel = 0
 CMDFrame.Size = UDim2.new(0, 400, 0, 350)
 CMDFrame.CanvasPosition = Vector2.new(0, 1050)
-CMDFrame.CanvasSize = UDim2.new(0, 0, 4, 0)
+CMDFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
 
 UIListLayout.Parent = CMDFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-spammessage.Name = ":spam <\"message\">"
-spammessage.Parent = CMDFrame
-spammessage.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-spammessage.BackgroundTransparency = 1.000
-spammessage.BorderSizePixel = 0
-spammessage.Size = UDim2.new(0, 400, 0, 50)
-spammessage.AutoButtonColor = false
-spammessage.Font = Enum.Font.Gotham
-spammessage.Text = "    > :spam <\"message\">"
-spammessage.TextColor3 = Color3.fromRGB(255, 255, 255)
-spammessage.TextSize = 14.000
-spammessage.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-spammessage.TextXAlignment = Enum.TextXAlignment.Left
+spamkillall.Name = ":spam kill all"
+spamkillall.Parent = CMDFrame
+spamkillall.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+spamkillall.BackgroundTransparency = 1.000
+spamkillall.BorderSizePixel = 0
+spamkillall.Size = UDim2.new(0, 400, 0, 50)
+spamkillall.AutoButtonColor = false
+spamkillall.Font = Enum.Font.Gotham
+spamkillall.Text = "    > :spam <\"message\">"
+spamkillall.TextColor3 = Color3.fromRGB(255, 255, 255)
+spamkillall.TextSize = 14.000
+spamkillall.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+spamkillall.TextXAlignment = Enum.TextXAlignment.Left
 
-stopspammessage.Name = ":stopspam <\"message\">"
-stopspammessage.Parent = CMDFrame
-stopspammessage.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-stopspammessage.BackgroundTransparency = 1.000
-stopspammessage.BorderSizePixel = 0
-stopspammessage.Size = UDim2.new(0, 400, 0, 50)
-stopspammessage.AutoButtonColor = false
-stopspammessage.Font = Enum.Font.Gotham
-stopspammessage.Text = "    > :stopspam <\"message\">"
-stopspammessage.TextColor3 = Color3.fromRGB(255, 255, 255)
-stopspammessage.TextSize = 14.000
-stopspammessage.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-stopspammessage.TextXAlignment = Enum.TextXAlignment.Left
+stopspamkillall.Name = ":stopspam kill all"
+stopspamkillall.Parent = CMDFrame
+stopspamkillall.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+stopspamkillall.BackgroundTransparency = 1.000
+stopspamkillall.BorderSizePixel = 0
+stopspamkillall.Size = UDim2.new(0, 400, 0, 50)
+stopspamkillall.AutoButtonColor = false
+stopspamkillall.Font = Enum.Font.Gotham
+stopspamkillall.Text = "    > :stopspam <\"message\">"
+stopspamkillall.TextColor3 = Color3.fromRGB(255, 255, 255)
+stopspamkillall.TextSize = 14.000
+stopspamkillall.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+stopspamkillall.TextXAlignment = Enum.TextXAlignment.Left
 
 getmusic.Name = ":getmusic"
 getmusic.Parent = CMDFrame
@@ -163,19 +165,19 @@ refreshmusic.TextSize = 14.000
 refreshmusic.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 refreshmusic.TextXAlignment = Enum.TextXAlignment.Left
 
-playnumber.Name = ":play <\"number\">"
-playnumber.Parent = CMDFrame
-playnumber.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-playnumber.BackgroundTransparency = 1.000
-playnumber.BorderSizePixel = 0
-playnumber.Size = UDim2.new(0, 400, 0, 50)
-playnumber.AutoButtonColor = false
-playnumber.Font = Enum.Font.Gotham
-playnumber.Text = "    > :play <\"number\">"
-playnumber.TextColor3 = Color3.fromRGB(255, 255, 255)
-playnumber.TextSize = 14.000
-playnumber.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-playnumber.TextXAlignment = Enum.TextXAlignment.Left
+play1.Name = ":play 1"
+play1.Parent = CMDFrame
+play1.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+play1.BackgroundTransparency = 1.000
+play1.BorderSizePixel = 0
+play1.Size = UDim2.new(0, 400, 0, 50)
+play1.AutoButtonColor = false
+play1.Font = Enum.Font.Gotham
+play1.Text = "    > :play <\"number\">"
+play1.TextColor3 = Color3.fromRGB(255, 255, 255)
+play1.TextSize = 14.000
+play1.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+play1.TextXAlignment = Enum.TextXAlignment.Left
 
 xcmds.Name = ":xcmds"
 xcmds.Parent = CMDFrame
@@ -487,35 +489,62 @@ earrape.TextSize = 14.000
 earrape.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 earrape.TextXAlignment = Enum.TextXAlignment.Left
 
-blacklistphrase.Name = ":blacklistphrase"
-blacklistphrase.Parent = CMDFrame
-blacklistphrase.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-blacklistphrase.BackgroundTransparency = 1.000
-blacklistphrase.BorderSizePixel = 0
-blacklistphrase.Position = UDim2.new(0, 0, -0.0114285713, 0)
-blacklistphrase.Size = UDim2.new(0, 400, 0, 50)
-blacklistphrase.AutoButtonColor = false
-blacklistphrase.Font = Enum.Font.Gotham
-blacklistphrase.Text = "    > :blacklistphrase | PLAYERNAME | PHRASE | PUNISHMENT  "
-blacklistphrase.TextColor3 = Color3.fromRGB(255, 255, 255)
-blacklistphrase.TextSize = 14.000
-blacklistphrase.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-blacklistphrase.TextXAlignment = Enum.TextXAlignment.Left
+blacklistphraseEpicGamer69killallresetall.Name = ":blacklistphrase | EpicGamer69 | kill all | reset all"
+blacklistphraseEpicGamer69killallresetall.Parent = CMDFrame
+blacklistphraseEpicGamer69killallresetall.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+blacklistphraseEpicGamer69killallresetall.BackgroundTransparency = 1.000
+blacklistphraseEpicGamer69killallresetall.BorderSizePixel = 0
+blacklistphraseEpicGamer69killallresetall.Position = UDim2.new(0, 0, -0.0114285713, 0)
+blacklistphraseEpicGamer69killallresetall.Size = UDim2.new(0, 400, 0, 50)
+blacklistphraseEpicGamer69killallresetall.AutoButtonColor = false
+blacklistphraseEpicGamer69killallresetall.Font = Enum.Font.Gotham
+blacklistphraseEpicGamer69killallresetall.Text = "    > :blacklistphrase | PLAYERNAME | PHRASE | PUNISHMENT  "
+blacklistphraseEpicGamer69killallresetall.TextColor3 = Color3.fromRGB(255, 255, 255)
+blacklistphraseEpicGamer69killallresetall.TextSize = 14.000
+blacklistphraseEpicGamer69killallresetall.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+blacklistphraseEpicGamer69killallresetall.TextXAlignment = Enum.TextXAlignment.Left
 
-removeblacklistphrase.Name = ":removeblacklistphrase"
-removeblacklistphrase.Parent = CMDFrame
-removeblacklistphrase.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-removeblacklistphrase.BackgroundTransparency = 1.000
-removeblacklistphrase.BorderSizePixel = 0
-removeblacklistphrase.Position = UDim2.new(0, 0, -0.0114285713, 0)
-removeblacklistphrase.Size = UDim2.new(0, 400, 0, 50)
-removeblacklistphrase.AutoButtonColor = false
-removeblacklistphrase.Font = Enum.Font.Gotham
-removeblacklistphrase.Text = "    > :blacklistphrase | PLAYERNAME | PHRASE"
-removeblacklistphrase.TextColor3 = Color3.fromRGB(255, 255, 255)
-removeblacklistphrase.TextSize = 14.000
-removeblacklistphrase.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-removeblacklistphrase.TextXAlignment = Enum.TextXAlignment.Left
+removeblacklistphraseEpicGamer69killall.Name = ":removeblacklistphrase | EpicGamer69 | kill all"
+removeblacklistphraseEpicGamer69killall.Parent = CMDFrame
+removeblacklistphraseEpicGamer69killall.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+removeblacklistphraseEpicGamer69killall.BackgroundTransparency = 1.000
+removeblacklistphraseEpicGamer69killall.BorderSizePixel = 0
+removeblacklistphraseEpicGamer69killall.Position = UDim2.new(0, 0, -0.0114285713, 0)
+removeblacklistphraseEpicGamer69killall.Size = UDim2.new(0, 400, 0, 50)
+removeblacklistphraseEpicGamer69killall.AutoButtonColor = false
+removeblacklistphraseEpicGamer69killall.Font = Enum.Font.Gotham
+removeblacklistphraseEpicGamer69killall.Text = "    > :removeblacklistphrase | PLAYERNAME | PHRASE"
+removeblacklistphraseEpicGamer69killall.TextColor3 = Color3.fromRGB(255, 255, 255)
+removeblacklistphraseEpicGamer69killall.TextSize = 14.000
+removeblacklistphraseEpicGamer69killall.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+removeblacklistphraseEpicGamer69killall.TextXAlignment = Enum.TextXAlignment.Left
+
+paintareaReallyredObbyBox.Name = ":paintarea | Really red | Obby Box"
+paintareaReallyredObbyBox.Parent = CMDFrame
+paintareaReallyredObbyBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+paintareaReallyredObbyBox.BackgroundTransparency = 1.000
+paintareaReallyredObbyBox.BorderSizePixel = 0
+paintareaReallyredObbyBox.Position = UDim2.new(0, 0, -0.0114285713, 0)
+paintareaReallyredObbyBox.Size = UDim2.new(0, 400, 0, 50)
+paintareaReallyredObbyBox.AutoButtonColor = false
+paintareaReallyredObbyBox.Font = Enum.Font.Gotham
+paintareaReallyredObbyBox.Text = "    > :paintarea | COLOUR | SECTION"
+paintareaReallyredObbyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+paintareaReallyredObbyBox.TextSize = 14.000
+paintareaReallyredObbyBox.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+paintareaReallyredObbyBox.TextXAlignment = Enum.TextXAlignment.Left
+
+TextButton.Parent = Header
+TextButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TextButton.BackgroundTransparency = 1.000
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.38499999, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 50)
+TextButton.AutoButtonColor = false
+TextButton.Font = Enum.Font.Gotham
+TextButton.Text = " click cmds 4 example print"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextSize = 14.000
 
 -- // Script
 local Dragger = {}; do
@@ -606,7 +635,7 @@ for i,v in pairs(CMDFrame:GetChildren()) do
 	if v:IsA("TextButton") then
 		hoverGlow(v, v)
 		local ButtonClickConnection = v.MouseButton1Click:Connect(function()
-			print(v.Name)
+			print('Example: '..v.Name)
 		end)
 		table.insert(Connections, {Connection = ButtonClickConnection})
 	end

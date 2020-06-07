@@ -235,6 +235,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
 
     -- // Server OOF Commands
     if KAHHax.intServerOOF then
+        local paintareacommand = string.split(message, " | ")
         if string.match(message, ":movebaseplate") then
             KAHHax.moveBaseplate()
         elseif string.match(message, ":partspam") then
@@ -243,8 +244,14 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":respam") then
             KAHHax.RespawnExplode = not KAHHax.RespawnExplode
             print('Respawn-Explode Spam Toggle:', (not KAHHax.RespawnExplode and "Disabled." or "Enabled."))
-
-        end -- too stupid to do the paint server thing
+        elseif paintareacommand[1] and paintareacommand[2] and paintareacommand[3] then
+            local initialcommmand = paintareacommand[1]
+            local colour = paintareacommand[2]
+            local section = paintareacommand[3]
+            if initialcommmand == ":paintarea" then
+                KAHHax.paintServer(colour, section)
+            end
+        end
     end
 
     -- // Sound Abuse Commands
