@@ -151,5 +151,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     elseif string.sub(message, 1, 10) == ":stopspam " then
         local spammessage = string.sub(message, 11)
         removeSpamPhrase(spammessage)
+    elseif string.sub(message, 1, 10) == ":xcmds" then -- // cmd gui
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Command%20GUI/Script.lua"))()
     end
 end)
