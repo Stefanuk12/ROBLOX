@@ -14,7 +14,7 @@ if not KAHHax["intServerOOF"] then
 
         -- // Some Vars
         local paintRemote = game:GetService("Players").LocalPlayer.Character:FindFirstChild("PaintBucket").Remotes.ServerControls
-        local SelectedColour = BrickColor.new(Colour)
+        local SelectedColour = BrickColor.new(Colour).Color
         local Terrain = game:GetService("Workspace").Terrain["_Game"]
 
         -- // Rainbow Function

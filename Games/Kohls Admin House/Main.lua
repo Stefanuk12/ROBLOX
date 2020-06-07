@@ -248,10 +248,8 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             local initialcommmand = paintareacommand[1]
             local colour = paintareacommand[2]
             local section = paintareacommand[3]
-            print('Passed.')
             if initialcommmand == ":paintarea" then
                 KAHHax.paintServer(colour, section)
-                print('Test:', colour, section)
             end
         end
     end
