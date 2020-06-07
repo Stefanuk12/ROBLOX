@@ -16,6 +16,7 @@ local stopspammessage = Instance.new("TextButton")
 local getmusic = Instance.new("TextButton")
 local refreshmusic = Instance.new("TextButton")
 local playnumber = Instance.new("TextButton")
+local xcmds = Instance.new("TextButton")
 
 --Properties:
 
@@ -151,6 +152,20 @@ playnumber.TextColor3 = Color3.fromRGB(255, 255, 255)
 playnumber.TextSize = 14.000
 playnumber.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 playnumber.TextXAlignment = Enum.TextXAlignment.Left
+
+xcmds.Name = ":xcmds"
+xcmds.Parent = CMDFrame
+xcmds.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+xcmds.BackgroundTransparency = 1.000
+xcmds.BorderSizePixel = 0
+xcmds.Size = UDim2.new(0, 300, 0, 50)
+xcmds.AutoButtonColor = false
+xcmds.Font = Enum.Font.Gotham
+xcmds.Text = "    > :xcmds - shows this"
+xcmds.TextColor3 = Color3.fromRGB(255, 255, 255)
+xcmds.TextSize = 14.000
+xcmds.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+xcmds.TextXAlignment = Enum.TextXAlignment.Left
 
 -- // Script
 local Dragger = {}; do
