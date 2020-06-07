@@ -6,20 +6,20 @@ if not KAHHax.intAdmin then
         print('Regened Admin.')
     end
     function KAHHax.getAdmin()
-        regenAdmin()
+        KAHHax.regenAdmin()
         wait(0.25)
         local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
         local PreviousPos = game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame
         game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = Pad.Head.CFrame
         wait(1)
         game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = PreviousPos
-        print('Got Admim.')
+        print('Got Admin.')
     end
     function KAHHax.togglePersistantAdmin()
         KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
+        print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
         if KAHHax.PersistantAdmin then
-            regenAdmin()
-            print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
+            KAHHax.regenAdmin()
             coroutine.wrap(function()
                 while wait() do 
                     if not KAHHax.PersistantAdmin then break end
