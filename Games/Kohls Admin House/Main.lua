@@ -218,9 +218,12 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         if string.match(message, ":movebaseplate") then
             KAHHax.moveBaseplate()
         elseif string.match(message, ":partspam") then
-            KAHHax.partSpamToggle()
+            KAHHax.PartSpam = not KAHHax.PartSpam
+            print('Part Spam Toggle:', (not KAHHax.PartSpam and "Disabled." or "Enabled."))
         elseif string.match(message, ":respam") then
-            KAHHax.respawnExplodeToggle()
+            KAHHax.RespawnExplode = not KAHHax.RespawnExplode
+            print('Respawn-Explode Spam Toggle:', (not KAHHax.RespawnExplode and "Disabled." or "Enabled."))
+
         end -- too stupid to do the paint server thing
     end
 

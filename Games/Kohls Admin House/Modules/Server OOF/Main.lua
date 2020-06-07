@@ -36,7 +36,7 @@ if not KAHHax["intServerOOF"] then
         else
             for i,v in pairs(Terrain.Workspace:GetChildren()) do
                 if string.match(v.Name, Section) then
-                    for a,x in pairs(v:GetDescendants())
+                    for a,x in pairs(v:GetDescendants()) do
                         if x:IsA("Part") then
                             paintRemote:InvokeServer("PaintPart", {["Part"] = x, ["Color"] = (string.lower(Colour) == "rainbow" and rainbowcolour or SelectedColour)})
                         end
@@ -60,35 +60,27 @@ if not KAHHax["intServerOOF"] then
         print('Moved Baseplate.')
     end
 
-    function KAHHax.partSpamToggle()
-        KAHHax.PartSpam = not KAHHax.PartSpam
-        print('Part Spam Toggle:', (not KAHHax.PartSpam and "Disabled." or "Enabled."))
-        coroutine.wrap(function()
-            while wait() do
-                if not KAHHax.PartSpam then break end
-                if KAHHax.PartSpam then
-                    game:GetService("Players"):Chat("part/10/10/10")
-                end
+    coroutine.wrap(function()
+        while wait() do
+            if not KAHHax.PartSpam then break end
+            if KAHHax.PartSpam then
+                game:GetService("Players"):Chat("part/10/10/10")
             end
-        end)()
-    end
+        end
+    end)()
 
-    function KAHHax.respawnExplodeToggle()
-        KAHHax.RespawnExplode = not KAHHax.RespawnExplode
-        print('Respawn-Explode Spam Toggle:', (not KAHHax.RespawnExplode and "Disabled." or "Enabled."))
-        coroutine.wrap(function()
-            while wait() do
-                if not KAHHax.RespawnExplode then break end
-                    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                        if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
-                            game:GetService("Players"):Chat(":respawn others")
-                            wait(0.1)
-                            game:GetService("Players"):Chat(":explode others")
-                        end
+    coroutine.wrap(function()
+        while wait() do
+            if KAHHax.RespawnExplode then
+                for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                    if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+                        game:GetService("Players"):Chat(":respawn others")
+                        wait(0.1)
+                        game:GetService("Players"):Chat(":explode others")
                     end
                 end
             end
-        end)()
-    end
+        end
+    end)()
     KAHHax["intServerOOF"] = true
 end
