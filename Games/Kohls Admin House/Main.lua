@@ -68,7 +68,7 @@ function blacklistPhrase(Player, Phrase, Punishment)
         if not KAHHax["Blacklist"][Player] then 
             KAHHax["Blacklist"][Player] = {}
         end
-        table.insert(KAHHax["Blacklist"][Player], ["Phrase"] = Phrase, ["Punishment"] = Punishment)
+        table.insert(KAHHax["Blacklist"][Player], {["Phrase"] = Phrase, ["Punishment"] = Punishment})
         print('Blacklisted Phrase:', "Player -", Player, "Phrase -", Phrase, "Punishment -", Punishment)
     else
         warn('Player Does Not Exist!')
