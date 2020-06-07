@@ -13,6 +13,10 @@ local CMDFrame = Instance.new("ScrollingFrame")
 local UIListLayout = Instance.new("UIListLayout")
 local spammessage = Instance.new("TextButton")
 local stopspammessage = Instance.new("TextButton")
+local getmusic = Instance.new("TextButton")
+local refreshmusic = Instance.new("TextButton")
+local playnumber = Instance.new("TextButton")
+local xcmds = Instance.new("TextButton")
 
 --Properties:
 
@@ -106,6 +110,62 @@ stopspammessage.TextColor3 = Color3.fromRGB(255, 255, 255)
 stopspammessage.TextSize = 14.000
 stopspammessage.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 stopspammessage.TextXAlignment = Enum.TextXAlignment.Left
+
+getmusic.Name = ":getmusic"
+getmusic.Parent = CMDFrame
+getmusic.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+getmusic.BackgroundTransparency = 1.000
+getmusic.BorderSizePixel = 0
+getmusic.Size = UDim2.new(0, 300, 0, 50)
+getmusic.AutoButtonColor = false
+getmusic.Font = Enum.Font.Gotham
+getmusic.Text = "    > :getmusic - returns all playable songs"
+getmusic.TextColor3 = Color3.fromRGB(255, 255, 255)
+getmusic.TextSize = 14.000
+getmusic.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+getmusic.TextXAlignment = Enum.TextXAlignment.Left
+
+refreshmusic.Name = ":refreshmusic"
+refreshmusic.Parent = CMDFrame
+refreshmusic.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+refreshmusic.BackgroundTransparency = 1.000
+refreshmusic.BorderSizePixel = 0
+refreshmusic.Size = UDim2.new(0, 300, 0, 50)
+refreshmusic.AutoButtonColor = false
+refreshmusic.Font = Enum.Font.Gotham
+refreshmusic.Text = "    > :refreshmusic - refreshes musictable"
+refreshmusic.TextColor3 = Color3.fromRGB(255, 255, 255)
+refreshmusic.TextSize = 14.000
+refreshmusic.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+refreshmusic.TextXAlignment = Enum.TextXAlignment.Left
+
+playnumber.Name = ":play <\"number\">"
+playnumber.Parent = CMDFrame
+playnumber.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+playnumber.BackgroundTransparency = 1.000
+playnumber.BorderSizePixel = 0
+playnumber.Size = UDim2.new(0, 300, 0, 50)
+playnumber.AutoButtonColor = false
+playnumber.Font = Enum.Font.Gotham
+playnumber.Text = "    > :play <\"number\">"
+playnumber.TextColor3 = Color3.fromRGB(255, 255, 255)
+playnumber.TextSize = 14.000
+playnumber.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+playnumber.TextXAlignment = Enum.TextXAlignment.Left
+
+xcmds.Name = ":xcmds"
+xcmds.Parent = CMDFrame
+xcmds.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+xcmds.BackgroundTransparency = 1.000
+xcmds.BorderSizePixel = 0
+xcmds.Size = UDim2.new(0, 300, 0, 50)
+xcmds.AutoButtonColor = false
+xcmds.Font = Enum.Font.Gotham
+xcmds.Text = "    > :xcmds - shows this"
+xcmds.TextColor3 = Color3.fromRGB(255, 255, 255)
+xcmds.TextSize = 14.000
+xcmds.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+xcmds.TextXAlignment = Enum.TextXAlignment.Left--
 
 -- // Script
 local Dragger = {}; do
