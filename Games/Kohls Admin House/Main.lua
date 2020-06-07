@@ -194,7 +194,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             KAHHax.regenAdmin()
         elseif string.match(message, ":getadmin") then
             KAHHax.getAdmin()
-        elseif string.match(message, ":tPAdmin") then
+        elseif string.match(message, ":tpadmin") then
             KAHHax.togglePersistantAdmin()
         end
     end 
