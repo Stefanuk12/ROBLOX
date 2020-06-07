@@ -6,14 +6,14 @@ if not KAHHax["intServerOOF"] then
     -- // Paint Server
     function KAHHax.paintServer(Colour, Section)
         -- // Give you the Paint Bucket if you don't have it
-        if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
+        if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") or not game:GetService("Players").LocalPlayer.Character:FindFirstChild("PaintBucket") then
             game:GetService("Players"):Chat(":gear me 18474459")
             wait(0.5)
             game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket"))
         end
 
         -- // Some Vars
-        local paintRemote = game:GetService("Players").LocalPlayer.Character:FindFirstChild("PaintBucket").Remotes.ServerControls
+        local paintRemote = game:GetService("Players").LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
         local SelectedColour = BrickColor.new(Colour).Color
         local Terrain = game:GetService("Workspace").Terrain["_Game"]
 
