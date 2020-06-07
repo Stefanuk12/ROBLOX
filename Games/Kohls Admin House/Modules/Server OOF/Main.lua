@@ -1,6 +1,6 @@
 -- // Int
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax.intServerOOF then
+if not KAHHax["intServerOOF"] then
     KAHHax["RespawnExplode"] = false
 
     -- // Paint Server
@@ -90,5 +90,5 @@ if not KAHHax.intServerOOF then
             end
         end)
     end
-    KAHHax.intServerOOF = true
+    KAHHax["intServerOOF"] = true
 end

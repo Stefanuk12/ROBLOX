@@ -1,5 +1,5 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax.antiModule then
+if not KAHHax["antiModule"] then
     KAHHax.antiPunish = false
     KAHHax.antiBlind = false
     KAHHax.antiKill = false
@@ -21,5 +21,5 @@ if not KAHHax.antiModule then
         if KAHHax.antiKill then game:GetService("Players"):Chat(":reset me") end
     end)
 
-    KAHHax.antiModule = true
+    KAHHax["antiModule"] = true
 end

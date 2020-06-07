@@ -1,6 +1,6 @@
 -- // Initialisation
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax.intSoundAbuse then
+if not KAHHax["intSoundAbuse"] then
     getgenv().KAHHax["EarRape"] = false
 
     -- // Script
@@ -45,5 +45,5 @@ if not KAHHax.intSoundAbuse then
         end)()
     end
 
-    KAHHax.intSoundAbuse = true
+    KAHHax["intSoundAbuse"] = true
 end

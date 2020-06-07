@@ -1,7 +1,7 @@
 -- // Initialisation
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 
-if not KAHHax.intMusicCMDs then
+if not KAHHax["intMusicCMDs"] then
     local GHMusicTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/MusicTable.json'
     KAHHax.musicTable = {}
     KAHHax.oldMusicTable = {}
@@ -69,5 +69,5 @@ if not KAHHax.intMusicCMDs then
         end
     end)
 
-    KAHHax.intMusicCMDs = true
+    KAHHax["intMusicCMDs"] = true
 end

@@ -1,5 +1,5 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax.intAdmin then
+if not KAHHax["intAdmin"] then
     function KAHHax.regenAdmin()
         local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
         fireclickdetector(Regen.ClickDetector, 0)
@@ -32,5 +32,5 @@ if not KAHHax.intAdmin then
         end
     end
 
-    KAHHax.intAdmin = true
+    KAHHax["intAdmin"] = true
 end

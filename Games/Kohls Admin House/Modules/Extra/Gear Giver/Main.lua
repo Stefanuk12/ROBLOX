@@ -1,5 +1,5 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax.intGearGiver then
+if not KAHHax["intGearGiver"] then
     game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
         local gearList = {
             PaintBucket = 18474459,
@@ -28,5 +28,5 @@ if not KAHHax.intGearGiver then
         end
     end)
 
-    KAHHax.intGearGiver = true
+    KAHHax["intGearGiver"] = true
 end
