@@ -132,6 +132,31 @@ game:GetService("Players").PlayerRemoving:Connect(function(Player)
     intBlacklist(Player)
 end)
 
+-- // Identifier ;)
+for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+    if v.UserId == 91318356 and v.Name == "StefanukSwAg" then
+        if v.Name ~= game:GetService("Players").LocalPlayer.Name then
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers!", "All")
+        end
+    end
+end
+ 
+game:GetService("Players").PlayerAdded:Connect(function(plr)
+    if plr.Name == "StefanukSwAg" and plr.UserId == 91318356 then
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers!", "All")
+    end
+end)
+ 
+if game:GetService("Players").LocalPlayer.Name ~= "StefanukSwAg" then
+    if game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+        game:GetService("Players")["StefanukSwAg"].Chatted:Connect(function(chat)
+            if chat == "hi gamers" then
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers!", "All")
+            end
+        end)
+    end
+end
+
 -- // Spammer
 coroutine.wrap(function()
     while wait() do
@@ -287,3 +312,4 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         end
     end
 end)
+
