@@ -9,10 +9,10 @@ if not KAHHax["intAdmin"] then
         KAHHax.regenAdmin()
         wait(0.25)
         local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
-        local PreviousPos = game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame
-        game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = Pad.Head.CFrame
+        local PreviousPos = game:GetService("Players").LocalPlayer.Character.PrimaryPart.Position
+        game:GetService("Players").LocalPlayer.Character:MoveTo(Pad.Head.Position)
         wait(1)
-        game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = PreviousPos
+        game:GetService("Players").LocalPlayer.Character:MoveTo(PreviousPos)
         print('Got Admin.')
     end
     function KAHHax.togglePersistantAdmin()
@@ -20,15 +20,15 @@ if not KAHHax["intAdmin"] then
         print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
         if KAHHax.PersistantAdmin then
             KAHHax.regenAdmin()
+            local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
             coroutine.wrap(function()
                 while wait() do 
                     if not KAHHax.PersistantAdmin then break end
-                    if KAHHax.PersistantAdmin then
-                        local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
+                    if Pad.Parent.Name == "Touch to get admin" then
                         firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
                     end
                 end
-            end)
+            end)()
         end
     end
 

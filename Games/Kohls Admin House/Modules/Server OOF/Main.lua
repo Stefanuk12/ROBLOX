@@ -70,7 +70,7 @@ if not KAHHax["intServerOOF"] then
                     game:GetService("Players"):Chat("part/10/10/10")
                 end
             end
-        end
+        end)()
     end
 
     function KAHHax.respawnExplodeToggle()
@@ -88,7 +88,7 @@ if not KAHHax["intServerOOF"] then
                     end
                 end
             end
-        end)
+        end)()
     end
     KAHHax["intServerOOF"] = true
 end
