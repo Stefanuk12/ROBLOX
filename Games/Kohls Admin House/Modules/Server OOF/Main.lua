@@ -62,7 +62,6 @@ if not KAHHax["intServerOOF"] then
 
     coroutine.wrap(function()
         while wait() do
-            if not KAHHax.PartSpam then break end
             if KAHHax.PartSpam then
                 game:GetService("Players"):Chat("part/10/10/10")
             end
