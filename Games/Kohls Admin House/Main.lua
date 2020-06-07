@@ -52,32 +52,40 @@ function verifyGameIntegrity()
     return CheckList
 end
 
+function getPlayer(String)
+    local Found = {}
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v.Name:lower():sub(1, #String) == String:lower() then
+            table.insert(Found, v)
+        end
+    end 
+end
+
 -- // Blacklist
 function blacklistPhrase(Player, Phrase, Punishment)
     local Player = tostring(Player)
-    if Player ~= "StefanukSwAg" then
-        local count
+    if Player ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild(Player) then
         if not KAHHax["Blacklist"][Player] then 
             KAHHax["Blacklist"][Player] = {}
-            count = 0 
-        else
-            count = #KAHHax["Blacklist"][Player]
         end
-        KAHHax["Blacklist"][Player][count + 1] = {["Phrase"] = Phrase, ["Punishment"] = Punishment}
+        table.insert(KAHHax["Blacklist"][Player], ["Phrase"] = Phrase, ["Punishment"] = Punishment)
+        print('Blacklisted Phrase:', "Player -", Player, "Phrase -", Phrase, "Punishment -", Punishment)
+    else
+        warn('Player Does Not Exist!')
     end
 end
 
 function removeBlacklistedPhrase(Player, Phrase)
     local Player = tostring(Player)
-    if Player ~= "StefanukSwAg" then
-        if KAHHax["Blacklist"][Player] then
-            for i,v in pairs(KAHHax["Blacklist"][Player]) do
-                if v.Phrase == Phrase then
-                    table.remove(KAHHax["Blacklist"][Player], i)
-                    print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
-                end
+    if Player ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild(Player) and KAHHax["Blacklist"][Player] then
+        for i,v in pairs(KAHHax["Blacklist"][Player]) do
+            if v.Phrase == Phrase then
+                table.remove(KAHHax["Blacklist"][Player], i)
+                print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
             end
         end
+    else
+        warn('Player Does Not Exist!')
     end
 end
 
@@ -262,10 +270,12 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         local blacklistedphrase = blacklistcommand[3]
         local punishmentphrase = blacklistcommand[4]
 
-        if initialcommmand == ":blacklistphrase" then
-            blacklistPhrase(targetblacklist, blacklistedphrase, punishmentphrase)
-        elseif initialcommmand == ":removeblacklistphrase" then
-            removeBlacklistedPhrase(targetblacklist, blacklistedphrase)
+        for _,plr in pairs(getPlayer(targetblacklist)) do
+            if initialcommmand == ":blacklistphrase" then
+                blacklistPhrase(plr.Name, blacklistedphrase, punishmentphrase)
+            elseif initialcommmand == ":removeblacklistphrase" then
+                removeBlacklistedPhrase(plr.Name, blacklistedphrase)
+            end
         end
     end
 end)
