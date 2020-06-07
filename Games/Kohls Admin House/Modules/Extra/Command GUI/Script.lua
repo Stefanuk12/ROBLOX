@@ -635,7 +635,7 @@ for i,v in pairs(CMDFrame:GetChildren()) do
 	if v:IsA("TextButton") then
 		hoverGlow(v, v)
 		local ButtonClickConnection = v.MouseButton1Click:Connect(function()
-			print('Example: '..v.Name)
+			print('Command Example - '..v.Name)
 		end)
 		table.insert(Connections, {Connection = ButtonClickConnection})
 	end
