@@ -9,7 +9,7 @@ if not KAHHax["intServerOOF"] then
         if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
             game:GetService("Players"):Chat(":gear me 18474459")
             wait(0.5)
-            game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):Equip(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket"))
+            game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket"))
         end
 
         -- // Some Vars
