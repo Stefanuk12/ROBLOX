@@ -165,7 +165,7 @@ xcmds.Text = "    > :xcmds - shows this"
 xcmds.TextColor3 = Color3.fromRGB(255, 255, 255)
 xcmds.TextSize = 14.000
 xcmds.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-xcmds.TextXAlignment = Enum.TextXAlignment.Left--
+xcmds.TextXAlignment = Enum.TextXAlignment.Left
 
 -- // Script
 local Dragger = {}; do
