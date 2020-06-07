@@ -155,3 +155,77 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Command%20GUI/Script.lua"))()
     end
 end)
+
+
+-- // Chat CMDs
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
+    -- // Initialise Commands
+    if string.match(message, ":intmusic") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/Main.lua"))() -- // Loadstring Music CMDs
+    elseif string.match(message, ":intadmin") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Admin/Main.lua"))() -- // Loadstring Admin Module
+    elseif string.match(message, ":intgeargiver") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Gear%20Giver/Main.lua"))() -- // Loadstring Gear Giver
+    elseif string.match(message, ":intserveroof") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Server%20OOF/Main.lua"))() -- // Loadstring Server OOF Module
+    elseif string.match(message, ":intsoundabuse") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
+    elseif string.match(message, ":intantimodule") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
+    elseif string.match(message, ":intall") then
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/Main.lua"))() -- // Loadstring Music CMDs
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Admin/Main.lua"))() -- // Loadstring Admin Module
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Gear%20Giver/Main.lua"))() -- // Loadstring Gear Giver
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Server%20OOF/Main.lua"))() -- // Loadstring Server OOF Module
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
+    end
+
+    -- // Admin Commands
+    if KAHHax.intAdmin then
+        if string.match(message, ":regen") then
+            KAHHax.regenAdmin()
+        elseif string.match(message, ":getadmin") then
+            KAHHax.getAdmin()
+        elseif string.match(message, ":tPAdmin") then
+            KAHHax.togglePersistantAdmin()
+        end
+    end 
+
+    -- // Anti Module Commands
+    if KAHHax.antiModule then
+        if string.match(message, ":antipunish") then
+            KAHHax.AntiPunish = not KAHHax.AntiPunish
+        elseif string.match(message, ":antiblind") then
+            KAHHax.antiBlind = not KAHHax.antiBlind
+        elseif string.match(message, ":antikill") then
+            KAHHax.antiKill = not KAHHax.antiKill
+        end
+    end
+
+    -- // Server OOF Commands
+    if KAHHax.intServerOOF then
+        if string.match(message, ":movebaseplate") then
+            KAHHax.moveBaseplate()
+        elseif string.match(message, ":partspam") then
+            KAHHax.partSpamToggle()
+        elseif string.match(message, ":respam") then
+            KAHHax.respawnExplodeToggle()
+        end -- too stupid to do the paint server thing
+    end
+
+    -- // Sound Abuse Commands
+    if KAHHax.intSoundAbuse then
+        if string.match(message, ":pallsounds") then
+            KAHHax.playAllSounds()
+        elseif string.match(message, ":sallsounds") then
+            KAHHax.stopAllSounds()
+        elseif string.match(message, ":pmusic") then
+            KAHHax.playMusic()
+        elseif string.match(message, ":smusic") then
+            KAHHax.stopMusic()
+        elseif string.match(message, ":earrape") then
+            KAHHax.earRape()
+        end
+    end
+end)
