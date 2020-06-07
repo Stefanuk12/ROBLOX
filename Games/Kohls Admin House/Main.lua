@@ -1,3 +1,4 @@
+warn('Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12')
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 KAHHax.Blacklist = {
     --[[
@@ -313,3 +314,4 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     end
 end)
 
+warn('Loaded oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12')
