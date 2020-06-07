@@ -59,6 +59,7 @@ function getPlayer(String)
             table.insert(Found, v)
         end
     end 
+    return Found
 end
 
 -- // Blacklist
