@@ -1,5 +1,7 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not KAHHax["intAdmin"] then
+    KAHHax.regenAdmin()
+    KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
     function KAHHax.regenAdmin()
         local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
         fireclickdetector(Regen.ClickDetector, 0)
@@ -20,13 +22,16 @@ if not KAHHax["intAdmin"] then
         print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
         if KAHHax.PersistantAdmin then
             KAHHax.regenAdmin()
-            local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head
             coroutine.wrap(function()
                 while wait() do 
                     if not KAHHax.PersistantAdmin then break end
-                    if Pad.Parent.Name == "Touch to get admin" then
-                        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad, 0)
-                    end
+                    pcall(function()         
+                        if KAHHax.Pad.Name ~= "Touch to get admin" then
+                            KAHHax.regenAdmin()
+                            wait(0.1)
+                        end
+                        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad, 0)
+                    end)()
                 end
             end)()
         end
