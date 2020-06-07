@@ -1,12 +1,13 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not KAHHax["intAdmin"] then
-    KAHHax.regenAdmin()
-    KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
     function KAHHax.regenAdmin()
         local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
         fireclickdetector(Regen.ClickDetector, 0)
         print('Regened Admin.')
     end
+    KAHHax.regenAdmin()
+    wait(0.1)
+    KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
     function KAHHax.getAdmin()
         KAHHax.regenAdmin()
         wait(0.25)
