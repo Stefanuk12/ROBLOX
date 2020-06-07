@@ -9,13 +9,7 @@ KAHHax.Blacklist = {
         },
     ]]
 }
-KAHHax.SpamList = {
-    --[[
-        [1] = {
-            Phrase = ":kill all"
-        },
-    ]]
-}
+KAHHax.SpamList = {}
 
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
@@ -120,16 +114,23 @@ end)
 -- // Spammer
 coroutine.wrap(function()
     while wait() do
-        for i,v in pairs(KAHHax.SpamList) do
-            game:GetService("Players"):Chat(v.Phrase)
+        if KAHHax.SpamList[1] then
+            for i,v in pairs(KAHHax.SpamList) do
+                game:GetService("Players"):Chat(v.Phrase)
+            end
         end
     end
-end)
+end)()
 
 function addToSpamList(givenPhrase)
-    for i,v in pairs(KAHHax.SpamList) do
-        if v.Phrase ~= givenPhrase then
-            table.insert(KAHHax.SpamList, {Phrase = givenPhrase})
+    if not KAHHax.SpamList[1] then
+        table.insert(KAHHax.SpamList, {Phrase = givenPhrase})
+    else
+        for i,v in pairs(KAHHax.SpamList) do
+            if v.Phrase ~= givenPhrase then
+                table.insert(KAHHax.SpamList, {Phrase = givenPhrase})
+                print('Successfully added to Spam List, Message:', givenPhrase)
+            end
         end
     end
 end
@@ -138,16 +139,17 @@ function removeSpamPhrase(givenPhrase)
     for i,v in pairs(KAHHax.SpamList) do
         if v.Phrase == givenPhrase then
             table.remove(KAHHax.SpamList, i)
+            print('Successfully removed to Spam List, Message:', givenPhrase)
         end
     end
 end
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     if string.sub(message, 1, 6) == ":spam " then
-        local spammessage = string.sub(message, 6)
+        local spammessage = string.sub(message, 7)
         addToSpamList(spammessage)
     elseif string.sub(message, 1, 10) == ":stopspam " then
-        local spammessage = string.sub(message, 10)
+        local spammessage = string.sub(message, 11)
         removeSpamPhrase(spammessage)
     end
 end)
