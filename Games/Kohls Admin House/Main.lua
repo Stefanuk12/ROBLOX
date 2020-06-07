@@ -238,7 +238,8 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":smusic") then
             KAHHax.stopMusic()
         elseif string.match(message, ":earrape") then
-            KAHHax.earRape()
+            print('EarRape Toggle:', (not KAHHax.EarRape and "Disabled." or "Enabled."))
+            KAHHax.EarRape = not KAHHax.EarRape
         end
     end
 end)

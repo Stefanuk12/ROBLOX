@@ -32,18 +32,13 @@ if not KAHHax["intSoundAbuse"] then
         end
         print('Stopped Music.')
     end
-    function KAHHax.earRape()
-        KAHHax.EarRape = not KAHHax.EarRape
-        print('EarRape Toggle:', (not KAHHax.EarRape and "Disabled." or "Enabled."))
-        coroutine.wrap(function()
-            while wait(0.25) do
-                if not KAHHax.EarRape then break end
-                if KAHHax.EarRape then
-                    playAllSounds()
-                end
+    coroutine.wrap(function()
+        while wait(0.25) do
+            if KAHHax.EarRape then
+                KAHHax.playAllSounds()
             end
-        end)()
-    end
+        end
+    end)()
 
     KAHHax["intSoundAbuse"] = true
 end
