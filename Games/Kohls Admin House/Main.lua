@@ -254,7 +254,8 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":getadmin") then
             KAHHax.getAdmin()
         elseif string.match(message, ":tpadmin") then
-            KAHHax.togglePersistantAdmin()
+            KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
+            print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
         end
     end 
 

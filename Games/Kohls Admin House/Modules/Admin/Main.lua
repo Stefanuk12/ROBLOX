@@ -14,25 +14,20 @@ if not KAHHax["intAdmin"] then
         firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
         print('Got Admin.')
     end
-    function KAHHax.togglePersistantAdmin()
-        KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
-        print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
-        if KAHHax.PersistantAdmin then
-            KAHHax.regenAdmin()
-            coroutine.wrap(function()
-                while wait() do 
-                    if not KAHHax.PersistantAdmin then break end
-                    pcall(function()         
-                        if KAHHax.Pad.Name ~= "Touch to get admin" or KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin") then
-                            KAHHax.regenAdmin()
-                        end
-                        wait(0.25)
-                        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
-                    end)()
+
+    coroutine.wrap(function()
+        while wait() do 
+            if KAHHax.PersistantAdmin then
+                if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
+                    if KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin") then
+                        KAHHax.regenAdmin()
+                    end
+                    wait(0.25)
+                    firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
                 end
-            end)()
+            end
         end
-    end
+    end)()
 
     KAHHax["intAdmin"] = true
 end
