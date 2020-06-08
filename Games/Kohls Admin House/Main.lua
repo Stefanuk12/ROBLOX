@@ -69,7 +69,7 @@ end
 function getPlayer(String)
     local Found = {}
     local Target = string.lower(String)
-    if Target = "all" then
+    if Target == "all" then
         for i,v in pairs(game:GetService("Players"):GetPlayers())
             table.insert(Found, v)
         end
