@@ -125,11 +125,11 @@ function getPlayerText(Player, Health, Distance, Visbility)
 end
 
 function ValiantESP:setTracer(visible)
-    self.tracer[2] = visible
-end;
+    self.ObjectTracer[2] = visible
+end
 
 function ValiantESP:setText(text)
-    self.name[2] = text
+    self.ObjectName[2] = text
 end
 
 function ValiantESP:update()
