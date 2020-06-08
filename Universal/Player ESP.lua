@@ -217,7 +217,6 @@ for i, v in next, Players.GetPlayers(Players) do
     if v ~= LocalPlayer then
         local Character = v.Character
         if Character and Character:WaitForChild("HumanoidRootPart") and Character:WaitForChild("Head") then
-            print(v)
             trackingPlayer[#trackingPlayer + 1] = ValiantESP.new({
                 Player = v,
                 Boxes = PlayerESP["Boxes"],
