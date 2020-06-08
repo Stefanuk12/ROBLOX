@@ -17,23 +17,24 @@ if not KAHHax["intAdmin"] then
     end
 
     coroutine.wrap(function()
+        KAHHax.regenAdmin()
+        local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChildWhichIsA("Model")
+        local Clone = Pad:Clone()
+        Clone.Parent = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads
+        if Pad.Head:FindFirstChildWhichIsA("Humanoid") then Pad.Head:FindFirstChildWhichIsA("Humanoid"):Destroy() end
         while wait() do 
             if KAHHax.PersistantAdmin and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
-                local function stuff()
-                    for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:GetChildren()) do
-                        local Pad = v
-                        if string.match(Pad.Name, "admin") then
-                            if Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
-                                KAHHax.regenAdmin()
-                            end
-                            Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
-                            Pad.Head.CanCollide = false
-                            Pad.Head.CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg").CFrame
-                        end      
-                        return 
-                    end
+                if string.match(Pad.Name, "admin") and (Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name)) then
+                    KAHHax.regenAdmin()
                 end
-                stuff()
+                Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
+                Pad.Head.CanCollide = false
+                Pad.Head.Transparency = 1
+                Pad.Head.CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg").CFrame
+                Clone.Name = "hi yes persistant admin is on rn"
+            elseif not KAHHax.PersistantAdmin then
+                Clone.Name = game:GetService("Players").LocalPlayer.Name.."'s admin"
+                Clone.Head.BrickColor = BrickColor.new("Really red")
             end
         end
     end)()
