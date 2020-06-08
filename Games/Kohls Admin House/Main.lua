@@ -107,12 +107,13 @@ end
 
 function removeBlacklistedPhrase(Player, Phrase)
     local Player = tostring(Player)
-    if Player ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild(Player) and KAHHax["Blacklist"][Player] then
+    if Player ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild(Player) then  
         for i,v in pairs(KAHHax["Blacklist"][Player]) do
             if v.Phrase == Phrase then
                 table.remove(KAHHax["Blacklist"][Player], i)
                 print('Removed Blacklisted Phrase from - Player:', Player, "| Phrase:", Phrase)
             end
+            
         end
     else
         warn('Player Does Not Exist!')
@@ -323,7 +324,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
 
     -- // Blacklist Commands
     local blacklistcommand = string.split(message, " | ")
-    if blacklistcommand[1] and blacklistcommand[2] and blacklistcommand[3] and blacklistcommand[4] then
+    if string.match(blacklistcommand[1], "blacklistphrase") and blacklistcommand[2] and blacklistcommand[3] then
         local initialcommmand = blacklistcommand[1]
         local targetblacklist = blacklistcommand[2]
         local blacklistedphrase = blacklistcommand[3]
