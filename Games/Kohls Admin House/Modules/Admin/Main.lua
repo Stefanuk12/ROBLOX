@@ -29,6 +29,7 @@ if not KAHHax["intAdmin"] then
                         end
                         wait(0.25)
                         firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad.Head, 0)
+                        print('testy')
                         return 
                     end
                 end
