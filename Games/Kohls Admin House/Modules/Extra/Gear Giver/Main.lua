@@ -7,9 +7,11 @@ if not KAHHax["intGearGiver"] then
             RainbowCarpet = 225921000,
             Airstrike = 88885539,
             SuperRLauncher = 190094159,
+            RLauncher = 32356064,
             SSTripmine = 11999247,
             ASSentry = 68603151,
             RPOSword = 159229806,
+            IceStaff = 19704064,
         }
         local prefix = ":give "
         local splitmessage = string.split(msg, " ")
