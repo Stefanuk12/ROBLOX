@@ -115,8 +115,8 @@ function ValiantESP.new(data)
 end
 
 function getPlayerText(Player, Health, Distance, Visbility)
-    local PlayerHumanoid = Player.Character.FindFirstChild(Player.Character, "Humanoid")
-    local HealthText = tostring(PlayerHumanoid.Health / PlayerHumanoid.MaxHealth * 100).."%"
+    local PlayerHumanoid = Player.Character.FindFirstChildWhichIsA(Player.Character, "Humanoid")
+    local HealthText = tostring(math.floor(PlayerHumanoid.Health / PlayerHumanoid.MaxHealth) * 100).."%"
     local DistanceText = tostring("["..math.floor(game.GetService(game, "Players").LocalPlayer.DistanceFromCharacter(game.GetService(game, "Players").LocalPlayer, Player.Character.PrimaryPart.Position)).."]")
     local PlayerText = tostring(Player.Name)
     local VisbilityText = (Visbility and PlayerESP["VisibleText"] or PlayerESP["NotVisibleText"])
@@ -152,12 +152,12 @@ function ValiantESP:update()
                     ObjectBox.Color = (self.BoxColor == 'rainbow' and rainbowcolour or self.BoxColor)
                     ObjectName.Color = self.NameColor
                     ObjectTracer.Color = self.TracerColor
-                    Text = getPlayerText(self.Player, self.Health, self.Distance, true)
+                    ObjectName.Text = getPlayerText(self.Player, self.Health, self.Distance, true)
                 else
                     ObjectBox.Color = PlayerESP["NotVisibleColor"]
                     ObjectName.Color = PlayerESP["NotVisibleColor"]
                     ObjectTracer.Color = PlayerESP["NotVisibleColor"]
-                    Text = getPlayerText(self.Player, self.Health, self.Distance, false)
+                    ObjectName.Text = getPlayerText(self.Player, self.Health, self.Distance, false)
                 end
             
                 ObjectTracer.To = Vector2.new(rootPos.X, rootPos.Y - BoxSize.Y / 2)
