@@ -25,6 +25,7 @@ KAHHax.BlacklistConnections = {
         }
     ]]
 }
+KAHHax.lagServer = false
 
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
@@ -90,6 +91,23 @@ function getPlayer(String)
     end
     return Found
 end
+
+-- // Lag Server
+coroutine.wrap(function()
+    while wait() do
+        if KAHHax.lagServer then
+            -- placeholder for when this happens
+            break
+        end
+    end
+end)()
+
+game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
+    if not gpe and key.KeyCode == Enum.KeyCode.LeftShift then
+        KAHHax.lagServer = not KAHHax.lagServer
+        print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
+    end
+end)
 
 -- // Blacklist
 function blacklistPhrase(Player, Phrase, Punishment)
@@ -347,6 +365,9 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     -- // Other Commands
     if string.match(message, ":rj") then
         game:GetService('TeleportService'):Teleport(game.PlaceId)
+    elseif string.match(message, ":lagserver") then
+        KAHHax.lagServer = not KAHHax.lagServer
+        print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
     end
 end)
 
