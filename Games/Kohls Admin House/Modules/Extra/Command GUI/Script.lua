@@ -40,6 +40,7 @@ local earrape = Instance.new("TextButton")
 local blacklistphraseEpicGamer69killallresetall = Instance.new("TextButton")
 local removeblacklistphraseEpicGamer69killall = Instance.new("TextButton")
 local paintareaReallyredObbyBox = Instance.new("TextButton")
+local rj = Instance.new("TextButton")
 local ExamplePrompt = Instance.new("TextButton")
 
 --Properties:
@@ -532,6 +533,21 @@ paintareaReallyredObbyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 paintareaReallyredObbyBox.TextSize = 14.000
 paintareaReallyredObbyBox.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 paintareaReallyredObbyBox.TextXAlignment = Enum.TextXAlignment.Left
+
+rj.Name = ":rj"
+rj.Parent = CMDFrame
+rj.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+rj.BackgroundTransparency = 1.000
+rj.BorderSizePixel = 0
+rj.Position = UDim2.new(0, 0, -0.0114285713, 0)
+rj.Size = UDim2.new(0, 400, 0, 50)
+rj.AutoButtonColor = false
+rj.Font = Enum.Font.Gotham
+rj.Text = "    > :rj - rejoins the server"
+rj.TextColor3 = Color3.fromRGB(255, 255, 255)
+rj.TextSize = 14.000
+rj.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+rj.TextXAlignment = Enum.TextXAlignment.Left
 
 ExamplePrompt.Name = "Example Prompt"
 ExamplePrompt.Parent = Header
