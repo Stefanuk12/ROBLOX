@@ -256,9 +256,6 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":tpadmin") then      
             KAHHax.PersistantAdmin = not KAHHax.PersistantAdmin
             print('Persistant Admin Toggle:', (not KAHHax.PersistantAdmin and "Disabled." or "Enabled."))
-            wait(0.25)
-            KAHHax.regenAdmin()
-            KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
         end
     end 
 
