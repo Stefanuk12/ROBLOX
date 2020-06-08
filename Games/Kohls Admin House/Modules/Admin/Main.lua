@@ -23,7 +23,7 @@ if not KAHHax["intAdmin"] then
                     for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:GetChildren()) do
                         local Pad = v
                         if string.match(Pad.Name, "admin") then
-                            if Pad.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
+                            if Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
                                 KAHHax.regenAdmin()
                             end
                         end
