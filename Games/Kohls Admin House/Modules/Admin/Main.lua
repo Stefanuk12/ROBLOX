@@ -9,9 +9,11 @@ if not KAHHax["intAdmin"] then
     wait(0.1)
     KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
     function KAHHax.getAdmin()
-        KAHHax.regenAdmin()
-        wait(0.1)
-        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
+        if not game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin") then
+            KAHHax.regenAdmin()
+            wait(0.1)
+        end
+        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head, 0)
         print('Got Admin.')
     end
 
