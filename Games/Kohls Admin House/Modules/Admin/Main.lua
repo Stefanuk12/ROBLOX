@@ -20,6 +20,15 @@ if not KAHHax["intAdmin"] then
     coroutine.wrap(function()
         while wait() do 
             if KAHHax.PersistantAdmin and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
+                for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:GetChildren()) do
+                    local Pad = v
+                    if string.match(Pad.Name, "admin") then
+                        if Pad.Name ~= "Touch to get admin" or string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
+                            regenAdmin()
+                        end
+                    end
+                    return 
+                end
                 wait(0.25)
                 firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
             end
