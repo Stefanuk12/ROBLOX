@@ -7,7 +7,6 @@ if not KAHHax["intAdmin"] then
     end
     KAHHax.regenAdmin()
     wait(0.1)
-    KAHHax.Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin")
     function KAHHax.getAdmin()
         if not game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin") then
             KAHHax.regenAdmin()
@@ -24,7 +23,7 @@ if not KAHHax["intAdmin"] then
                     local Pad = v
                     if string.match(Pad.Name, "admin") then
                         if Pad.Name ~= "Touch to get admin" or string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
-                            regenAdmin()
+                            KAHHax.regenAdmin()
                         end
                     end
                     wait(0.25)
