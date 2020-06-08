@@ -282,6 +282,9 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         elseif string.match(message, ":antikill") then
             KAHHax.antiKill = not KAHHax.antiKill
             print('Anti Kill Toggle:', (not KAHHax.antiKill and "Disabled." or "Enabled."))
+        elseif string.match(message, ":antijail") then
+            KAHHax.antiJail = not KAHHax.antiJail
+            print('Anti Jail Toggle:', (not KAHHax.antiJail and "Disabled." or "Enabled."))
         end
     end
 
