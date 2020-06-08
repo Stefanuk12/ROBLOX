@@ -27,10 +27,12 @@ if not KAHHax["antiModule"] then
             if KAHHax.antiKill then game:GetService("Players"):Chat(":reset me") end
         end)
     end)
-    game:GetService("Workspace").Terrain["_Game"].Folder.ChildAdded:Connect(function(child)
+
+    game:GetService("Workspace")["Terrain"]["_Game"]["Folder"].ChildAdded:Connect(function(child)
         if KAHHax.antiJail and child.Name == tostring(game:GetService("Players").LocalPlayer.Name.."'s jail") then
             game:GetService("Players"):Chat(":removejails")
         end
     end)
+
     KAHHax["antiModule"] = true
 end

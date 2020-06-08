@@ -51,7 +51,7 @@ if not KAHHax["intServerOOF"] then
 
     function KAHHax.moveBasepate()
         local Character = game:GetService("Players").LocalPlayer.Character
-        Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").Terrain["_Game"]["Spawn1"].CFrame * CFrame.new(0, 2, 0)
+        Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-24.5691223, 5.18362379, -24.1011047, -0.00181806216, -0.0071650343, -0.999972641, -1.20756167e-05, 0.99997431, -0.00716502406, 0.999998331, -9.60367743e-07, -0.00181810197)
         wait(1)
         Character:WaitForChild("Humanoid").Sit = true
         wait(0.5)
@@ -63,6 +63,10 @@ if not KAHHax["intServerOOF"] then
         print('Moved Baseplate.')
     end
 
+    function KAHHax.resetBaseplate()
+        Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-10.643856, 6.09559107, 41.6999359, -0.999985814, 0.000743591227, -0.00526216626, 0.000726414903, 0.999994397, 0.0032653599, 0.00526453461, 0.00326149096, -0.999980867)
+    end
+    
     coroutine.wrap(function()
         while wait() do
             if KAHHax.PartSpam then
