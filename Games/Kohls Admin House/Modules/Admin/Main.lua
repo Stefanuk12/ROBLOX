@@ -26,7 +26,9 @@ if not KAHHax["intAdmin"] then
                             if Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
                                 KAHHax.regenAdmin()
                             end
-                            firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad.Head, 0)
+                            Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
+                            Pad.Head.CanCollide = false
+                            Pad.Head.CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg").CFrame
                         end      
                         return 
                     end
