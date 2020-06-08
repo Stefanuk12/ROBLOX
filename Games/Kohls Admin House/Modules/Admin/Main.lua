@@ -35,7 +35,7 @@ if not KAHHax["intAdmin"] then
                 Clone.Name = game:GetService("Players").LocalPlayer.Name.."'s admin"
             elseif not KAHHax.PersistantAdmin then
                 Clone.Head.BrickColor = BrickColor.new("Bright green")
-                Clone.Name = "Touch for admin"
+                Clone.Name = "Touch to get admin"
             end
         end
     end)()
