@@ -144,7 +144,7 @@ function ValiantESP:update()
         local visible = (self.TeamCheck and Player.TeamColor ~= LocalPlayer.TeamColor) or (not self.TeamCheck)
 
         if rootVis then
-            if ObjectBox.__OBJECT_EXISTS and ObjectTracer.__OBJECT_EXISTS and ObjectName.__OBJECT_EXISTS then
+            if ObjectBox and ObjectTracer and ObjectName then
                 ObjectBox.Size = Vector2.new(2350 / rootPos.Z, headPos.Y - legPos.Y)
                 local BoxSize = ObjectBox.Size
                 ObjectBox.Position = Vector2.new(rootPos.X - BoxSize.X / 2, rootPos.Y - BoxSize.Y / 2)
@@ -170,7 +170,7 @@ function ValiantESP:update()
                 ObjectName.Visible = Names and visible
             end
         else
-            if ObjectBox.__OBJECT_EXISTS and ObjectTracer.__OBJECT_EXISTS and ObjectName.__OBJECT_EXISTS then
+            if ObjectBox and ObjectTracer and ObjectName then
                 ObjectBox.Visible = false
                 ObjectTracer.Visible = false
                 ObjectName.Visible = false
