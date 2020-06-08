@@ -23,10 +23,10 @@ if not KAHHax["intAdmin"] then
                 while wait() do 
                     if not KAHHax.PersistantAdmin then break end
                     pcall(function()         
-                        if KAHHax.Pad.Name ~= "Touch to get admin" then
+                        if KAHHax.Pad.Name ~= "Touch to get admin" or KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin") then
                             KAHHax.regenAdmin()
-                            wait(0.1)
                         end
+                        wait(0.25)
                         firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
                     end)()
                 end
