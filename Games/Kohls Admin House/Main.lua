@@ -70,11 +70,11 @@ function getPlayer(String)
     local Found = {}
     local Target = string.lower(String)
     if Target == "all" then
-        for i,v in pairs(game:GetService("Players"):GetPlayers())
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
             table.insert(Found, v)
         end
     elseif Target == "others" then
-        for i,v in pairs(game:GetService("Players"):GetPlayers())
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
             if v ~= game:GetService("Players").LocalPlayer then
                 table.insert(Found, v)
             end
