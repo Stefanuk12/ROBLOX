@@ -5,7 +5,7 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLO
 
 -- // Vars
 local ValiantESP = {}
-local trackingitem = {}
+local trackingplayer = {}
 local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = workspace.CurrentCamera
 local worldToViewportPoint = CurrentCamera.WorldToViewportPoint
