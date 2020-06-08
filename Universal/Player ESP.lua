@@ -78,7 +78,7 @@ function ValiantESP.new(data)
     local rootPos, rootVis = worldToViewportPoint(CurrentCamera, rootPart.Position)
     local headPos = worldToViewportPoint(CurrentCamera, Head.Position + HeadOffset)
     local legPos = worldToViewportPoint(CurrentCamera, rootPart.Position - legOffset)
-    local Visible = (self.TeamCheck and Player.TeamColor ~= LocalPlayer.TeamColor) or (not self.TeamCheck)
+    local visible = (self.TeamCheck and Player.TeamColor ~= LocalPlayer.TeamColor) or (not self.TeamCheck)
 
     local ObjectBox = Drawing.new("Square")
     ObjectBox.Thickness = 2
@@ -102,9 +102,9 @@ function ValiantESP.new(data)
         ObjectTracer.To = Vector2.new(rootPos.X, rootPos.Y - ObjectBox.Size.Y / 2)
         ObjectName.Position = Vector2.new(rootPos.X, (rootPos.Y + ObjectBox.Size.Y / 2) - 25)
 
-        ObjectBox.Visible = Boxes and Visible
-        ObjectTracer.Visible = Tracers and Visible
-        ObjectName.Visible = Names and Visible
+        ObjectBox.Visible = Boxes and visible
+        ObjectTracer.Visible = Tracers and visible
+        ObjectName.Visible = Names and visible
     end
 
     self.ObjectBox = {ObjectBox, Boxes}
