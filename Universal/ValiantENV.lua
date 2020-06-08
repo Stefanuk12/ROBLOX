@@ -183,14 +183,8 @@ function valiantENV()
     setstack = setstack or debug.setstack or setstack
     syn_context_get = syn_context_get
     syn_isactive = syn_isactive
-    profilebegan = debug.profilebegin or profilebegin
-    traceback = debug.traceback or traceback
-    setmetatable = debug.setmetatable or setmetatable
-    getmetatable = debug.getmetatable or getmetatable
     getfenv = debug.getfenv or getfenv
     setupvaluename = debug.setupvaluename or setupvaluename
-    profileend = debug.profileend or profileend
-    validlevel = debug.validlevel or validlevel
 end
 
 valiantENV()
