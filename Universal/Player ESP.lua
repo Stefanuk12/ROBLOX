@@ -15,7 +15,7 @@ local legOffset = Vector3.new(0, 3, 0)
 
 local PlayerESP = {
     Enabled = true,
-    TeamCheck = true,
+    TeamCheck = false,
     Health = true,
     Boxes = true,
     Tracers = true,
@@ -26,7 +26,7 @@ local PlayerESP = {
     BoxColor = 'rainbow',
     VisibleText = '>:)',
     NotVisibleText = '>:c',
-    NotVisibleColor = Color3.fromRGB(231, 84, 128),
+    NotVisibleColor = Color3.fromRGB(255, 0, 0),
 }
 
 rainbowcolour = Color3.fromHSV(1, 1, 1)
@@ -37,7 +37,7 @@ local rainbowroad = coroutine.wrap(function()
     end
 end)()
 
-local isPartVisible = function(Part, PartDescendant)
+function isPartVisible(Part, PartDescendant)
     local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
     local Origin = CurrentCamera.CFrame.p
     local _, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, Part.Position)
@@ -168,13 +168,16 @@ function ValiantESP:update()
                 ObjectBox.Visible = Boxes and visible
                 ObjectTracer.Visible = Tracers and visible
                 ObjectName.Visible = Names and visible
+                print(Boxes, visible)
             end
         elseif not rootVis and ObjectBox and ObjectTracer and ObjectName then
             ObjectBox.Visible = false
             ObjectTracer.Visible = false
             ObjectName.Visible = false
         end
+
     end
+
 end
 
 function ValiantESP:remove()
@@ -214,7 +217,7 @@ end
 for i, v in next, Players.GetPlayers(Players) do
     if v ~= LocalPlayer then
         local Character = v.Character
-        if Character and Character:WaitForChild("HumanoidRootPart") and Character:WaitForChild("Head") then
+        if Character and Character:WaitForChild(Character.PrimaryPart.Name) and Character:WaitForChild("Head") then
             trackingPlayer[#trackingPlayer + 1] = ValiantESP.new({
                 Player = v,
                 Boxes = PlayerESP["Boxes"],
