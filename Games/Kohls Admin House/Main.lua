@@ -326,6 +326,11 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             end
         end
     end
+
+    -- // Other Commands
+    if string.match(message, ":rj") then
+        game:GetService('TeleportService'):Teleport(game.PlaceId)
+    end
 end)
 
 warn('Loaded oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12')
