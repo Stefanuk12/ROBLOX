@@ -19,7 +19,7 @@ if not KAHHax["intAdmin"] then
         while wait() do 
             if KAHHax.PersistantAdmin then
                 if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
-                    if KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin") then
+                    if (KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin") or KAHHax.Pad.Name ~= "Touch to get admin") then
                         KAHHax.regenAdmin()
                     end
                     wait(0.25)
