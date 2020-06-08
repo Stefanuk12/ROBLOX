@@ -23,11 +23,9 @@ if not KAHHax["intAdmin"] then
                     for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:GetChildren()) do
                         local Pad = v
                         if string.match(Pad.Name, "admin") then
-                            print(Pad:GetFullName())
                             if Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name) then
                                 KAHHax.regenAdmin()
                             end
-                            wait(0.25)
                             firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], Pad.Head, 0)
                         end      
                         return 
