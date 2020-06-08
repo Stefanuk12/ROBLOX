@@ -31,10 +31,11 @@ if not KAHHax["intAdmin"] then
                 Pad.Head.CanCollide = false
                 Pad.Head.Transparency = 1
                 Pad.Head.CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg").CFrame
-                Clone.Name = "hi yes persistant admin is on rn"
-            elseif not KAHHax.PersistantAdmin then
-                Clone.Name = game:GetService("Players").LocalPlayer.Name.."'s admin"
                 Clone.Head.BrickColor = BrickColor.new("Really red")
+                Clone.Name = game:GetService("Players").LocalPlayer.Name.."'s admin"
+            elseif not KAHHax.PersistantAdmin then
+                Clone.Head.BrickColor = BrickColor.new("Bright green")
+                Clone.Name = game:GetService("Players").LocalPlayer.Name.."Touch for admin"
             end
         end
     end)()

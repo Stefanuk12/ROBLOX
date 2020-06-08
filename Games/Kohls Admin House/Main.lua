@@ -58,7 +58,7 @@ function verifyGameIntegrity()
                 CheckList["Total"] = false
             end
         end
-        if count < 9 then
+        if count < 9 or count < 10 then
             CheckList["AdminPads"] = false
             CheckList["Total"] = false
         end
