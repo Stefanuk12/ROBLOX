@@ -14,19 +14,12 @@ if not KAHHax["intAdmin"] then
         firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
         print('Got Admin.')
     end
-    function xor (a, b)
-        if a ~= b then return true else return false end
-    end
+
     coroutine.wrap(function()
         while wait() do 
-            if KAHHax.PersistantAdmin then
-                if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
-                    if xor(KAHHax.Pad.Name ~= tostring(game:GetService("Players").LocalPlayer.Name.."'s admin"), KAHHax.Pad.Name ~= "Touch to get admin") then
-                        KAHHax.regenAdmin()
-                    end
-                    wait(0.25)
-                    firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
-                end
+            if KAHHax.PersistantAdmin and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
+                wait(0.25)
+                firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
             end
         end
     end)()
