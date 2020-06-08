@@ -27,10 +27,10 @@ if not KAHHax["intAdmin"] then
                             regenAdmin()
                         end
                     end
+                    wait(0.25)
+                    firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
                     return 
                 end
-                wait(0.25)
-                firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], KAHHax.Pad.Head, 0)
             end
         end
     end)()
