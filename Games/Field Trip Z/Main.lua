@@ -15,6 +15,7 @@ local Glass = Interactions:WaitForChild("Glass")
 -- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
 local backupnamecall = mt.__namecall
+getnamecallmethod = getnamecallmethod or get_namecall_method
 setreadonly(mt, false)
 
 -- // Inf DMG + Godmode
