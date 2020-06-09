@@ -40,7 +40,7 @@ end)
 for i,v in pairs(Players:GetPlayers()) do
     local Humanoid = v.Character:FindFirstChildWhichIsA("Humanoid")
     RF:InvokeServer("HEAL_PLAYER", v, 100)
-    Humanoid.HealthChanged:Connect(function(health)
+    Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
         RF:InvokeServer("HEAL_PLAYER", v, 100)
     end)
 end
