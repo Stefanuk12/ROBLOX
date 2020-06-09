@@ -25,7 +25,6 @@ KAHHax.BlacklistConnections = {
         }
     ]]
 }
-KAHHax.lagServer = false
 
 function verifyGameIntegrity()
     local _Game = game:GetService("Workspace").Terrain["_Game"]
@@ -91,24 +90,6 @@ function getPlayer(String)
     end
     return Found
 end
-
--- // Lag Server
-local largetext = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt")
-coroutine.wrap(function()
-    while wait() do
-        if KAHHax.lagServer and (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-            game:GetService("Players"):Chat(":pm others "..largetext)
-        end
-    end
-end)()
-
-game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
-    if not gpe and key.KeyCode == Enum.KeyCode.LeftShift then
-        KAHHax.lagServer = not KAHHax.lagServer
-        getgenv().chatSpyEnabled = not KAHHax.lagServer
-        print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
-    end
-end)
 
 -- // Blacklist
 function blacklistPhrase(Player, Phrase, Punishment)

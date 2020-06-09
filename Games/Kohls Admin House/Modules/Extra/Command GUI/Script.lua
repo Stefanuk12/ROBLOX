@@ -42,6 +42,7 @@ local removeblacklistphraseEpicGamer69killall = Instance.new("TextButton")
 local paintareaReallyredObbyBox = Instance.new("TextButton")
 local rj = Instance.new("TextButton")
 local antijail = Instance.new("TextButton")
+local lagserverBindLeftShift = Instance.new("TextButton")
 local ExamplePrompt = Instance.new("TextButton")
 
 --Properties:
@@ -108,7 +109,6 @@ CMDFrame.Size = UDim2.new(0, 400, 0, 350)
 CMDFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
 
 UIListLayout.Parent = CMDFrame
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 spamkillall.Name = ":spam kill all"
 spamkillall.Parent = CMDFrame
@@ -564,6 +564,21 @@ antijail.TextColor3 = Color3.fromRGB(255, 255, 255)
 antijail.TextSize = 14.000
 antijail.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 antijail.TextXAlignment = Enum.TextXAlignment.Left
+
+lagserverBindLeftShift.Name = ":lagserver - Bind: Left Shift"
+lagserverBindLeftShift.Parent = CMDFrame
+lagserverBindLeftShift.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+lagserverBindLeftShift.BackgroundTransparency = 1.000
+lagserverBindLeftShift.BorderSizePixel = 0
+lagserverBindLeftShift.Position = UDim2.new(0, 0, -0.0114285713, 0)
+lagserverBindLeftShift.Size = UDim2.new(0, 400, 0, 50)
+lagserverBindLeftShift.AutoButtonColor = false
+lagserverBindLeftShift.Font = Enum.Font.Gotham
+lagserverBindLeftShift.Text = "    > :lagserver - Bind: Left Shift"
+lagserverBindLeftShift.TextColor3 = Color3.fromRGB(255, 255, 255)
+lagserverBindLeftShift.TextSize = 14.000
+lagserverBindLeftShift.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+lagserverBindLeftShift.TextXAlignment = Enum.TextXAlignment.Left
 
 ExamplePrompt.Name = "Example Prompt"
 ExamplePrompt.Parent = Header
