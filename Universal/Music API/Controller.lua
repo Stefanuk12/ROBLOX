@@ -24,31 +24,39 @@ function ValiantMusicAPI.checkBadSound(SoundId)
 end
 
 function ValiantMusicAPI.testAllSounds(mode)
-    warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
-    ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
-    for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-        coroutine.wrap(function()
-            wait(1)
-            if ValiantMusicAPI.checkBadSound(v.SoundId) then
+    if not ValiantMusicAPI.musicChecks then
+        warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
+        ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
+        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
+            coroutine.wrap(function()
                 wait(1)
-                ValiantMusicAPI.oldMusicTable[i] = nil
-                if mode then print('Removed:', v.Name) end
-            end
-        end)()
+                if ValiantMusicAPI.checkBadSound(v.SoundId) then
+                    wait(1)
+                    ValiantMusicAPI.oldMusicTable[i] = nil
+                    if mode then print('Removed:', v.Name) end
+                end
+            end)()
+        end
+        wait(30)
+        ValiantMusicAPI.musicTable = {}
+        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
+            table.insert(ValiantMusicAPI.musicTable, v)
+        end
+        warn('--~~-- Music Checks Finished! --~~--')
+        ValiantMusicAPI.musicChecks = true
     end
-    wait(30)
+end
+
+function ValiantMusicAPI.refreshSounds(mode)
+    ValiantMusicAPI.musicChecks = false
+    ValiantMusicAPI.GHMusicTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json'
     ValiantMusicAPI.musicTable = {}
-    for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-        table.insert(ValiantMusicAPI.musicTable, v)
-    end
-    warn('--~~-- Music Checks Finished! --~~--')
-    ValiantMusicAPI.musicChecks = true
+    ValiantMusicAPI.oldMusicTable = {}
+    ValiantMusicAPI.testAllSounds(mode)
 end
 
 function ValiantMusicAPI.returnMusic(mode)
-    if not ValiantMusicAPI.musicChecks then
-        ValiantMusicAPI.testAllSounds(mode)
-    end
+    ValiantMusicAPI.testAllSounds(mode)
     wait(0.5)
     for i,v in pairs(ValiantMusicAPI.musicTable) do
         print(i, "|", v.Name)
@@ -57,6 +65,9 @@ end
 
 function ValiantMusicAPI.getSound(Index)
     return ValiantMusicAPI.musicTable[Index].SoundId
+end
+function ValiantMusicAPI.getSoundName(Index)
+    return ValiantMusicAPI.musicTable[Index].Name
 end
 
 return ValiantMusicAPI
