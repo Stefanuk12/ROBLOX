@@ -96,7 +96,7 @@ end
 local largetext = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"))
 coroutine.wrap(function()
     while wait() do
-        if KAHHax.lagServer and not game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+        if KAHHax.lagServer and (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
             game:GetService("Players"):Chat(":pm others"..largetext)
         end
     end
