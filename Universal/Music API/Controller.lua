@@ -24,24 +24,30 @@ function ValiantMusicAPI.checkBadSound(SoundId)
 end
 
 function ValiantMusicAPI.testAllSounds(mode)
-    warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')
-    ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
-    for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-        coroutine.wrap(function()
-            wait(1)
-            if ValiantMusicAPI.checkBadSound(v.SoundId) then
+    if not ValiantMusicAPI.testingInProgress then
+        ValiantMusicAPI.testingInProgress = true
+        warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')  
+        ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
+        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
+            coroutine.wrap(function()
                 wait(1)
-                ValiantMusicAPI.oldMusicTable[i] = nil
-                if mode then print('Removed:', v.Name) end
-            end
-        end)()
+                if ValiantMusicAPI.checkBadSound(v.SoundId) then
+                    wait(1)
+                    ValiantMusicAPI.oldMusicTable[i] = nil
+                    if mode then print('Removed:', v.Name) end
+                end
+            end)()
+        end
+        wait(30)
+        ValiantMusicAPI.musicTable = {}
+        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
+            table.insert(ValiantMusicAPI.musicTable, v)
+        end
+        warn('--~~-- Music Checks Finished! --~~--')
+        ValiantMusicAPI.testingInProgress = false
+    else
+        warn('--~~-- Music Checks Already In Progress! --~~--')
     end
-    wait(30)
-    ValiantMusicAPI.musicTable = {}
-    for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-        table.insert(ValiantMusicAPI.musicTable, v)
-    end
-    warn('--~~-- Music Checks Finished! --~~--')
 end
 ValiantMusicAPI.testAllSounds(mode)
 
