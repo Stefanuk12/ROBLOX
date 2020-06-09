@@ -97,7 +97,7 @@ local largetext = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk1
 coroutine.wrap(function()
     while wait() do
         if KAHHax.lagServer and (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-            game:GetService("Players"):Chat(":pm others", largetext)
+            game:GetService("Players"):Chat(":pm others "..largetext)
         end
     end
 end)()
