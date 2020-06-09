@@ -216,17 +216,12 @@ function removeSpamPhrase(givenPhrase)
     end
 end
 
-game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
-    if string.sub(message, 1, 6) == ":spam " then
-        local spammessage = string.sub(message, 7)
-        addToSpamList(spammessage)
-    elseif string.sub(message, 1, 10) == ":stopspam " then
-        local spammessage = string.sub(message, 11)
-        removeSpamPhrase(spammessage)
-    elseif string.sub(message, 1, 6) == ":xcmds" then -- // cmd gui
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Command%20GUI/Script.lua"))()
+-- // Dont Die from Lava Blocks
+for i,v in pairs(game:GetService("Workspace")["Terrain"]["_Game"]["Workspace"].Obby:GetDescendants()) do
+    if v:IsA("TouchTransmitter") then
+        v:Destroy()
     end
-end)
+end
 
 -- // Chat CMDs
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
@@ -257,6 +252,17 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Main.lua"))() -- // Loadstring Anti Module
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Music%20Commands/Main.lua"))() -- // Loadstring Music CMDs
+    end
+    
+    -- // spam commmands + xcmds
+    if string.sub(message, 1, 6) == ":spam " then
+        local spammessage = string.sub(message, 7)
+        addToSpamList(spammessage)
+    elseif string.sub(message, 1, 10) == ":stopspam " then
+        local spammessage = string.sub(message, 11)
+        removeSpamPhrase(spammessage)
+    elseif string.sub(message, 1, 6) == ":xcmds" then -- // cmd gui
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Extra/Command%20GUI/Script.lua"))()
     end
 
     -- // Admin Commands
