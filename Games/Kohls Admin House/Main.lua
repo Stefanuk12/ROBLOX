@@ -93,7 +93,7 @@ function getPlayer(String)
 end
 
 -- // Lag Server
-local largetext = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"))()
+local largetext = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"))
 coroutine.wrap(function()
     while wait() do
         if KAHHax.lagServer and not game:GetService("Players"):FindFirstChild("StefanukSwAg") then
