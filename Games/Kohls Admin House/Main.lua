@@ -105,6 +105,7 @@ end)()
 game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
     if not gpe and key.KeyCode == Enum.KeyCode.LeftShift then
         KAHHax.lagServer = not KAHHax.lagServer
+        getgenv().chatSpyEnabled = not KAHHax.lagServer
         print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
     end
 end)
@@ -367,6 +368,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         game:GetService('TeleportService'):Teleport(game.PlaceId)
     elseif string.match(message, ":lagserver") then
         KAHHax.lagServer = not KAHHax.lagServer
+        getgenv().chatSpyEnabled = not KAHHax.lagServer
         print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
     end
 end)
