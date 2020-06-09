@@ -14,8 +14,10 @@ local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 local RF = ReplicatedStorage:WaitForChild("NetworkEvents"):WaitForChild("RemoteFunction")
 local Interactions = Workspace.Interactions
 local Weapons = Interactions:WaitForChild("Weapons")
+local BloodSamples = Interactions.BloodSamples
 local KillParts = Interactions.KillParts
 local Items = Interactions.Items
+local Glass = Interactions.Glass
 
 -- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
