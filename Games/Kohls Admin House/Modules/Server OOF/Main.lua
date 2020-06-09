@@ -29,10 +29,7 @@ if not KAHHax["intServerOOF"] then
         -- // Painting Sections
         if string.lower(Section) == "all" then
             for i,v in pairs(Terrain:GetDescendants()) do
-                local success = pcall(function() 
-                    local test = v["Color"] 
-                end)
-                if success then
+                if v:IsA("BasePart") then
                     paintRemote:InvokeServer("PaintPart", {["Part"] = v, ["Color"] = (string.lower(Colour) == "rainbow" and rainbowcolour or SelectedColour)})
                 end
             end
