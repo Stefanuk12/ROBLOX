@@ -1,11 +1,11 @@
--- Game: https://roblox.com/games/4954096313
+-- Game: https://roblox.com/games/4954096313/#
 
 -- // Vars
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RE = ReplicatedStorage:WaitForChild("NetworkEvents"):WaitForChild("RemoteEvent")
 local RF = ReplicatedStorage:WaitForChild("NetworkEvents"):WaitForChild("RemoteFunction")
-local Interactions = Workspace:WatForChild("Interactions")
+local Interactions = Workspace:WaitForChild("Interactions")
 local Weapons = Interactions:WaitForChild("Weapons")
 local BloodSamples = Interactions:WaitForChild("BloodSamples")
 local KillParts = Interactions:WaitForChild("KillParts")
