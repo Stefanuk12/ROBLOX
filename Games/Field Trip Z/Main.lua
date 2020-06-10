@@ -52,3 +52,19 @@ end
 KillParts.ChildAdded:Connect(function(child)
     child:Destroy()
 end)
+
+function getAllItems()
+    for i,v in pairs(Items:GetDescendants()) do
+        if v:IsA("ClickDetector") then
+            fireclickdetector(v, 0)
+        end
+    end
+end
+
+function getAllWeapons()
+    for i,v in pairs(Weapons:GetDescendants()) do
+        if v:IsA("ClickDetector") then
+            fireclickdetector(v, 0)
+        end
+    end
+end
