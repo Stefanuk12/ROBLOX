@@ -67,12 +67,12 @@ function checkTable(Item, Table)
 	return Passed
 end
 
-local function getClosestPlayerToCursor()
+function ValiantAimHacks.getClosestPlayerToCursor()
     local ClosestPlayer = nil
-    local Chance = math.chance(AimHacks["HitChance"])
+    local Chance = math.chance(ValiantAimHacks["HitChance"])
     local ShortestDistance = math.huge
-    if not Chance then AimHacks["Selected"] = (Chance and LocalPlayer or LocalPlayer) return (Chance and LocalPlayer or LocalPlayer) end
-    local isPartVisible = function(Part, PartDescendant)
+    if not Chance then ValiantAimHacks["Selected"] = (Chance and LocalPlayer or LocalPlayer) return (Chance and LocalPlayer or LocalPlayer) end
+    function isPartVisible(Part, PartDescendant)
         local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
         local Origin = CurrentCamera.CFrame.p
         local _, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, Part.Position)
@@ -84,36 +84,41 @@ local function getClosestPlayerToCursor()
         end
         return false
     end
-    for _,plr in pairs(Players.GetPlayers(Players)) do
-        if plr ~= LocalPlayer and plr.Character and plr.Character.FindFirstChild(plr.Character, "Humanoid") and plr.Character.Humanoid.Health > 0 and not checkTable(plr.Name, AimHacks["BlacklistedPlayers"]) then
-            if (AimHacks["TeamCheck"] and plr.Team ~= LocalPlayer.Team and not checkTable(tostring(plr.Team), AimHacks["BlacklistedTeams"])) then
-                local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
-                local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
-                if (Magnitude < (AimHacks["FOV"] * 6 - 8)) and (Magnitude < ShortestDistance) then
-                    if AimHacks["VisibleCheck"] and isPartVisible(plr.Character.PrimaryPart, plr.Character) then
-                        ClosestPlayer = plr
-                        ShortestDistance = Magnitude
-                    elseif not AimHacks["VisibleCheck"] then
-                        ClosestPlayer = plr
-                        ShortestDistance = Magnitude
-                    end
+    function checkTeam(localPlayer, targetPlayer)
+        if targetPlayer.Team ~= localPlayer.Team then
+            for _,v in pairs(ValiantAimHacks.BlacklistedTeams) do
+                if targetPlayer.Team ~= v.Team and targetPlayer.TeamColor ~= v.TeamColor then
+                    return true
                 end
-            else
-                local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
-                local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
-                if (Magnitude < (AimHacks["FOV"] * 6 - 8)) and (Magnitude < ShortestDistance) then
-                    if AimHacks["VisibleCheck"] and isPartVisible(plr.Character.PrimaryPart, plr.Character) then
-                        ClosestPlayer = plr
-                        ShortestDistance = Magnitude
-                    elseif not AimHacks["VisibleCheck"] then
-                        ClosestPlayer = plr
-                        ShortestDistance = Magnitude
-                    end
+            end
+        end
+        return false
+    end
+    function checkPlayer(targetPlayer)
+        for i,v in pairs(ValiantAimHacks.BlacklistedPlayers) do
+            if v ~= targetPlayer then
+                return true
+            end
+        end
+        return false
+    end
+    for _,plr in pairs(Players.GetPlayers(Players)) do
+        if checkPlayer(plr) and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
+            if (ValiantAimHacks["TeamCheck"] and not checkTeam(LocalPlayer, plr)) then break end
+            local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
+            local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
+            if (Magnitude < (ValiantAimHacks["FOV"] * 6 - 8)) and (Magnitude < ShortestDistance) then
+                if ValiantAimHacks["VisibleCheck"] and isPartVisible(plr.Character.PrimaryPart, plr.Character) then
+                    ClosestPlayer = plr
+                    ShortestDistance = Magnitude
+                elseif not ValiantAimHacks["VisibleCheck"] then
+                    ClosestPlayer = plr
+                    ShortestDistance = Magnitude
                 end
             end
         end
     end
-    AimHacks["Selected"] = (Chance and ClosestPlayer or LocalPlayer)
+    ValiantAimHacks["Selected"] = (Chance and ClosestPlayer or LocalPlayer)
     return (Chance and ClosestPlayer or LocalPlayer)
 end
 
