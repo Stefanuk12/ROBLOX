@@ -24,7 +24,7 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Silent Aim Vars
-getgenv().AimHacks = {
+getgenv().ValiantAimHacks = {
     SilentAimEnabled = true,
     AimbotEnabled = false,
     ShowFOV = true,
@@ -33,21 +33,28 @@ getgenv().AimHacks = {
     FOV = 60,
     HitChance = 100,
     Selected = LocalPlayer,
-    BlacklistedPlayers = {game:GetService("Players").LocalPlayer.Name},
+    BlacklistedTeams = {
+        {
+            Team = LocalPlayer.Team,
+            TeamColor = LocalPlayer.TeamColor,
+        },
+    },
+    BlacklistedPlayers = {game:GetService("Players").LocalPlayer},
 }
 
 -- // Show FOV
 local circle = Drawing.new("Circle")
-function updateCircle()
+function ValiantAimHacks.updateCircle()
     if circle then
         circle.Transparency = 1
-        circle.Visible = AimHacks["ShowFOV"]
+        circle.Visible = ValiantAimHacks["ShowFOV"]
         circle.Thickness = 2
         circle.Color = Color3.fromRGB(231, 84, 128)
         circle.NumSides = 12
-        circle.Radius = (AimHacks["FOV"] * 6) / 2
+        circle.Radius = (ValiantAimHacks["FOV"] * 6) / 2
         circle.Filled = false
         circle.Position = Vector2.new(Mouse.X, Mouse.Y + (GuiService.GetGuiInset(GuiService).Y))
+        return circle
     end
 end
 
@@ -55,18 +62,7 @@ end
 setreadonly(math, false); math.chance = function(percentage) local percentage = math.floor(percentage); local chance = math.floor(Random.new().NextNumber(Random.new(), 0, 1) * 100)/100; return chance <= percentage/100 end; setreadonly(math, true);
 setreadonly(table, false); table.loopforeach = function(tbl, func) for index, value in pairs(tbl) do if type(value) == 'table' then table.loopforeach(value, func); elseif type(value) == 'function' then table.loopforeach(debug.getupvalues(value)); else func(index, value); end; end; end; setreadonly(table, true);
 
--- // Silent Aim Functions
-function checkTable(Item, Table)
-    local Passed = false
-    if type(Item) ~= "string" then Item = tostring(Item) end
-	for i,v in pairs(Table) do 
-		if Table[i] then 
-			Passed = true
-		end
-	end
-	return Passed
-end
-
+-- // Silent Aim Function
 function ValiantAimHacks.getClosestPlayerToCursor()
     local ClosestPlayer = nil
     local Chance = math.chance(ValiantAimHacks["HitChance"])
@@ -123,9 +119,9 @@ function ValiantAimHacks.getClosestPlayerToCursor()
 end
 
 -- // Heartbeat Function
-local function HBFuncs()
-    updateCircle()
-    getClosestPlayerToCursor()
+local HBFuncs = function()
+    ValiantAimHacks.updateCircle()
+    ValiantAimHacks.getClosestPlayerToCursor()
 end
 Heartbeat.Connect(Heartbeat, HBFuncs)
 
