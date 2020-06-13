@@ -168,7 +168,6 @@ function ValiantESP:update()
                 ObjectBox.Visible = Boxes and visible
                 ObjectTracer.Visible = Tracers and visible
                 ObjectName.Visible = Names and visible
-                print(Boxes, visible)
             end
         elseif not rootVis and ObjectBox and ObjectTracer and ObjectName then
             ObjectBox.Visible = false
