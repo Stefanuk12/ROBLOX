@@ -35,11 +35,11 @@ bool checkMusic(std::string SoundId){
 
     for (std::string v : removedAssets){
         if (readBuffer.find(v)){
-            return true;
+            return false;
         };
     };
 
-    return false;
+    return true;
 };
 
 int main(){
