@@ -2,9 +2,9 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <curl/curl.h>
 #include <jsoncons/json.hpp>
 #include <cassert>
+#include "curl/curl.h"
 
 using namespace jsoncons;
 
@@ -52,15 +52,13 @@ int main(){
             std::string Name = item["Name"].as<std::string>();
             std::string SoundId = item["SoundId"].as<std::string>();
 
-            /*
             if ( !checkMusic(SoundId) && jsondata[i].is_object() ){
                 jsondata.remove_range(i, i);
                 std::cout << "Removed: " << Name << " - " << SoundId << "\n";
-                std::cout << a << "\n";
             };
             
             std::cout << jsondata << "\n";
-            */
+            
         };
     }
     
