@@ -52,13 +52,14 @@ int main(){
             std::string Name = item["Name"].as<std::string>();
             std::string SoundId = item["SoundId"].as<std::string>();
 
+            /*
             if ( !checkMusic(SoundId) && jsondata[i].is_object() ){
                 jsondata.remove_range(i, i);
                 std::cout << "Removed: " << Name << " - " << SoundId << "\n";
             };
             
             std::cout << jsondata << "\n";
-            
+            */
         };
     }
     
