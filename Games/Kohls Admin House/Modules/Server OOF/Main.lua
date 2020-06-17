@@ -47,17 +47,13 @@ if not KAHHax["intServerOOF"] then
         end
     end
 
-    function moveBaseplate()
+    function KAHHax.moveBasepate()
         local Player = game:GetService("Players").LocalPlayer
         local gameWorkspace = game:GetService("Workspace")["Terrain"]["_Game"]["Workspace"]
         local Spawn = gameWorkspace["Spawn3"]
         local Baseplate = gameWorkspace["Baseplate"]
         local newCFrame = CFrame.new(Spawn.CFrame.p.X, Baseplate.CFrame.p.Y+1, Spawn.CFrame.p.Z)
-        Player.Character.HumanoidRootPart.CFrame = newCFrame   
-    end
-
-    function KAHHax.moveBasepate()
-        moveBaseplate()
+        Player.Character.HumanoidRootPart.CFrame = newCFrame 
         wait(1)
         game:GetService("Players"):Chat(":stun me")
         wait(0.5)
