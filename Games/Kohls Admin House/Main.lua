@@ -312,8 +312,6 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             if initialcommmand == ":paintarea" then
                 KAHHax.paintServer(colour, section)
             end
-        elseif string.match(message, ":resetbaseplate") then
-            KAHHax.resetBaseplate()
         elseif string.match(message, ":makepbaseplate") then
             KAHHax.phantomBaseplate()
         elseif string.match(message, ":removepbaseplate") then
