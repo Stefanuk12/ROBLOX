@@ -47,11 +47,19 @@ if not KAHHax["intServerOOF"] then
         end
     end
 
+    function moveBaseplate()
+        local Player = game:GetService("Players").LocalPlayer
+        local gameWorkspace = game:GetService("Workspace")["Terrain"]["_Game"]["Workspace"]
+        local Spawn = gameWorkspace["Spawn3"]
+        local Baseplate = gameWorkspace["Baseplate"]
+        local newCFrame = CFrame.new(Spawn.CFrame.p.X, Baseplate.CFrame.p.Y+1, Spawn.CFrame.p.Z)
+        Player.Character.HumanoidRootPart.CFrame = newCFrame   
+    end
+
     function KAHHax.moveBasepate()
-        local Character = game:GetService("Players").LocalPlayer.Character
-        Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-24.5691223, 5.18362379, -24.1011047, -0.00181806216, -0.0071650343, -0.999972641, -1.20756167e-05, 0.99997431, -0.00716502406, 0.999998331, -9.60367743e-07, -0.00181810197)
+        moveBaseplate()
         wait(1)
-        Character:WaitForChild("Humanoid").Sit = true
+        game:GetService("Players"):Chat(":stun me")
         wait(0.5)
         game:GetService("Players"):Chat(":punish me")
         wait(5)
@@ -59,6 +67,23 @@ if not KAHHax["intServerOOF"] then
         wait(0.5)
         game:GetService("Players"):Chat(":skydive me")
         print('Moved Baseplate.')
+    end
+
+    function KAHHax.phantomBaseplate()
+        local Baseplate = Instance.new("Part", game:GetService("Workspace").Terrain["_Game"]["Workspace"])
+        Baseplate.Name = "PhantomBaseplate"
+        Baseplate.BrickColor = BrickColor.new("Bright green")
+        Baseplate.Size = Vector3.new(1000, 1.2, 1000)
+        Baseplate.TopSurface = "Studs"
+        Baseplate.Anchored = true
+    end
+
+    function KAHHax.removePhantomBaseplate()
+        for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Workspace"]:GetChildren()) do
+            if v.Name == "PhantomBaseplate" then
+                v:Destroy()
+            end
+        end
     end
 
     function KAHHax.resetBaseplate()
