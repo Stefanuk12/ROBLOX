@@ -62,7 +62,6 @@ if not KAHHax["intServerOOF"] then
         game:GetService("Players"):Chat(":unpunish me")
         wait(0.5)
         game:GetService("Players"):Chat(":skydive me")
-        print('Moved Baseplate.')
     end
 
     function KAHHax.phantomBaseplate()

@@ -299,6 +299,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         local paintareacommand = string.split(message, " | ")
         if string.match(message, ":movebaseplate") then
             KAHHax.moveBaseplate()
+            print('Moved Baseplate.')
         elseif string.match(message, ":partspam") then
             KAHHax.PartSpam = not KAHHax.PartSpam
             print('Part Spam Toggle:', (not KAHHax.PartSpam and "Disabled." or "Enabled."))
