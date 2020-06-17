@@ -47,7 +47,7 @@ if not KAHHax["intServerOOF"] then
         end
     end
 
-    function KAHHax.moveBasepate()
+    function KAHHax.moveBaseplate()
         local Player = game:GetService("Players").LocalPlayer
         local gameWorkspace = game:GetService("Workspace")["Terrain"]["_Game"]["Workspace"]
         local Spawn = gameWorkspace["Spawn3"]
