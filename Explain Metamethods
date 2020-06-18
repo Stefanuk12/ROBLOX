@@ -1,0 +1,115 @@
+> What is a metamethod?
+A metamethod in lua is like a function and helps handle metatables. 
+
+> Examples/Roles of metamethods
+Every metamethod and an explenation can be found at the lua website: http://lua-users.org/wiki/MetatableEvents
+
+There are a few metamethods exclusive to ROBLOX like __namecall. __namecall is fired when the ":" method is used. For example: 
+[
+Remote:FireServer()
+game:HttpGet()
+Remote:InvokeServer()
+]
+
+Any time ":" is used like that, __namecall is fired
+
+> Cool. What can we do with this?
+Quite a lot. I'll name a few examples:
+
+- Spoof Anything (with __index)
+- Control values set to a table (with __newindex) 
+[
+while wait() do
+    Humanoid.Walkspeed = 16
+end 
+]
+
+We can bypass that with __newindex 
+
+- Stop any remote from firing and edit remote arguments (with __namecall)
+
+
+> 1. Introduction to laying out a metamethod hook
+
+    Firstly, we want to define our metatable.
+
+    [ local mt = getmetatable(game) ]
+
+    That wouldn't actually work because game has the __metatable hides and lock the table. Instead, we do this
+
+    [ local mt = getrawmetatable(game) ]
+
+    That bypasses the __metatable restriction. Next, we want to make a backup of the metamethod we are hooking.
+
+    [ local backupnamecall = mt.__namecall ]
+
+    We need this.
+
+    If you try edit the metamethod normally, it would say it's locked. How do we get around it? Simple. 
+
+    [ setreadonly(mt, false) ]
+
+    It does what it says and lets us write to it. Now, we want to do this
+
+    [mt.__namecall = newcclosure(function(...)) ]
+
+    We need newcclosure() to make the hook undetectable and the arguments (... part) changes depending on the metamethod you're hooking. Now, we need to make that
+    we return the backup or we will break everything that uses ":"!
+
+    [
+    local mt = getrawmetatable(game)
+    local backupnamecall = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...))
+        return backupnamecall(...)
+    end)
+    setreadonly(mt, true) -- // Good practice to do this.
+    ]
+
+    But how do we get the arguments and the thing the metamethod is being called on, as well as the method? Simple.
+
+    [
+    mt.__namecall = newcclosure(function(...))
+        local arguments = {...}
+        local method = getnamecallmethod()
+        local called = args[1]
+
+        return backupnamecall(...)
+    end)
+    ]
+
+    You may be wondering what is 'called'. Well when we do [ Remote:FireServer() ], the 'called' thing, is the "Remote" part in that example as well as any other time.`
+
+> 2. Modifying the __namecall metamethod
+
+    Let's make a simple anti kick!
+    [
+    local mt = getrawmetatable(game)
+    local backupnamecall = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local method = getnamecallmethod()
+        local args = {...}
+        if string.lower(method) == "kick" then
+            print("Uh oh, the game tried to kick", args[1])
+            return nil
+        end
+        return backupnamecall(...)
+    end)
+    setreadonly(mt, true)
+    ]
+
+    If the game tries to kick you then it'll stop it and tell you in the dev console.
+
+> General Tips
+
+1. Do not use the same metamethod in a metamethod hook. For example using __namecall (:GetChildren() for example) in a __namecall hook. Instead you can index the function/method
+by doing, for example
+
+[
+Remote.FireSever(Remote, args)
+]
+
+It generally follows a pattern of <called>.<method>(<called>, <any args here>)
+
+2. NEVER use [nonamecall] in a __namecall hook as barely any exploits support it and neither does obfuscation, it's better to do Tip 1 and index the function/method
