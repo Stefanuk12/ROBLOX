@@ -48,13 +48,6 @@ function doGunMods()
                 end
             end
         end
-        if type(Obj) == 'function' then
-            if getfenv(Obj).script then
-                if debug.getinfo(Obj).name == "getAmmoInWeapon" then
-                    print(debug.getfenv(Obj).script:GetFullName())
-                end
-            end
-        end
     end
 end
 
