@@ -56,12 +56,6 @@ if not KAHHax["intServerOOF"] then
         Player.Character.HumanoidRootPart.CFrame = newCFrame 
         wait(1)
         game:GetService("Players"):Chat(":stun me")
-        wait(0.5)
-        game:GetService("Players"):Chat(":punish me")
-        wait(5)
-        game:GetService("Players"):Chat(":unpunish me")
-        wait(0.5)
-        game:GetService("Players"):Chat(":skydive me")
     end
 
     function KAHHax.phantomBaseplate()
