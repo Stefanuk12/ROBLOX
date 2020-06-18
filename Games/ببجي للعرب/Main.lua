@@ -24,7 +24,7 @@ local changeVals = {
     ShotCooldown = 0,
     FireMode = "Automatic"
 }
-local autoReload = false
+local autoReload = true
 local GunModTable = {}
 local WeaponsSystem = ReplicatedStorage.WeaponsSystem
 local Libraries = WeaponsSystem.Libraries
