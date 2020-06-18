@@ -112,6 +112,26 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     return (Chance and ClosestPlayer or LocalPlayer)
 end
 
+function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination)
+    if typeof(Origin) == "Vector3" and typeof(Destination) == "Vector3" then
+        local Direction = (Destination - Origin).Unit * 5000
+        local RaycastResult = Workspace.Raycast(Workspace, Origin, Direction)
+        if RaycastResult ~= nil then
+            local Normal = RaycastResult.Normal
+            local Material = RaycastResult.Material
+            return Direction, Normal, Material
+        end
+    end
+    return nil
+end
+
+function ValiantAimHacks.checkSilentAim()
+    if ValiantAimHacks.SilentAimEnabled and ValiantAimHacks["Selected"] ~= LocalPlayer then
+        return true
+    end
+    return false
+end
+
 -- // Heartbeat Function
 local HBFuncs = function()
     ValiantAimHacks.updateCircle()
