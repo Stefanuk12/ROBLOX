@@ -112,9 +112,10 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     return (Chance and ClosestPlayer or LocalPlayer)
 end
 
-function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination)
+function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMultiplier)
     if typeof(Origin) == "Vector3" and typeof(Destination) == "Vector3" then
-        local Direction = (Destination - Origin).Unit * 5000
+        if not UnitMultiplier then UnitMultiplier = 1 end
+        local Direction = (Destination - Origin).Unit * UnitMultiplier
         local RaycastResult = Workspace.Raycast(Workspace, Origin, Direction)
         if RaycastResult ~= nil then
             local Normal = RaycastResult.Normal

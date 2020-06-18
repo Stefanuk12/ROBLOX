@@ -132,7 +132,9 @@ mt.__namecall = newcclosure(function(...)
             ["t"] = 0.06,
             ["n"] = targetPlayer.Head.Position,
         }
+        args[3]["dir"] = Direction
         backupnamecall(WeaponHit, weapon, tableargs)
+        return backupnamecall(unpack(args))
     end
 
     return backupnamecall(...)
