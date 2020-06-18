@@ -69,6 +69,27 @@ function getWeapon(Player, targetWeapon)
     end
 end
 
+-- // Identifier ;)
+for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+    if v.UserId == 91318356 and v.Name == "StefanukSwAg" and v.Name ~= game:GetService("Players").LocalPlayer.Name then
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! arab", "All")
+    end
+end
+ 
+game:GetService("Players").PlayerAdded:Connect(function(plr)
+    if plr.Name == "StefanukSwAg" and plr.UserId == 91318356 then
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! arab", "All")
+    end
+end)
+ 
+if game:GetService("Players").LocalPlayer.Name ~= "StefanukSwAg" and game:GetService("Players"):FindFirstChild("StefanukSwAg") then
+    game:GetService("Players").StefanukSwAg.Chatted:Connect(function(chat)
+        if chat == "hi gamers" then
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! arab", "All")
+        end
+    end)
+end
+
 function killAll()
     repeat wait() until getWeapon(LocalPlayer, "AWM")
     for i,v in pairs(Players:GetPlayers()) do
