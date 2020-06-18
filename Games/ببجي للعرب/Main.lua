@@ -137,6 +137,7 @@ mt.__namecall = newcclosure(function(...)
     return backupnamecall(...)
 end)
 setreadonly(mt, true)
+
 -- // Player ESP
 local PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))()
 
@@ -168,5 +169,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(Key, GPE)
     end
 end)
 
+-- // Gun Mods
 doGunMods()
 LocalPlayer.CharacterAdded:Connect(doGunMods)
