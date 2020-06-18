@@ -252,3 +252,5 @@ RunService.RenderStepped:Connect(function()
         v:update()
     end
 end)
+
+return PlayerESPOptions
