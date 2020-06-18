@@ -174,7 +174,10 @@ function ValiantESP:update()
             ObjectTracer.Visible = false
             ObjectName.Visible = false
         end
-
+    elseif not PlayerESPOptions["Enabled"] and ObjectBox and ObjectTracer and ObjectName then
+        ObjectBox.Visible = false
+        ObjectTracer.Visible = false
+        ObjectName.Visible = false
     end
 
 end
