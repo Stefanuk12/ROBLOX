@@ -13,7 +13,7 @@ local TracerStart = Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.
 local HeadOffset = Vector3.new(0, 0.5, 0)
 local legOffset = Vector3.new(0, 3, 0)
 
-local PlayerESP = {
+getgenv().PlayerESPOptions = {
     Enabled = true,
     TeamCheck = false,
     Health = true,
@@ -49,7 +49,7 @@ function isPartVisible(Part, PartDescendant)
     end
     return false
 end
--- // PlayerESP
+-- // PlayerESPOptions
 function ValiantESP.new(data)
     local self = setmetatable({
         Player = data.Player,
@@ -71,7 +71,7 @@ function ValiantESP.new(data)
     local Tracers = data.Tracers
     local Names = data.Names
     local Text = data.Text
-    if not Character and not PlayerESP["Enabled"] then return end
+    if not Character and not PlayerESPOptions["Enabled"] then return end
 
     local rootPart = Character.HumanoidRootPart
     local Head = Character.Head
@@ -119,7 +119,7 @@ function getPlayerText(Player, Health, Distance, Visbility)
     local HealthText = tostring(math.floor(PlayerHumanoid.Health / PlayerHumanoid.MaxHealth) * 100).."%"
     local DistanceText = tostring("["..math.floor(game.GetService(game, "Players").LocalPlayer.DistanceFromCharacter(game.GetService(game, "Players").LocalPlayer, Player.Character.PrimaryPart.Position)).."]")
     local PlayerText = tostring(Player.Name)
-    local VisbilityText = (Visbility and PlayerESP["VisibleText"] or PlayerESP["NotVisibleText"])
+    local VisbilityText = (Visbility and PlayerESPOptions["VisibleText"] or PlayerESPOptions["NotVisibleText"])
   	local returnText = tostring((Distance and DistanceText or "").." "..PlayerText.." "..(Health and HealthText or "").." "..VisbilityText)
 	return returnText
 end
@@ -137,7 +137,7 @@ function ValiantESP:update()
     local Boxes, Tracers, Text, Names = self.ObjectBox[2], self.ObjectTracer[2], self.ObjectName[2], self.ObjectName[3]
     local rootPart, Head = Character.PrimaryPart, Character:FindFirstChild("Head")
 
-    if rootPart and PlayerESP["Enabled"] then
+    if rootPart and PlayerESPOptions["Enabled"] then
         local rootPos, rootVis = worldToViewportPoint(CurrentCamera, rootPart.Position)
         local headPos = worldToViewportPoint(CurrentCamera, Head.Position + HeadOffset)
         local legPos = worldToViewportPoint(CurrentCamera, rootPart.Position - legOffset)
@@ -154,9 +154,9 @@ function ValiantESP:update()
                     ObjectTracer.Color = self.TracerColor
                     ObjectName.Text = getPlayerText(self.Player, self.Health, self.Distance, true)
                 else
-                    ObjectBox.Color = PlayerESP["NotVisibleColor"]
-                    ObjectName.Color = PlayerESP["NotVisibleColor"]
-                    ObjectTracer.Color = PlayerESP["NotVisibleColor"]
+                    ObjectBox.Color = PlayerESPOptions["NotVisibleColor"]
+                    ObjectName.Color = PlayerESPOptions["NotVisibleColor"]
+                    ObjectTracer.Color = PlayerESPOptions["NotVisibleColor"]
                     ObjectName.Text = getPlayerText(self.Player, self.Health, self.Distance, false)
                 end
             
@@ -200,16 +200,16 @@ local function CharacterAdded(Player)
     Character:WaitForChild("HumanoidRootPart"); Character:WaitForChild("Head")
     trackingPlayer[#trackingPlayer + 1] = ValiantESP.new({
         Player = Player,
-        Boxes = PlayerESP["Boxes"],
-        Tracers = PlayerESP["Tracers"],
-        Names = PlayerESP["Names"],
-        TeamCheck = PlayerESP["TeamCheck"],
-        Health = PlayerESP["Health"],
-        Distance = PlayerESP["Distance"],
-        Text = getPlayerText(Player, PlayerESP["Health"], PlayerESP["Distance"]),
-        NameColor = PlayerESP["NameColor"],
-        TracerColor = PlayerESP["TracerColor"],
-        BoxColor = PlayerESP["BoxColor"],
+        Boxes = PlayerESPOptions["Boxes"],
+        Tracers = PlayerESPOptions["Tracers"],
+        Names = PlayerESPOptions["Names"],
+        TeamCheck = PlayerESPOptions["TeamCheck"],
+        Health = PlayerESPOptions["Health"],
+        Distance = PlayerESPOptions["Distance"],
+        Text = getPlayerText(Player, PlayerESPOptions["Health"], PlayerESPOptions["Distance"]),
+        NameColor = PlayerESPOptions["NameColor"],
+        TracerColor = PlayerESPOptions["TracerColor"],
+        BoxColor = PlayerESPOptions["BoxColor"],
     })
 end
 
@@ -219,16 +219,16 @@ for i, v in next, Players.GetPlayers(Players) do
         if Character and Character:WaitForChild(Character.PrimaryPart.Name) and Character:WaitForChild("Head") then
             trackingPlayer[#trackingPlayer + 1] = ValiantESP.new({
                 Player = v,
-                Boxes = PlayerESP["Boxes"],
-                Tracers = PlayerESP["Tracers"],
-                Names = PlayerESP["Names"],
-                TeamCheck = PlayerESP["TeamCheck"],
-                Health = PlayerESP["Health"],
-                Distance = PlayerESP["Distance"],
-                Text = getPlayerText(v, (PlayerESP["Health"]), (PlayerESP["Distance"])),
-                NameColor = PlayerESP["NameColor"],
-                TracerColor = PlayerESP["TracerColor"],
-                BoxColor = PlayerESP["BoxColor"],
+                Boxes = PlayerESPOptions["Boxes"],
+                Tracers = PlayerESPOptions["Tracers"],
+                Names = PlayerESPOptions["Names"],
+                TeamCheck = PlayerESPOptions["TeamCheck"],
+                Health = PlayerESPOptions["Health"],
+                Distance = PlayerESPOptions["Distance"],
+                Text = getPlayerText(v, (PlayerESPOptions["Health"]), (PlayerESPOptions["Distance"])),
+                NameColor = PlayerESPOptions["NameColor"],
+                TracerColor = PlayerESPOptions["TracerColor"],
+                BoxColor = PlayerESPOptions["BoxColor"],
             })
         end
         v.CharacterAdded:Connect(function()
