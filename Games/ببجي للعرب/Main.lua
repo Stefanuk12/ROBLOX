@@ -109,7 +109,7 @@ end
 -- // Silent Aim 
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 
-setreadonly(mt, false)
+
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
@@ -136,7 +136,7 @@ mt.__namecall = newcclosure(function(...)
 
     return backupnamecall(...)
 end)
-setreadonly(mt, true)
+
 
 -- // Player ESP
 local PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))()
