@@ -114,10 +114,8 @@ setreadonly(mt, false)
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
-    if tostring(args[1]) == "WeaponFired" and ValiantAimHacks.checkSilentAim() then
-        local Origin = args[3]["origin"]
+    if tostring(args[1]) == "WeaponFired" and ValiantAimHacks.checkSilentAim() and not checkcaller() then
         local targetPlayer = ValiantAimHacks["Selected"].Character
-        local Direction, Normal, Material = ValiantAimHacks.findDirectionNormalMaterial(Origin, targetPlayer.Head.Position)
         local weapon = args[2]
         local Id1 = args[3]["id"]
         local tableargs = {
@@ -132,11 +130,8 @@ mt.__namecall = newcclosure(function(...)
             ["t"] = 0.06,
             ["n"] = targetPlayer.Head.Position,
         }
-        args[3]["dir"] = Direction
         backupnamecall(WeaponHit, weapon, tableargs)
-        return backupnamecall(unpack(args))
     end
-
     return backupnamecall(...)
 end)
 setreadonly(mt, true)
