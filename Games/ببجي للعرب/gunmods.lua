@@ -1,5 +1,3 @@
--- Game: https://www.roblox.com/games/5111155861
-
 -- // Valiant ENV
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
 
@@ -48,8 +46,18 @@ function doGunMods()
                 end
             end
         end
+        if type(Obj) == 'function' then
+            if getfenv(Obj).script then
+                if debug.getinfo(Obj).name == "getAmmoInWeapon" then
+                    print(debug.getfenv(Obj).script:GetFullName())
+                end
+            end
+        end
     end
 end
 
 doGunMods()
-Player.CharacterAdded:Connect(doGunMods)
+LocalPlayer.CharacterAdded:Connect(function()
+    wait(1)
+    doGunMods()
+end)
