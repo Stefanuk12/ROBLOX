@@ -565,7 +565,7 @@ antijail.TextSize = 14.000
 antijail.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 antijail.TextXAlignment = Enum.TextXAlignment.Left
 
-lagserverBindLeftShift.Name = ":lagserver - Bind: Left Shift"
+lagserverBindLeftShift.Name = ":lagserver - Bind: Right Shift"
 lagserverBindLeftShift.Parent = CMDFrame
 lagserverBindLeftShift.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 lagserverBindLeftShift.BackgroundTransparency = 1.000
@@ -574,7 +574,7 @@ lagserverBindLeftShift.Position = UDim2.new(0, 0, -0.0114285713, 0)
 lagserverBindLeftShift.Size = UDim2.new(0, 400, 0, 50)
 lagserverBindLeftShift.AutoButtonColor = false
 lagserverBindLeftShift.Font = Enum.Font.Gotham
-lagserverBindLeftShift.Text = "    > :lagserver - Bind: Left Shift"
+lagserverBindLeftShift.Text = "    > :lagserver - Bind: Right Shift"
 lagserverBindLeftShift.TextColor3 = Color3.fromRGB(255, 255, 255)
 lagserverBindLeftShift.TextSize = 14.000
 lagserverBindLeftShift.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)

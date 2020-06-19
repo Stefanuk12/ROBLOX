@@ -111,7 +111,7 @@ if not KAHHax["intServerOOF"] then
     end)()
 
     game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
-        if not gpe and key.KeyCode == Enum.KeyCode.LeftShift then
+        if not gpe and key.KeyCode == Enum.KeyCode.RightSgift then
             KAHHax.lagServer = not KAHHax.lagServer
             getgenv().chatSpyEnabled = not KAHHax.lagServer
             print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))

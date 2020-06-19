@@ -13,6 +13,7 @@ if not KAHHax["intGearGiver"] then
             RPOSword = 159229806,
             IceStaff = 19704064,
             Transmorph = 29099749,
+            ShiftingPolarity = 61459706,
         }
         local prefix = ":give "
         local splitmessage = string.split(msg, " ")
