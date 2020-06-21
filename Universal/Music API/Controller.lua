@@ -54,7 +54,7 @@ function ValiantMusicAPI.testAllSounds(mode)
         end
         wait(30)
         ValiantMusicAPI.musicTable = {}
-        ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.oldMusicTable)
+        ValiantMusicAPI.oldMusicTable = ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.oldMusicTable)
         for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
             table.insert(ValiantMusicAPI.musicTable, v)
         end
