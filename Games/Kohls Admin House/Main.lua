@@ -324,10 +324,8 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             local initialcommmand = targetsplit[1]
             local target = ":pm "..targetsplit[2]
             if initialcommmand == ":lag" then   
-                getgenv().chatSpyEnabled = false
                 KAHHax.addToLagSpammer(target)
             elseif initialcommmand == ":stoplag" then
-                getgenv().chatSpyEnabled = true
                 KAHHax.removeLagSpammer(target)
             end
         end
