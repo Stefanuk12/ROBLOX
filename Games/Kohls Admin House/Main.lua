@@ -201,10 +201,11 @@ function addToSpamList(givenPhrase)
         for i,v in pairs(KAHHax.SpamList) do
             if v.Phrase ~= givenPhrase then
                 table.insert(KAHHax.SpamList, {Phrase = givenPhrase})
-                print('Successfully added to Spam List, Message:', givenPhrase)
+                
             end
         end
     end
+    print('Successfully added to Spam List, Message:', givenPhrase)
 end
 
 function removeSpamPhrase(givenPhrase)

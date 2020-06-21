@@ -136,19 +136,19 @@ if not KAHHax["intServerOOF"] then
             else
                 for i,v in pairs(KAHHax.crashSpammer) do
                     if v.Phrase ~= givenPhrase then
-                        table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})
-                        print('Successfully added to Lagger')
+                        table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})               
                     end
                 end
             end
+            print('Successfully added to Lagger')
         end
     end
     
     function KAHHax.removeLagSpammer(givenPhrase)
         if (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-            givenPhrase = ":pm "..givenPhrase.." "..KAHHax.largeText
+            givenPhrase = ":pm "..givenPhrase
             for i,v in pairs(KAHHax.crashSpammer) do
-                if v.Phrase == givenPhrase then
+                if string.match(v.Phrase, givenPhrase) then
                     table.remove(KAHHax.crashSpammer, i)
                     print('Successfully removed from Lagger')
                 end
