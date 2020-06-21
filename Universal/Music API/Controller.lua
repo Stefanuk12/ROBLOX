@@ -23,6 +23,20 @@ function ValiantMusicAPI.checkBadSound(SoundId)
     return false
 end
 
+function ValiantMusicAPI.removeDuplicates(tbl)
+    local checkTable = {}
+    for i,v in pairs(tbl) do
+        for a,x in pairs(checkTable) do
+            if not x or not x.SoundId == v.SoundId then
+                table.insert(checkTable, v)
+            else
+                print('Removed Duplicate SoundId - Name:', v.Name, "- SoundId:", v.SoundId)
+            end
+        end
+    end
+    return checkTable
+end
+
 function ValiantMusicAPI.testAllSounds(mode)
     if not ValiantMusicAPI.testingInProgress then
         ValiantMusicAPI.testingInProgress = true
@@ -40,6 +54,7 @@ function ValiantMusicAPI.testAllSounds(mode)
         end
         wait(30)
         ValiantMusicAPI.musicTable = {}
+        ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.oldMusicTable)
         for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
             table.insert(ValiantMusicAPI.musicTable, v)
         end
