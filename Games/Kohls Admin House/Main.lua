@@ -319,14 +319,15 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             KAHHax.phantomBaseplate()
         elseif string.match(message, ":removepbaseplate") then
             KAHHax.removePhantomBaseplate()
-        elseif string.match(message, ":lag") and targetsplit[1] and targetsplit[2] then
+        elseif targetsplit[1] and targetsplit[2] then
             local targetsplit = string.split(message, " ")
             local initialcommmand = targetsplit[1]
             local target = ":pm "..targetsplit[2]
             if initialcommmand == ":lag" then   
+                getgenv().chatSpyEnabled = false
                 KAHHax.addToLagSpammer(target)
             elseif initialcommmand == ":stoplag" then
-                print(target)
+                getgenv().chatSpyEnabled = true
                 KAHHax.removeLagSpammer(target)
             end
         end
