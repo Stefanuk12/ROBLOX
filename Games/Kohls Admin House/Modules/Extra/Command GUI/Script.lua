@@ -1,8 +1,3 @@
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
 local ScriptCMDs = Instance.new("ScreenGui")
 local Container = Instance.new("Frame")
 local Header = Instance.new("Frame")
@@ -42,7 +37,9 @@ local removeblacklistphraseEpicGamer69killall = Instance.new("TextButton")
 local paintareaReallyredObbyBox = Instance.new("TextButton")
 local rj = Instance.new("TextButton")
 local antijail = Instance.new("TextButton")
-local lagserverBindLeftShift = Instance.new("TextButton")
+local lagserverBindF8 = Instance.new("TextButton")
+local lagothers = Instance.new("TextButton")
+local stoplagEpicGamer69 = Instance.new("TextButton")
 local ExamplePrompt = Instance.new("TextButton")
 
 --Properties:
@@ -106,6 +103,7 @@ CMDFrame.Active = true
 CMDFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 CMDFrame.BorderSizePixel = 0
 CMDFrame.Size = UDim2.new(0, 400, 0, 350)
+CMDFrame.CanvasPosition = Vector2.new(0, 1400)
 CMDFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
 
 UIListLayout.Parent = CMDFrame
@@ -565,20 +563,50 @@ antijail.TextSize = 14.000
 antijail.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
 antijail.TextXAlignment = Enum.TextXAlignment.Left
 
-lagserverBindLeftShift.Name = ":lagserver - Bind: Right Shift"
-lagserverBindLeftShift.Parent = CMDFrame
-lagserverBindLeftShift.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-lagserverBindLeftShift.BackgroundTransparency = 1.000
-lagserverBindLeftShift.BorderSizePixel = 0
-lagserverBindLeftShift.Position = UDim2.new(0, 0, -0.0114285713, 0)
-lagserverBindLeftShift.Size = UDim2.new(0, 400, 0, 50)
-lagserverBindLeftShift.AutoButtonColor = false
-lagserverBindLeftShift.Font = Enum.Font.Gotham
-lagserverBindLeftShift.Text = "    > :lagserver - Bind: Right Shift"
-lagserverBindLeftShift.TextColor3 = Color3.fromRGB(255, 255, 255)
-lagserverBindLeftShift.TextSize = 14.000
-lagserverBindLeftShift.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
-lagserverBindLeftShift.TextXAlignment = Enum.TextXAlignment.Left
+lagserverBindF8.Name = ":lagserver - Bind: F8"
+lagserverBindF8.Parent = CMDFrame
+lagserverBindF8.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+lagserverBindF8.BackgroundTransparency = 1.000
+lagserverBindF8.BorderSizePixel = 0
+lagserverBindF8.Position = UDim2.new(0, 0, -0.0114285713, 0)
+lagserverBindF8.Size = UDim2.new(0, 400, 0, 50)
+lagserverBindF8.AutoButtonColor = false
+lagserverBindF8.Font = Enum.Font.Gotham
+lagserverBindF8.Text = "    > :lagserver - Bind: Right Shift"
+lagserverBindF8.TextColor3 = Color3.fromRGB(255, 255, 255)
+lagserverBindF8.TextSize = 14.000
+lagserverBindF8.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+lagserverBindF8.TextXAlignment = Enum.TextXAlignment.Left
+
+lagothers.Name = ":lag others"
+lagothers.Parent = CMDFrame
+lagothers.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+lagothers.BackgroundTransparency = 1.000
+lagothers.BorderSizePixel = 0
+lagothers.Position = UDim2.new(0, 0, -0.0114285713, 0)
+lagothers.Size = UDim2.new(0, 400, 0, 50)
+lagothers.AutoButtonColor = false
+lagothers.Font = Enum.Font.Gotham
+lagothers.Text = "    > :lag <person> - spams pm lag to <person>"
+lagothers.TextColor3 = Color3.fromRGB(255, 255, 255)
+lagothers.TextSize = 14.000
+lagothers.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+lagothers.TextXAlignment = Enum.TextXAlignment.Left
+
+stoplagEpicGamer69.Name = ":stoplag EpicGamer69"
+stoplagEpicGamer69.Parent = CMDFrame
+stoplagEpicGamer69.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+stoplagEpicGamer69.BackgroundTransparency = 1.000
+stoplagEpicGamer69.BorderSizePixel = 0
+stoplagEpicGamer69.Position = UDim2.new(0, 0, -0.0114285713, 0)
+stoplagEpicGamer69.Size = UDim2.new(0, 400, 0, 50)
+stoplagEpicGamer69.AutoButtonColor = false
+stoplagEpicGamer69.Font = Enum.Font.Gotham
+stoplagEpicGamer69.Text = "    > :stoplag <person> - stops the pm lag to <person>"
+stoplagEpicGamer69.TextColor3 = Color3.fromRGB(255, 255, 255)
+stoplagEpicGamer69.TextSize = 14.000
+stoplagEpicGamer69.TextStrokeColor3 = Color3.fromRGB(200, 200, 200)
+stoplagEpicGamer69.TextXAlignment = Enum.TextXAlignment.Left
 
 ExamplePrompt.Name = "Example Prompt"
 ExamplePrompt.Parent = Header
