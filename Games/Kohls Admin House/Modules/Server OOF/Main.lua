@@ -129,7 +129,7 @@ if not KAHHax["intServerOOF"] then
     end)()
     
     function KAHHax.addToLagSpammer(givenPhrase)
-        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg")) then
+        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
             givenPhrase = ":pm "..givenPhrase.." "..KAHHax.largeText
             if not KAHHax.crashSpammer[1] then
                 table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})
@@ -145,7 +145,7 @@ if not KAHHax["intServerOOF"] then
     end
     
     function KAHHax.removeLagSpammer(givenPhrase)
-        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg")) then
+        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
             givenPhrase = ":pm "..givenPhrase.." "..KAHHax.largeText
             for i,v in pairs(KAHHax.crashSpammer) do
                 if v.Phrase == givenPhrase then
