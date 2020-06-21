@@ -297,6 +297,7 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     -- // Server OOF Commands
     if KAHHax.intServerOOF then
         local paintareacommand = string.split(message, " | ")
+        local targetsplit = string.split(message, " ")
         if string.match(message, ":movebaseplate") then
             KAHHax.moveBaseplate()
             print('Moved Baseplate.')
@@ -317,6 +318,15 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
             KAHHax.phantomBaseplate()
         elseif string.match(message, ":removepbaseplate") then
             KAHHax.removePhantomBaseplate()
+        elseif string.match(message, ":lag") and targetsplit[1] and targetsplit[2] then
+            local targetsplit = string.split(message, " ")
+            local initialcommmand = targetsplit[1]
+            local target = targetsplit[2]
+            if initialcommmand == ":lag" then   
+                KAHHax.addToLagSpammer(target)
+            elseif initialcommmand == ":stoplag" then
+                KAHHax.removeLagSpammer(target)
+            end
         end
     end
 

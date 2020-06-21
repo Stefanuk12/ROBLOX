@@ -3,7 +3,7 @@ if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not KAHHax["intServerOOF"] then
     KAHHax["RespawnExplode"] = false
     KAHHax.lagServer = false
-
+    KAHHax.crashSpammer = {}
     -- // Paint Server
     function KAHHax.paintServer(Colour, Section)
         -- // Give you the Paint Bucket if you don't have it
@@ -101,22 +101,60 @@ if not KAHHax["intServerOOF"] then
         end
     end)()
     
-    local largetext = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt")
+    local getgenv().KAHHax.largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt")
     coroutine.wrap(function()
         while wait() do
             if KAHHax.lagServer and (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-                game:GetService("Players"):Chat(":pm others "..largetext)
+                game:GetService("Players"):Chat(":pm others "..KAHHax.largeText)
             end
         end
     end)()
 
     game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
-        if not gpe and key.KeyCode == Enum.KeyCode.RightShift then
+        if not gpe and key.KeyCode == Enum.KeyCode.F8 then
             KAHHax.lagServer = not KAHHax.lagServer
             getgenv().chatSpyEnabled = not KAHHax.lagServer
             print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
         end
     end)
+
+    coroutine.wrap(function()
+        while wait() do
+            if KAHHax.crashSpammer[1] then
+                for i,v in pairs(KAHHax.crashSpammer) do
+                    game:GetService("Players"):Chat(v.Phrase)
+                end
+            end
+        end
+    end)()
+    
+    function KAHHax.addToLagSpammer(givenPhrase)
+        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg")) then
+            givenPhrase = ":pm "..givenPhrase.." "..KAHHax.largeText
+            if not KAHHax.crashSpammer[1] then
+                table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})
+            else
+                for i,v in pairs(KAHHax.crashSpammer) do
+                    if v.Phrase ~= givenPhrase then
+                        table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})
+                        print('Successfully added to Lagger')
+                    end
+                end
+            end
+        end
+    end
+    
+    function KAHHax.removeLagSpammer(givenPhrase)
+        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg")) then
+            givenPhrase = ":pm "..givenPhrase.." "..KAHHax.largeText
+            for i,v in pairs(KAHHax.crashSpammer) do
+                if v.Phrase == givenPhrase then
+                    table.remove(KAHHax.crashSpammer, i)
+                    print('Successfully removed from Lagger')
+                end
+            end
+        end
+    end
 
     KAHHax["intServerOOF"] = true
 end
