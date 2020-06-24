@@ -92,7 +92,7 @@ KAHHax["vars"] = {
     },
     SpamList = {},
     Prefix = ":",
-    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))().
+    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
 }
 -- // Player Manager
 function addPlayerToManager(Player)
@@ -110,6 +110,13 @@ function addPlayerToManager(Player)
                 KAHHax["vars"].PlayerManager[Player.UserId]["Whitelisted"] = false
             end
         end
+        KAHHax["vars"].PlayerManager[Player.UserId].BlacklistConnection.A = Player.Chatted:Connect(function(message)
+            for i,v in pairs(KAHHax["vars"].PlayerManager[Player.UserId].BlacklistedPhrases) do
+                if string.match(message, v.Phrase) then
+                    KAHHax["vars"].Chat(v.Punishment)
+                end
+            end
+        end)
     end
 end
 
@@ -135,11 +142,11 @@ for i,v in pairs(KAHHax["vars"].Players:GetPlayers()) do
     addPlayerToManager(v)
 end
 
-KAHHax["vars"].PlayerAdded:Connect(function(player)
+KAHHax["vars"].Players.PlayerAdded:Connect(function(player)
     addPlayerToManager(player)
 end)
 
-KAHHax["vars"].PlayerRemoving:Connect(function(player)
+KAHHax["vars"].Players.PlayerRemoving:Connect(function(player)
     removePlayerFromManager(player)
 end)
 
