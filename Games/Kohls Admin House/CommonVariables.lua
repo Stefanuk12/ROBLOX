@@ -92,7 +92,7 @@ KAHHax["vars"] = {
     },
     SpamList = {},
     Prefix = ":",
-    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))()
+    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))().
 }
 -- // Player Manager
 function addPlayerToManager(Player)
