@@ -26,7 +26,7 @@ function getPlayer(String)
     return Found
 end
 
-function checkWhitelisted(UserId) do
+function checkWhitelisted(UserId)
     for _,v in pairs(KAHHax["vars"].WhilelistedUsers) do
         if UserId == v then
             return true
@@ -35,7 +35,7 @@ function checkWhitelisted(UserId) do
     return false
 end
 
-function checkAllWhitelisted() do
+function checkAllWhitelisted()
     for _,v in pairs(KAHHax["vars"].Players:GetPlayers()) do
         for _,x in pairs(KAHHax["vars"].WhilelistedUsers) do
             if v ~= KAHHax["vars"].LocalPlayer and v.UserId == x then
@@ -45,6 +45,7 @@ function checkAllWhitelisted() do
     end
     return false
 end
+
 
 KAHHax["vars"] = {
     Players = game:GetService("Players"),
@@ -57,16 +58,16 @@ KAHHax["vars"] = {
         },
 
     ]]},
-    Chat = game:GetService("Players"):Chat,
+    Chat = function (...) game:GetService("Players"):Chat(...) end,
     GameFolder = GameFolder,
     AdminFolder = GameFolder:WaitForChild("Admin"),
     PadFolder = GameFolder:WaitForChild("Admin"):WaitForChild("Pads"),
     WorkspaceFolder = GameFolder:WaitForChild("Workspace"),
     HolderFolder = GameFolder:WaitForChild("Folder"),
     Pads = GameFolder:WaitForChild("Admin"):WaitForChild("Pads"),
-    Obby = GameFolder["Workspace"].Obby
+    Obby = GameFolder["Workspace"].Obby,
     LocalPlayer = game:GetService("Players").LocalPlayer,
-    Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait(),
+    Character = game:GetService("Players").LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait(),
     RainbowColor = Color3.fromRGB(0, 0, 0),
     getPlayer = getPlayer,
     WhilelistedUsers = {91318356},
@@ -92,7 +93,7 @@ KAHHax["vars"] = {
     SpamList = {},
     Prefix = ":",
     MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))()
-
+}
 -- // Player Manager
 function addPlayerToManager(Player)
     if typeof(Player) == 'Instance' and Player.Parent == KAHHax["vars"].Players then
