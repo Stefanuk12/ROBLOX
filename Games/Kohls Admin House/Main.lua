@@ -347,9 +347,9 @@ KAHHax.SoundAbuseController.mainCoroutine = coroutine.wrap(function()
     end
 end)()
 
-coroutine.wrap(function()
+SpamListCoroutine = coroutine.wrap(function()
     while wait() do
-        if vars.SpamList[1] then
+        if vars.SpamListRunning and vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
                 Players:Chat(v.Phrase)
             end
@@ -621,6 +621,17 @@ addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player
         end
     else
         vars.Alert("Invalid Arguments!")
+    end
+    local LaggingCount = 0
+    for i,v in pairs(vars.PlayerManager) do
+        if v.Lagging then
+            LaggingCount = LaggingCount + 1 
+        end
+    end
+    if LaggingCount <= 0 then 
+        vars.SpamListRunning = false
+    elseif LaggingCount >= 1 then
+        vars.SpamListRunning = true
     end
 end)
 
