@@ -27,7 +27,7 @@ KAHHax["vars"] = {
         },
     ]]},
     RainbowColor = Color3.fromRGB(0, 0, 0),
-    WhitelistedUsers = {91318356},
+    WhitelistedUsers = {91318356, 489163522, 23294806},
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
     MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     gearList = {
@@ -178,6 +178,7 @@ KAHHax.ControllerSettings = {
     lagServer = false,
     EarRape = false,
     PersistantAdmin = false,
+    Epilepsy = false
 }
 
 KAHHax.ServerOOFController = {}
@@ -726,6 +727,29 @@ addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", 
         end
     else
         vars.Alert("Invalid Arguments!")
+    end
+end)
+
+addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whitelisted Users.", function(message)
+    if checkWhitelisted(LocalPlayer.UserId) then
+        Players:Chat(":gear me 94794847")
+        LocalPlayer.Backpack:WaitForChild("VampireVanquisher")
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher)
+        LocalPlayer.Character:WaitForChild("VampireVanquisher")
+        Players:Chat(":size me .3")
+        Players:Chat(":size me .3")
+        Players:Chat(":size me .3")
+        Players:Chat(":size me .3")
+    end
+end)
+
+addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
+    if KAHHax.ControllerSettings.Epilepsy then
+        fireCommand(":spam :colorshiftbottom 0 100000 0")
+        fireCommand(":spam :colorshiftbottom 0 0 100000")
+    else
+        fireCommand(":rspam :colorshiftbottom 0 100000 0")
+        fireCommand(":rspam :colorshiftbottom 0 0 100000")
     end
 end)
 
