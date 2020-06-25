@@ -96,8 +96,11 @@ end
 
 -- // Identifier ;)
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-    if vars.checkWhitelisted(v.UserId) then
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
+    for i,v in pairs(vars.WhitelistedUsers) do
+        if v == vars.LocalPlayer and v.UserId == v then
+        else
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
+        end
     end
 end
  
@@ -107,7 +110,7 @@ game:GetService("Players").PlayerAdded:Connect(function(plr)
     end
 end)
  
-for _,v in pairs(vars.WhilelistedUsers) do
+for _,v in pairs(vars.WhitelistedUsers) do
     local Player = vars.Players:GetNameFromUserIdAsync(v)
     if vars.Players:FindFirstChild(Player) then
         local Player = vars.Players:FindFirstChild(Player)

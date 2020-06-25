@@ -24,7 +24,7 @@ if not KAHHax.CommonVars then
         Character = game:GetService("Players").LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait(),
         RainbowColor = Color3.fromRGB(0, 0, 0),
         getPlayer = getPlayer,
-        WhilelistedUsers = {91318356},
+        WhitelistedUsers = {91318356},
         Alert = warn,
         Notify = print,
         largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
@@ -74,7 +74,7 @@ if not KAHHax.CommonVars then
     end
 
     function KAHHax.vars.checkWhitelisted(UserId)
-        for _,v in pairs(vars.WhilelistedUsers) do
+        for _,v in pairs(vars.WhitelistedUsers) do
             if UserId == v then
                 return true
             end
@@ -84,7 +84,7 @@ if not KAHHax.CommonVars then
 
     function KAHHax.vars.checkAllWhitelisted()
         for _,v in pairs(vars.Players:GetPlayers()) do
-            for _,x in pairs(vars.WhilelistedUsers) do
+            for _,x in pairs(vars.WhitelistedUsers) do
                 if v ~= vars.LocalPlayer and v.UserId == x then
                     return true
                 end
@@ -101,7 +101,7 @@ if not KAHHax.CommonVars then
                 ["BlacklistedPhrases"] = {},
                 ["BlacklistConnection"] = {},
             }
-            for i,v in pairs(vars.WhilelistedUsers) do
+            for i,v in pairs(vars.WhitelistedUsers) do
                 if Player.UserId == v then
                     vars.PlayerManager[Player.Name]["Whitelisted"] = true
                 else
