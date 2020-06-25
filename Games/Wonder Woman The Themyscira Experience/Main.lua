@@ -29,13 +29,16 @@ function killDeRats()
         intRatQuest()
         for i,v in pairs(Rat:GetDescendants()) do
             if v and v.Name == "RatMesh" then
-                wait()
-                firetouchinterest(game:GetService("Players").LocalPlayer.Character.PrimaryPart, v, 0); wait(0.01)
-                firetouchinterest(game:GetService("Players").LocalPlayer.Character.PrimaryPart, v, 1)
+                if firetouchinterest then
+                    firetouchinterest(game:GetService("Players").LocalPlayer.Character.PrimaryPart, v, 0); wait()
+                    firetouchinterest(game:GetService("Players").LocalPlayer.Character.PrimaryPart, v, 1)
+                else 
+                    game:GetService("Players").LocalPlayer.Character.PrimaryPart.CFrame = v.CFrame
+                end
                 local v1 = "Corrupted Rats"
                 local rem = game:GetService("ReplicatedStorage").RemoteFunctions.CollectQuestRewardRemoteFunction
                 rem:InvokeServer(v1)
-                wait()
+                wait(1)
             end
         end
     end)
