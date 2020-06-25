@@ -744,12 +744,13 @@ addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whiteli
 end)
 
 addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
+    KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
     if KAHHax.ControllerSettings.Epilepsy then
-        fireCommand(":spam :colorshiftbottom 0 100000 0")
-        fireCommand(":spam :colorshiftbottom 0 0 100000")
+        fireCommand("spam", ":colorshiftbottom 0 100000 0")
+        fireCommand("spam", ":colorshifttop 0 0 100000")
     else
-        fireCommand(":rspam :colorshiftbottom 0 100000 0")
-        fireCommand(":rspam :colorshiftbottom 0 0 100000")
+        fireCommand(":rspam", ":colorshiftbottom 0 100000 0")
+        fireCommand(":rspam", ":colorshifttop 0 0 100000")
     end
 end)
 
