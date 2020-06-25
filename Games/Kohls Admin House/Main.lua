@@ -161,6 +161,10 @@ end
 
 -- // CMD Handler
 function addCMD(CommandName, ModuleName, Example, Description, Function)
+    if not CommandName or not ModuleName or not Example or not Description or not Function then
+        vars.Alert("addCMDs invalid!", CommandName)
+        return
+    end
     local CMDs = KAHHax.CMDs
     local insertTable = {
         CommandName = CommandName,
@@ -477,6 +481,7 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
 
     for i,v in pairs(KAHHax.CMDs) do
         local Clone = example:Clone()
+        wait()
         Clone.Name = v.Example
         Clone.Text = "    > "..Prefix..v.CommandName.." - "..v.Description
         Clone.Parent = CMDFrame
