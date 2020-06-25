@@ -375,8 +375,8 @@ end)
 
 addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number", function(message)
     local SoundId
-    local stringSplit = string.split(message, " ")
-    if stringSplit[1] and splitString[2] and tonumber(splitString[2]) and vars.MusicAPI.getSound(tonumber(splitString[2])) then
+    local splitString = string.split(message, " ")
+    if splitString[1] and splitString[2] and tonumber(splitString[2]) and vars.MusicAPI.getSound(tonumber(splitString[2])) then
         vars.Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
         vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(tonumber(splitString[2])))
     else
@@ -506,7 +506,7 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
         Clone.Visible = true 
     end
     example = nil
-    
+
     -- // Script
     local Dragger = {}; do
         local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
