@@ -582,6 +582,8 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
         SelectedColor = Color3.new(0, 0, 0)
         Color = string.lower(splitString[2])
         local Section = string.lower(splitString[3]) 
+        vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[2]) == "rainbow" and "Rainbow" or Color))
+        
         if string.gmatch(Color, "[%d%s]+") then
             R, G, B = 0, 0, 0
             local colorSplit = string.split(splitString[2], " ")
@@ -590,16 +592,18 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
             if colorSplit[3] and tonumber(colorSplit[3]) then B = tonumber(colorSplit[3]) end
             SelectedColor = Color3.fromRGB(R, G, B)
         end
-        -- // Check if you already have a Paint Bucket
-        if not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or Character:FindFirstChild("PaintBucket")) then
-            Players:Chat(":gear me 18474459"); wait(0.5)
-            Character.Humanoid:EquipTool(LocalPlayer.Backpack:WaitForChild("PaintBucket"))
+        
+        -- // Check if you already have a Paint Bucket   
+        if not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket")) then
+            Players:Chat(":gear me 18474459")
+            LocalPlayer.Backpack:WaitForChild("PaintBucket")
+            LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket)
+            LocalPlayer.Character:WaitForChild("PaintBucket")
         end
 
-        -- // Vars
-        local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
-
         -- // The Actual Painting Part
+        local Remote = LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls")
+
         if Section == "all" then
             for _, part in pairs(WorkspaceFolder:GetDescendants()) do
                 if part:IsA("BasePart") then
