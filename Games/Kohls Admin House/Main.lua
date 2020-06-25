@@ -376,7 +376,7 @@ end)
 addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number", function(message)
     local SoundId
     local stringSplit = string.split(message, " ")
-    if stringSplit[1] and splitString[2] and tostring(splitString[2]) and vars.MusicAPI.getSound(tostring(splitString[2])) then
+    if stringSplit[1] and splitString[2] and vars.MusicAPI.getSound(tonumber(splitString[2])) then
         vars.Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
         vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(tonumber(splitString[2])))
     else
