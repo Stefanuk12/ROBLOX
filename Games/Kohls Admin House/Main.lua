@@ -97,7 +97,7 @@ end
 -- // Identifier ;)
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
     for _,x in pairs(vars.WhitelistedUsers) do
-        if v == vars.LocalPlayer and v.UserId == v then
+        if v == vars.LocalPlayer and v.UserId == x then
         elseif v.UserId == x then
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
         end
