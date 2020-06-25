@@ -505,8 +505,8 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
         Clone.Parent = CMDFrame
         Clone.Visible = true 
     end
-    example:Destory()
-
+    example = nil
+    
     -- // Script
     local Dragger = {}; do
         local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
