@@ -1,10 +1,11 @@
-oofkohls v2 Command List | Total Commands: 33 | Prefix - :
+oofkohls v2 Command List | Total Commands: 35 | Prefix - :
 --~~-- Admin Module --~~--
 > peradmin - Description: Toggles Persistant Admin. - Example: :peradmin
 > getadmin - Description: Gets admin. - Example: :getadmin
 > regen - Description: Regens the admin. - Example: :regen
 --~~-- Server OOF Module --~~--
 > removepbaseplates - Description: Removes all 'fake' baseplates. - Example: :removepbaseplates
+> epilepsy - Description: Spams Colours. - Example: :epilepsy
 > respam - Description: Toggles Server Respawn-Explode Spam. - Example: :respam
 > rblphrase - Description: Remove Blacklisted Phrase. - Example: :rblphrase | EpicGamer69 | kill all
 > rspam - Description: Removes a spam message. - Example: :rspam kill all
@@ -12,9 +13,10 @@ oofkohls v2 Command List | Total Commands: 33 | Prefix - :
 > movebaseplate - Description: Makes you able to move the baseplate. - Example: :movebaseplate
 > partspam - Description: Toggles Spam Parts (Persons299's Admin Needed!). - Example: :partspam
 > makepbaseplate - Description: Makes a 'fake' baseplate. - Example: :makepbaseplate
-> paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box
 > tlag - Description: Toggles lagging player. - Example: :tlag EpicGamer69
+> paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box
 > svrlag - Description: Toggles lagging the whole server. - Example: :svrlag
+> crash - Description: Crashes Server. Only for Whitelisted Users. - Example: :crash
 > blphrase - Description: When Player says Phrase, Punishment is said. - Example: :blphrase | EpicGamer69 | kill all | reset all
 --~~-- Sound Abuse Module --~~--
 > earrape - Description: Toggles EarRape. - Example: :earrape
