@@ -11,7 +11,7 @@ local vars = KAHHax["vars"]
 
 KAHHax.CMDs = {--[[
     {
-        CommandName = s,
+        CommandName = v,
         ModuleName = w,
         Example = x,
         Description = y,
