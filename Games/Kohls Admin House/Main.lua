@@ -1,5 +1,5 @@
 -- // Main Script
-vars.Alert("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
+warn("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
 
 -- // Initialise
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
@@ -166,8 +166,8 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
         CommandName = CommandName,
         ModuleName = ModuleName,
         Example = Example,
-        Description = Description
-        Function = Function
+        Description = Description,
+        Function = Function,
     }
     table.insert(CMDs, insertTable)
 end
@@ -582,4 +582,4 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
     table.insert(Connections, {Connection = TitleClickConnection})
 end)
 
-vars.Alert("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
+warn("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
