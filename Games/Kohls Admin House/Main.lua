@@ -586,7 +586,7 @@ addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to yo
     for i,v in pairs(KAHHax.CMDs) do
         CommandCount = CommandCount + 1
     end
-    local Holder = "oofkohls v2 Command List. Total Commands: "..CommandCount.."Prefix - "..Prefix.."\n"
+    local Holder = "oofkohls v2 Command List. Total Commands: "..CommandCount.." Prefix - "..Prefix.."\n"
     Holder = Holder.."--~~-- Admin Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Admin" then
