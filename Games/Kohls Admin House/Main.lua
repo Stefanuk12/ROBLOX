@@ -395,7 +395,7 @@ addCMD("execute", "Misc", Prefix.."execute print('hi'))", "Executes whatever you
 end)
 
 addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to your clipboard.", function(message)
-    local Holder = ""
+    local Holder = "oofkohls v2 Command List. Total Commands: "..#KAHHax.CMDs.."\n"
     Holder = Holder.."--~~-- Admin Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Admin" then
