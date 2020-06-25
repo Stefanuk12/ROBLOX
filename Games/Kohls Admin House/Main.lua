@@ -586,43 +586,43 @@ addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to yo
     Holder = Holder.."--~~-- Admin Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Admin" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Server OOF Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Server OOF" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Sound Abuse Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Sound Abuse" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Music Commands Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Music Commands" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Gear Giver Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Gear Giver" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Anti Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Anti" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     Holder = Holder.."--~~-- Misc Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Misc" then
-            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
     setclipboard(Holder)
