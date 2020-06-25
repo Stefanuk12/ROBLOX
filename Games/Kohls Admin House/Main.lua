@@ -228,7 +228,22 @@ addCMD("antijail", "Extra", Prefix.."antijail", "Toggles Anti Jail.", function(m
 end)
 
 -- // CMDs: Gear Giver Module
-addCMD("give help", "Gear Giver")
+addCMD("give", "Gear Giver", Prefix.."give SuperRLauncher", "Give yourself gears!", function(message)
+    local gHelp = Prefix.."give help"
+    local splitString = string.split(message, " ")
+    if string.sub(message, 1, #gHelp) == gHelp then
+        print('Welcome to Gear Giver - for Kohls Admin House. Prefix is :give - You need admin! All of the available gears will be listed below.')
+        for i,v in pairs(vars.gearList) do
+            local itemName = game:GetService("MarketplaceService"):GetProductInfo(v).Name
+            print("> "..itemName.." = "..i)
+        end
+        print('Example - :give all SSTripmine')
+    elseif splitString[2] and splitString[3] and vars.gearList[splitString[2]] then
+        vars.Chat(":gear "..splitmessage[2].." "..vars.gearList[splitString[2]])
+    else
+        vars.Alert("Invalid Arguments!")
+    end
+end)
 
 -- // CMDs: Sound Abuse Module
 addCMD("pasounds", "Sound Abuse", Prefix.."pasounds", "Plays all of the sounds in the game.", function(message)
