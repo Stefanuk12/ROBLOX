@@ -1,4 +1,5 @@
 -- // Main Script
+if getgenv().KAHHaxLoaded then warn("oofkohls v2 already loaded!") return end
 warn("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
 
 -- // Initialise
@@ -19,11 +20,18 @@ KAHHax.CMDs = {--[[
     }
 ]]}
 
--- // Get All Modules
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Admin/Main.lua"))() -- // Loadstring Admin Module
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Server%20OOF/Main.lua"))() -- // Loadstring Server OOF Module
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Modules/Sound%20Abuse/Main.lua"))() -- // Loadstring Sound Abuse Module
-wait(1)
+-- // Controller Vars
+KAHHax.ServerOOFController = {}
+KAHHax.ServerOOFController.RE = false
+KAHHax.ServerOOFController.PS = false
+KAHHax.ServerOOFController.lagServer = false
+KAHHax.ServerOOFController.crashSpammer = {}
+
+KAHHax.SoundAbuseController = {}
+KAHHax.SoundAbuseController.EarRape = false
+
+KAHHax.AdminController = {}
+KAHHax.AdminController.PersistantAdmin = false
 
 -- // Script
 function verifyGameIntegrity()
@@ -65,6 +73,13 @@ function verifyGameIntegrity()
     end)
     return CheckList
 end
+
+function fireCommand(command, message)
+    if KAHHax.CMDs[command] then
+        KAHHax.CMDs[command].Function(message)
+    end
+end
+
 -- // Anti
 antiPunish = false
 antiBlind = false
@@ -99,33 +114,6 @@ vars.HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
     end
 end)
 
--- // Blacklist Manager
-function blacklistPhrase(targetPlayer, Phrase, Punishment)
-    local targetPlayer = vars.getPlayer(tostring(Player))
-    for _,v in pairs(targetPlayer) do
-        if v and not vars.checkWhitelisted(v.UserId) then
-            local bLTBL = vars.PlayerManager[v.Name].BlacklistedPhrases
-            table.insert(bLTBL, {Phrase = Phrase, Punishment = Punishment})
-            vars.Notify('Blacklisted Phrase:', "Player -", v.Name, "Phrase -", Phrase, "Punishment -", Punishment)
-        else
-            vars.Alert(targetPlayer, " - unable to blacklist phrases")
-        end
-    end
-end
-
-function removeBlacklistedPhrase(targetPlayer, Phrase)
-    local targetPlayer = vars.getPlayer(tostring(Player))
-    for _,v in pairs(targetPlayer) do
-        if v and not vars.checkWhitelisted(v.UserId) then
-            for a,x in pairs(vars.PlayerManager[v.Name].BlacklistedPhrases) do
-                if x.Phrase == Phrase then
-                    table.remove(vars.PlayerManager[v.Name].BlacklistedPhrases, a)
-                end
-            end
-        end
-    end
-end
-
 -- // Identifier ;)
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
     for _,x in pairs(vars.WhitelistedUsers) do
@@ -154,38 +142,95 @@ for _,v in pairs(vars.WhitelistedUsers) do
     end
 end
 
--- // SpamList Handler
+-- // All of the Coroutines
+KAHHax.ServerOOFController.RECoroutine = coroutine.wrap(function() -- // Respawn Explode Spam
+    while wait() do
+        if KAHHax.ServerOOFController.RE then
+            for i,v in pairs(vars.getPlayer("others")) do
+                if not vars.checkWhitelisted(v.UserId) then
+                    vars.Chat(":respawn others")
+                    wait(0.1)
+                    vars.Chat(":explode others")
+                end
+            end
+        end
+    end
+end)()
+
+KAHHax.ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part Spam
+    while wait() do
+        if KAHHax.ServerOOFController.PS then
+            vars.Chat("part/10/10/10")
+        end
+    end
+end)()
+if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(vars.LocalPlayer.UserId, 35748) then coroutine.yield(KAHHax.ServerOOFController.PartCoroutine) vars.Alert("You do not have Person299's Admin, cannot part spam!") end
+
+KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
+    while wait() do
+        for i,v in pairs(vars.PlayerManager) do
+            if v.Lagging then
+                vars.Chat(":pm "..i.." "..vars.largeText)
+            end
+        end
+    end
+end)()
+
+KAHHax.ServerOOFController.SVRLagCoroutine = coroutine.wrap(function() -- // Server Lag
+    while wait() do
+        if KAHHax.ServerOOFController.lagServer and not vars.checkAllWhitelisted() then
+            vars.Chat(":pm others "..vars.largeText)
+        end
+    end
+end)()
+
+KAHHax.SoundAbuseController.mainCoroutine = coroutine.wrap(function()
+    while wait(0.25) do
+        if KAHHax.SoundAbuseController.EarRape then
+            for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+                if v:IsA("Sound") then
+                    v:Play()
+                end
+            end
+        end
+    end
+end)()
+
 coroutine.wrap(function()
     while wait() do
         if vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
-                game:GetService("Players"):Chat(v.Phrase)
+                vars.Chat(v.Phrase)
             end
         end
     end
-end)
+end)()
 
-function addToSpamList(givenPhrase)
-    if not vars.SpamList[1] then
-        table.insert(vars.SpamList, {Phrase = givenPhrase})
-    else
-        for i,v in pairs(vars.SpamList) do
-            if v.Phrase ~= givenPhrase then
-                table.insert(vars.SpamList, {Phrase = givenPhrase})
+KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
+    fireCommand("regen")
+
+    local Pad = vars.Pads:FindFirstChildWhichIsA("Model")
+    local PadClone = Pad:Clone()
+
+    PadClone.Parent = vars.Pads
+    PadClone.Name = "ClonedPad"
+    if Pad:FindFirstChildWhichIsA("Humanoid") then Pad:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+    if PadClone:FindFirstChildWhichIsA("Humanoid") then PadClone:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+    
+    while wait() do       
+        if KAHHax.AdminController.PersistantAdmin and vars.Character:FindFirstChildWhichIsA("BasePart") then
+            if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
+                fireCommand("regen")
             end
-        end
-    end
-    vars.Notify('Successfully added to Spam List, Message:', givenPhrase)
-end
+            Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
+            Pad.Head.CanCollide = false
+            Pad.Head.Transparency = 1
+            Pad.Head.CFrame = vars.Character["Left Leg"].CFrame
 
-function removeSpamPhrase(givenPhrase)
-    for i,v in pairs(vars.SpamList) do
-        if v.Phrase == givenPhrase then
-            table.remove(vars.SpamList, i)
-            vars.Notify('Successfully removed to Spam List, Message:', givenPhrase)
+            PadClone.Head.BrickColor = BrickColor.new("Really red")
         end
-    end
-end
+    end       
+end)()
 
 -- // Anti Lava Blocks
 for _,v in pairs(vars.Obby:GetDescendants()) do
@@ -194,6 +239,7 @@ for _,v in pairs(vars.Obby:GetDescendants()) do
     end
 end
 
+
 -- // CMD Handler
 function addCMD(CommandName, ModuleName, Example, Description, Function)
     if not CommandName or not ModuleName or not Example or not Description or not Function then
@@ -201,19 +247,17 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
         return
     end
     local CMDs = KAHHax.CMDs
-    local insertTable = {
-        CommandName = CommandName,
+    CMDs[CommandName] = {
         ModuleName = ModuleName,
         Example = Example,
         Description = Description,
         Function = Function,
     }
-    table.insert(CMDs, insertTable)
 end
 
 vars.LocalPlayer.Chatted:Connect(function(message)
     for i,v in pairs(KAHHax.CMDs) do
-        local Command = vars.Prefix..v.CommandName
+        local Command = vars.Prefix..i
         if v.Function and string.sub(message, 1, #Command) == Command then
             v.Function(message)
         end
@@ -224,18 +268,22 @@ local Prefix = vars.Prefix
 -- // CMDs: Admin Module
 addCMD("regen", "Admin", Prefix.."regen", "Regens the admin.", function(message)
     local verbrose = string.split(message, " ")[2]
-    KAHHax.AdminController.regenAdmin(verbrose and true or false)
+    local RegenPad = vars.AdminFolder.Regen
+    fireclickdetector(vars.AdminFolder.Regen.ClickDetector, 0)
+    if verbrose then print('Regened Admin.') end
 end)
 
 addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
     local verbrose = string.split(message, " ")[2]
-    KAHHax.AdminController.getAdmin(verbrose and true or false)
+    fireCommand("regen", verbrose)
+    wait(0.25)
+    firetouchinterest(vars.Character["Left Leg"], vars.Pads:FindFirstChild("Touch to get admin").Head, 0)
+    if verbrose then print('Got Admin.') end
 end)
 
 addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", function(message)
-    local toggle = KAHHax.AdminController.PersistantAdmin
-    toggle = not toggle
-    vars.Notify('Persistant Admin Toggle:', (not toggle and "Disabled." or "Enabled."))
+    KAHHax.AdminController.PersistantAdmin = not KAHHax.AdminController.PersistantAdmin
+    vars.Notify('Persistant Admin Toggle:', (not KAHHax.AdminController.PersistantAdmin and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Extra (Anti) Module
@@ -260,73 +308,100 @@ addCMD("antijail", "Anti", Prefix.."antijail", "Toggles Anti Jail.", function(me
 end)
 
 -- // CMDs: Gear Giver Module
-addCMD("give", "Gear Giver", Prefix.."give SuperRLauncher", "Give yourself gears!", function(message)
-    local gHelp = Prefix.."give help"
+addCMD("give", "Gear Giver", Prefix.."give me SuperRLauncher", "Give yourself and others gears!", function(message)
     local splitString = string.split(message, " ")
-    if string.sub(message, 1, #gHelp) == gHelp then
-        print('Welcome to Gear Giver - for Kohls Admin House. Prefix is :give - You need admin! All of the available gears will be listed below.')
-        for i,v in pairs(vars.gearList) do
-            local itemName = game:GetService("MarketplaceService"):GetProductInfo(v).Name
-            print("> "..itemName.." = "..i)
-        end
-        print('Example - :give all SSTripmine')
-    elseif splitString[2] and splitString[3] and vars.gearList[splitString[2]] then
-        vars.Chat(":gear "..splitmessage[2].." "..vars.gearList[splitString[2]])
-    else
+    if splitString[2] and splitString[3] and vars.gearList[splitString[3]] then
+        vars.Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
+    elseif not splitString[2] or splitString[3] then
         vars.Alert("Invalid Arguments!")
     end
 end)
 
+addCMD("givehelp", "Gear Giver", Prefix.."givehelp", "Returns all of the givable gears.", function(message)
+    print('Welcome to Gear Giver - for Kohls Admin House. Prefix is :give - You need admin! All of the available gears will be listed below.')
+    for i,v in pairs(vars.gearList) do
+        local itemName = game:GetService("MarketplaceService"):GetProductInfo(v).Name
+        print("> "..itemName.." = "..i)
+    end
+    print('Example - :give all SSTripmine')
+end)
+
 -- // CMDs: Sound Abuse Module
 addCMD("pasounds", "Sound Abuse", Prefix.."pasounds", "Plays all of the sounds in the game.", function(message)
-    KAHHax.SoundAbuseController.playAllSounds()
+    for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+        if v:IsA("Sound") then
+            v:Play()
+        end
+    end
+    vars.Notify('Played All Sounds.')
 end)
 
 addCMD("sallsounds", "Sound Abuse", Prefix.."sallsounds", "Stops all of the sounds in the game.", function(message)
-    KAHHax.SoundAbuseController.stopAllSounds()
+    for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+        if v:IsA("Sound") then
+            v:Stop()
+        end
+    end
+    vars.Notify('Stopped All Sounds.')
 end)
 
 addCMD("pmusic", "Sound Abuse", Prefix.."pmusic", "Plays the 'Music' Sound.", function(message)
-    KAHHax.SoundAbuseController.playMusic()
+    if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
+        vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Play()
+    end
+    vars.Notify('Played Music.')
 end)
 
 addCMD("smusic", "Sound Abuse", Prefix.."smusic", "Stops the 'Music' Sound.", function(message)
-    KAHHax.SoundAbuseController.stopMusic()
+    if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
+        vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Stop()
+    end
+    vars.Notify('Stopped Music.')
 end)
 
 addCMD("earrape", "Sound Abuse", Prefix.."earrape", "Toggles EarRape.", function(message)
-    local toggle = KAHHax.SoundAbuseController.EarRape
-    toggle = not toggle
-    vars.Notify('EarRape Toggle:', (not toggle and "Disabled." or "Enabled."))
+    KAHHax.SoundAbuseController.EarRape = not KAHHax.SoundAbuseController.EarRape
+    vars.Notify('EarRape Toggle:', (not KAHHax.SoundAbuseController.EarRape and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Server OOF Module
 addCMD("movebaseplate", "Server OOF", Prefix.."movebaseplate", "Makes you able to move the baseplate.", function(message)
-    KAHHax.ServerOOFController.moveBaseplate()
+    local Spawn = vars.WorkspaceFolder.Spawn3
+    local Baseplate = vars.WorkspaceFolder.Baseplate
+    vars.Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
+    wait(1.5)
+    vars.Chat(":stun me")
     vars.Notify("Done!")
 end)
 
 addCMD("partspam", "Server OOF", Prefix.."partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
-    local toggle = KAHHax.ServerOOFController.PartSpam 
-    toggle = not toggle
-    getgenv().chatSpyEnabled = not toggle
-    vars.Notify('Part Spam Toggle:', (not toggle and "Disabled." or "Enabled."))
+    KAHHax.ServerOOFController.PS = not KAHHax.ServerOOFController.PS
+    getgenv().chatSpyEnabled = not KAHHax.ServerOOFController.PS
+    vars.Notify('Part Spam Toggle:', (not KAHHax.ServerOOFController.PS and "Disabled." or "Enabled."))
 end)
 
 addCMD("respam", "Server OOF", Prefix.."respam", "Toggles Server Respawn-Explode Spam.", function(message)
-    local toggle = KAHHax.ServerOOFController.RE
-    toggle = not toggle
-    getgenv().chatSpyEnabled = not toggle
-    vars.Notify('Respawn-Explode Spam Toggle:', (not toggle and "Disabled." or "Enabled."))
+    KAHHax.ServerOOFController.RE = not KAHHax.ServerOOFController.RE
+    getgenv().chatSpyEnabled = not KAHHax.ServerOOFController.RE
+    vars.Notify('Respawn-Explode Spam Toggle:', (not KAHHax.ServerOOFController.RE and "Disabled." or "Enabled."))
 end)
 
 addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake' baseplate.", function(message)
-    KAHHax.ServerOOFController.phantomBaseplate()
+    local Baseplate = Instance.new("Part", vars.WorkspaceFolder)
+    Baseplate.Name = "PhantomBaseplate"
+    Baseplate.BrickColor = BrickColor.new("Bright green")
+    Baseplate.Size = Vector3.new(1000, 1.2, 1000)
+    Baseplate.TopSurface = "Studs"
+    Baseplate.Anchored = true
     vars.Notify("Made Fake Baseplate.")
 end)
 
 addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes all 'fake' baseplates.", function(message)
-    KAHHax.ServerOOFController.removePhantomBaseplate()
+    for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
+        if v.Name == "PhantomBaseplate" then
+            v:Destroy()
+        end
+    end
     vars.Notify("Removed Fake Baseplates.")
 end)
 
@@ -334,6 +409,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (You may use Bric
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] then
         local Colour 
+        local Section = splitString[3]
         if string.gmatch(splitString[2], "%d") and not string.gmatch(splitString[2], "[%a%p%c]+") then
             Colour = Vector3.new(0, 0, 0)
             local colorSplit = string.split(splitString[2], " ")
@@ -341,7 +417,41 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (You may use Bric
             if colorSplit[2] and tonumber(colorSplit[2]) then Colour.Y = colorSplit[2] end
             if colorSplit[3] and tonumber(colorSplit[3]) then Colour.Z = colorSplit[3] end
         end
-        KAHHax.ServerOOFController.paintServer(Color, splitString[3])
+        -- // Check if you already have a Paint Bucket
+        vars.Character.Humanoid:UnequipTools(); wait(0.5)
+        if not vars.LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
+            vars.Chat(":gear me 18474459"); wait(0.5)
+            vars.Character.Humanoid:EquipTool(vars.LocalPlayer.Backpack.PaintBucket)
+        end
+
+        -- // Vars
+        local Remote = vars.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
+        local SelectedColor
+
+        if typeof(SelectedColor) == 'Vector3' then 
+            SelectedColor = Color.fromRGB(SelectedColor.X, SelectedColor.Y, SelectedColor.Z) 
+        elseif typeof(SelectedColor) == 'BrickColor' then 
+            SelectedColor = SelectedColor.Color 
+        elseif typeof(SelectedColor) == 'string' then 
+            if SelectedColor == "rainbow" then 
+                SelectedColor = vars.RainbowColor 
+            else 
+                SelectedColor = BrickColor.new(SelectedColor).Color 
+            end 
+        end
+
+        -- // The Actual Painting Part
+        if string.lower(Section) == "all" then
+            for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
+                if string.match(string.lower(v.Name), string.lower(Section)) then
+                    for _, part in pairs(v:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColor})
+                        end
+                    end
+                end
+            end
+        end
     else
         vars.Alert("Invalid Arguments!")
     end
@@ -350,38 +460,73 @@ end)
 addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player.", function(message)
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] then
-        getgenv().chatSpyEnabled = not toggle
-        KAHHax.ServerOOFController.toggleLagUser(splitString[2])
+        local targetUser = splitString[2]
+        for i,v in pairs(vars.getPlayer(targetUser)) do
+            if not vars.checkWhitelisted(v.UserId) then
+                vars.PlayerManager[v.Name].Lagging = not vars.PlayerManager[v.Name].Lagging
+                getgenv().chatSpyEnabled = not vars.PlayerManager[v.Name].Lagging
+                vars.Notify(vars.PlayerManager[v.Name].Lagging and v.Name.." is being lagged." or v.Name.." has stopped being lagged.")
+            end
+        end
     else
         vars.Alert("Invalid Arguments!")
     end
 end)
 
 addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
-    local toggle = KAHHax.ServerOOFController.lagServer
-    getgenv().chatSpyEnabled = toggle
-    toggle = not toggle
-    vars.Notify('Lag Server Toggle:', (not toggle and "Disabled." or "Enabled."))
+    getgenv().chatSpyEnabled = KAHHax.ServerOOFController.lagServer
+    KAHHax.ServerOOFController.lagServer = not KAHHax.ServerOOFController.lagServer
+    vars.Notify('Lag Server Toggle:', (not KAHHax.ServerOOFController.lagServer and "Disabled." or "Enabled."))
 end)
 
 addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", function(message)
     local Str = Prefix.."spam  "
-    local spamString = string.sub(message, #Str)
+    local givenPhrase = string.sub(message, #Str, -1)
+    if not givenPhrase then
+        vars.Alert("Invalid Arguments!")
+        return
+    end
     getgenv().chatSpyEnabled = false
-    addToSpamList(spamString)
+    if not vars.SpamList[1] then
+        table.insert(vars.SpamList, {Phrase = givenPhrase})
+        vars.Notify('Successfully added to Spam List, Message:', givenPhrase)
+    else
+        for i,v in pairs(vars.SpamList) do
+            if v.Phrase ~= givenPhrase then
+                table.insert(vars.SpamList, {Phrase = givenPhrase})
+                vars.Notify('Successfully added to Spam List, Message:', givenPhrase)
+            else
+                vars.Alert("Already spamming this message:", givenPhrase)
+            end
+        end
+    end
 end)
 
 addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message.", function(message)
     local Str = Prefix.."rspam  "
-    local spamString = string.sub(message, #Str)
+    local givenPhrase = string.sub(message, #Str, -1)
     if #vars.SpamList < 1 then getgenv().chatSpyEnabled = true end
-    removeSpamPhrase(spamString)
+    for i,v in pairs(vars.SpamList) do
+        if v.Phrase == givenPhrase then
+            table.remove(vars.SpamList, i)
+            vars.Notify('Successfully removed to Spam List, Message:', givenPhrase)
+        end
+    end
 end)
 
 addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] and splitString[4] then
-        blacklistPhrase(splitString[2], splitString[3], splitString[4])
+        local targetPlayer = vars.getPlayer(splitString[2])
+        for _,v in pairs(targetPlayer) do
+            if v and not vars.checkWhitelisted(v.UserId) then
+                local bLTBL = vars.PlayerManager[v.Name].BlacklistedPhrases
+                table.insert(bLTBL, {Phrase = splitString[3], Punishment = splitString[4]})
+                vars.Notify('Blacklisted Phrase: Player -', v.Name, "Phrase -", splitString[3], "Punishment -", splitString[4])
+            else
+                vars.Alert(targetPlayer, " - unable to blacklist phrases")
+            end
+        end    
     else
         vars.Alert("Invalid Arguments!")
     end
@@ -390,7 +535,17 @@ end)
 addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3]then
-        removeBlacklistedPhrase(splitString[2], splitString[3])
+        local targetPlayer = vars.getPlayer(splitString[2])
+        for _,v in pairs(targetPlayer) do
+            if v and not vars.checkWhitelisted(v.UserId) then
+                for a,x in pairs(vars.PlayerManager[v.Name].BlacklistedPhrases) do
+                    if x.Phrase == splitString[3] then
+                        table.remove(vars.PlayerManager[v.Name].BlacklistedPhrases, a)
+                        vars.Notify('Removed Blacklisted Phrase: Player -', v.Name, "Phrase -", splitString[3])
+                    end
+                end
+            end
+        end
     else
         vars.Alert("Invalid Arguments!")
     end
@@ -572,7 +727,7 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(mess
         local Clone = example:Clone()
         wait()
         Clone.Name = v.Example
-        Clone.Text = "    > "..Prefix..v.CommandName.." - "..v.Description
+        Clone.Text = "    > "..Prefix..i.." - "..v.Description
         Clone.Parent = CMDFrame
         Clone.Visible = true 
     end
@@ -675,5 +830,5 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(mess
     table.insert(Connections, {Connection = CloseConnection})
     table.insert(Connections, {Connection = TitleClickConnection})
 end)
-
+getgenv().KAHHaxLoaded = true
 warn("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
