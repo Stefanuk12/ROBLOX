@@ -15,7 +15,7 @@ local mt = getrawmetatable(game)
 local backupnamecall = mt.__namecall
 local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
-setreadonly(mt, false)
+--setreadonly(mt, false)
 
 -- // Silent Aim Vars
 getgenv().ValiantAimHacks = {
