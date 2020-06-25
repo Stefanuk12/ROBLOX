@@ -606,22 +606,34 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
 
         if Section == "all" then
             for _, part in pairs(WorkspaceFolder:GetDescendants()) do
-                coroutine.wrap(function()
+                if string.lower(splitString[3]) ~= "rainbow" then
+                    coroutine.wrap(function()
+                        if part:IsA("BasePart") then
+                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                        end
+                    end)()
+                else
                     if part:IsA("BasePart") then
                         Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
                     end
-                end)()
+                end
             end
             vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[3]) == "rainbow" and "Rainbow" or Color))
         else
             for i,v in pairs(WorkspaceFolder:GetChildren()) do
                 if string.match(string.lower(v.Name), Section) then
                     for _, part in pairs(v:GetDescendants()) do
-                        coroutine.wrap(function()
+                        if string.lower(splitString[3]) ~= "rainbow" then
+                            coroutine.wrap(function()
+                                if part:IsA("BasePart") then
+                                    Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                                end
+                            end)()
+                        else
                             if part:IsA("BasePart") then
                                 Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
                             end
-                        end)()
+                        end
                     end
                 end
             end
