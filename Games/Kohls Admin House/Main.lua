@@ -207,22 +207,22 @@ addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", fun
 end)
 
 -- // CMDs: Extra (Anti) Module
-addCMD("antipunish", "Extra", Prefix.."antipunish", "Toggles Anti Punish.", function(message)
+addCMD("antipunish", "Anti", Prefix.."antipunish", "Toggles Anti Punish.", function(message)
     local toggle = not KAHHax.ExtraController.antiPunish
     vars.Notify('Anti Punish Toggle:', (not toggle and "Disabled." or "Enabled."))
 end)
 
-addCMD("antiblind", "Extra", Prefix.."antiblind", "Toggles Anti Blind.", function(message)
+addCMD("antiblind", "Anti", Prefix.."antiblind", "Toggles Anti Blind.", function(message)
     local toggle = not KAHHax.ExtraController.antiBlind
     vars.Notify('Anti Blind Toggle:', (not toggle and "Disabled." or "Enabled."))
 end)
 
-addCMD("antikill", "Extra", Prefix.."antikill", "Toggles Anti Kill.", function(message)
+addCMD("antikill", "Anti", Prefix.."antikill", "Toggles Anti Kill.", function(message)
     local toggle = not KAHHax.ExtraController.antiKill
     vars.Notify('Anti Kill Toggle:', (not toggle and "Disabled." or "Enabled."))
 end)
 
-addCMD("antijail", "Extra", Prefix.."antijail", "Toggles Anti Jail.", function(message)
+addCMD("antijail", "Anti", Prefix.."antijail", "Toggles Anti Jail.", function(message)
     local toggle = not KAHHax.ExtraController.antiJail
     vars.Notify('Anti Jail Toggle:', (not toggle and "Disabled." or "Enabled."))
 end)
@@ -325,28 +325,28 @@ addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player
     end
 end)
 
-addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server", function(message)
+addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
     local toggle = KAHHax.ServerOOFController.lagServer
     getgenv().chatSpyEnabled = toggle
     toggle = not toggle
     vars.Notify('Lag Server Toggle:', (not toggle and "Disabled." or "Enabled."))
 end)
 
-addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message", function(message)
+addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", function(message)
     local Str = Prefix.."spam  "
     local spamString = string.sub(message, #Str)
     getgenv().chatSpyEnabled = false
     addToSpamList(spamString)
 end)
 
-addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message", function(message)
+addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message.", function(message)
     local Str = Prefix.."rspam  "
     local spamString = string.sub(message, #Str)
     if #vars.SpamList < 1 then getgenv().chatSpyEnabled = true end
     removeSpamPhrase(spamString)
 end)
 
-addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said", function(message)
+addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] and splitString[4] then
         blacklistPhrase(splitString[2], splitString[3], splitString[4])
@@ -355,7 +355,7 @@ addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | re
     end
 end)
 
-addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase", function(message)
+addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3]then
         removeBlacklistedPhrase(splitString[2], splitString[3])
@@ -365,15 +365,15 @@ addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", 
 end)
 
 -- // CMDs: Music Commands
-addCMD("getmusic", "Music Commands", Prefix.."getmusic", "Prints all of the playable music", function(message)
+addCMD("getmusic", "Music Commands", Prefix.."getmusic", "Prints all of the playable music.", function(message)
     vars.MusicAPI.returnMusic(false)
 end)
 
-addCMD("refreshmusic", "Music Commands", Prefix.."refreshmusic", "Refreshes the music table", function(message)
+addCMD("refreshmusic", "Music Commands", Prefix.."refreshmusic", "Refreshes the music table.", function(message)
     vars.MusicAPI.refreshSounds()
 end)
 
-addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number", function(message)
+addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number.", function(message)
     local SoundId
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] and tonumber(splitString[2]) and vars.MusicAPI.getSound(tonumber(splitString[2])) then
@@ -385,25 +385,64 @@ addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at 
 end)
 
 -- // CMDs: Misc. Commands
-addCMD("rj", "Misc", Prefix.."rj", "Rejoins the game", function(message)
+addCMD("rj", "Misc", Prefix.."rj", "Rejoins the game.", function(message)
     game:GetService('TeleportService'):Teleport(game.PlaceId)
 end)
 
-addCMD("execute", "Misc", Prefix.."execute print('hi'))", "Executes whatever you want", function(message)
+addCMD("execute", "Misc", Prefix.."execute print('hi'))", "Executes whatever you want.", function(message)
     local Str = Prefix.."execute  "
     loadstring(string.sub(message, #Str, -1))()
 end)
 
-addCMD("copycmds", "Misc", Prefix.."copycmds", "Copys all of the commands to your clipboard", function(message)
+addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to your clipboard.", function(message)
     local Holder = ""
+    Holder = Holder.."--~~-- Admin Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
-        Holder = Holder..v.CommandName.." - Module: "..v.ModuleName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        if v.ModuleName == "Admin" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Server OOF Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Server OOF" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Sound Abuse Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Sound Abuse" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Music Commands Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Music Commands" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Gear Giver Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Gear Giver" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Anti Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Anti" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."--~~-- Misc Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Misc" then
+            Holder = Holder.."> "..v.CommandName.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
     end
     setclipboard(Holder)
 end)
 
 -- // CMDs: Misc. Commands - CMD GUI
-addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(message)
+addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(message)
     local ScriptCMDs = Instance.new("ScreenGui")
     local Container = Instance.new("Frame")
     local Header = Instance.new("Frame")
