@@ -4,7 +4,7 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["InitialisedModules"] = {} end
 
-loadstring(game:HttpGetAsync("lol"))() -- // Common Vars
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/CommonVariables.lua"))() -- // Common Vars
 repeat wait() until KAHHax["vars"]
 local vars = KAHHax["vars"]
 
