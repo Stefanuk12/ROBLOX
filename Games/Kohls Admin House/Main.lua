@@ -7,9 +7,17 @@ if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["InitialisedModules"] = {} end
 
 -- // Vars
-local GameFolder = game:GetService("Workspace"):WaitForChild("Terrain"):WaitForChild("_Game")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local GameFolder = Workspace:WaitForChild("Terrain"):WaitForChild("_Game")
+local AdminFolder = GameFolder:WaitForChild("Admin")
+local Pads = AdminFolder:WaitForChild("Pads")
+local WorkspaceFolder = GameFolder:WaitForChild("Workspace")
+local HolderFolder = GameFolder:WaitForChild("Folder")
+
 KAHHax["vars"] = {
-    Players = game:GetService("Players"),
     PlayerManager = {--[[
         PlayerUID = {
             Lagging = true,
@@ -18,19 +26,10 @@ KAHHax["vars"] = {
             BlacklistConnection = {},
         },
     ]]},
-    Chat = function (...) game:GetService("Players"):Chat(...) end,
-    GameFolder = GameFolder,
-    AdminFolder = GameFolder:WaitForChild("Admin"),
-    PadFolder = GameFolder:WaitForChild("Admin"):WaitForChild("Pads"),
-    WorkspaceFolder = GameFolder:WaitForChild("Workspace"),
-    HolderFolder = GameFolder:WaitForChild("Folder"),
-    Pads = GameFolder:WaitForChild("Admin"):WaitForChild("Pads"),
-    Obby = GameFolder["Workspace"].Obby,
-    LocalPlayer = game:GetService("Players").LocalPlayer,
-    Character = game:GetService("Players").LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait(),
     RainbowColor = Color3.fromRGB(0, 0, 0),
     WhitelistedUsers = {91318356},
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
+    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     gearList = {
         PaintBucket = 18474459,
         Hyperlaser = 130113146,
@@ -47,7 +46,6 @@ KAHHax["vars"] = {
     },
     SpamList = {},
     Prefix = ":",
-    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
 }
 vars = KAHHax.vars
 
@@ -89,9 +87,9 @@ function KAHHax.vars.checkWhitelisted(UserId)
 end
 
 function KAHHax.vars.checkAllWhitelisted()
-    for _,v in pairs(vars.Players:GetPlayers()) do
+    for _,v in pairs(Players:GetPlayers()) do
         for _,x in pairs(vars.WhitelistedUsers) do
-            if v ~= vars.LocalPlayer and v.UserId == x then
+            if v ~= LocalPlayer and v.UserId == x then
                 return true
             end
         end
@@ -100,10 +98,9 @@ function KAHHax.vars.checkAllWhitelisted()
 end
 
 function KAHHax.vars.addPlayerToManager(Player)
-    if typeof(Player) == 'Instance' and Player.Parent == vars.Players then
+    if typeof(Player) == 'Instance' and Player.Parent == Players then
         vars.PlayerManager[Player.Name] = {
             ["Lagging"] = false,
-            ["SpamList"] = {},
             ["BlacklistedPhrases"] = {},
             ["BlacklistConnection"] = {},
         }
@@ -117,7 +114,7 @@ function KAHHax.vars.addPlayerToManager(Player)
         vars.PlayerManager[Player.Name].BlacklistConnection.A = Player.Chatted:Connect(function(message)
             for i,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
                 if string.match(message, v.Phrase) then
-                    vars.Chat(v.Punishment)
+                    Players:Chat(v.Punishment)
                 end
             end
         end)
@@ -126,17 +123,15 @@ function KAHHax.vars.addPlayerToManager(Player)
 end
 
 function KAHHax.vars.removePlayerFromManager(Player)
-    if typeof(Player) == 'Instance' and Player.Parent == vars.Players and vars.PlayerManager[Player.Name] then
-        count = 0
+    if typeof(Player) == 'Instance' and Player.Parent == Players and vars.PlayerManager[Player.Name] then
         for i,v in pairs(vars.PlayerManager) do
-            count = count + 1
             if i == Player.Name then
                 for a,x in pairs(v.BlacklistConnection) do
                     if typeof(x) == "RBXScriptConnection" then
                         x:Disconnect()
                     end
                 end
-                table.remove(vars.PlayerManager, count)
+                vars.PlayerManager[i] = nil
                 vars.Notify(Player.Name, "has left and been removed from the PlayerManager.")
                 break
             end
@@ -146,15 +141,15 @@ end
 wait(0.5)
 
 -- // Player Manager
-for i,v in pairs(vars.Players:GetPlayers()) do
+for i,v in pairs(Players:GetPlayers()) do
     vars.addPlayerToManager(v)
 end
 
-vars.Players.PlayerAdded:Connect(function(player)
+Players.PlayerAdded:Connect(function(player)
     vars.addPlayerToManager(player)
 end)
 
-vars.Players.PlayerRemoving:Connect(function(player)
+Players.PlayerRemoving:Connect(function(player)
     vars.removePlayerFromManager(player)
 end)
 
@@ -177,17 +172,17 @@ KAHHax.CMDs = {--[[
 ]]}
 
 -- // Controller Vars
+KAHHax.ControllerSettings = {
+    RE = false,
+    PS = false,
+    lagServer = false,
+    EarRape = false,
+    PersistantAdmin = false,
+}
+
 KAHHax.ServerOOFController = {}
-KAHHax.ServerOOFController.RE = false
-KAHHax.ServerOOFController.PS = false
-KAHHax.ServerOOFController.lagServer = false
-KAHHax.ServerOOFController.crashSpammer = {}
-
 KAHHax.SoundAbuseController = {}
-KAHHax.SoundAbuseController.EarRape = false
-
 KAHHax.AdminController = {}
-KAHHax.AdminController.PersistantAdmin = false
 
 -- // Script
 function verifyGameIntegrity()
@@ -242,38 +237,38 @@ antiBlind = false
 antiKill = false
 antiJail = false
 game:GetService("Lighting").ChildAdded:Connect(function(child) -- // Anti Punish
-    if antiPunish and child.Name == vars.LocalPlayer.Name then
-        vars.Chat(":reset me")
+    if antiPunish and child.Name == LocalPlayer.Name then
+        Players:Chat(":reset me")
     end
 end)
 
-vars.LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
+LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
     if antiBlind and child.Name == "EFFECTGUIBLIND" then
         wait(0.1)
         child:Destroy()
     end
 end)
 
-vars.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
-    if antiKill then vars.Chat(":reset me") end
+Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+    if antiKill then Players:Chat(":reset me") end
 end)
 
-vars.LocalPlayer.CharacterAdded:Connect(function(Character)
+LocalPlayer.CharacterAdded:Connect(function(Character)
     Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
-        if antiKill then vars.Chat(":reset me") end
+        if antiKill then Players:Chat(":reset me") end
     end)
 end)
 
-vars.HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
-    if antiJail and child.Name == vars.LocalPlayer.Name.."'s jail" then
-        vars.Chat(":removejails")
+HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
+    if antiJail and child.Name == LocalPlayer.Name.."'s jail" then
+        Players:Chat(":removejails")
     end
 end)
 
 -- // Identifier ;)
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
     for _,x in pairs(vars.WhitelistedUsers) do
-        if v == vars.LocalPlayer and v.UserId == x then
+        if v == LocalPlayer and v.UserId == x then
         elseif v.UserId == x then
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
         end
@@ -287,9 +282,9 @@ game:GetService("Players").PlayerAdded:Connect(function(plr)
 end)
  
 for _,v in pairs(vars.WhitelistedUsers) do
-    local Player = vars.Players:GetNameFromUserIdAsync(v)
-    if vars.Players:FindFirstChild(Player) then
-        local Player = vars.Players:FindFirstChild(Player)
+    local Player = Players:GetNameFromUserIdAsync(v)
+    if Players:FindFirstChild(Player) then
+        local Player = Players:FindFirstChild(Player)
         Player.Chatted:Connect(function(chat)
             if string.lower(chat) == "hi gamers" then
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
@@ -299,14 +294,14 @@ for _,v in pairs(vars.WhitelistedUsers) do
 end
 
 -- // All of the Coroutines
-KAHHax.ServerOOFController.RECoroutine = coroutine.wrap(function() -- // Respawn Explode Spam
+KAHHax.ControllerSettings.RECoroutine = coroutine.wrap(function() -- // Respawn Explode Spam
     while wait() do
-        if KAHHax.ServerOOFController.RE then
+        if KAHHax.ControllerSettings.RE then
             for i,v in pairs(vars.getPlayer("others")) do
                 if not vars.checkWhitelisted(v.UserId) then
-                    vars.Chat(":respawn others")
+                    Players:Chat(":respawn others")
                     wait(0.1)
-                    vars.Chat(":explode others")
+                    Players:Chat(":explode others")
                 end
             end
         end
@@ -315,18 +310,18 @@ end)()
 
 KAHHax.ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part Spam
     while wait() do
-        if KAHHax.ServerOOFController.PS then
-            vars.Chat("part/10/10/10")
+        if KAHHax.ControllerSettings.PS then
+            Players:Chat("part/10/10/10")
         end
     end
 end)()
-if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(vars.LocalPlayer.UserId, 35748) then coroutine.yield(KAHHax.ServerOOFController.PartCoroutine) vars.Alert("You do not have Person299's Admin, cannot part spam!") end
+if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then coroutine.yield(KAHHax.ServerOOFController.PartCoroutine) vars.Alert("You do not have Person299's Admin, cannot part spam!") end
 
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
     while wait() do
         for i,v in pairs(vars.PlayerManager) do
-            if v.Lagging then
-                vars.Chat(":pm "..i.." "..vars.largeText)
+            if v and v.Lagging then
+                Players:Chat(":pm "..i.." "..vars.largeText)
             end
         end
     end
@@ -334,15 +329,15 @@ end)()
 
 KAHHax.ServerOOFController.SVRLagCoroutine = coroutine.wrap(function() -- // Server Lag
     while wait() do
-        if KAHHax.ServerOOFController.lagServer and not vars.checkAllWhitelisted() then
-            vars.Chat(":pm others "..vars.largeText)
+        if KAHHax.ControllerSettings.lagServer and not vars.checkAllWhitelisted() then
+            Players:Chat(":pm others "..vars.largeText)
         end
     end
 end)()
 
 KAHHax.SoundAbuseController.mainCoroutine = coroutine.wrap(function()
     while wait(0.25) do
-        if KAHHax.SoundAbuseController.EarRape then
+        if KAHHax.ControllerSettings.EarRape then
             for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
                 if v:IsA("Sound") then
                     v:Play()
@@ -356,7 +351,7 @@ coroutine.wrap(function()
     while wait() do
         if vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
-                vars.Chat(v.Phrase)
+                Players:Chat(v.Phrase)
             end
         end
     end
@@ -365,23 +360,23 @@ end)()
 KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
     fireCommand("regen")
 
-    local Pad = vars.Pads:FindFirstChildWhichIsA("Model")
+    local Pad = Pads:FindFirstChildWhichIsA("Model")
     local PadClone = Pad:Clone()
 
-    PadClone.Parent = vars.Pads
+    PadClone.Parent = Pads
     PadClone.Name = "ClonedPad"
     if Pad:FindFirstChildWhichIsA("Humanoid") then Pad:FindFirstChildWhichIsA("Humanoid"):Destroy() end
     if PadClone:FindFirstChildWhichIsA("Humanoid") then PadClone:FindFirstChildWhichIsA("Humanoid"):Destroy() end
     
     while wait() do       
-        if KAHHax.AdminController.PersistantAdmin and vars.Character:FindFirstChildWhichIsA("BasePart") then
+        if KAHHax.ControllerSettings.PersistantAdmin and Character:FindFirstChildWhichIsA("BasePart") then
             if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
                 fireCommand("regen")
             end
             Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
             Pad.Head.CanCollide = false
             Pad.Head.Transparency = 1
-            Pad.Head.CFrame = vars.Character["Left Leg"].CFrame
+            Pad.Head.CFrame = Character["Left Leg"].CFrame
 
             PadClone.Head.BrickColor = BrickColor.new("Really red")
         end
@@ -389,7 +384,7 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
 end)()
 
 -- // Anti Lava Blocks
-for _,v in pairs(vars.Obby:GetDescendants()) do
+for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
     if v:IsA("TouchTransmitter") then
         v:Destroy()
     end
@@ -411,7 +406,7 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
     }
 end
 
-vars.LocalPlayer.Chatted:Connect(function(message)
+LocalPlayer.Chatted:Connect(function(message)
     for i,v in pairs(KAHHax.CMDs) do
         local Command = vars.Prefix..i
         if v.Function and string.sub(message, 1, #Command) == Command then
@@ -424,8 +419,8 @@ local Prefix = vars.Prefix
 -- // CMDs: Admin Module
 addCMD("regen", "Admin", Prefix.."regen", "Regens the admin.", function(message)
     local verbrose = string.split(message, " ")[2]
-    local RegenPad = vars.AdminFolder.Regen
-    fireclickdetector(vars.AdminFolder.Regen.ClickDetector, 0)
+    local RegenPad = AdminFolder.Regen
+    fireclickdetector(AdminFolder.Regen.ClickDetector, 0)
     if verbrose then print('Regened Admin.') end
 end)
 
@@ -433,13 +428,13 @@ addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
     local verbrose = string.split(message, " ")[2]
     fireCommand("regen", verbrose)
     wait(0.25)
-    firetouchinterest(vars.Character["Left Leg"], vars.Pads:FindFirstChild("Touch to get admin").Head, 0)
+    firetouchinterest(Character["Left Leg"], Pads:FindFirstChild("Touch to get admin").Head, 0)
     if verbrose then print('Got Admin.') end
 end)
 
 addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", function(message)
-    KAHHax.AdminController.PersistantAdmin = not KAHHax.AdminController.PersistantAdmin
-    vars.Notify('Persistant Admin Toggle:', (not KAHHax.AdminController.PersistantAdmin and "Disabled." or "Enabled."))
+    KAHHax.ControllerSettings.PersistantAdmin = not KAHHax.ControllerSettings.PersistantAdmin
+    vars.Notify('Persistant Admin Toggle:', (not KAHHax.ControllerSettings.PersistantAdmin and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Extra (Anti) Module
@@ -467,7 +462,7 @@ end)
 addCMD("give", "Gear Giver", Prefix.."give me SuperRLauncher", "Give yourself and others gears!", function(message)
     local splitString = string.split(message, " ")
     if splitString[2] and splitString[3] and vars.gearList[splitString[3]] then
-        vars.Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
+        Players:Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
     elseif not splitString[2] or splitString[3] then
         vars.Alert("Invalid Arguments!")
     end
@@ -502,48 +497,48 @@ addCMD("sallsounds", "Sound Abuse", Prefix.."sallsounds", "Stops all of the soun
 end)
 
 addCMD("pmusic", "Sound Abuse", Prefix.."pmusic", "Plays the 'Music' Sound.", function(message)
-    if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
-        vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Play()
+    if HolderFolder:FindFirstChildWhichIsA("Sound") then
+        HolderFolder:FindFirstChildWhichIsA("Sound"):Play()
     end
     vars.Notify('Played Music.')
 end)
 
 addCMD("smusic", "Sound Abuse", Prefix.."smusic", "Stops the 'Music' Sound.", function(message)
-    if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
-        vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Stop()
+    if HolderFolder:FindFirstChildWhichIsA("Sound") then
+        HolderFolder:FindFirstChildWhichIsA("Sound"):Stop()
     end
     vars.Notify('Stopped Music.')
 end)
 
 addCMD("earrape", "Sound Abuse", Prefix.."earrape", "Toggles EarRape.", function(message)
-    KAHHax.SoundAbuseController.EarRape = not KAHHax.SoundAbuseController.EarRape
-    vars.Notify('EarRape Toggle:', (not KAHHax.SoundAbuseController.EarRape and "Disabled." or "Enabled."))
+    KAHHax.ControllerSettings.EarRape = not KAHHax.ControllerSettings.EarRape
+    vars.Notify('EarRape Toggle:', (not KAHHax.ControllerSettings.EarRape and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Server OOF Module
 addCMD("movebaseplate", "Server OOF", Prefix.."movebaseplate", "Makes you able to move the baseplate.", function(message)
-    local Spawn = vars.WorkspaceFolder.Spawn3
-    local Baseplate = vars.WorkspaceFolder.Baseplate
-    vars.Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
+    local Spawn = WorkspaceFolder.Spawn3
+    local Baseplate = WorkspaceFolder.Baseplate
+    Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
     wait(1.5)
-    vars.Chat(":stun me")
+    Players:Chat(":stun me")
     vars.Notify("Done!")
 end)
 
 addCMD("partspam", "Server OOF", Prefix.."partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
-    KAHHax.ServerOOFController.PS = not KAHHax.ServerOOFController.PS
-    getgenv().chatSpyEnabled = not KAHHax.ServerOOFController.PS
-    vars.Notify('Part Spam Toggle:', (not KAHHax.ServerOOFController.PS and "Disabled." or "Enabled."))
+    KAHHax.ControllerSettings.PS = not KAHHax.ControllerSettings.PS
+    getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.PS
+    vars.Notify('Part Spam Toggle:', (not KAHHax.ControllerSettings.PS and "Disabled." or "Enabled."))
 end)
 
 addCMD("respam", "Server OOF", Prefix.."respam", "Toggles Server Respawn-Explode Spam.", function(message)
-    KAHHax.ServerOOFController.RE = not KAHHax.ServerOOFController.RE
-    getgenv().chatSpyEnabled = not KAHHax.ServerOOFController.RE
-    vars.Notify('Respawn-Explode Spam Toggle:', (not KAHHax.ServerOOFController.RE and "Disabled." or "Enabled."))
+    KAHHax.ControllerSettings.RE = not KAHHax.ControllerSettings.RE
+    getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.RE
+    vars.Notify('Respawn-Explode Spam Toggle:', (not KAHHax.ControllerSettings.RE and "Disabled." or "Enabled."))
 end)
 
 addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake' baseplate.", function(message)
-    local Baseplate = Instance.new("Part", vars.WorkspaceFolder)
+    local Baseplate = Instance.new("Part", WorkspaceFolder)
     Baseplate.Name = "PhantomBaseplate"
     Baseplate.BrickColor = BrickColor.new("Bright green")
     Baseplate.Size = Vector3.new(1000, 1.2, 1000)
@@ -553,7 +548,7 @@ addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake'
 end)
 
 addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes all 'fake' baseplates.", function(message)
-    for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
+    for i,v in pairs(WorkspaceFolder:GetChildren()) do
         if v.Name == "PhantomBaseplate" then
             v:Destroy()
         end
@@ -574,14 +569,14 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (You may use Bric
             if colorSplit[3] and tonumber(colorSplit[3]) then Colour.Z = colorSplit[3] end
         end
         -- // Check if you already have a Paint Bucket
-        vars.Character.Humanoid:UnequipTools(); wait(0.5)
-        if not vars.LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
-            vars.Chat(":gear me 18474459"); wait(0.5)
-            vars.Character.Humanoid:EquipTool(vars.LocalPlayer.Backpack.PaintBucket)
+        Character.Humanoid:UnequipTools(); wait(0.5)
+        if not LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
+            Players:Chat(":gear me 18474459"); wait(0.5)
+            Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket)
         end
 
         -- // Vars
-        local Remote = vars.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
+        local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
         local SelectedColor
 
         if typeof(SelectedColor) == 'Vector3' then 
@@ -598,7 +593,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (You may use Bric
 
         -- // The Actual Painting Part
         if string.lower(Section) == "all" then
-            for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
+            for i,v in pairs(WorkspaceFolder:GetChildren()) do
                 if string.match(string.lower(v.Name), string.lower(Section)) then
                     for _, part in pairs(v:GetDescendants()) do
                         if part:IsA("BasePart") then
@@ -630,9 +625,9 @@ addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player
 end)
 
 addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
-    getgenv().chatSpyEnabled = KAHHax.ServerOOFController.lagServer
-    KAHHax.ServerOOFController.lagServer = not KAHHax.ServerOOFController.lagServer
-    vars.Notify('Lag Server Toggle:', (not KAHHax.ServerOOFController.lagServer and "Disabled." or "Enabled."))
+    getgenv().chatSpyEnabled = KAHHax.ControllerSettings.lagServer
+    KAHHax.ControllerSettings.lagServer = not KAHHax.ControllerSettings.lagServer
+    vars.Notify('Lag Server Toggle:', (not KAHHax.ControllerSettings.lagServer and "Disabled." or "Enabled."))
 end)
 
 addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", function(message)
@@ -720,7 +715,7 @@ addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at 
     local SoundId
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] and tonumber(splitString[2]) and vars.MusicAPI.getSound(tonumber(splitString[2])) then
-        vars.Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
+        Players:Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
         vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(tonumber(splitString[2])))
     else
         vars.Alert("Invalid Arguments!")
