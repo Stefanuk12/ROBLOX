@@ -539,7 +539,7 @@ end)
 addCMD("movebaseplate", "Server OOF", Prefix.."movebaseplate", "Makes you able to move the baseplate.", function(message)
     local Spawn = WorkspaceFolder.Spawn3
     local Baseplate = WorkspaceFolder.Baseplate
-    Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
+    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
     wait(1.5)
     Players:Chat(":stun me")
     vars.Notify("Done!")
