@@ -39,9 +39,9 @@ if not KAHHax.InitialisedModules.Admin then
 
         PadClone.Parent = vars.Pads
         PadClone.Name = "ClonedPad"
-        if Pad.Head:FindFirstChildWhichIsA("Humanoid") then Pad.Head:FindFirstChildWhichIsA("Humanoid"):Destroy() end
-        if PadClone.Head:FindFirstChildWhichIsA("Humanoid") then PadClone.Head:FindFirstChildWhichIsA("Humanoid"):Destroy() end
-
+        if Pad:FindFirstChildWhichIsA("Humanoid") then Pad:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+        if PadClone:FindFirstChildWhichIsA("Humanoid") then PadClone:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+        
         while wait() do       
             if AdminController.PersistantAdmin and vars.Character:FindFirstChildWhichIsA("BasePart") then
                 if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
