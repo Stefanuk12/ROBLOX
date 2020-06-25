@@ -505,7 +505,7 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
         Clone.Parent = CMDFrame
         Clone.Visible = true 
     end
-    clone:Destory()
+    example:Destory()
 
     -- // Script
     local Dragger = {}; do
