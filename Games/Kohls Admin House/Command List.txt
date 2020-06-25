@@ -1,0 +1,41 @@
+oofkohls v2 Command List | Total Commands: 33 | Prefix - :
+--~~-- Admin Module --~~--
+> peradmin - Description: Toggles Persistant Admin. - Example: :peradmin
+> getadmin - Description: Gets admin. - Example: :getadmin
+> regen - Description: Regens the admin. - Example: :regen
+--~~-- Server OOF Module --~~--
+> removepbaseplates - Description: Removes all 'fake' baseplates. - Example: :removepbaseplates
+> respam - Description: Toggles Server Respawn-Explode Spam. - Example: :respam
+> rblphrase - Description: Remove Blacklisted Phrase. - Example: :rblphrase | EpicGamer69 | kill all
+> rspam - Description: Removes a spam message. - Example: :rspam kill all
+> spam - Description: Spams a message. - Example: :spam kill all
+> movebaseplate - Description: Makes you able to move the baseplate. - Example: :movebaseplate
+> partspam - Description: Toggles Spam Parts (Persons299's Admin Needed!). - Example: :partspam
+> makepbaseplate - Description: Makes a 'fake' baseplate. - Example: :makepbaseplate
+> paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box
+> tlag - Description: Toggles lagging player. - Example: :tlag EpicGamer69
+> svrlag - Description: Toggles lagging the whole server. - Example: :svrlag
+> blphrase - Description: When Player says Phrase, Punishment is said. - Example: :blphrase | EpicGamer69 | kill all | reset all
+--~~-- Sound Abuse Module --~~--
+> earrape - Description: Toggles EarRape. - Example: :earrape
+> smusic - Description: Stops the 'Music' Sound. - Example: :smusic
+> pmusic - Description: Plays the 'Music' Sound. - Example: :pmusic
+> sallsounds - Description: Stops all of the sounds in the game. - Example: :sallsounds
+> pasounds - Description: Plays all of the sounds in the game. - Example: :pasounds
+--~~-- Music Commands Module --~~--
+> refreshmusic - Description: Refreshes the music table. - Example: :refreshmusic
+> play - Description: Plays the sound indexed at the number. - Example: :play 53
+> getmusic - Description: Prints all of the playable music. - Example: :getmusic
+--~~-- Gear Giver Module --~~--
+> givehelp - Description: Returns all of the givable gears. - Example: :givehelp
+> give - Description: Give yourself and others gears! - Example: :give me SuperRLauncher
+--~~-- Anti Module --~~--
+> antipunish - Description: Toggles Anti Punish. - Example: :antipunish
+> antijail - Description: Toggles Anti Jail. - Example: :antijail
+> antikill - Description: Toggles Anti Kill. - Example: :antikill
+> antiblind - Description: Toggles Anti Blind. - Example: :antiblind
+--~~-- Misc Module --~~--
+> xcmds - Description: Shows all of the CMDs. - Example: :xcmds
+> execute - Description: Executes whatever you want. - Example: :execute print('hi'))
+> rj - Description: Rejoins the game. - Example: :rj
+> copycmds - Description: Copies all of the commands to your clipboard. - Example: :copycmds
