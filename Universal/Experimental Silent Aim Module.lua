@@ -139,5 +139,5 @@ local HBFuncs = function()
     ValiantAimHacks.getClosestPlayerToCursor()
 end
 Heartbeat.Connect(Heartbeat, HBFuncs)
-setreadonly(mt, true)
+--setreadonly(mt, true)
 return ValiantAimHacks
