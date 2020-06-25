@@ -66,6 +66,39 @@ function verifyGameIntegrity()
     end)
     return CheckList
 end
+-- // Anti
+antiPunish = false
+antiBlind = false
+antiKill = false
+antiJail = false
+game:GetService("Lighting").ChildAdded:Connect(function(child) -- // Anti Punish
+    if antiPunish and child.Name == vars.LocalPlayer.Name then
+        vars.Chat(":reset me")
+    end
+end)
+
+vars.LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
+    if antiBlind and child.Name == "EFFECTGUIBLIND" then
+        wait(0.1)
+        child:Destroy()
+    end
+end)
+
+vars.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+    if antiKill then vars.Chat(":reset me") end
+end)
+
+vars.LocalPlayer.CharacterAdded:Connect(function(Character)
+    Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+        if antiKill then vars.Chat(":reset me") end
+    end)
+end)
+
+vars.HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
+    if antiJail and child.Name == vars.LocalPlayer.Name.."'s jail" then
+        vars.Chat(":removejails")
+    end
+end)
 
 -- // Blacklist Manager
 function blacklistPhrase(targetPlayer, Phrase, Punishment)
@@ -208,23 +241,23 @@ end)
 
 -- // CMDs: Extra (Anti) Module
 addCMD("antipunish", "Anti", Prefix.."antipunish", "Toggles Anti Punish.", function(message)
-    local toggle = not KAHHax.ExtraController.antiPunish
-    vars.Notify('Anti Punish Toggle:', (not toggle and "Disabled." or "Enabled."))
+    antiPunish = not antiPunish
+    vars.Notify('Anti Punish Toggle:', (not antiPunish and "Disabled." or "Enabled."))
 end)
 
 addCMD("antiblind", "Anti", Prefix.."antiblind", "Toggles Anti Blind.", function(message)
-    local toggle = not KAHHax.ExtraController.antiBlind
-    vars.Notify('Anti Blind Toggle:', (not toggle and "Disabled." or "Enabled."))
+    antiBlind = not antiBlind
+    vars.Notify('Anti Blind Toggle:', (not antiBlind and "Disabled." or "Enabled."))
 end)
 
 addCMD("antikill", "Anti", Prefix.."antikill", "Toggles Anti Kill.", function(message)
-    local toggle = not KAHHax.ExtraController.antiKill
-    vars.Notify('Anti Kill Toggle:', (not toggle and "Disabled." or "Enabled."))
+    antiKill = not antiKill
+    vars.Notify('Anti Kill Toggle:', (not antiKill and "Disabled." or "Enabled."))
 end)
 
 addCMD("antijail", "Anti", Prefix.."antijail", "Toggles Anti Jail.", function(message)
-    local toggle = not KAHHax.ExtraController.antiJail
-    vars.Notify('Anti Jail Toggle:', (not toggle and "Disabled." or "Enabled."))
+    antiJail = not antiJail
+    vars.Notify('Anti Jail Toggle:', (not antiJail and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Gear Giver Module
