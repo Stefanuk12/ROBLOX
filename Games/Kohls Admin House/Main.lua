@@ -95,10 +95,10 @@ function removeBlacklistedPhrase(targetPlayer, Phrase)
 end
 
 -- // Identifier ;)
-for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-    for i,v in pairs(vars.WhitelistedUsers) do
+for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+    for _,x in pairs(vars.WhitelistedUsers) do
         if v == vars.LocalPlayer and v.UserId == v then
-        elseif v.UserId == v then
+        elseif v.UserId == x then
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
         end
     end
