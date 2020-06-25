@@ -920,7 +920,6 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(mess
                 end)
             end
         end
-
     end
     Dragger.new(Container)
 
