@@ -231,6 +231,20 @@ function fireCommand(command, message)
     end
 end
 
+function checkLagging()
+    local LaggingCount = 0
+    for i,v in pairs(vars.PlayerManager) do
+        if v.Lagging then
+            LaggingCount = LaggingCount + 1 
+        end
+    end
+    if LaggingCount <= 0 then 
+        vars.SpamListRunning = false
+    elseif LaggingCount >= 1 then
+        vars.SpamListRunning = true
+    end
+end
+
 -- // Anti
 antiPunish = false
 antiBlind = false
@@ -354,6 +368,12 @@ SpamListCoroutine = coroutine.wrap(function()
                 Players:Chat(v.Phrase)
             end
         end
+    end
+end)()
+
+SpamListCheckerCoroutine = coroutine.wrap(function()
+    while wait(1) do
+        checkLagging()
     end
 end)()
 
@@ -556,52 +576,48 @@ addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes 
     vars.Notify("Removed Fake Baseplates.")
 end)
 
-addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (You may use BrickColor or RGB) | Obby Box", "Paints the specified section as the specified colour.", function(message)
+addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box", "Paints the specified section as the specified colour.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] then
-        local Colour 
-        local Section = splitString[3]
-        if string.gmatch(splitString[2], "%d") and not string.gmatch(splitString[2], "[%a%p%c]+") then
-            Colour = Vector3.new(0, 0, 0)
+        SelectedColor = Color3.new(0, 0, 0)
+        Color = string.lower(splitString[2])
+        local Section = string.lower(splitString[3]) 
+        if string.gmatch(Color, "[%d%s]+") then
+            R, G, B = 0, 0, 0
             local colorSplit = string.split(splitString[2], " ")
-            if colorSplit[1] and tonumber(colorSplit[1]) then Colour.X = colorSplit[1] end
-            if colorSplit[2] and tonumber(colorSplit[2]) then Colour.Y = colorSplit[2] end
-            if colorSplit[3] and tonumber(colorSplit[3]) then Colour.Z = colorSplit[3] end
+            if colorSplit[1] and tonumber(colorSplit[1]) then R = tonumber(colorSplit[1]) end
+            if colorSplit[2] and tonumber(colorSplit[2]) then G = tonumber(colorSplit[2]) end
+            if colorSplit[3] and tonumber(colorSplit[3]) then B = tonumber(colorSplit[3]) end
+            SelectedColor = Color3.fromRGB(R, G, B)
         end
         -- // Check if you already have a Paint Bucket
-        Character.Humanoid:UnequipTools(); wait(0.5)
-        if not LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
+        if not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or Character:FindFirstChild("PaintBucket")) then
             Players:Chat(":gear me 18474459"); wait(0.5)
-            Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket)
+            Character.Humanoid:EquipTool(LocalPlayer.Backpack:WaitForChild("PaintBucket"))
         end
 
         -- // Vars
         local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
-        local SelectedColor
-
-        if typeof(SelectedColor) == 'Vector3' then 
-            SelectedColor = Color.fromRGB(SelectedColor.X, SelectedColor.Y, SelectedColor.Z) 
-        elseif typeof(SelectedColor) == 'BrickColor' then 
-            SelectedColor = SelectedColor.Color 
-        elseif typeof(SelectedColor) == 'string' then 
-            if SelectedColor == "rainbow" then 
-                SelectedColor = vars.RainbowColor 
-            else 
-                SelectedColor = BrickColor.new(SelectedColor).Color 
-            end 
-        end
 
         -- // The Actual Painting Part
-        if string.lower(Section) == "all" then
+        if Section == "all" then
+            for _, part in pairs(WorkspaceFolder:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                end
+            end
+            vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[3]) == "rainbow" and "Rainbow" or Color))
+        else
             for i,v in pairs(WorkspaceFolder:GetChildren()) do
-                if string.match(string.lower(v.Name), string.lower(Section)) then
+                if string.match(string.lower(v.Name), Section) then
                     for _, part in pairs(v:GetDescendants()) do
                         if part:IsA("BasePart") then
-                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColor})
+                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
                         end
                     end
                 end
             end
+            vars.Notify("Painted: Section -", Section, "Color -", (string.lower(splitString[2]) == "rainbow" and "Rainbow" or SelectedColor))
         end
     else
         vars.Alert("Invalid Arguments!")
@@ -622,17 +638,7 @@ addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player
     else
         vars.Alert("Invalid Arguments!")
     end
-    local LaggingCount = 0
-    for i,v in pairs(vars.PlayerManager) do
-        if v.Lagging then
-            LaggingCount = LaggingCount + 1 
-        end
-    end
-    if LaggingCount <= 0 then 
-        vars.SpamListRunning = false
-    elseif LaggingCount >= 1 then
-        vars.SpamListRunning = true
-    end
+    checkLagging()
 end)
 
 addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
