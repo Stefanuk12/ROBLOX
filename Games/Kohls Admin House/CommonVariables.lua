@@ -1,53 +1,6 @@
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
 if not KAHHax.CommonVars then
     local GameFolder = game:GetService("Workspace"):WaitForChild("Terrain"):WaitForChild("_Game")
-
-    function getPlayer(String)
-        local Found = {}
-        local Target = string.lower(String)
-        if Target == "all" then
-            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                table.insert(Found, v)
-            end
-        elseif Target == "others" then
-            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                if v ~= game:GetService("Players").LocalPlayer then
-                    table.insert(Found, v)
-                end
-            end
-        elseif Target == "me" then
-            table.insert(Found, game:GetService("Players").LocalPlayer)
-        else
-            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                if v.Name:lower():sub(1, #String) == String:lower() then
-                    table.insert(Found, v)
-                end
-            end
-        end
-        return Found
-    end
-
-    function checkWhitelisted(UserId)
-        for _,v in pairs(KAHHax["vars"].WhilelistedUsers) do
-            if UserId == v then
-                return true
-            end
-        end
-        return false
-    end
-
-    function checkAllWhitelisted()
-        for _,v in pairs(KAHHax["vars"].Players:GetPlayers()) do
-            for _,x in pairs(KAHHax["vars"].WhilelistedUsers) do
-                if v ~= KAHHax["vars"].LocalPlayer and v.UserId == x then
-                    return true
-                end
-            end
-        end
-        return false
-    end
-
-
     KAHHax["vars"] = {
         Players = game:GetService("Players"),
         PlayerManager = {--[[
@@ -72,8 +25,6 @@ if not KAHHax.CommonVars then
         RainbowColor = Color3.fromRGB(0, 0, 0),
         getPlayer = getPlayer,
         WhilelistedUsers = {91318356},
-        checkWhitelisted = checkWhitelisted,
-        checkAllWhitelisted = checkAllWhitelisted,
         Alert = warn,
         Notify = print,
         largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
@@ -95,36 +46,83 @@ if not KAHHax.CommonVars then
         Prefix = ":",
         MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     }
-    -- // Player Manager
-    function addPlayerToManager(Player)
-        if typeof(Player) == 'Instance' and Player.Parent == KAHHax["vars"].Players then
-            KAHHax["vars"].PlayerManager[Player.UserId] = {
+    vars = KAHHax.vars
+    local vars = KAHHax["vars"]
+    function KAHHax.vars.getPlayer(String)
+        local Found = {}
+        local Target = string.lower(String)
+        if Target == "all" then
+            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                table.insert(Found, v)
+            end
+        elseif Target == "others" then
+            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                if v ~= game:GetService("Players").LocalPlayer then
+                    table.insert(Found, v)
+                end
+            end
+        elseif Target == "me" then
+            table.insert(Found, game:GetService("Players").LocalPlayer)
+        else
+            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                if v.Name:lower():sub(1, #String) == String:lower() then
+                    table.insert(Found, v)
+                end
+            end
+        end
+        return Found
+    end
+
+    function KAHHax.vars.checkWhitelisted(UserId)
+        for _,v in pairs(vars.WhilelistedUsers) do
+            if UserId == v then
+                return true
+            end
+        end
+        return false
+    end
+
+    function KAHHax.vars.checkAllWhitelisted()
+        for _,v in pairs(vars.Players:GetPlayers()) do
+            for _,x in pairs(vars.WhilelistedUsers) do
+                if v ~= vars.LocalPlayer and v.UserId == x then
+                    return true
+                end
+            end
+        end
+        return false
+    end
+
+    function KAHHax.vars.addPlayerToManager(Player)
+        if typeof(Player) == 'Instance' and Player.Parent == vars.Players then
+            vars.PlayerManager[Player.Name] = {
                 ["Lagging"] = false,
                 ["SpamList"] = {},
                 ["BlacklistedPhrases"] = {},
                 ["BlacklistConnection"] = {},
             }
-            for i,v in pairs(KAHHax["vars"].WhilelistedUsers) do
+            for i,v in pairs(vars.WhilelistedUsers) do
                 if Player.UserId == v then
-                    KAHHax["vars"].PlayerManager[Player.UserId]["Whitelisted"] = true
+                    vars.PlayerManager[Player.Name]["Whitelisted"] = true
                 else
-                    KAHHax["vars"].PlayerManager[Player.UserId]["Whitelisted"] = false
+                    vars.PlayerManager[Player.Name]["Whitelisted"] = false
                 end
             end
-            KAHHax["vars"].PlayerManager[Player.UserId].BlacklistConnection.A = Player.Chatted:Connect(function(message)
-                for i,v in pairs(KAHHax["vars"].PlayerManager[Player.UserId].BlacklistedPhrases) do
+            vars.PlayerManager[Player.Name].BlacklistConnection.A = Player.Chatted:Connect(function(message)
+                for i,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
                     if string.match(message, v.Phrase) then
-                        KAHHax["vars"].Chat(v.Punishment)
+                        vars.Chat(v.Punishment)
                     end
                 end
             end)
+            vars.Notify(Player.Name, "has joined and added to the PlayerManager.")
         end
     end
 
-    function removePlayerFromManager(Player)
-        if typeof(Player) == 'Instance' and Player.Parent == KAHHax["vars"].Players and KAHHax["vars"].PlayerManager[Player.UserId] then
+    function KAHHax.vars.removePlayerFromManager(Player)
+        if typeof(Player) == 'Instance' and Player.Parent == vars.Players and vars.PlayerManager[Player.Name] then
             count = 0
-            for i,v in pairs(KAHHax["vars"].PlayerManager) do
+            for i,v in pairs(vars.PlayerManager) do
                 count = count + 1
                 if i == Player.UserId then
                     for a,x in pairs(v.BlacklistConnection) do
@@ -132,32 +130,34 @@ if not KAHHax.CommonVars then
                             x:Disconnect()
                         end
                     end
-                    table.remove(KAHHax["vars"].PlayerManager, count)
+                    table.remove(vars.PlayerManager, count)
+                    vars.Notify(Player.Name, "has left and been removed from the PlayerManager.")
                     break
                 end
             end
         end
     end
-
-    for i,v in pairs(KAHHax["vars"].Players:GetPlayers()) do
-        addPlayerToManager(v)
+    wait(0.5)
+    -- // Player Manager
+    for i,v in pairs(vars.Players:GetPlayers()) do
+        vars.addPlayerToManager(v)
     end
 
-    KAHHax["vars"].Players.PlayerAdded:Connect(function(player)
-        addPlayerToManager(player)
+    vars.Players.PlayerAdded:Connect(function(player)
+        vars.addPlayerToManager(player)
     end)
 
-    KAHHax["vars"].Players.PlayerRemoving:Connect(function(player)
-        removePlayerFromManager(player)
+    vars.Players.PlayerRemoving:Connect(function(player)
+        vars.removePlayerFromManager(player)
     end)
 
     -- // Rainbow Color
     coroutine.wrap(function()
         while wait() do
-            KAHHax["vars"].RainbowColor = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+            vars.RainbowColor = Color3.fromHSV(tick() % 5 / 5, 1, 1)
         end
     end)()
     
     KAHHax.CommonVars = true
 end
-return KAHHax["vars"]
+return vars
