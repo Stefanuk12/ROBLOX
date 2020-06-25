@@ -630,6 +630,7 @@ addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to yo
         end
     end
     setclipboard(Holder)
+    vars.Notify("Copied all Commands to clipboard!")
 end)
 
 -- // CMDs: Misc. Commands - CMD GUI
