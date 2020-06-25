@@ -1,4 +1,5 @@
 -- // Main Script
+vars.Alert("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
 
 -- // Initialise
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
@@ -8,7 +9,6 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLO
 repeat wait() until KAHHax["vars"]
 local vars = KAHHax["vars"]
 
-vars.Notify("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
 KAHHax.CMDs = {--[[
     {
         CommandName = s,
@@ -160,12 +160,13 @@ for _,v in pairs(vars.Obby:GetDescendants()) do
 end
 
 -- // CMD Handler
-function addCMD(CommandName, ModuleName, Example, Function)
+function addCMD(CommandName, ModuleName, Example, Description, Function)
     local CMDs = KAHHax.CMDs
     local insertTable = {
         CommandName = CommandName,
         ModuleName = ModuleName,
         Example = Example,
+        Description = Description
         Function = Function
     }
     table.insert(CMDs, insertTable)
@@ -581,4 +582,4 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs", function(messa
     table.insert(Connections, {Connection = TitleClickConnection})
 end)
 
-vars.Notify("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
+vars.Alert("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
