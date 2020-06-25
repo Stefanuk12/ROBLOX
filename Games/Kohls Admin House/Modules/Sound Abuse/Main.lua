@@ -1,44 +1,55 @@
--- // Initialisation
-if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax["intSoundAbuse"] then
-    getgenv().KAHHax["EarRape"] = false
+-- // Main Controller Script for the Sound Abuse Module
 
-    -- // Script
-    function KAHHax.playAllSounds()
+-- // Initialise
+if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
+if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["InitialisedModules"] = {} end
+
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/CommonVariables.lua"))() -- // Common Vars
+repeat wait() until KAHHax["vars"]
+
+KAHHax.SoundAbuseController = {}
+local SoundAbuseController = KAHHax.SoundAbuseController
+local vars = KAHHax["vars"]
+
+if not KAHHax.InitialisedModules.SoundAbuse then
+    SoundAbuseController.EarRape = false
+
+    function SoundAbuseController.playAllSounds()
         for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
             if v:IsA("Sound") then
                 v:Play()
             end
         end
-        print('Played All Sounds.')
+        vars.Notify('Played All Sounds.')
     end
-    function KAHHax.stopAllSounds()
+    function SoundAbuseController.stopAllSounds()
         for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
             if v:IsA("Sound") then
                 v:Stop()
             end
         end
-        print('Stopped All Sounds.')
+        vars.Notify('Stopped All Sounds.')
     end
-    function KAHHax.playMusic()
-        if game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound") then
-            game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound"):Play()
+    function SoundAbuseController.playMusic()
+        if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
+            vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Play()
         end
-        print('Played Music.')
+        vars.Notify('Played Music.')
     end
-    function KAHHax.stopMusic()
-        if game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound") then
-            game:GetService("Workspace").Terrain["_Game"].Folder:FindFirstChildWhichIsA("Sound"):Stop()
+    function SoundAbuseController.stopMusic()
+        if vars.HolderFolder:FindFirstChildWhichIsA("Sound") then
+            vars.HolderFolder:FindFirstChildWhichIsA("Sound"):Stop()
         end
-        print('Stopped Music.')
+        vars.Notify('Stopped Music.')
     end
-    coroutine.wrap(function()
+    SoundAbuseController.mainCoroutine = coroutine.wrap(function()
         while wait(0.25) do
-            if KAHHax.EarRape then
-                KAHHax.playAllSounds()
+            if SoundAbuseController.EarRape then
+                SoundAbuseController.playAllSounds()
             end
         end
     end)()
 
-    KAHHax["intSoundAbuse"] = true
+
+    KAHHax.InitialisedModules.SoundAbuse = true
 end

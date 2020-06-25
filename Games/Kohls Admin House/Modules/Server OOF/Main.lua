@@ -1,45 +1,55 @@
--- // Int
+-- // Main Controller Script for the Server OOF Module
+
+-- // Initialise
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax["intServerOOF"] then
-    KAHHax["RespawnExplode"] = false
-    KAHHax.lagServer = false
-    KAHHax.crashSpammer = {}
-    -- // Paint Server
-    function KAHHax.paintServer(Colour, Section)
-        -- // Give you the Paint Bucket if you don't have it
-        if not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket") or not game:GetService("Players").LocalPlayer.Character:FindFirstChild("PaintBucket") then
-            game:GetService("Players"):Chat(":gear me 18474459")
-            wait(0.5)
-            game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket"))
+if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["InitialisedModules"] = {} end
+
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/CommonVariables.lua"))() -- // Common Vars
+repeat wait() until KAHHax["vars"]
+
+KAHHax.ServerOOFController = {}
+local ServerOOFController = KAHHax.ServerOOFController
+local vars = KAHHax["vars"]
+
+if not KAHHax.InitialisedModules.ServerOOF then
+    -- // Vars
+    ServerOOFController.RE = false
+    ServerOOFController.PS = false
+    ServerOOFController.lagServer = false
+    ServerOOFController.crashSpammer = {}
+
+    -- // Paint Function
+    function ServerOOFController.paintServer(Color, Section)
+        -- // Check if you already have a Paint Bucket
+        vars.Character.Humanoid:UnequipTools(); wait(0.5)
+        if not vars.LocalPlayer.Backpack:FindFirstChild("PaintBucket") then
+            vars.Chat(":gear me 18474459"); wait(0.5)
+            vars.Character.Humanoid:EquipTool(vars.LocalPlayer.Backpack.PaintBucket)
         end
 
-        -- // Some Vars
-        local paintRemote = game:GetService("Players").LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
-        local SelectedColour = BrickColor.new(Colour).Color
-        local Terrain = game:GetService("Workspace").Terrain["_Game"]
+        -- // Vars
+        local Remote = vars.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes").ServerControls
+        local SelectedColor
 
-        -- // Rainbow Function
-        local rainbowcolour = Color3.fromHSV(1, 1, 1)
-        local rainbowroad = coroutine.wrap(function()
-            while wait() do
-                local hue = tick() % 5 / 5
-                rainbowcolour = Color3.fromHSV(hue, 1, 1)
-            end
-        end)()
-        
-        -- // Painting Sections
+        if typeof(SelectedColor) == 'Vector3' then 
+            SelectedColor = Color.fromRGB(SelectedColor.X, SelectedColor.Y, SelectedColor.Z) 
+        elseif typeof(SelectedColor) == 'BrickColor' then 
+            SelectedColor = SelectedColor.Color 
+        elseif typeof(SelectedColor) == 'string' then 
+            if SelectedColor == "rainbow" then 
+                SelectedColor = vars.RainbowColor 
+            else 
+                SelectedColor = BrickColor.new(SelectedColor).Color 
+            end 
+        end
+
+        -- // The Actual Painting Part
         if string.lower(Section) == "all" then
-            for i,v in pairs(Terrain:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    paintRemote:InvokeServer("PaintPart", {["Part"] = v, ["Color"] = (string.lower(Colour) == "rainbow" and rainbowcolour or SelectedColour)})
-                end
-            end
-        else
-            for i,v in pairs(Terrain.Workspace:GetChildren()) do
+            for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
                 if string.match(string.lower(v.Name), string.lower(Section)) then
-                    for a,x in pairs(v:GetDescendants()) do
-                        if x:IsA("Part") then
-                            paintRemote:InvokeServer("PaintPart", {["Part"] = x, ["Color"] = (string.lower(Colour) == "rainbow" and rainbowcolour or SelectedColour)})
+                    for _, part in pairs(v:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColor})
                         end
                     end
                 end
@@ -47,19 +57,18 @@ if not KAHHax["intServerOOF"] then
         end
     end
 
-    function KAHHax.moveBaseplate()
-        local Player = game:GetService("Players").LocalPlayer
-        local gameWorkspace = game:GetService("Workspace")["Terrain"]["_Game"]["Workspace"]
-        local Spawn = gameWorkspace["Spawn3"]
-        local Baseplate = gameWorkspace["Baseplate"]
-        local newCFrame = CFrame.new(Spawn.CFrame.p.X, Baseplate.CFrame.p.Y+1, Spawn.CFrame.p.Z)
-        Player.Character.HumanoidRootPart.CFrame = newCFrame 
-        wait(1)
-        game:GetService("Players"):Chat(":stun me")
+    -- // Gets you stuck in the Baseplate so you can move it
+    function ServerOOFController.moveBaseplate()
+        local Spawn = vars.WorkspaceFolder.Spawn3
+        local Baseplate = vars.WorkspaceFolder.Baseplate
+        vars.Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
+        wait(1.5)
+        vars.Chat(":stun me")
     end
 
-    function KAHHax.phantomBaseplate()
-        local Baseplate = Instance.new("Part", game:GetService("Workspace").Terrain["_Game"]["Workspace"])
+    -- // Make a phantom/fake baseplate
+    function ServerOOFController.phantomBaseplate()
+        local Baseplate = Instance.new("Part", vars.WorkspaceFolder)
         Baseplate.Name = "PhantomBaseplate"
         Baseplate.BrickColor = BrickColor.new("Bright green")
         Baseplate.Size = Vector3.new(1000, 1.2, 1000)
@@ -67,95 +76,67 @@ if not KAHHax["intServerOOF"] then
         Baseplate.Anchored = true
     end
 
-    function KAHHax.removePhantomBaseplate()
-        for i,v in pairs(game:GetService("Workspace").Terrain["_Game"]["Workspace"]:GetChildren()) do
+    -- // Remove all phanton/fake baseplates
+    function ServerOOFController.removePhantomBaseplate()
+        for i,v in pairs(vars.WorkspaceFolder:GetChildren()) do
             if v.Name == "PhantomBaseplate" then
                 v:Destroy()
             end
         end
     end
 
-    function KAHHax.resetBaseplate()
-        Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-10.643856, 6.09559107, 41.6999359, -0.999985814, 0.000743591227, -0.00526216626, 0.000726414903, 0.999994397, 0.0032653599, 0.00526453461, 0.00326149096, -0.999980867)
-    end
-    
-    coroutine.wrap(function()
-        while wait() do
-            if KAHHax.PartSpam then
-                game:GetService("Players"):Chat("part/10/10/10")
+    -- // Functions for the PM Lag Spammer
+    function ServerOOFController.toggleLagUser(targetUser)
+        for i,v in pairs(vars.getPlayer(targetUser)) do
+            if not vars.checkWhitelisted(v.UserId) then
+                vars.PlayerManager[v.Name].Lagging = not vars.PlayerManager[v.Name].Lagging
+                getgenv().chatSpyEnabled = not vars.PlayerManager[v.Name].Lagging
+                vars.Notify(vars.PlayerManager[v.Name].Lagging and v.Name.." is being lagged." or v.Name.." has stopped being lagged.")
             end
         end
-    end)()
+    end
 
-    coroutine.wrap(function()
+    -- // Spam Coroutines
+    ServerOOFController.RECoroutine = coroutine.wrap(function() -- // Respawn Explode Spam
         while wait() do
-            if KAHHax.RespawnExplode then
-                for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-                    if v ~= game:GetService("Players").LocalPlayer and v ~= game:GetService("Players"):FindFirstChild("StefanukSwAg") then
-                        game:GetService("Players"):Chat(":respawn others")
+            if ServerOOFController.RE then
+                for i,v in pairs(vars.getPlayer("others")) do
+                    if not vars.checkWhitelisted(v.UserId) then
+                        vars.Chat(":respawn others")
                         wait(0.1)
-                        game:GetService("Players"):Chat(":explode others")
+                        vars.Chat(":explode others")
                     end
                 end
             end
         end
     end)()
-    
-    getgenv().KAHHax.largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt")
-    coroutine.wrap(function()
+
+    ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part Spam
         while wait() do
-            if KAHHax.lagServer and (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-                game:GetService("Players"):Chat(":pm others "..KAHHax.largeText)
+            if ServerOOFController.PS then
+                if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(vars.LocalPlayer.UserId, 35748) then vars.Alert("You do not have Person299's Admin, cannot part spam!") end
+                vars.Chat("part/10/10/10")
             end
         end
     end)()
 
-    game:GetService("UserInputService").InputBegan:Connect(function(key, gpe)
-        if not gpe and key.KeyCode == Enum.KeyCode.F8 then
-            KAHHax.lagServer = not KAHHax.lagServer
-            getgenv().chatSpyEnabled = not KAHHax.lagServer
-            print('Lag Server Toggle:', (not KAHHax.lagServer and "Disabled." or "Enabled."))
-        end
-    end)
-
-    coroutine.wrap(function()
+    ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
         while wait() do
-            if KAHHax.crashSpammer[1] then
-                for i,v in pairs(KAHHax.crashSpammer) do
-                    game:GetService("Players"):Chat(v.Phrase)
+            for i,v in pairs(vars.PlayerManager) do
+                if v.Lagging then
+                    vars.Chat(":pm "..i.." "..vars.largeText)
                 end
             end
         end
     end)()
-    
-    function KAHHax.addToLagSpammer(givenPhrase)
-        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-            getgenv().chatSpyEnabled = false
-            givenPhrase = givenPhrase.." "..KAHHax.largeText
-            if not KAHHax.crashSpammer[1] then
-                table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})
-            else
-                for i,v in pairs(KAHHax.crashSpammer) do
-                    if v.Phrase ~= givenPhrase then
-                        table.insert(KAHHax.crashSpammer, {Phrase = givenPhrase})               
-                    end
-                end
-            end
-            print('Successfully added to Lagger')
-        end
-    end
-    
-    function KAHHax.removeLagSpammer(givenPhrase)
-        if (not game:GetService("Players"):FindFirstChild("StefanukSwAg") or game:GetService("Players").LocalPlayer.Name == "StefanukSwAg") then
-            if not KAHHax.crashSpammer[1] then getgenv().chatSpyEnabled = true end
-            for i,v in pairs(KAHHax.crashSpammer) do
-                if string.match(v.Phrase, givenPhrase) then
-                    table.remove(KAHHax.crashSpammer, i)
-                    print('Successfully removed from Lagger')
-                end
-            end
-        end
-    end
 
-    KAHHax["intServerOOF"] = true
+    ServerOOFController.SVRLagCoroutine = coroutine.wrap(function() -- // Server Lag
+        while wait() do
+            if ServerOOFController.lagServer and not vars.checkAllWhitelisted() then
+                vars.Chat(":pm others "..vars.largeText)
+            end
+        end
+    end)()
+
+    KAHHax.InitialisedModules.ServerOOF = true
 end

@@ -1,44 +1,62 @@
+-- // Main Controller Script for the Admin Module
+
+-- // Initialise
 if not getgenv()["KAHHax"] then getgenv()["KAHHax"] = {} end
-if not KAHHax["intAdmin"] then
-    function KAHHax.regenAdmin()
-        local Regen = game:GetService("Workspace").Terrain["_Game"]["Admin"].Regen
-        fireclickdetector(Regen.ClickDetector, 0)
-        print('Regened Admin.')
+if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["InitialisedModules"] = {} end
+KAHHax.AdminController = {}
+local AdminController = KAHHax.AdminController
+
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/CommonVariables.lua"))() -- // Common Vars
+repeat wait() until KAHHax["vars"]
+local vars = KAHHax["vars"]
+
+-- // Functions
+if not KAHHax.InitialisedModules.Admin then 
+    -- // Regen Admin
+    function AdminController.regenAdmin(verbrose)
+        local RegenPad = vars.AdminFolder.Regen
+        fireclickdetector(vars.AdminFolder.Regen.ClickDetector, 0)
+        if verbrose then print('Regened Admin.') end
     end
-    KAHHax.regenAdmin()
+    AdminController.regenAdmin()
+
     wait(0.1)
-    function KAHHax.getAdmin()
-        if not game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin") then
-            KAHHax.regenAdmin()
-            wait(0.1)
-        end
-        firetouchinterest(game:GetService("Players").LocalPlayer.Character["Left Leg"], game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChild("Touch to get admin").Head, 0)
-        print('Got Admin.')
+
+    -- // Get Admin
+    function AdminController.getAdmin(verbrose)
+        AdminController.regenAdmin()
+        wait(0.25)
+        firetouchinterest(vars.Character["Left Leg"], vars.Pads:FindFirstChild("Touch to get admin").Head, 0)
+        if verbrose then print('Got Admin.') end
     end
 
-    coroutine.wrap(function()
-        KAHHax.regenAdmin()
-        local Pad = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads:FindFirstChildWhichIsA("Model")
-        local Clone = Pad:Clone()
-        Clone.Parent = game:GetService("Workspace").Terrain["_Game"]["Admin"].Pads
+    -- // Persistant Admin
+    AdminController.PAdminCoroutine = coroutine.wrap(function()
+        AdminController.regenAdmin()
+
+        local Pad = vars.Pads:FindFirstChildWhichIsA("Model")
+        local PadClone = Pad:Clone()
+
+        PadClone.Parent = vars.Pads
+        PadClone.Name = "ClonedPad"
         if Pad.Head:FindFirstChildWhichIsA("Humanoid") then Pad.Head:FindFirstChildWhichIsA("Humanoid"):Destroy() end
-        while wait() do 
-            if KAHHax.PersistantAdmin and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg") then
-                if string.match(Pad.Name, "admin") and (Pad.Head.BrickColor == BrickColor.new("Really red") and not string.match(Pad.Name, game:GetService("Players").LocalPlayer.Name)) then
-                    KAHHax.regenAdmin()
+        if PadClone.Head:FindFirstChildWhichIsA("Humanoid") then PadClone.Head:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+
+        while wait() do       
+            if AdminController.PersistantAdmin and vars.Character:FindFirstChildWhichIsA("BasePart") then
+                if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
+                    AdminController.regenAdmin()
                 end
                 Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
                 Pad.Head.CanCollide = false
                 Pad.Head.Transparency = 1
-                Pad.Head.CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Left Leg").CFrame
-                Clone.Head.BrickColor = BrickColor.new("Really red")
-                Clone.Name = game:GetService("Players").LocalPlayer.Name.."'s admin"
-            elseif not KAHHax.PersistantAdmin then
-                Clone.Head.BrickColor = BrickColor.new("Bright green")
-                Clone.Name = "Touch to get admin"
+                Pad.Head.CFrame = vars.Character["Left Leg"].CFrame
+
+                PadClone.Head.BrickColor = BrickColor.new("Really red")
             end
-        end
+        end       
     end)()
 
-    KAHHax["intAdmin"] = true
+
+    KAHHax.InitialisedModules.Admin = true
 end
