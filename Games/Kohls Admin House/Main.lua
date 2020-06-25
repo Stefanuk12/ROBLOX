@@ -30,8 +30,6 @@ KAHHax["vars"] = {
     Character = game:GetService("Players").LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait(),
     RainbowColor = Color3.fromRGB(0, 0, 0),
     WhitelistedUsers = {91318356},
-    Alert = warn,
-    Notify = print,
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
     gearList = {
         PaintBucket = 18474459,
@@ -52,6 +50,10 @@ KAHHax["vars"] = {
     MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
 }
 vars = KAHHax.vars
+
+vars.Alert = warn
+vars.Notify = print
+
 function KAHHax.vars.getPlayer(String)
     local Found = {}
     local Target = string.lower(String)
