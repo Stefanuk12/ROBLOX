@@ -592,7 +592,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
             if colorSplit[3] and tonumber(colorSplit[3]) then B = tonumber(colorSplit[3]) end
             SelectedColor = Color3.fromRGB(R, G, B)
         end
-        
+
         -- // Check if you already have a Paint Bucket   
         if not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket")) then
             Players:Chat(":gear me 18474459")
@@ -606,18 +606,22 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
 
         if Section == "all" then
             for _, part in pairs(WorkspaceFolder:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
-                end
+                coroutine.wrap(function()
+                    if part:IsA("BasePart") then
+                        Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                    end
+                end)()
             end
             vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[3]) == "rainbow" and "Rainbow" or Color))
         else
             for i,v in pairs(WorkspaceFolder:GetChildren()) do
                 if string.match(string.lower(v.Name), Section) then
                     for _, part in pairs(v:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
-                        end
+                        coroutine.wrap(function()
+                            if part:IsA("BasePart") then
+                                Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                            end
+                        end)()
                     end
                 end
             end
