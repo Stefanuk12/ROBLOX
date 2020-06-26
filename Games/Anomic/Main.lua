@@ -18,14 +18,12 @@ local ItemList = ReplicatedStorage.Client.ItemList
 local Sprinting = false
 local changeVals = {
     Firemode = "Auto",
-    Damage = 100, -- doesn't actually work
     MaxAmmo = math.huge,
     Firerate = 2000,
     Range = 2000000,
     ReloadTime = 0.1,
     Accuracy = 0.1,
     Speed = 250,
-    Health = math.huge,
 }
 local Remotes = game:GetService("ReplicatedStorage")["_CS.Events"]
 
@@ -149,3 +147,4 @@ end
 
 -- // Backpack
 LocalPlayer.PlayerScripts.OwnsBackpackPass.Value = true
+LocalPlayer.CharacterAdded:Connect(function() wait(1) LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true end)
