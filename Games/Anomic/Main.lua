@@ -65,10 +65,6 @@ mt.__namecall = newcclosure(function(...)
             backupnamecall(Remotes.WeaponServer, "Player", CPlayer.Humanoid, returnGun().Name, CPlayer.Head)
             return backupnamecall(unpack(args))
         end
-    elseif method == "InvokeServer" then
-        if tostring(args[1]) == "RequestAmmo" then
-            return math.huge
-        end
     elseif method == "UserOwnsGamePassAync" and game:GetService("MarketplaceService"):GetProductInfo(tostring(args[2])) then
         return true
     end
@@ -121,19 +117,16 @@ for _,v in pairs(getgc()) do
 end
 
 -- // Unlimited Ammo
-function unlimtedAmmo()
-    coroutine.wrap(function()
-        while wait(1) do
-            if returnGun() then
-                local Gun = returnGun()
-                if Gun then
-                    Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = math.huge
-                end
+coroutine.wrap(function()
+    while wait() do
+        if returnGun() then
+            local Gun = returnGun()
+            if Gun then
+                Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = 100
             end
         end
-    end)
-end
-unlimtedAmmo()
+    end
+end)
 
 -- // Gun Mods
 for i,v in pairs(changeVals) do
