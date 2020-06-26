@@ -122,18 +122,18 @@ end
 
 -- // Unlimited Ammo
 function unlimtedAmmo()
-    if returnGun() then
-        local Gun = returnGun()
-        if Gun then
-            Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = math.huge
+    coroutine.wrap(function()
+        while wait(1) do
+            if returnGun() then
+                local Gun = returnGun()
+                if Gun then
+                    Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = math.huge
+                end
+            end
         end
-    end
+    end)
 end
 unlimtedAmmo()
-Character.ChildAdded:Connect(function()
-    wait(0.2)
-    unlimtedAmmo()
-end)
 
 -- // Gun Mods
 for i,v in pairs(changeVals) do
