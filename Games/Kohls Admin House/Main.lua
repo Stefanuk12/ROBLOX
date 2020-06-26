@@ -178,7 +178,10 @@ KAHHax.ControllerSettings = {
     lagServer = false,
     EarRape = false,
     PersistantAdmin = false,
-    Epilepsy = false
+    Epilepsy = false,
+    LaggerRunning = false,
+    SpammerRunning = false,
+    PSCan = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748).
 }
 
 KAHHax.ServerOOFController = {}
@@ -228,7 +231,7 @@ end
 
 function fireCommand(command, message)
     if KAHHax.CMDs[command] then
-        KAHHax.CMDs[command].Function(message)
+        KAHHax.CMDs[command].Function(vars.Prefix..command.." "..message)
     end
 end
 
@@ -240,9 +243,21 @@ function checkLagging()
         end
     end
     if LaggingCount <= 0 then 
-        vars.SpamListRunning = false
+        KAHHax.ControllerSettings.LaggerRunning = false
     elseif LaggingCount >= 1 then
-        vars.SpamListRunning = true
+        KAHHax.ControllerSettings.LaggerRunning = true
+    end
+end
+
+function checkSpammer()
+    local SpammerCount = 0
+    for i,v in pairs(vars.SpamList) do
+        SpammerCount = SpammerCount + 1
+    end
+    if SpammerCount <= 0 then 
+        KAHHax.ControllerSettings.SpammerCount = false
+    elseif SpammerCount >= 1 then
+        KAHHax.ControllerSettings.SpammerCount = true
     end
 end
 
@@ -325,17 +340,28 @@ end)()
 
 KAHHax.ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part Spam
     while wait() do
+        if not KAHHax.ControllerSettings.PSCan then break end
         if KAHHax.ControllerSettings.PS then
             Players:Chat("part/10/10/10")
         end
     end
 end)()
-if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then coroutine.yield(KAHHax.ServerOOFController.PartCoroutine) vars.Alert("You do not have Person299's Admin, cannot part spam!") end
+if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then vars.Alert("You do not have Person299's Admin, cannot part spam!") end
+
+KAHHax.ServerOOFController.EpilepsyCoroutine = coroutine.wrap(function() -- // Epilepsy
+    while wait() do
+        if KAHHax.ControllerSettings.Epilepsy then
+            Players:Chat(":colorshifttop 0 0 100000")
+            wait(0.1)
+            Players:Chat(":colorshiftbottom 0 100000 0")
+        end
+    end
+end)
 
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
     while wait() do
         for i,v in pairs(vars.PlayerManager) do
-            if v and v.Lagging then
+            if KAHHax.ControllerSettings.LaggerRunning and v and v.Lagging then
                 Players:Chat(":pm "..i.." "..vars.largeText)
             end
         end
@@ -364,7 +390,7 @@ end)()
 
 SpamListCoroutine = coroutine.wrap(function()
     while wait() do
-        if vars.SpamListRunning and vars.SpamList[1] then
+        if KAHHax.ControllerSettings.SpamListRunning and vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
                 Players:Chat(v.Phrase)
             end
@@ -372,9 +398,10 @@ SpamListCoroutine = coroutine.wrap(function()
     end
 end)()
 
-SpamListCheckerCoroutine = coroutine.wrap(function()
+SpamListLaggerCheckerCoroutine = coroutine.wrap(function()
     while wait(1) do
         checkLagging()
+        checkSpammer()
     end
 end)()
 
@@ -577,13 +604,13 @@ addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes 
     vars.Notify("Removed Fake Baseplates.")
 end)
 
-addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box", "Paints the specified section as the specified colour.", function(message)
+addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random') | Obby Box", "Paints the specified section as the specified colour.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] then
         SelectedColor = Color3.new(0, 0, 0)
         Color = string.lower(splitString[2])
         local Section = string.lower(splitString[3]) 
-        vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[2]) == "rainbow" and "Rainbow" or Color))
+        vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[2]) == "random" and "Random Color" or Color))
         
         if string.gmatch(Color, "[%d%s]+") then
             R, G, B = 0, 0, 0
@@ -597,10 +624,10 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
         -- // Check if you already have a Paint Bucket   
         if not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket")) then
             Players:Chat(":gear me 18474459")
-            LocalPlayer.Backpack:WaitForChild("PaintBucket")
-            LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket)
-            LocalPlayer.Character:WaitForChild("PaintBucket")
         end
+        LocalPlayer.Backpack:WaitForChild("PaintBucket")
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket)
+        LocalPlayer.Character:WaitForChild("PaintBucket")
 
         -- // The Actual Painting Part
         local Remote = LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls")
@@ -608,28 +635,25 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'rainbow'
         if Section == "all" then
             for _, part in pairs(WorkspaceFolder:GetDescendants()) do
                 coroutine.wrap(function()
-                    if Color == "rainbow" then wait() end
                     if part:IsA("BasePart") then   
-                        Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                        Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "random" and vars.RainbowColor or SelectedColor) })
                     end
                 end)()
-            end
-            vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[3]) == "rainbow" and "Rainbow" or Color))
+            end          
         else
             for i,v in pairs(WorkspaceFolder:GetChildren()) do
                 if string.match(string.lower(v.Name), Section) then
                     for _, part in pairs(v:GetDescendants()) do
                         coroutine.wrap(function()
-                            if Color == "rainbow" then wait() end
                             if part:IsA("BasePart") then
-                                Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "rainbow" and vars.RainbowColor or SelectedColor) })
+                                Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = (Color == "random" and vars.RainbowColor or SelectedColor) })
                             end
                         end)()
                     end
                 end
             end
-            vars.Notify("Painted: Section -", Section, "Color -", (string.lower(splitString[2]) == "rainbow" and "Rainbow" or SelectedColor))
         end
+        vars.Notify("Painted: Section -", Section, "Color -", (string.lower(splitString[2]) == "random" and "Random Color" or SelectedColor))
     else
         vars.Alert("Invalid Arguments!")
     end
@@ -731,12 +755,11 @@ addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", 
 end)
 
 addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whitelisted Users.", function(message)
-    if checkWhitelisted(LocalPlayer.UserId) then
+    if vars.checkWhitelisted(LocalPlayer.UserId) then
         Players:Chat(":gear me 94794847")
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher")
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher)
         LocalPlayer.Character:WaitForChild("VampireVanquisher")
-        Players:Chat(":size me .3")
         Players:Chat(":size me .3")
         Players:Chat(":size me .3")
         Players:Chat(":size me .3")
@@ -745,13 +768,7 @@ end)
 
 addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
     KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
-    if KAHHax.ControllerSettings.Epilepsy then
-        fireCommand("spam", ":colorshiftbottom 0 100000 0")
-        fireCommand("spam", ":colorshifttop 0 0 100000")
-    else
-        fireCommand(":rspam", ":colorshiftbottom 0 100000 0")
-        fireCommand(":rspam", ":colorshifttop 0 0 100000")
-    end
+    vars.Notify("Toggle - Epilepsy:", KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled.")
 end)
 
 -- // CMDs: Music Commands
