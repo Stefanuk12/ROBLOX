@@ -181,7 +181,7 @@ KAHHax.ControllerSettings = {
     Epilepsy = false,
     LaggerRunning = false,
     SpammerRunning = false,
-    PSCan = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748).
+    PSCan = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748),
 }
 
 KAHHax.ServerOOFController = {}
