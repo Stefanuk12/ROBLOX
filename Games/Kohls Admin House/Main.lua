@@ -13,7 +13,6 @@ if not getgenv()["KAHHax"]["InitialisedModules"] then getgenv()["KAHHax"]["Initi
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local GameFolder = Workspace:WaitForChild("Terrain"):WaitForChild("_Game")
 local AdminFolder = GameFolder:WaitForChild("Admin")
 local Pads = AdminFolder:WaitForChild("Pads")
@@ -288,7 +287,7 @@ LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Ant
 end)
 
 LocalPlayer.CharacterAdded:Connect(function(Character)
-    LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+    Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
         if antiKill then Players:Chat(":reset me") end
     end)
 end)
@@ -665,6 +664,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random')
                 end
             end
         end
+        LocalPlayer.Character.PaintBucket.Parent = LocalPlayer.Backpack
         vars.Notify("Painted: Section -", Section, "Color -", (string.lower(splitString[2]) == "random" and "Random Color" or SelectedColor))
     else
         vars.Alert("Invalid Arguments!")
@@ -795,7 +795,8 @@ end)
 addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number.", function(message)
     local SoundId
     local splitString = string.split(message, " ")
-    if splitString[1] and splitString[2] and tonumber(splitString[2]) and vars.MusicAPI.getSound(tonumber(splitString[2])) then
+    if splitString[1] and splitString[2] and tonumber(splitString[2]) then
+        if not vars.MusicAPI.musicTable[tonumber(splitString[2])] then vars.Alert("This sound does not exist!") return end
         Players:Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
         vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(tonumber(splitString[2])))
     else
