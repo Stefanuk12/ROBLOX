@@ -122,11 +122,11 @@ coroutine.wrap(function()
         if returnGun() then
             local Gun = returnGun()
             if Gun then
-                Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = 100
+                Gun:WaitForChild("Handle"):WaitForChild("Mag").Value = math.huge
             end
         end
     end
-end)
+end)()
 
 -- // Gun Mods
 for i,v in pairs(changeVals) do
