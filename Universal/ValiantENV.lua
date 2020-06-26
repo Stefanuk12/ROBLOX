@@ -72,7 +72,7 @@ function valiantENV()
 
     --// Valiant ENV: Custom Exploit Funcs
     syn_websocket_send = syn_websocket_send or nil
-    queueonteleport = syn["queue_on_teleport"] or queue_on_teleport or nil
+    queueonteleport = queue_on_teleport or queueonteleport or nil; if syn then queueonteleport = syn.queue_on_teleport end
     firesignal = firesignal or nil
     makefolder = makefolder or nil
     is_protosmasher_caller = is_protosmasher_caller or nil
