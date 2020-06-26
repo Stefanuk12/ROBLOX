@@ -1,3 +1,6 @@
+-- // Valiant ENV
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
+
 -- // Main Script
 if getgenv().KAHHaxLoaded then warn("oofkohls v2 already loaded!") return end
 warn("Loading oofkohls v2 - Made By Stefanuk12#5820 | Stefanuk12")
@@ -458,6 +461,7 @@ end
 LocalPlayer.Chatted:Connect(function(message)
     for i,v in pairs(KAHHax.CMDs) do
         local Command = vars.Prefix..i
+        if not message then message = "" end
         if v.Function and string.sub(message, 1, #Command) == Command then
             v.Function(message)
         end
@@ -477,7 +481,14 @@ addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
     local verbrose = string.split(message, " ")[2]
     fireCommand("regen")
     wait(0.25)
-    firetouchinterest(LocalPlayer.Character.PrimaryPart, Pads:FindFirstChild("Touch to get admin").Head, 0)
+    if firetouchinterest then
+        firetouchinterest(LocalPlayer.Character.PrimaryPart, Pads:FindFirstChild("Touch to get admin").Head, 0)
+    else
+        local savedPos = LocalPlayer.Character.PrimaryPart.CFrame
+        LocalPlayer.Character.PrimaryPart.CFrame = Pads:FindFirstChild("Touch to get admin").Head.CFrame
+        wait(1)
+        LocalPlayer.Character.PrimaryPart.CFrame = savedPos
+    end
     if verbrose then print('Got Admin.') end
 end)
 
