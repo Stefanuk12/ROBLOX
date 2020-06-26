@@ -14,7 +14,7 @@ oofkohls v2 Command List | Total Commands: 35 | Prefix - :
 > partspam - Description: Toggles Spam Parts (Persons299's Admin Needed!). - Example: :partspam
 > makepbaseplate - Description: Makes a 'fake' baseplate. - Example: :makepbaseplate
 > tlag - Description: Toggles lagging player. - Example: :tlag EpicGamer69
-> paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'rainbow') | Obby Box
+> paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'random') | Obby Box
 > svrlag - Description: Toggles lagging the whole server. - Example: :svrlag
 > crash - Description: Crashes Server. Only for Whitelisted Users. - Example: :crash
 > blphrase - Description: When Player says Phrase, Punishment is said. - Example: :blphrase | EpicGamer69 | kill all | reset all

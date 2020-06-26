@@ -231,6 +231,7 @@ end
 
 function fireCommand(command, message)
     if KAHHax.CMDs[command] then
+        if not message then message = "" end
         KAHHax.CMDs[command].Function(vars.Prefix..command.." "..message)
     end
 end
@@ -279,12 +280,12 @@ LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
     end
 end)
 
-Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
     if antiKill then Players:Chat(":reset me") end
 end)
 
 LocalPlayer.CharacterAdded:Connect(function(Character)
-    Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+    LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
         if antiKill then Players:Chat(":reset me") end
     end)
 end)
@@ -417,14 +418,14 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
     if PadClone:FindFirstChildWhichIsA("Humanoid") then PadClone:FindFirstChildWhichIsA("Humanoid"):Destroy() end
     
     while wait() do       
-        if KAHHax.ControllerSettings.PersistantAdmin and Character:FindFirstChildWhichIsA("BasePart") then
+        if KAHHax.ControllerSettings.PersistantAdmin and LocalPlayer.Character:FindFirstChildWhichIsA("BasePart") then
             if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
                 fireCommand("regen")
             end
             Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
             Pad.Head.CanCollide = false
             Pad.Head.Transparency = 1
-            Pad.Head.CFrame = Character["Left Leg"].CFrame
+            Pad.Head.CFrame = LocalPlayer.Character["Left Leg"].CFrame
 
             PadClone.Head.BrickColor = BrickColor.new("Really red")
         end
@@ -474,9 +475,9 @@ end)
 
 addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
     local verbrose = string.split(message, " ")[2]
-    fireCommand("regen", verbrose)
+    fireCommand("regen")
     wait(0.25)
-    firetouchinterest(Character["Left Leg"], Pads:FindFirstChild("Touch to get admin").Head, 0)
+    firetouchinterest(LocalPlayer.Character.PrimaryPart, Pads:FindFirstChild("Touch to get admin").Head, 0)
     if verbrose then print('Got Admin.') end
 end)
 
