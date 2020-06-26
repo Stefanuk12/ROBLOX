@@ -351,12 +351,12 @@ if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.U
 KAHHax.ServerOOFController.EpilepsyCoroutine = coroutine.wrap(function() -- // Epilepsy
     while wait() do
         if KAHHax.ControllerSettings.Epilepsy then
-            Players:Chat(":colorshifttop 0 0 100000")
+            Players:Chat(":colorshifttop 0 0 10000")
             wait(0.1)
-            Players:Chat(":colorshiftbottom 0 100000 0")
+            Players:Chat(":colorshiftbottom 0 10000 0")
         end
     end
-end)
+end)()
 
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
     while wait() do
