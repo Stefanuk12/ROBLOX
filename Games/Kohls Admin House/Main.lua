@@ -522,7 +522,7 @@ addCMD("give", "Gear Giver", Prefix.."give me SuperRLauncher", "Give yourself an
     local splitString = string.split(message, " ")
     if splitString[2] and splitString[3] and vars.gearList[splitString[3]] then
         Players:Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
-    elseif not splitString[2] or splitString[3] then
+    elseif not splitString[2] or not splitString[3] then
         vars.Alert("Invalid Arguments!")
     end
 end)

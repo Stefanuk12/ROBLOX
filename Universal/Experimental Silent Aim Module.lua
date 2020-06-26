@@ -34,6 +34,7 @@ getgenv().ValiantAimHacks = {
         },
     },
     BlacklistedPlayers = {game:GetService("Players").LocalPlayer},
+    WhitelistedPUIDs = {91318356},
 }
 
 -- // Show FOV
@@ -92,8 +93,16 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         end
         return false
     end
+    function checkWhitelisted(targetPlayer)
+        for i,v in pairs(ValiantAimHacks.WhitelistedPUIDs) do
+            if targetPlayer.UserId == v then
+                return true
+            end
+        end
+        return false
+    end
     for _,plr in pairs(Players.GetPlayers(Players)) do
-        if checkPlayer(plr) and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
+        if not checkWhitelisted(plr) and checkPlayer(plr) and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
             if (ValiantAimHacks["TeamCheck"] and not checkTeam(LocalPlayer, plr)) then break end
             local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
