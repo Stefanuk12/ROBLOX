@@ -27,7 +27,18 @@ setreadonly(mt, false)
 local AimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 
 -- // Da Hood Protections
-local function removeAvatarItems()
+local function removeRagdolls()
+    for i,v in pairs(Character:WaitForChild("RagdollConstraints"):GetChildren()) do
+        v.Enabled = false
+    end
+end
+
+local function protections()
+    -- // Anti Fall/Ragdoll
+    Humanoid:SetStateEnabled(Enum.HumnaoidStateType.FallingDown, false)
+    Humanoid:SetStateEnabled(Enum.HumnaoidStateType.Ragdoll, false)
+    Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None -- Hide your name
+
     for i,v in pairs(Character:GetDescendants()) do
         if v:IsA("Accessory") or (v:IsA("Decal") and v.Name == 'face') then
             v:Destroy()
@@ -35,29 +46,12 @@ local function removeAvatarItems()
             v.Color = Color3.fromRGB(255, 255, 255)
         end
     end
-end
-   
-local function removeAnimationSlowdowns()
+
+    removeRagdolls()
     Character:WaitForChild("BodyEffects").Movement.DescendantAdded:Connect(function(descendant)
         wait()
         descendant:Destroy()
     end)
-end
-
-local function removeRagdolls()
-    for i,v in pairs(Character:WaitForChild("RagdollConstraints"):GetChildren()) do
-        v.Enabled = false
-    end
-end
-
-local function finaliseProtections()
-    -- // Anti Fall/Ragdoll
-    Humanoid:SetStateEnabled(Enum.HumnaoidStateType.FallingDown, false)
-    Humanoid:SetStateEnabled(Enum.HumnaoidStateType.Ragdoll, false)
-    Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None -- Hide your name
-
-    removeAvatarItems()
-    removeAnimationSlowdowns()
 end
 
 function toggleSeats(state)
@@ -208,12 +202,5 @@ function collectCashiers()
     Teleport(SavedCFrame, true)
 end
 
-function connectProtectChar()
-    finaliseProtections()
-    LocalPlayer.CharacterAdded:Connect(finaliseProtections())
-end
-
-function connectRemoveRagdoll()
-    removeRagdolls()
-    LocalPlayer.CharacterAdded:Connect(removeRagdolls())
-end
+protections()
+LocalPlayer.CharacterAdded:Connect(protections())
