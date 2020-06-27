@@ -53,7 +53,7 @@ ValiantAimHacks["TeamCheck"] = false
 mt.__index = newcclosure(function(t, k)
     if t == Mouse and (k == "Target" or k == "Hit") and ValiantAimHacks.checkSilentAim() then
         local CPlayer = ValiantAimHacks["Selected"].Character.Head
-        return (k == "Target" and CPlayer or CPlayer.Position)
+        return (k == "Target" and CPlayer or CPlayer.CFrame)
     end
     return backupindex(t, k)
 end)
