@@ -24,6 +24,7 @@ local changeVals = {
     ReloadTime = 0.1,
     Accuracy = 0.1,
     Speed = 250,
+    Price = 0,
 }
 local Remotes = game:GetService("ReplicatedStorage")["_CS.Events"]
 
@@ -43,7 +44,10 @@ function returnGun()
     end
 end
 
--- // Silent Aim 
+-- // Silent Aim + Anti Kick
+hookfunction(LocalPlayer.Kick, warn)
+hookfunction(LocalPlayer.kick, warn)
+
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 ValiantAimHacks["TeamCheck"] = false
 
@@ -67,6 +71,8 @@ mt.__namecall = newcclosure(function(...)
         end
     elseif method == "UserOwnsGamePassAync" and game:GetService("MarketplaceService"):GetProductInfo(tostring(args[2])) then
         return true
+    elseif string.lower(method) == "kick" then
+        return nil
     end
     return backupnamecall(...)
 end)

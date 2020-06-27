@@ -29,7 +29,7 @@ KAHHax["vars"] = {
         },
     ]]},
     RainbowColor = Color3.fromRGB(0, 0, 0),
-    WhitelistedUsers = {91318356, 489163522, 23294806},
+    WhitelistedUsers = {91318356, 23294806},
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
     MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     gearList = {
