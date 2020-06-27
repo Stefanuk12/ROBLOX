@@ -26,8 +26,7 @@ local modValues = {
 	BulletPerShot = 50, 
 	ShellClipinSpeed = 1, 
 	BulletPerBurst = 10, 
-	BurstRate = 0.001, 
-	MouseSensitive = 0.05, 
+	BurstRate = 0.001,
 	SpreadRedution = 1, 
 	ExplosiveEnabled = true, 
 	Radius = 20, 
@@ -40,7 +39,8 @@ local modValues = {
 	Lifesteal = 0, 
 	FlamingBullet = true, 
 	DualEnabled = false, 
-	Piercing = 10
+    Piercing = 10,
+    CameraShakingEnabled = false, 
 }
 
 -- // Base MT Vars + Funs
@@ -237,7 +237,7 @@ function killAllFurries()
                     v:FindFirstChildWhichIsA("Humanoid"),
                     v:FindFirstChild("Torso"),
                     100,
-                    Vector3.new(0.104619741, 0.0154566243, -0.994392216),
+                    Vector3.new(),
                     GunSettings.Knockback,
                     GunSettings.Lifesteal,
                     GunSettings.FlamingBullet
