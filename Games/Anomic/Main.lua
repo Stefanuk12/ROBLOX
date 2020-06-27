@@ -13,7 +13,6 @@ local Backpack = LocalPlayer.Backpack
 local Humanoid = Character.WaitForChild(Character, "Humanoid")
 local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
-local SprintHandler = Character.SprintHandler
 local ItemList = ReplicatedStorage.Client.ItemList
 local Sprinting = false
 local changeVals = {
@@ -76,7 +75,7 @@ mt.__namecall = newcclosure(function(...)
     end
     return backupnamecall(...)
 end)
-
+print('Done Silent Aim!')
 --[[ // Trash AC Bypass
 local connections = {
     Humanoid.GetPropertyChangedSignal(Humanoid, "WalkSpeed"),
@@ -106,21 +105,25 @@ UIS.InputEnded:Connect(function(Key, GPE)
     if not GPE and Key.KeyCode == Enum.KeyCode.LeftShift then Sprinting = false end
 end)
 
-for _,v in pairs(getgc()) do
-    if getfenv(v).script == SprintHandler then
-        for a,x in pairs(debug.getupvalues(v)) do
-            if type(x) == 'number' then
-                coroutine.wrap(function()
-                    while wait(0.05) do
-                        if Sprinting then
-                            debug.setupvalue(v, a, 100)
+function unlimitedStamina()
+    for _,v in pairs(getgc()) do
+        if getfenv(v).script and getfenv(v).script.Name == "SprintHandler" then
+            for a,x in pairs(debug.getupvalues(v)) do
+                if type(x) == 'number' then
+                    coroutine.wrap(function()
+                        while wait(0.05) do
+                            if Sprinting then
+                                debug.setupvalue(v, a, 100)
+                            end
                         end
-                    end
-                end)()
+                    end)()
+                end
             end
         end
     end
+    print('Done Unlimited Stamina!')
 end
+unlimitedStamina()
 
 -- // Unlimited Ammo
 coroutine.wrap(function()
@@ -143,7 +146,13 @@ for i,v in pairs(changeVals) do
         end
     end
 end
+print('Done Gun Mods!')
 
 -- // Backpack
 LocalPlayer.PlayerScripts.OwnsBackpackPass.Value = true
-LocalPlayer.CharacterAdded:Connect(function() wait(1) LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true end)
+LocalPlayer.CharacterAdded:Connect(function() 
+    wait(1) 
+    unlimitedStamina() 
+    LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true 
+    print('Got Backpack Gamepass!')
+end)
