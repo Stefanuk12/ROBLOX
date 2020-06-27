@@ -354,9 +354,12 @@ if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.U
 KAHHax.ServerOOFController.EpilepsyCoroutine = coroutine.wrap(function() -- // Epilepsy
     while wait() do
         if KAHHax.ControllerSettings.Epilepsy then
-            Players:Chat(":colorshifttop 0 0 10000")
-            wait(0.1)
-            Players:Chat(":colorshiftbottom 0 10000 0")
+            Players:Chat("colorshifttop 10000 0 0"); wait()
+            Players:Chat("colorshiftbottom 10000 0 0"); wait()
+            Players:Chat("colorshifttop 0 10000 0"); wait()
+            Players:Chat("colorshiftbottom 0 10000 0"); wait()
+            Players:Chat("colorshifttop 0 0 10000"); wait()
+            Players:Chat("colorshiftbottom 0 0 10000"); wait()
         end
     end
 end)()
