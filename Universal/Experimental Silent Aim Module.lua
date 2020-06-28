@@ -1,3 +1,4 @@
+if getgenv().ValiantAimHacks then return getgenv().ValiantAimHacks end
 -- // Valiant ENV
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
 
@@ -102,7 +103,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         return false
     end
     for _,plr in pairs(Players.GetPlayers(Players)) do
-        if not checkWhitelisted(plr) and checkPlayer(plr) and plr.Character and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
+        if not checkWhitelisted(plr) and checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
             if (ValiantAimHacks["TeamCheck"] and not checkTeam(LocalPlayer, plr)) then break end
             local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
