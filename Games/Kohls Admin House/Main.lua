@@ -771,6 +771,8 @@ end)
 
 addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whitelisted Users.", function(message)
     if vars.checkWhitelisted(LocalPlayer.UserId) then
+        Players:Chat(":char me 489163522")
+        wait(1)
         Players:Chat(":gear me 94794847")
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher")
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher)
