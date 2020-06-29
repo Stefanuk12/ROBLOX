@@ -22,6 +22,9 @@
                 Accuracy = 0.1,
                 Speed = 250,
             }
+
+    Unsure:
+        1. Not sure if Firerate and Firemode even work. Removed for now. You can add it back in if you want.
 ]]
 
 -- // Valiant ENV
@@ -40,9 +43,9 @@ local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 local ItemList = ReplicatedStorage.Client.ItemList
 local Sprinting = false
 local changeVals = {
-    Firemode = "Auto",
+    --Firemode = "Auto",
     MaxAmmo = math.huge,
-    Firerate = 2000,
+    --Firerate = 2000,
     Range = 2000000,
     ReloadTime = 0.1,
     Accuracy = 0.1,
