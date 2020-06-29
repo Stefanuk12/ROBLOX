@@ -252,18 +252,6 @@ function checkLagging()
     end
 end
 
-function checkSpammer()
-    local SpammerCount = 0
-    for i,v in pairs(vars.SpamList) do
-        SpammerCount = SpammerCount + 1
-    end
-    if SpammerCount <= 0 then 
-        KAHHax.ControllerSettings.SpammerCount = false
-    elseif SpammerCount >= 1 then
-        KAHHax.ControllerSettings.SpammerCount = true
-    end
-end
-
 -- // Anti
 antiPunish = false
 antiBlind = false
@@ -396,7 +384,7 @@ end)()
 
 SpamListCoroutine = coroutine.wrap(function()
     while wait() do
-        if KAHHax.ControllerSettings.SpamListRunning and vars.SpamList[1] then
+        if vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
                 Players:Chat(v.Phrase)
             end
@@ -407,7 +395,6 @@ end)()
 SpamListLaggerCheckerCoroutine = coroutine.wrap(function()
     while wait(1) do
         checkLagging()
-        checkSpammer()
     end
 end)()
 
