@@ -1,8 +1,8 @@
 -- Game: https://www.roblox.com/games/4581966615
 --[[
     Bugs: 
-        1. Silent Aim doesn't work. I do not know how the game devs manage to get your mouse position to know where you're shooting at. If you know, please hit me up on discord!
         
+    
     Caution:
         1. You will get kicked if you rapid fire for long enough. If you want to remove rapid fire then make:
             local changeVals = {
@@ -74,7 +74,7 @@ end
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
 
---[[
+
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 ValiantAimHacks["TeamCheck"] = false
 
@@ -86,14 +86,14 @@ mt.__namecall = newcclosure(function(...)
             if args[1] == Remotes.RayDrawer and ValiantAimHacks.checkSilentAim() then
                 local CPlayer = ValiantAimHacks["Selected"].Character
                 local WSArgs = {
-                    Remotes.WeaponServer,
                     "Player",
                     CPlayer.Humanoid,
                     returnGun(),
                     CPlayer.Head,
                 }
-                backupnamecall(unpack(WSArgs))
+                Remotes.WeaponServer:FireServer(unpack(WSArgs))
                 args[2] = CPlayer.Head.Position
+                warn("Silent Aim Activated")
                 return backupnamecall(unpack(args))
             end
         elseif method == "Fire" then
@@ -108,7 +108,7 @@ mt.__namecall = newcclosure(function(...)
     return backupnamecall(...)
 end)
 print('Done Silent Aim!')
-]]
+
 
 --[[ // Trash AC Bypass
 local connections = {
