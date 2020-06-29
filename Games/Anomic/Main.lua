@@ -1,7 +1,7 @@
 -- Game: https://www.roblox.com/games/4581966615
 --[[
     Bugs: 
-        1. Silent Aim doesn't work
+        1. Silent Aim doesn't work. I do not know how the game devs manage to get your mouse position to know where you're shooting at. If you know, please hit me up on discord!
     
     Caution:
         1. You will get kicked if you rapid fire for long enough. If you want to remove rapid fire then make:
