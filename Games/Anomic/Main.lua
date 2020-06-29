@@ -42,7 +42,6 @@ local Humanoid = Character.WaitForChild(Character, "Humanoid")
 local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 local ItemList = ReplicatedStorage.Client.ItemList
-local Sprinting = false
 local changeVals = {
     --Firemode = "Auto",
     MaxAmmo = math.huge,
@@ -121,18 +120,20 @@ removeConnections()
 LocalPlayer.CharacterAdded:Connect(removeConnections)]]
 
 
--- // Unlimited Stamina
+-- // Unlimited Stamina + Toggle Silent Aim
 UIS.InputBegan:Connect(function(Key, GPE)
     if not GPE then
-        if Key.KeyCode == Enum.KeyCode.LeftShift then Sprinting = true end
         if Key.KeyCode == Enum.KeyCode.F4 then 
             ValiantAimHacks["SilentAimEnabled"] = not ValiantAimHacks["SilentAimEnabled"] 
             ValiantAimHacks["ShowFOV"] = not ValiantAimHacks["ShowFOV"]
-        end       
+        end
+        if Key.KeyCode == Enum.KeyCode.LeftShift then Humanoid.WalkSpeed = 23 end
     end
 end)
 UIS.InputEnded:Connect(function(Key, GPE)
-    if not GPE and Key.KeyCode == Enum.KeyCode.LeftShift then Sprinting = false end
+    if not GPE then
+        if Key.KeyCode == Enum.KeyCode.LeftShift then Humanoid.WalkSpeed = 13 end
+    end
 end)
 
 -- // Gun Mods
@@ -162,21 +163,23 @@ unlimtedAmmo()
 
 -- // Unlimited Stamina
 function unlimitedStamina()
-    coroutine.wrap(function()
-        for _,v in pairs(getgc()) do
-            if getfenv(v).script and getfenv(v).script.Name == "SprintHandler" then
-                for a,x in pairs(debug.getupvalues(v)) do
-                    if type(x) == 'number' then
-                        while wait(0.05) do
-                            if Sprinting then
-                                debug.setupvalue(v, a, 100)
-                            end
+    wait(3)
+    if game:GetService("StarterPlayer").StarterCharacterScripts:FindFirstChild("SprintHandler") then
+        game:GetService("StarterPlayer").StarterCharacterScripts:FindFirstChild("SprintHandler"):Destroy()
+    end
+    for i,v in pairs(getgc()) do
+        if getfenv(v).script and getfenv(v).script.Name == "SprintHandler" then
+            for a,x in pairs(debug.getupvalues(v)) do
+                if type(x) == 'number' then
+                    coroutine.wrap(function()
+                        while wait() do
+                            debug.setupvalue(v, a, 100)
                         end
-                    end
+                    end)()
                 end
             end
         end
-    end)()
+    end
     print('Done Unlimited Stamina!')
 end
 unlimitedStamina()
@@ -187,5 +190,5 @@ LocalPlayer.CharacterAdded:Connect(function()
     LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true 
     print('Got Backpack Gamepass!')
     unlimtedAmmo()
+    unlimitedStamina()
 end)
-
