@@ -73,28 +73,37 @@ end
 -- // Silent Aim + Anti Kick
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
+
 --[[
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 ValiantAimHacks["TeamCheck"] = false
 
-
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
-    if method == "FireServer" then
-        if args[1] == Remotes.RayDrawer and ValiantAimHacks.checkSilentAim() then
-            local CPlayer = ValiantAimHacks["Selected"].Character
-            args[2] = CPlayer.Head.Position
-            backupnamecall(Remotes.WeaponServer, "Player", CPlayer.Humanoid, returnGun(), CPlayer.Head)
-            return backupnamecall(unpack(args))
+    if not checkcaller() then
+        if method == "FireServer" then
+            if args[1] == Remotes.RayDrawer and ValiantAimHacks.checkSilentAim() then
+                local CPlayer = ValiantAimHacks["Selected"].Character
+                local WSArgs = {
+                    Remotes.WeaponServer,
+                    "Player",
+                    CPlayer.Humanoid,
+                    returnGun(),
+                    CPlayer.Head,
+                }
+                backupnamecall(unpack(WSArgs))
+                args[2] = CPlayer.Head.Position
+                return backupnamecall(unpack(args))
+            end
+        elseif method == "Fire" then
+            if tostring(args[1]) == "GunDetailClient" and ValiantAimHacks.checkSilentAim() then
+                args[2] = ValiantAimHacks["Selected"].Character.Head.Position
+                return backupnamecall(unpack(args))
+            end
+        elseif string.lower(method) == "kick" then
+            return nil
         end
-    elseif method == "Fire" then
-        if tostring(args[1]) == "GunDetailClient" and ValiantAimHacks.checkSilentAim() then
-            args[2] = ValiantAimHacks["Selected"].Character.Head.Position
-            return backupnamecall(unpack(args))
-        end
-    elseif string.lower(method) == "kick" then
-        return nil
     end
     return backupnamecall(...)
 end)
