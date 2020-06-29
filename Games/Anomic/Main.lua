@@ -2,7 +2,7 @@
 --[[
     Bugs: 
         
-    
+
     Caution:
         1. You will get kicked if you rapid fire for long enough. If you want to remove rapid fire then make:
             local changeVals = {
@@ -28,6 +28,7 @@
 
     Side Notes:
         1. Infinite Stamina works weirdly. 3ds pls fix Connection.Function!!!!
+        2. Silent Aim works, the hit marker just doesn't appear
 ]]
 
 -- // Valiant ENV
