@@ -1,7 +1,7 @@
 -- Game: https://roblox.com/games/4623386862
 --[[
     Bugs:
-        1. Teleport don't actually teleport you
+        Some possible ones. Latest update is untested
     
     Note: 
         1. Not finished yet!
@@ -39,7 +39,8 @@ getgenv().PiggyHax = {
     KillAllInProgress = false,
     WalkSpeed = 50,
     JumpPower = 50,
-    PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))()
+    PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))(),
+    autoDoItemMaps = {Forest = "Wrench"}
 }
 
 -- // Base MT Vars + Funs
@@ -66,12 +67,22 @@ function noRagFall()
 end
 
 function PiggyHax.teleport(targetCFrame)
-    Character.PrimaryPart.CFrame = targetCFrame
-    print('Teleported!')
+    if targetCFrame and typeof(targetCFrame) == 'CFrame' and Character and Character:FindFirstChild("HumanoidRootPart") then
+        Character.HumanoidRootPart.CFrame = targetCFrame
+        print('Teleported!')
+    end
 end
 
 function PiggyHax.inGame()
     return GameFolder.Phase == "GameInProgress"
+end
+
+function PiggyHax.returnMap()
+    for _,v in pairs(Workspace:GetChildren()) do
+        if v:IsA("Model") and v:FindFirstChild("Events") then
+            return v 
+        end
+    end
 end
 
 function PiggyHax.returnItem(ItemName)
@@ -86,28 +97,46 @@ function PiggyHax.returnAllItems()
     return ItemFolder:GetChildren()
 end
 
-function PiggyHax.retriveItem(ItemName)
+function PiggyHax.autoDoItem(ItemName) -- // Basically goes to where the item belongs so the White Key goes to the Main Door and the Key Code goes to the Key Pad, etc.
+    if ItemName and typeof(ItemName) == 'string' and inGame() and returnMap() and Character:FindFirstChild(ItemName) then
+        for _,v in pairs(returnMap().Events:GetDescendants()) do
+            local SpecialHandlingDone = false
+            for a,x in pairs(PiggyHax.autoDoItemMaps) do
+                if tostring(returnMap()) == a and ItemName == x then
+                    -- Special Handling Here
+                    SpecialHandlingDone = true
+                    break
+                end
+            end
+            if SpecialHandlingDone then break end
+            if v.Name == "ToolRequired" and v.Value == ItemName then
+                PiggyHax.teleport(v.Parent.CFrame * CFrame.new(0, 1, 0))
+                local Handle = Character:FindFirstChild(ItemName).Handle
+                for i = 1, 10 do
+                    Humanoid.Jump = true
+                    firetouchinterest(Handle, v.Parent, 0)
+                    wait(0.1)
+                    firetouchinterest(Handle, v.Parent, 1)
+                    Humanoid.Jump = false
+                end
+                break
+            end
+        end
+    end
+end
+
+function PiggyHax.retriveItem(ItemName, GoTo)
     if PiggyHax.returnItem(ItemName) then
         local Item = PiggyHax.returnItem(ItemName)
         local SavedPos = Character.PrimaryPart.CFrame
         function getItem()
-            PiggyHax.teleport(Item.CFrame)
-            wait(0.25)
-            fireclickdetector(Item:FindFirstChildWhichIsA("ClickDetector"), 0)
-            wait(0.25)
-            PiggyHax.teleport(SavedPos)
-            wait(0.25)
+            PiggyHax.teleport(Item.CFrame); wait(0.25)
+            Item:FindFirstChildWhichIsA("ClickDetector").MaxActivationDistance = 15; wait(0.25)
+            fireclickdetector(Item:FindFirstChildWhichIsA("ClickDetector"), 0); wait(0.5)
+            if not GoTo then PiggyHax.teleport(SavedPos); wait(0.25) else PiggyHax.autoDoItem(ItemName) end
         end
         getItem()
         print('Got Item!')
-    end
-end
-
-function PiggyHax.returnMap()
-    for _,v in pairs(Workspace:GetChildren()) do
-        if v:IsA("Model") and v:FindFirstChild("Events") then
-            return v 
-        end
     end
 end
 
