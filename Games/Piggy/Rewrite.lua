@@ -1,7 +1,13 @@
 -- Game: https://roblox.com/games/4623386862
 --[[
     Bugs:
-        None ATM
+        1. Teleport don't actually teleport you
+    
+    Note: 
+        1. Not finished yet!
+
+    Things to add:
+        1. Autofarm!
     
 ]]
 
