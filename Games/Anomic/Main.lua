@@ -71,11 +71,11 @@ end
 -- // Silent Aim + Anti Kick
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
-
+--[[
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 ValiantAimHacks["TeamCheck"] = false
 
---[[
+
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
