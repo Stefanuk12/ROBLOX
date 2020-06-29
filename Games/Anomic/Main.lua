@@ -156,6 +156,9 @@ gunMods()
 function unlimtedAmmo()
     LocalPlayer.Character.ChildAdded:Connect(function(v)
         if v.IsA(v, "Tool") and v.FindFirstChild(v, "MainGunScript") then
+            v.Handle.Mag:GetPropertyChangedSignal("Value"):Connect(function()
+                v.Handle.Mag.Value = math.huge
+            end)
             v.Handle.Mag.Value = math.huge
             print('Done Unlimited Ammo!')
         end
