@@ -291,14 +291,16 @@ for _,v in pairs(game:GetService("Players"):GetPlayers()) do
     for _,x in pairs(vars.WhitelistedUsers) do
         if v == LocalPlayer and v.UserId == x then
         elseif v.UserId == x then
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
+            wait(0.5)
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
         end
     end
 end
  
 game:GetService("Players").PlayerAdded:Connect(function(plr)
-    if vars.checkWhitelisted(plr.UserId) then
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
+    if vars.checkWhitelisted(plr.UserId) and not vars.checkWhitelisted(LocalPlayer) then
+        wait(0.5)
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
     end
 end)
  
@@ -308,7 +310,8 @@ for _,v in pairs(vars.WhitelistedUsers) do
         local Player = Players:FindFirstChild(Player)
         Player.Chatted:Connect(function(chat)
             if string.lower(chat) == "hi gamers" then
-                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("m Hi Epic Gamers! v2", "All")
+                wait(0.5)
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
             end
         end)
     end
