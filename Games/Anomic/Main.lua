@@ -2,7 +2,8 @@
 --[[
     Bugs: 
         1. Silent Aim doesn't work. I do not know how the game devs manage to get your mouse position to know where you're shooting at. If you know, please hit me up on discord!
-    
+        2. INF Stamina does not work after Respawn
+        
     Caution:
         1. You will get kicked if you rapid fire for long enough. If you want to remove rapid fire then make:
             local changeVals = {
@@ -159,14 +160,6 @@ function unlimtedAmmo()
 end
 unlimtedAmmo()
 
--- // Backpack
-LocalPlayer.PlayerScripts.OwnsBackpackPass.Value = true
-LocalPlayer.CharacterAdded:Connect(function() 
-    LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true 
-    print('Got Backpack Gamepass!')
-    unlimtedAmmo()
-end)
-
 -- // Unlimited Stamina
 function unlimitedStamina()
     coroutine.wrap(function()
@@ -187,3 +180,12 @@ function unlimitedStamina()
     print('Done Unlimited Stamina!')
 end
 unlimitedStamina()
+
+-- // Backpack
+LocalPlayer.PlayerScripts.OwnsBackpackPass.Value = true
+LocalPlayer.CharacterAdded:Connect(function() 
+    LocalPlayer.PlayerScripts:WaitForChild("OwnsBackpackPass").Value = true 
+    print('Got Backpack Gamepass!')
+    unlimtedAmmo()
+end)
+
