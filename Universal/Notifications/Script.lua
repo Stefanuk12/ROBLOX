@@ -133,7 +133,8 @@ function NotificationTheme.newNotification(TitleText, BodyText, NotificationType
 		
 		if not TitleText or (TitleText and type(TitleText) ~= "string") then TitleText = "" end
 		if not BodyText or (BodyText and type(BodyText) ~= "string") then TitleText = "" end
-		if not NotificationType or (NotificationType and type(NotificationType) ~= 'string') or (NotificationType and type(NotificationType) == 'string' and not CustomTheme[NotificationType]) then NotificationType = "Success" end
+		if not NotificationType or (typeof(NotificationType) ~= 'string' and typeof(NotificationType) ~= 'Color3') or (typeof(NotificationType) == 'string' and not CustomTheme[NotificationType]) then NotificationType = "Success" end
+
 		if type(NotificationType) == 'string' then
 			NotificationType = CustomTheme[NotificationType]
 		end
@@ -166,32 +167,34 @@ function NotificationTheme.newNotification(TitleText, BodyText, NotificationType
 		end)
 		
 		-- // Tweening Start
-		Notification:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.25)
-		Notification.StatusColour:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.25)
-		wait(0.25)
-		local timetaken = tick()
-		coroutine.wrap(function()
-			Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
-			wait(0.35)
-			Notification.StatusBar:TweenSize(UDim2.new(0, 20, 0, 100), "Out", "Quad", 0.35)
-			wait(0.35)
-		end)()
-		coroutine.wrap(function()
-			wait(0.60)
+		if Notification and Notification:FindFirstChild("StatusColour") and Notification:FindFirstChild("StatusBar") then
+			Notification:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.25)
+			Notification.StatusColour:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.25)
+			wait(0.25)
+			local timetaken = tick()
+			coroutine.wrap(function()
+				Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
+				wait(0.35)
+				Notification.StatusBar:TweenSize(UDim2.new(0, 20, 0, 100), "Out", "Quad", 0.35)
+				wait(0.35)
+			end)()
+			coroutine.wrap(function()
+				wait(0.60)
+				Notification.StatusColour:TweenSize(UDim2.new(0, 25, 0, 100), "Out", "Quad", 0.30)
+			end)()
+				
+			-- // Tweening End
+			wait(CustomTheme["WaitTime"])
 			Notification.StatusColour:TweenSize(UDim2.new(0, 25, 0, 100), "Out", "Quad", 0.30)
-		end)()
-			
-		-- // Tweening End
-		wait(CustomTheme["WaitTime"])
-		Notification.StatusColour:TweenSize(UDim2.new(0, 25, 0, 100), "Out", "Quad", 0.30)
-		wait(0.30)
-		Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
-		wait(0.30)
-		Notification:TweenSize(UDim2.new(0, 0, 0, 100), "In", "Quad", 0.25, false, function()
-			-- // Destroying
-			Notification:Destroy()
-			Connection:Disconnect()
-		end)
+			wait(0.30)
+			Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
+			wait(0.30)
+			Notification:TweenSize(UDim2.new(0, 0, 0, 100), "In", "Quad", 0.25, false, function()
+				-- // Destroying
+				Notification:Destroy()
+				Connection:Disconnect()
+			end)
+		end
 	end)()
 end
 
