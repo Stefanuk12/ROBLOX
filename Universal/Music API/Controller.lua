@@ -45,9 +45,8 @@ function ValiantMusicAPI.testAllSounds(mode)
         ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
         for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
             coroutine.wrap(function()
-                wait(2)
                 if ValiantMusicAPI.checkBadSound(v.SoundId) then
-                    wait(2)
+                    wait(math.random(1, 10))
                     ValiantMusicAPI.oldMusicTable[i] = nil
                     if mode then print('Removed:', v.Name) end
                 end
