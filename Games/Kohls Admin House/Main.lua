@@ -783,7 +783,7 @@ end)
 
 addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
     KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
-    vars.Notify("Toggle - Epilepsy: ".. KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled.")
+    vars.Notify("Toggle - Epilepsy: ".. (KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled."))
 end)
 
 -- // CMDs: Music Commands

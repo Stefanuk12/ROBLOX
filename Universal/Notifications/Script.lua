@@ -125,6 +125,7 @@ end
 function NotificationTheme.newNotification(TitleText, BodyText, NotificationType, CustomTheme)
 	-- // Initialise
 	coroutine.wrap(function()
+		TitleText = tostring(TitleText)
 		CustomTheme = NotificationTheme.failSafeChecks(CustomTheme)
 		local Notification = NotificationTheme.returnBaseNotification(CustomTheme)	
 		local NotificationGUI = CustomTheme["StorageLocation"]:WaitForChild(CustomTheme["GUIName"])
