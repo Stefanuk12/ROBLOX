@@ -5,6 +5,7 @@
     
     Note: 
         1. Not finished yet!
+        2. Some maps need special handling that I have not added yet!
 
     Things to add:
         1. Autofarm!
@@ -40,7 +41,10 @@ getgenv().PiggyHax = {
     WalkSpeed = 50,
     JumpPower = 50,
     PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))(),
-    autoDoItemMaps = {Forest = "Wrench"}
+    autoDoItemMapsOrder = {
+        Forest = {"Wrench"}
+    },
+    Binds = {Noclip = Enum.KeyCode.F4}
 }
 
 -- // Base MT Vars + Funs
@@ -65,6 +69,7 @@ function noRagFall()
     Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
     Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 end
+noRagFall()
 
 function PiggyHax.teleport(targetCFrame)
     if targetCFrame and typeof(targetCFrame) == 'CFrame' and Character and Character:FindFirstChild("HumanoidRootPart") then
@@ -110,7 +115,7 @@ function PiggyHax.autoDoItem(ItemName) -- // Basically goes to where the item be
             end
             if SpecialHandlingDone then break end
             if v.Name == "ToolRequired" and v.Value == ItemName then
-                PiggyHax.teleport(v.Parent.CFrame * CFrame.new(0, 1, 0))
+                PiggyHax.teleport(v.Parent.CFrame)
                 local Handle = Character:FindFirstChild(ItemName).Handle
                 for i = 1, 10 do
                     Humanoid.Jump = true
@@ -132,10 +137,12 @@ function PiggyHax.retriveItem(ItemName, GoTo)
         function getItem()
             PiggyHax.teleport(Item.CFrame); wait(0.25)
             Item:FindFirstChildWhichIsA("ClickDetector").MaxActivationDistance = 15; wait(0.25)
+            Item.Transparency = 0; wait(0.25)
             fireclickdetector(Item:FindFirstChildWhichIsA("ClickDetector"), 0); wait(0.5)
             if not GoTo then PiggyHax.teleport(SavedPos); wait(0.25) else PiggyHax.autoDoItem(ItemName) end
         end
         getItem()
+        Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(ItemName))
         print('Got Item!')
     end
 end
@@ -191,7 +198,7 @@ function PiggyHax.destroyAllHazards()
             end
         end
         for _,v in pairs(PiggyHax.returnMap().Events:GetChildren()) do
-            if (v.Name == "LaserGate" and v:FindFirstChild("LaserTrigger")) or (v.Name == "SecuritySystem" and v:FindFirstChild("AlarmScanner")) then
+            if (v.Name == "LaserGate" and v:FindFirstChild("LaserTrigger")) or (v.Name == "SecuritySystem" and v:FindFirstChild("AlarmScanner")) or (v.Name == "FallTrigger") then
                 v.LaserTrigger:Destroy()
             end
         end
@@ -219,7 +226,7 @@ end)
 -- // Coroutines
 coroutine.wrap(function()
     while wait() do
-        if PiggyHax.SpammingEscape and PiggyHax.inGame() and not PiggyHax.localPlayerPiggy() then
+        if PiggyHax.SpammingEscape and PiggyHax.inGame() then
             PiggyHax.teleport(PiggyHax.returnMap().Events.EscapeTrigger.CFrame)
         end
     end
@@ -254,4 +261,17 @@ Stepped:Connect(function()
     end
 end)
 
+function PiggyHax.toggleNoclip()
+    PiggyHax.Noclip = not PiggyHax.Noclip
+    return PiggyHax.Noclip
+end
+
+-- // Bind Handling
+UserInputService.InputBegan:Connect(function(Key, GPE)
+    for cmd, bind in pairs(PiggyHax.Binds) do
+        if not GPE and Key == bind then
+            PiggyHax[cmd]()
+        end
+    end
+end)
 warn("PiggyHax Module Loaded!")
