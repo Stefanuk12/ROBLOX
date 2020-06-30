@@ -131,11 +131,9 @@ function NotificationTheme.newNotification(TitleText, BodyText, NotificationType
 		
 		if not TitleText or (TitleText and type(TitleText) ~= "string") then TitleText = "" end
 		if not BodyText or (BodyText and type(BodyText) ~= "string") then TitleText = "" end
-		if not NotificationType or (NotificationType and type(NotificationType) ~= 'string') or (NotificationType and type(NotificationType) == 'string' and NotificationType ~= "Success" or NotificationType ~= "Alert" or NotificationType ~= "Error") then NotificationType = "Success" end
+		if not NotificationType or (NotificationType and type(NotificationType) ~= 'string') or (NotificationType and type(NotificationType) == 'string' and not CustomTheme[NotificationType]) then NotificationType = "Success" end
 		if type(NotificationType) == 'string' then
 			NotificationType = CustomTheme[NotificationType]
-		elseif typeof(Notification) ~= 'Color3' then
-			NotificationType = CustomTheme["Success"]
 		end
 		
 		-- // Actually making the Notification
