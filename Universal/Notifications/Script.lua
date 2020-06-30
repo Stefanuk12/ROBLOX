@@ -83,7 +83,7 @@ function NotificationTheme.returnBaseNotification(CustomTheme)
 	Title.Font = Enum.Font.GothamBlack
 	Title.Text = "Title"
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Title.TextSize = 14.000
+	Title.TextSize = 16.000
 	Body.Name = "Body"
 	Body.Parent = Notification
 	Body.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
@@ -95,7 +95,7 @@ function NotificationTheme.returnBaseNotification(CustomTheme)
 	Body.Font = Enum.Font.SourceSans
 	Body.Text = "Body"
 	Body.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Body.TextSize = 14.000
+	Body.TextSize = 16.000
 	StatusColourLine.Name = "StatusColourLine"
 	StatusColourLine.Parent = Notification
 	StatusColourLine.BackgroundColor3 = Color3.fromRGB(199, 255, 174)
