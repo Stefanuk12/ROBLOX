@@ -96,6 +96,7 @@ function NotificationTheme.returnBaseNotification(CustomTheme)
 	Body.Text = "Body"
 	Body.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Body.TextSize = 16.000
+	Body.TextWrapped = true
 	StatusColourLine.Name = "StatusColourLine"
 	StatusColourLine.Parent = Notification
 	StatusColourLine.BackgroundColor3 = Color3.fromRGB(199, 255, 174)
