@@ -18,6 +18,7 @@ local AdminFolder = GameFolder:WaitForChild("Admin")
 local Pads = AdminFolder:WaitForChild("Pads")
 local WorkspaceFolder = GameFolder:WaitForChild("Workspace")
 local HolderFolder = GameFolder:WaitForChild("Folder")
+local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
 
 KAHHax["vars"] = {
     PlayerManager = {--[[
@@ -51,8 +52,15 @@ KAHHax["vars"] = {
 }
 vars = KAHHax.vars
 
-vars.Alert = warn
-vars.Notify = print
+vars.Alert = function(...)
+    local text = tostring(...)
+    NotificationHandler.newNotification("ALERT", text, "Alert")
+end
+
+vars.Notify = function(...)
+    local text = tostring(...)
+    NotificationHandler.newNotification("SUCCESS", text, "Success")
+end
 
 function KAHHax.vars.getPlayer(String)
     local Found = {}
@@ -120,7 +128,7 @@ function KAHHax.vars.addPlayerToManager(Player)
                 end
             end
         end)
-        vars.Notify(Player.Name, "has joined and added to the PlayerManager.")
+        vars.Notify(Player.Name.. " has joined and added to the PlayerManager.")
     end
 end
 
@@ -134,7 +142,7 @@ function KAHHax.vars.removePlayerFromManager(Player)
                     end
                 end
                 vars.PlayerManager[i] = nil
-                vars.Notify(Player.Name, "has left and been removed from the PlayerManager.")
+                vars.Notify(Player.Name.. " has left and been removed from the PlayerManager.")
                 break
             end
         end
@@ -438,7 +446,7 @@ end
 -- // CMD Handler
 function addCMD(CommandName, ModuleName, Example, Description, Function)
     if not CommandName or not ModuleName or not Example or not Description or not Function then
-        vars.Alert("addCMDs invalid!", CommandName)
+        vars.Alert("addCMDs invalid! ".. CommandName)
         return
     end
     local CMDs = KAHHax.CMDs
@@ -486,28 +494,28 @@ end)
 
 addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", function(message)
     KAHHax.ControllerSettings.PersistantAdmin = not KAHHax.ControllerSettings.PersistantAdmin
-    vars.Notify('Persistant Admin Toggle:', (not KAHHax.ControllerSettings.PersistantAdmin and "Disabled." or "Enabled."))
+    vars.Notify('Persistant Admin Toggle: '.. (not KAHHax.ControllerSettings.PersistantAdmin and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Extra (Anti) Module
 addCMD("antipunish", "Anti", Prefix.."antipunish", "Toggles Anti Punish.", function(message)
     antiPunish = not antiPunish
-    vars.Notify('Anti Punish Toggle:', (not antiPunish and "Disabled." or "Enabled."))
+    vars.Notify('Anti Punish Toggle: '.. (not antiPunish and "Disabled." or "Enabled."))
 end)
 
 addCMD("antiblind", "Anti", Prefix.."antiblind", "Toggles Anti Blind.", function(message)
     antiBlind = not antiBlind
-    vars.Notify('Anti Blind Toggle:', (not antiBlind and "Disabled." or "Enabled."))
+    vars.Notify('Anti Blind Toggle: '.. (not antiBlind and "Disabled." or "Enabled."))
 end)
 
 addCMD("antikill", "Anti", Prefix.."antikill", "Toggles Anti Kill.", function(message)
     antiKill = not antiKill
-    vars.Notify('Anti Kill Toggle:', (not antiKill and "Disabled." or "Enabled."))
+    vars.Notify('Anti Kill Toggle: '.. (not antiKill and "Disabled." or "Enabled."))
 end)
 
 addCMD("antijail", "Anti", Prefix.."antijail", "Toggles Anti Jail.", function(message)
     antiJail = not antiJail
-    vars.Notify('Anti Jail Toggle:', (not antiJail and "Disabled." or "Enabled."))
+    vars.Notify('Anti Jail Toggle: '.. (not antiJail and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Gear Giver Module
@@ -564,7 +572,7 @@ end)
 
 addCMD("earrape", "Sound Abuse", Prefix.."earrape", "Toggles EarRape.", function(message)
     KAHHax.ControllerSettings.EarRape = not KAHHax.ControllerSettings.EarRape
-    vars.Notify('EarRape Toggle:', (not KAHHax.ControllerSettings.EarRape and "Disabled." or "Enabled."))
+    vars.Notify('EarRape Toggle: '.. (not KAHHax.ControllerSettings.EarRape and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Server OOF Module
@@ -580,13 +588,13 @@ end)
 addCMD("partspam", "Server OOF", Prefix.."partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
     KAHHax.ControllerSettings.PS = not KAHHax.ControllerSettings.PS
     getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.PS
-    vars.Notify('Part Spam Toggle:', (not KAHHax.ControllerSettings.PS and "Disabled." or "Enabled."))
+    vars.Notify('Part Spam Toggle: '.. (not KAHHax.ControllerSettings.PS and "Disabled." or "Enabled."))
 end)
 
 addCMD("respam", "Server OOF", Prefix.."respam", "Toggles Server Respawn-Explode Spam.", function(message)
     KAHHax.ControllerSettings.RE = not KAHHax.ControllerSettings.RE
     getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.RE
-    vars.Notify('Respawn-Explode Spam Toggle:', (not KAHHax.ControllerSettings.RE and "Disabled." or "Enabled."))
+    vars.Notify('Respawn-Explode Spam Toggle: '.. (not KAHHax.ControllerSettings.RE and "Disabled." or "Enabled."))
 end)
 
 addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake' baseplate.", function(message)
@@ -614,7 +622,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random')
         SelectedColor = Color3.new(0, 0, 0)
         Color = string.lower(splitString[2])
         local Section = string.lower(splitString[3]) 
-        vars.Notify("Painting: Section -", Section, "Color -", (string.lower(splitString[2]) == "random" and "Random Color" or Color))
+        vars.Notify("Painting: Section - ".. Section.." ".. "Color - ".. (string.lower(splitString[2]) == "random" and "Random Color" or Color))
         
         if string.gmatch(Color, "[%d%s]+") then
             R, G, B = 0, 0, 0
@@ -658,7 +666,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random')
             end
         end
         LocalPlayer.Character.PaintBucket.Parent = LocalPlayer.Backpack
-        vars.Notify("Painted: Section -", Section, "Color -", (string.lower(splitString[2]) == "random" and "Random Color" or SelectedColor))
+        vars.Notify("Painted: Section - ".. Section.." ".. "Color -".. (string.lower(splitString[2]) == "random" and "Random Color" or SelectedColor))
     else
         vars.Alert("Invalid Arguments!")
     end
@@ -684,7 +692,7 @@ end)
 addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
     getgenv().chatSpyEnabled = KAHHax.ControllerSettings.lagServer
     KAHHax.ControllerSettings.lagServer = not KAHHax.ControllerSettings.lagServer
-    vars.Notify('Lag Server Toggle:', (not KAHHax.ControllerSettings.lagServer and "Disabled." or "Enabled."))
+    vars.Notify('Lag Server Toggle: '.. (not KAHHax.ControllerSettings.lagServer and "Disabled." or "Enabled."))
 end)
 
 addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", function(message)
@@ -697,14 +705,14 @@ addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", functi
     getgenv().chatSpyEnabled = false
     if not vars.SpamList[1] then
         table.insert(vars.SpamList, {Phrase = givenPhrase})
-        vars.Notify('Successfully added to Spam List, Message:', givenPhrase)
+        vars.Notify('Successfully added to Spam List, Message: '.. givenPhrase)
     else
         for i,v in pairs(vars.SpamList) do
             if v.Phrase ~= givenPhrase then
                 table.insert(vars.SpamList, {Phrase = givenPhrase})
-                vars.Notify('Successfully added to Spam List, Message:', givenPhrase)
+                vars.Notify('Successfully added to Spam List, Message: '.. givenPhrase)
             else
-                vars.Alert("Already spamming this message:", givenPhrase)
+                vars.Alert("Already spamming this message: ".. givenPhrase)
             end
         end
     end
@@ -717,7 +725,7 @@ addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message.
     for i,v in pairs(vars.SpamList) do
         if v.Phrase == givenPhrase then
             table.remove(vars.SpamList, i)
-            vars.Notify('Successfully removed to Spam List, Message:', givenPhrase)
+            vars.Notify('Successfully removed to Spam List, Message: '.. givenPhrase)
         end
     end
 end)
@@ -730,9 +738,9 @@ addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | re
             if v and not vars.checkWhitelisted(v.UserId) then
                 local bLTBL = vars.PlayerManager[v.Name].BlacklistedPhrases
                 table.insert(bLTBL, {Phrase = splitString[3], Punishment = splitString[4]})
-                vars.Notify('Blacklisted Phrase: Player -', v.Name, "Phrase -", splitString[3], "Punishment -", splitString[4])
+                vars.Notify('Blacklisted Phrase: Player - '.. v.Name.." ".. "Phrase -".. splitString[3].." ".. "Punishment -".. splitString[4])
             else
-                vars.Alert(targetPlayer, " - unable to blacklist phrases")
+                vars.Alert(targetPlayer.. " - unable to blacklist phrases")
             end
         end    
     else
@@ -749,7 +757,7 @@ addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", 
                 for a,x in pairs(vars.PlayerManager[v.Name].BlacklistedPhrases) do
                     if x.Phrase == splitString[3] then
                         table.remove(vars.PlayerManager[v.Name].BlacklistedPhrases, a)
-                        vars.Notify('Removed Blacklisted Phrase: Player -', v.Name, "Phrase -", splitString[3])
+                        vars.Notify('Removed Blacklisted Phrase: Player - '.. v.Name, "Phrase - ".. splitString[3])
                     end
                 end
             end
@@ -775,7 +783,7 @@ end)
 
 addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
     KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
-    vars.Notify("Toggle - Epilepsy:", KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled.")
+    vars.Notify("Toggle - Epilepsy: ".. KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled.")
 end)
 
 -- // CMDs: Music Commands
