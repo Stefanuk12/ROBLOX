@@ -122,7 +122,7 @@ function NotificationTheme.getY(CustomTheme)
 	return Highest 
 end
 
-function NotificationTheme.newNotification(TitleText, BodyText, NotificationType, CustomTheme)
+function (TitleText, BodyText, NotificationType, CustomTheme)
 	-- // Initialise
 	coroutine.wrap(function()
 		TitleText = tostring(TitleText)
@@ -185,15 +185,17 @@ function NotificationTheme.newNotification(TitleText, BodyText, NotificationType
 				
 			-- // Tweening End
 			wait(CustomTheme["WaitTime"])
-			Notification.StatusColour:TweenSize(UDim2.new(0, 25, 0, 100), "Out", "Quad", 0.30)
-			wait(0.30)
-			Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
-			wait(0.30)
-			Notification:TweenSize(UDim2.new(0, 0, 0, 100), "In", "Quad", 0.25, false, function()
-				-- // Destroying
-				Notification:Destroy()
-				Connection:Disconnect()
-			end)
+			if Notification and Notification:FindFirstChild("StatusColour") and Notification:FindFirstChild("StatusBar") then
+				Notification.StatusColour:TweenSize(UDim2.new(0, 25, 0, 100), "Out", "Quad", 0.30)
+				wait(0.30)
+				Notification.StatusBar:TweenSize(UDim2.new(0, 400, 0, 100), "In", "Quad", 0.35)
+				wait(0.30)
+				Notification:TweenSize(UDim2.new(0, 0, 0, 100), "In", "Quad", 0.25, false, function()
+					-- // Destroying
+					Notification:Destroy()
+					Connection:Disconnect()
+				end)
+			end
 		end
 	end)()
 end
