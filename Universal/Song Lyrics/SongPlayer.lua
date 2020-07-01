@@ -5,8 +5,10 @@ local DoingLyrics = false
 function doLyrics()
     if not GlobalAbort and not DoingLyrics and LyricModule[SelectedSong] then
         for _,song in pairs(LyricModule[SelectedSong].Lyrics) do
+            if GlobalAbort then GlobalAbort = false break end
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(song.Lyric, "All")
             wait(song.Time)
         end
     end
+    
 end
