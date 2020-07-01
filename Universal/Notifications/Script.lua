@@ -122,7 +122,7 @@ function NotificationTheme.getY(CustomTheme)
 	return Highest 
 end
 
-function (TitleText, BodyText, NotificationType, CustomTheme)
+function NotificationTheme.newNotification(TitleText, BodyText, NotificationType, CustomTheme)
 	-- // Initialise
 	coroutine.wrap(function()
 		TitleText = tostring(TitleText)
