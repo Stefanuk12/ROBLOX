@@ -191,6 +191,10 @@ KAHHax.ControllerSettings = {
     Epilepsy = false,
     LaggerRunning = false,
     SpammerRunning = false,
+    antiPunish = false,
+    antiBlind = false,
+    antiKill = false,
+    antiJail = false,
     PSCan = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748),
 }
 
@@ -261,35 +265,35 @@ function checkLagging()
 end
 
 -- // Anti
-antiPunish = false
-antiBlind = false
-antiKill = false
-antiJail = false
+KAHHax.ControllerSettings.antiPunish = false
+KAHHax.ControllerSettings.antiBlind = false
+KAHHax.ControllerSettings.antiKill = false
+KAHHax.ControllerSettings.antiJail = false
 game:GetService("Lighting").ChildAdded:Connect(function(child) -- // Anti Punish
-    if antiPunish and child.Name == LocalPlayer.Name then
+    if KAHHax.ControllerSettings.antiPunish and child.Name == LocalPlayer.Name then
         Players:Chat(":reset me")
     end
 end)
 
 LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
-    if antiBlind and child.Name == "EFFECTGUIBLIND" then
+    if KAHHax.ControllerSettings.antiBlind and child.Name == "EFFECTGUIBLIND" then
         wait(0.1)
         child:Destroy()
     end
 end)
 
 LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
-    if antiKill then Players:Chat(":reset me") end
+    if KAHHax.ControllerSettings.antiKill then Players:Chat(":reset me") end
 end)
 
 LocalPlayer.CharacterAdded:Connect(function(Character)
     Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
-        if antiKill then Players:Chat(":reset me") end
+        if KAHHax.ControllerSettings.antiKill then Players:Chat(":reset me") end
     end)
 end)
 
 HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
-    if antiJail and child.Name == LocalPlayer.Name.."'s jail" then
+    if KAHHax.ControllerSettings.antiJail and child.Name == LocalPlayer.Name.."'s jail" then
         Players:Chat(":removejails")
     end
 end)
@@ -366,7 +370,7 @@ end)()
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
     while wait() do
         for i,v in pairs(vars.PlayerManager) do
-            if KAHHax.ControllerSettings.LaggerRunning and v and v.Lagging then
+            if v and v.Lagging then
                 Players:Chat(":pm "..i.." "..vars.largeText)
             end
         end
@@ -403,12 +407,6 @@ SpamListCoroutine = coroutine.wrap(function()
     end
 end)()
 
-SpamListLaggerCheckerCoroutine = coroutine.wrap(function()
-    while wait(1) do
-        checkLagging()
-    end
-end)()
-
 KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
     fireCommand("regen")
 
@@ -441,7 +439,6 @@ for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
         v:Destroy()
     end
 end
-
 
 -- // CMD Handler
 function addCMD(CommandName, ModuleName, Example, Description, Function)
@@ -498,24 +495,24 @@ addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", fun
 end)
 
 -- // CMDs: Extra (Anti) Module
-addCMD("antipunish", "Anti", Prefix.."antipunish", "Toggles Anti Punish.", function(message)
-    antiPunish = not antiPunish
-    vars.Notify('Anti Punish Toggle: '.. (not antiPunish and "Disabled." or "Enabled."))
+addCMD("antipunish", "Anti", Prefix.."antiPunish", "Toggles Anti Punish.", function(message)
+    KAHHax.ControllerSettings.antiPunish = not KAHHax.ControllerSettings.antiPunish
+    vars.Notify('Anti Punish Toggle: '.. (not KAHHax.ControllerSettings.antiPunish and "Disabled." or "Enabled."))
 end)
 
-addCMD("antiblind", "Anti", Prefix.."antiblind", "Toggles Anti Blind.", function(message)
-    antiBlind = not antiBlind
-    vars.Notify('Anti Blind Toggle: '.. (not antiBlind and "Disabled." or "Enabled."))
+addCMD("antiblind", "Anti", Prefix.."antiBlind", "Toggles Anti Blind.", function(message)
+    KAHHax.ControllerSettings.antiBlind = not KAHHax.ControllerSettings.antiBlind
+    vars.Notify('Anti Blind Toggle: '.. (not KAHHax.ControllerSettings.antiBlind and "Disabled." or "Enabled."))
 end)
 
-addCMD("antikill", "Anti", Prefix.."antikill", "Toggles Anti Kill.", function(message)
-    antiKill = not antiKill
-    vars.Notify('Anti Kill Toggle: '.. (not antiKill and "Disabled." or "Enabled."))
+addCMD("antikill", "Anti", Prefix.."antiKill", "Toggles Anti Kill.", function(message)
+    KAHHax.ControllerSettings.antiKill = not KAHHax.ControllerSettings.antiKill
+    vars.Notify('Anti Kill Toggle: '.. (not KAHHax.ControllerSettings.antiKill and "Disabled." or "Enabled."))
 end)
 
-addCMD("antijail", "Anti", Prefix.."antijail", "Toggles Anti Jail.", function(message)
-    antiJail = not antiJail
-    vars.Notify('Anti Jail Toggle: '.. (not antiJail and "Disabled." or "Enabled."))
+addCMD("antijail", "Anti", Prefix.."antiJail", "Toggles Anti Jail.", function(message)
+    KAHHax.ControllerSettings.antiJail = not KAHHax.ControllerSettings.antiJail
+    vars.Notify('Anti Jail Toggle: '.. (not KAHHax.ControllerSettings.antiJail and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Gear Giver Module
@@ -784,6 +781,11 @@ end)
 addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
     KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
     vars.Notify("Toggle - Epilepsy: ".. (KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled."))
+end)
+
+addCMD("tturret", "Server OOF", Prefix.."tturret", "Gives you the Teapot Turret!", function(message)
+    Players:Chat(":hat me 1055299")
+    vars.Notify("Given Teapot Turret!")
 end)
 
 -- // CMDs: Music Commands
