@@ -1,4 +1,4 @@
-oofkohls v2 Command List | Total Commands: 35 | Prefix - :
+oofkohls v2 Command List | Total Commands: 37 | Prefix - :
 --~~-- Admin Module --~~--
 > peradmin - Description: Toggles Persistant Admin. - Example: :peradmin
 > getadmin - Description: Gets admin. - Example: :getadmin
@@ -12,9 +12,10 @@ oofkohls v2 Command List | Total Commands: 35 | Prefix - :
 > spam - Description: Spams a message. - Example: :spam kill all
 > movebaseplate - Description: Makes you able to move the baseplate. - Example: :movebaseplate
 > partspam - Description: Toggles Spam Parts (Persons299's Admin Needed!). - Example: :partspam
-> makepbaseplate - Description: Makes a 'fake' baseplate. - Example: :makepbaseplate
 > tlag - Description: Toggles lagging player. - Example: :tlag EpicGamer69
+> tturret - Description: Gives you the Teapot Turret! - Example: :tturret others
 > paintarea - Description: Paints the specified section as the specified colour. - Example: :paintarea | 255 0 0 (RGB or 'random') | Obby Box
+> makepbaseplate - Description: Makes a 'fake' baseplate. - Example: :makepbaseplate
 > svrlag - Description: Toggles lagging the whole server. - Example: :svrlag
 > crash - Description: Crashes Server. Only for Whitelisted Users. - Example: :crash
 > blphrase - Description: When Player says Phrase, Punishment is said. - Example: :blphrase | EpicGamer69 | kill all | reset all
@@ -32,12 +33,13 @@ oofkohls v2 Command List | Total Commands: 35 | Prefix - :
 > givehelp - Description: Returns all of the givable gears. - Example: :givehelp
 > give - Description: Give yourself and others gears! - Example: :give me SuperRLauncher
 --~~-- Anti Module --~~--
-> antipunish - Description: Toggles Anti Punish. - Example: :antipunish
-> antijail - Description: Toggles Anti Jail. - Example: :antijail
-> antikill - Description: Toggles Anti Kill. - Example: :antikill
-> antiblind - Description: Toggles Anti Blind. - Example: :antiblind
+> antipunish - Description: Toggles Anti Punish. - Example: :antiPunish
+> antijail - Description: Toggles Anti Jail. - Example: :antiJail
+> antikill - Description: Toggles Anti Kill. - Example: :antiKill
+> antiblind - Description: Toggles Anti Blind. - Example: :antiBlind
 --~~-- Misc Module --~~--
 > xcmds - Description: Shows all of the CMDs. - Example: :xcmds
 > execute - Description: Executes whatever you want. - Example: :execute print('hi'))
-> rj - Description: Rejoins the game. - Example: :rj
 > copycmds - Description: Copies all of the commands to your clipboard. - Example: :copycmds
+> country - Description: Shows Country of Player in Game and Notificaiton - Example: :country EpicGamer69
+> rj - Description: Rejoins the game. - Example: :rj
