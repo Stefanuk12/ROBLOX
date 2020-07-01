@@ -19,6 +19,7 @@ local Pads = AdminFolder:WaitForChild("Pads")
 local WorkspaceFolder = GameFolder:WaitForChild("Workspace")
 local HolderFolder = GameFolder:WaitForChild("Folder")
 local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
+NotificationHandler["StorageLocation"] = game:GetService("CoreGui")
 
 KAHHax["vars"] = {
     PlayerManager = {--[[
@@ -783,9 +784,14 @@ addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(
     vars.Notify("Toggle - Epilepsy: ".. (KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled."))
 end)
 
-addCMD("tturret", "Server OOF", Prefix.."tturret", "Gives you the Teapot Turret!", function(message)
-    Players:Chat(":hat me 1055299")
-    vars.Notify("Given Teapot Turret!")
+addCMD("tturret", "Server OOF", Prefix.."tturret others", "Gives you the Teapot Turret!", function(message)
+    local Str = Prefix.."tturret  "
+    if string.sub(message, #Str, -1) then
+        Players:Chat(":hat "..string.sub(message, #Str, -1).." 1055299")
+    else
+        Players:Chat(":hat me 1055299")
+    end
+    vars.Notify("Given Teapot Turret"..(string.sub(message, #Str, -1) and " to "..string.sub(message, #Str, -1).."!" or " self!"))
 end)
 
 -- // CMDs: Music Commands
@@ -817,6 +823,26 @@ end)
 addCMD("execute", "Misc", Prefix.."execute print('hi'))", "Executes whatever you want.", function(message)
     local Str = Prefix.."execute  "
     loadstring(string.sub(message, #Str, -1))()
+end)
+
+addCMD("country", "Misc", Prefix.."country EpicGamer69", "Shows Country of Player in Game and Notificaiton", function(message)
+    local Str = Prefix.."execute  "
+    local Target = string.sub(message, #Str, -1)
+    if Target and vars.getPlayer(Target) and vars.getPlayer(Target)[1] then
+        if not gethiddenproperty then vars.Alert("Your exploit does not support this!") return end
+        local targetPlayer = vars.getPlayer(Target)
+        for _, plr in pairs(targetPlayer) do
+            local targetPlayerCountryCode = gethiddenproperty(plr, "CountryRegionCodeReplicate")
+            local targetPlayerCountryName = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://restcountries.eu/rest/v2/alpha/"..targetPlayerCountryCode)).name
+            local Chat = plr.Name.." is located in "..targetPlayerCountryName.." ("..targetPlayerCountryCode..")."
+            game:GetService("Players"):Chat(":h "..Chat)
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
+            vars.Notify(Chat)
+            wait(1.5)
+        end
+    else
+        vars.Alert("Invalid Arguments!")
+    end
 end)
 
 addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to your clipboard.", function(message)
