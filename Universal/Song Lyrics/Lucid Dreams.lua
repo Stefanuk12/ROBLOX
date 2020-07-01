@@ -1,12 +1,12 @@
-local lyrics = {
-    {Lyric = "I still see your shadows on my room.", Time = 5},
-    {Lyric = "Can't take back the love I gave you.", Time = 4},
-    {Lyric = "It's to the point where I love you and hate you, and I cannot change you, so I must replace you, Oh.", Time = 7}
-}
-local playLyrics = true
-for i,v in pairs(lyrics) do
-    if playLyrics then
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(v.Lyric, "All")
-        wait(v.Time)
+local LyricModule = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Song%20Lyrics/SongLyricsModule.lua"))()
+local SelectedSong = "Juice WRLD - Lucid Dreams"
+local GlobalAbort = false
+local DoingLyrics = false
+function doLyrics()
+    if not GlobalAbort and not DoingLyrics and LyricModule[SelectedSong] then
+        for _,song in pairs(LyricModule[SelectedSong].Lyrics) do
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(song.Lyric, "All")
+            wait(song.Time)
+        end
     end
 end
