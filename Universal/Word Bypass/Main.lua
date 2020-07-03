@@ -1,5 +1,5 @@
 -- // Switch
-local Enabled = true
+getgenv().ChatBypassEnabled = true
 
 -- // The Bypass Character
 local SpecialChar1 = "ꜞ"
@@ -20,7 +20,7 @@ end
 setreadonly(mt, false)
 mt.__namecall = newcclosure(function(...)
     local args = {...}
-    if Enabled and tostring(args[1]) == "SayMessageRequest" then
+    if getgenv().ChatBypassEnabled and tostring(args[1]) == "SayMessageRequest" then
         args[2] = bypassText(args[2], true)
         return backupnamecall(unpack(args))
     end
