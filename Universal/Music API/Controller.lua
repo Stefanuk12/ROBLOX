@@ -4,25 +4,23 @@ ValiantMusicAPI.musicTable = {}
 ValiantMusicAPI.oldMusicTable = {}
 
 ValiantMusicAPI.removedAssets = {
-    'https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059',
-    'https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04',
-    'This audio asset has been blocked due to copyright violations.',
-    '(Removed for copyright)',
-    '[ Content Deleted ]',
+    "70608418c648be7ac4e323e3294bb059",
+    "d28c1b5eed271a7aa76f16689e74ca04",
 }
 function ValiantMusicAPI.checkBadSound(SoundId)
     local url = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId)
     if url then
-        for i,v in pairs(ValiantMusicAPI.removedAssets) do
+        for _,v in pairs(ValiantMusicAPI.removedAssets) do
             if string.match(url, v) then
                 return true
             end
         end
     end
     --[[
-    Easily rate limited.
+    Easily Rate Limited.
     if SoundId then
-        return (game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset).Description == '(Removed for copyright)' or game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset).Description == '[ Content Deleted ]')
+        local GPI = game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset)
+        return (GPI.Description == '(Removed for copyright)' or GPI.Description == '[ Content Deleted ]')
     end
     ]]
     return false
