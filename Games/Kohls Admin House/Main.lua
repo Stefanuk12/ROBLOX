@@ -129,7 +129,7 @@ function KAHHax.vars.addPlayerToManager(Player)
                 end
             end
         end)
-        vars.Notify(Player.Name.. " has joined and added to the PlayerManager.")
+        print(Player.Name.. " has joined and added to the PlayerManager.")
     end
 end
 
@@ -143,7 +143,7 @@ function KAHHax.vars.removePlayerFromManager(Player)
                     end
                 end
                 vars.PlayerManager[i] = nil
-                vars.Notify(Player.Name.. " has left and been removed from the PlayerManager.")
+                print(Player.Name.. " has left and been removed from the PlayerManager.")
                 break
             end
         end
@@ -1099,4 +1099,5 @@ addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(mess
     table.insert(Connections, {Connection = TitleClickConnection})
 end)
 getgenv().KAHHaxLoaded = true
+vars.Notify('Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12')
 warn("Loaded oofkohls v2 - Made by Stefanuk12#5820 | Stefanuk12")
