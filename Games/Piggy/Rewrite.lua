@@ -1,15 +1,30 @@
 -- Game: https://roblox.com/games/4623386862
 --[[
     Bugs:
-        Some possible ones. Latest update is untested
+        1. Spam Escape does not work.
     
     Note: 
         1. Not finished yet!
-        2. Some maps need special handling that I have not added yet!
+        2. Some maps need special handling that I have not added yet, due to them requiring to do certain things before you can get the item, auto farm, etc.
+        3. Kill All Hazards may not have all of the hazards indexed!
+        4. I may or may not add Auto Farm, probably not.
 
     Things to add:
-        1. Autofarm!
-    
+
+    Feature List:
+        (Things listed with * are not working or not implemented yet fully)
+
+        1. Avoid the Item Obfuscation
+        2. Get a certain item
+        3. Auto Use Item - For example, uses the hammer on the main door automatically*
+        4. Remove All Hazards*
+        5. Kill Enemy Bots*
+        6. Spam Escape*
+        8. Noclip
+        9. Infinite Jump
+        10. Player ESP
+        11. WalkSpeed + JumpPower
+        12. Kill All Players (As Piggy or Traitor)
 ]]
 
 if getgenv().PiggyHax then return getgenv().PiggyHax end
@@ -30,21 +45,22 @@ local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 local ItemFolder = Workspace:FindFirstChild("ItemFolder")
 local GameFolder = Workspace:FindFirstChild("GameFolder")
+local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
 
 getgenv().PiggyHax = {
+    Notifications = true,
     AntiTrap = true,
-    AutoFarm = false,
     SpammingEscape = false,
     InfiniteJump = false,
     Noclip = false,
     KillAllInProgress = false,
     WalkSpeed = 50,
     JumpPower = 50,
-    PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Player%20ESP.lua"))(),
+    PlayerESP = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Player%20ESP.lua"))(),
     autoDoItemMapsOrder = {
         Forest = {"Wrench"}
     },
-    Binds = {Noclip = Enum.KeyCode.F4}
+    Binds = {toggleNoclip = Enum.KeyCode.F4}
 }
 
 -- // Base MT Vars + Funs
@@ -103,11 +119,12 @@ function PiggyHax.returnAllItems()
 end
 
 function PiggyHax.autoDoItem(ItemName) -- // Basically goes to where the item belongs so the White Key goes to the Main Door and the Key Code goes to the Key Pad, etc.
-    if ItemName and typeof(ItemName) == 'string' and inGame() and returnMap() and Character:FindFirstChild(ItemName) then
-        for _,v in pairs(returnMap().Events:GetDescendants()) do
+    if ItemName and typeof(ItemName) == 'string' and PiggyHax.inGame() and PiggyHax.returnMap() and Character:FindFirstChild(ItemName) then
+        local Map = PiggyHax.returnMap()
+        for _,v in pairs(Map.Events:GetDescendants()) do
             local SpecialHandlingDone = false
             for a,x in pairs(PiggyHax.autoDoItemMaps) do
-                if tostring(returnMap()) == a and ItemName == x then
+                if tostring(Map) == a and ItemName == x then
                     -- Special Handling Here
                     SpecialHandlingDone = true
                     break
@@ -143,7 +160,12 @@ function PiggyHax.retriveItem(ItemName, GoTo)
         end
         getItem()
         Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(ItemName))
-        print('Got Item!')
+        wait(0.1)
+        if Character:FindFirstChild(ItemName) then
+            NotificationHandler.newNotification('SUCCESS', 'Got '..ItemName.."!", 'Success')
+        else
+            NotificationHandler.newNotification('ERROR', 'Unable to get '..ItemName.."!", 'Error')
+        end
     end
 end
 
@@ -186,6 +208,7 @@ function PiggyHax.killAll()
         end
         PiggyHax.KillAllInProgress = false
         Connection:Disconnect()
+        NotificationHandler.newNotification('SUCCESS', 'Killed All!', 'Success')
     end
 end
 
@@ -202,6 +225,7 @@ function PiggyHax.destroyAllHazards()
                 v.LaserTrigger:Destroy()
             end
         end
+        NotificationHandler.newNotification('SUCCESS', 'Removed all possible hazards!', 'Success')
     end
 end
 
@@ -212,6 +236,7 @@ function PiggyHax.RemoveBots()
                 v:Destroy()
             end
         end
+        NotificationHandler.newNotification('SUCCESS', 'Removed Bots.', 'Success')
     end
 end
 
@@ -263,6 +288,7 @@ end)
 
 function PiggyHax.toggleNoclip()
     PiggyHax.Noclip = not PiggyHax.Noclip
+    NotificationHandler.newNotification('SUCCESS', 'Toggle - Noclip: '..(PiggyHax.Noclip and "Enabled!" or "Disabled!"), 'Success')
     return PiggyHax.Noclip
 end
 
@@ -274,4 +300,5 @@ UserInputService.InputBegan:Connect(function(Key, GPE)
         end
     end
 end)
+NotificationHandler.newNotification('SUCCESS', 'PiggyHax Module Loaded!', 'Success')
 warn("PiggyHax Module Loaded!")
