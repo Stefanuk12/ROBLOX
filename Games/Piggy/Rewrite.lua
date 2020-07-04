@@ -60,7 +60,9 @@ getgenv().PiggyHax = {
     autoDoItemMapsOrder = {
         Forest = {"Wrench"}
     },
-    Binds = {toggleNoclip = Enum.KeyCode.F4}
+    Binds = {toggleNoclip = Enum.KeyCode.F4},
+    CMDs = {},
+    Prefix = ":",
 }
 
 -- // Base MT Vars + Funs
@@ -141,8 +143,8 @@ function PiggyHax.autoDoItem(ItemName) -- // Basically goes to where the item be
                     firetouchinterest(Handle, v.Parent, 1)
                     Humanoid.Jump = false
                 end
-                break
             end
+            break
         end
     end
 end
@@ -164,7 +166,7 @@ function PiggyHax.retriveItem(ItemName, GoTo)
         if Character:FindFirstChild(ItemName) then
             NotificationHandler.newNotification('SUCCESS', 'Got '..ItemName.."!", 'Success')
         else
-            NotificationHandler.newNotification('ERROR', 'Unable to get '..ItemName.."!", 'Error')
+            NotificationHandler.newNotification('ERROR', ItemName.." does not exist, another player has this item already, or support to get this item on this map is not added yet. Note: This is case-sensitive!", 'Error')
         end
     end
 end
@@ -240,6 +242,18 @@ function PiggyHax.RemoveBots()
     end
 end
 
+function PiggyHax.toggleEscapeSpam()
+    PiggyHax.SpammingEscape = not PiggyHax.SpammingEscape
+    NotificationHandler.newNotification('SUCCESS', 'Toggle - Escape Spam: '..(PiggyHax.SpammingEscape and "Enabled!" or "Disabled!"), 'Success')
+    return PiggyHax.Noclip
+end
+
+function PiggyHax.toggleInfiniteJump()
+    PiggyHax.InfiniteJump = not PiggyHax.InfiniteJump
+    NotificationHandler.newNotification('SUCCESS', 'Toggle - Infinite Jump: '..(PiggyHax.InfiniteJump and "Enabled!" or "Disabled!"), 'Success')
+    return PiggyHax.InfiniteJump
+end
+
 -- // Anti Trap
 ItemFolder.ChildAdded:Connect(function(child)
     wait()
@@ -295,10 +309,117 @@ end
 -- // Bind Handling
 UserInputService.InputBegan:Connect(function(Key, GPE)
     for cmd, bind in pairs(PiggyHax.Binds) do
-        if not GPE and Key == bind then
+        if not GPE and Key.KeyCode == bind then
             PiggyHax[cmd]()
         end
     end
 end)
+
+-- // CMD Handler
+function addCMD(CommandName, ModuleName, Example, Description, Function)
+    local CMDs = PiggyHax.CMDs
+    CMDs[CommandName] = {
+        ModuleName = ModuleName,
+        Example = Example,
+        Description = PiggyHax.Prefix..Description,
+        Function = Function,
+    }
+end
+
+LocalPlayer.Chatted:Connect(function(message)
+    for i,v in pairs(PiggyHax.CMDs) do
+        local Command = PiggyHax.Prefix..i
+        if not message then message = "" end
+        if v.Function and string.sub(message, 1, #Command) == Command then
+            v.Function(message)
+        end
+    end
+end)
+
+-- // Commands
+function PiggyHax.startCommands()
+    addCMD("getitem", "Farming", "getitem WhiteKey", "Gets the Item you want.", function(message)
+        local splitString = string.split(message, " ")
+        if splitString[2] and PiggyHax.returnItem(splitString[2]) then
+            PiggyHax.retriveItem(splitString[2])
+        else
+            if not splitString[2] then
+                NotificationHandler.newNotification("ALERT", "Missing Argument #2!", "Alert")
+            elseif splitString[2] and not PiggyHax.returnItem(splitString[2]) then
+                NotificationHandler.newNotification("ALERT", splitString[2].." does not exist, another player has this item already, or support to get this item on this map is not added yet. Note: This Argument is case-sensitive!", "Alert")
+            end
+        end
+    end)
+
+    addCMD("autoitem", "Farming", "autoitem", "Automatically does the needed action to use the item specified.", function()
+        local splitString = string.split(message, " ")
+        if splitString[2] and PiggyHax.returnItem[splitString[2]] then
+            PiggyHax.autoDoItem(splitString[2])
+        else
+            if not splitString[2] then
+                NotificationHandler.newNotification("ALERT", "Missing Argument #2!", "Alert")
+            elseif splitString[2] and not PiggyHax.returnItem(splitString[2]) then
+                NotificationHandler.newNotification("ALERT", splitString[2].." does not exist or another player has this item already. Note: This Argument is case-sensitive!", "Alert")
+            end
+        end
+    end)
+
+    addCMD("escapespam", "Farming", "escapespam", "Toggles Spamming the Escape", function()
+        PiggyHax["toggleEscapeSpam"]()
+    end)
+
+    addCMD("removebots", "Game", "removebots", "Removes the bot ability to kill you.", function(message)
+        PiggyHax["RemoveBots"]()
+    end)
+
+    addCMD("removehazards", "Game", "removehazards", "Removes all possible hazards that could kill you or give you away.", function(message)
+        PiggyHax["destroyAllHazards"]()
+    end)
+
+    addCMD("killall", "Game", "killall", "Kills everyone, if you're Piggy/Traitor.", function(message)
+        PiggyHax["killAll"]()
+    end)
+
+    addCMD("noclip", "Player", "noclip", "Toggles noclip.", function(message)
+        PiggyHax["toggleNoclip"]()
+    end)
+
+    addCMD("infjump", "Player", "infjump", "Toggles Infinite Jump.", function(message)
+        PiggyHax["toggleInfiniteJump"]()
+    end)
+
+    addCMD("ws", "Player", "ws 100", "Sets your WalkSpeed.", function(message)
+        local splitString = string.split(message, " ")
+        if splitString[2] and tonumber(splitString[2]) then
+            Humanoid.WalkSpeed = tonumber(splitString[2])
+            PiggyHax["WalkSpeed"] = tonumber(splitString[2])
+            NotificationHandler.newNotification("SUCCESS", "Set WalkSpeed to "..splitString[2].."!", "Success")
+        else
+            if not splitString[2] then
+                NotificationHandler.newNotification("ALERT", "Missing Argument #2!", "Alert")
+            elseif splitString[2] and not tonumber(splitString[2]) then
+                NotificationHandler.newNotification("ALERT", "Argument #2 is not a number!", "Alert")
+            end
+        end
+    end)
+
+    addCMD("jp", "Player", "jp 100", "Sets your JumpPower.", function(message)
+        local splitString = string.split(message, " ")
+        if splitString[2] and tonumber(splitString[2]) then
+            Humanoid.JumpPower = tonumber(splitString[2])
+            PiggyHax["JumpPower"] = tonumber(splitString[2])
+            NotificationHandler.newNotification("SUCCESS", "Set JumpPower to "..splitString[2].."!", "Success")
+        else
+            if not splitString[2] then
+                NotificationHandler.newNotification("ALERT", "Missing Argument #2!", "Alert")
+            elseif splitString[2] and not tonumber(splitString[2]) then
+                NotificationHandler.newNotification("ALERT", "Argument #2 is not a number!", "Alert")
+            end
+        end
+    end)
+
+    NotificationHandler.newNotification('SUCCESS', 'Commands Enabled!', 'Success')
+end
+
 NotificationHandler.newNotification('SUCCESS', 'PiggyHax Module Loaded!', 'Success')
 warn("PiggyHax Module Loaded!")
