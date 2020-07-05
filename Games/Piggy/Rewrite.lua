@@ -163,6 +163,7 @@ function PiggyHax.retriveItem(ItemName, GoTo)
         getItem()
         Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(ItemName))
         wait(0.1)
+
         if Character:FindFirstChild(ItemName) then
             NotificationHandler.newNotification('SUCCESS', 'Got '..ItemName.."!", 'Success')
         else
@@ -210,6 +211,7 @@ function PiggyHax.killAll()
         end
         PiggyHax.KillAllInProgress = false
         Connection:Disconnect()
+
         NotificationHandler.newNotification('SUCCESS', 'Killed All!', 'Success')
     end
 end
@@ -227,6 +229,7 @@ function PiggyHax.destroyAllHazards()
                 v.LaserTrigger:Destroy()
             end
         end
+
         NotificationHandler.newNotification('SUCCESS', 'Removed all possible hazards!', 'Success')
     end
 end
@@ -238,18 +241,21 @@ function PiggyHax.RemoveBots()
                 v:Destroy()
             end
         end
+
         NotificationHandler.newNotification('SUCCESS', 'Removed Bots.', 'Success')
     end
 end
 
 function PiggyHax.toggleEscapeSpam()
     PiggyHax.SpammingEscape = not PiggyHax.SpammingEscape
+
     NotificationHandler.newNotification('SUCCESS', 'Toggle - Escape Spam: '..(PiggyHax.SpammingEscape and "Enabled!" or "Disabled!"), 'Success')
     return PiggyHax.Noclip
 end
 
 function PiggyHax.toggleInfiniteJump()
     PiggyHax.InfiniteJump = not PiggyHax.InfiniteJump
+
     NotificationHandler.newNotification('SUCCESS', 'Toggle - Infinite Jump: '..(PiggyHax.InfiniteJump and "Enabled!" or "Disabled!"), 'Success')
     return PiggyHax.InfiniteJump
 end
@@ -302,6 +308,7 @@ end)
 
 function PiggyHax.toggleNoclip()
     PiggyHax.Noclip = not PiggyHax.Noclip
+    
     NotificationHandler.newNotification('SUCCESS', 'Toggle - Noclip: '..(PiggyHax.Noclip and "Enabled!" or "Disabled!"), 'Success')
     return PiggyHax.Noclip
 end
