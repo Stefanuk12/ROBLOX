@@ -32,6 +32,7 @@ KAHHax["vars"] = {
     ]]},
     RainbowColor = Color3.fromRGB(0, 0, 0),
     WhitelistedUsers = {91318356, 23294806},
+    ChatBypasser = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))(),
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
     MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     gearList = {
@@ -52,6 +53,7 @@ KAHHax["vars"] = {
     Prefix = ":",
 }
 vars = KAHHax.vars
+vars.ChatBypasser.ChatBypassEnabled = false
 
 vars.Alert = function(...)
     local text = tostring(...)
@@ -448,10 +450,11 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
         return
     end
     local CMDs = KAHHax.CMDs
+    local Prefix = vars.Prefix
     CMDs[CommandName] = {
         ModuleName = ModuleName,
         Example = Example,
-        Description = Description,
+        Description = Prefix..Description,
         Function = Function,
     }
 end
@@ -468,14 +471,14 @@ end)
 
 local Prefix = vars.Prefix
 -- // CMDs: Admin Module
-addCMD("regen", "Admin", Prefix.."regen", "Regens the admin.", function(message)
+addCMD("regen", "Admin", "regen", "Regens the admin.", function(message)
     local verbrose = string.split(message, " ")[2]
     local RegenPad = AdminFolder.Regen
     fireclickdetector(AdminFolder.Regen.ClickDetector, 0)
     if verbrose then print('Regened Admin.') end
 end)
 
-addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
+addCMD("getadmin", "Admin", "getadmin", "Gets admin.", function(message)
     local verbrose = string.split(message, " ")[2]
     fireCommand("regen")
     wait(0.25)
@@ -490,34 +493,34 @@ addCMD("getadmin", "Admin", Prefix.."getadmin", "Gets admin.", function(message)
     if verbrose then print('Got Admin.') end
 end)
 
-addCMD("peradmin", "Admin", Prefix.."peradmin", "Toggles Persistant Admin.", function(message)
+addCMD("peradmin", "Admin", "peradmin", "Toggles Persistant Admin.", function(message)
     KAHHax.ControllerSettings.PersistantAdmin = not KAHHax.ControllerSettings.PersistantAdmin
     vars.Notify('Persistant Admin Toggle: '.. (not KAHHax.ControllerSettings.PersistantAdmin and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Extra (Anti) Module
-addCMD("antipunish", "Anti", Prefix.."antiPunish", "Toggles Anti Punish.", function(message)
+addCMD("antipunish", "Anti", "antiPunish", "Toggles Anti Punish.", function(message)
     KAHHax.ControllerSettings.antiPunish = not KAHHax.ControllerSettings.antiPunish
     vars.Notify('Anti Punish Toggle: '.. (not KAHHax.ControllerSettings.antiPunish and "Disabled." or "Enabled."))
 end)
 
-addCMD("antiblind", "Anti", Prefix.."antiBlind", "Toggles Anti Blind.", function(message)
+addCMD("antiblind", "Anti", "antiBlind", "Toggles Anti Blind.", function(message)
     KAHHax.ControllerSettings.antiBlind = not KAHHax.ControllerSettings.antiBlind
     vars.Notify('Anti Blind Toggle: '.. (not KAHHax.ControllerSettings.antiBlind and "Disabled." or "Enabled."))
 end)
 
-addCMD("antikill", "Anti", Prefix.."antiKill", "Toggles Anti Kill.", function(message)
+addCMD("antikill", "Anti", "antiKill", "Toggles Anti Kill.", function(message)
     KAHHax.ControllerSettings.antiKill = not KAHHax.ControllerSettings.antiKill
     vars.Notify('Anti Kill Toggle: '.. (not KAHHax.ControllerSettings.antiKill and "Disabled." or "Enabled."))
 end)
 
-addCMD("antijail", "Anti", Prefix.."antiJail", "Toggles Anti Jail.", function(message)
+addCMD("antijail", "Anti", "antiJail", "Toggles Anti Jail.", function(message)
     KAHHax.ControllerSettings.antiJail = not KAHHax.ControllerSettings.antiJail
     vars.Notify('Anti Jail Toggle: '.. (not KAHHax.ControllerSettings.antiJail and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Gear Giver Module
-addCMD("give", "Gear Giver", Prefix.."give me SuperRLauncher", "Give yourself and others gears!", function(message)
+addCMD("give", "Gear Giver", "give me SuperRLauncher", "Give yourself and others gears!", function(message)
     local splitString = string.split(message, " ")
     if splitString[2] and splitString[3] and vars.gearList[splitString[3]] then
         Players:Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
@@ -526,7 +529,7 @@ addCMD("give", "Gear Giver", Prefix.."give me SuperRLauncher", "Give yourself an
     end
 end)
 
-addCMD("givehelp", "Gear Giver", Prefix.."givehelp", "Returns all of the givable gears.", function(message)
+addCMD("givehelp", "Gear Giver", "givehelp", "Returns all of the givable gears.", function(message)
     print('Welcome to Gear Giver - for Kohls Admin House. Prefix is :give - You need admin! All of the available gears will be listed below.')
     for i,v in pairs(vars.gearList) do
         local itemName = game:GetService("MarketplaceService"):GetProductInfo(v).Name
@@ -536,7 +539,7 @@ addCMD("givehelp", "Gear Giver", Prefix.."givehelp", "Returns all of the givable
 end)
 
 -- // CMDs: Sound Abuse Module
-addCMD("pasounds", "Sound Abuse", Prefix.."pasounds", "Plays all of the sounds in the game.", function(message)
+addCMD("pasounds", "Sound Abuse", "pasounds", "Plays all of the sounds in the game.", function(message)
     for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
         if v:IsA("Sound") then
             v:Play()
@@ -545,7 +548,7 @@ addCMD("pasounds", "Sound Abuse", Prefix.."pasounds", "Plays all of the sounds i
     vars.Notify('Played All Sounds.')
 end)
 
-addCMD("sallsounds", "Sound Abuse", Prefix.."sallsounds", "Stops all of the sounds in the game.", function(message)
+addCMD("sallsounds", "Sound Abuse", "sallsounds", "Stops all of the sounds in the game.", function(message)
     for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
         if v:IsA("Sound") then
             v:Stop()
@@ -554,27 +557,27 @@ addCMD("sallsounds", "Sound Abuse", Prefix.."sallsounds", "Stops all of the soun
     vars.Notify('Stopped All Sounds.')
 end)
 
-addCMD("pmusic", "Sound Abuse", Prefix.."pmusic", "Plays the 'Music' Sound.", function(message)
+addCMD("pmusic", "Sound Abuse", "pmusic", "Plays the 'Music' Sound.", function(message)
     if HolderFolder:FindFirstChildWhichIsA("Sound") then
         HolderFolder:FindFirstChildWhichIsA("Sound"):Play()
     end
     vars.Notify('Played Music.')
 end)
 
-addCMD("smusic", "Sound Abuse", Prefix.."smusic", "Stops the 'Music' Sound.", function(message)
+addCMD("smusic", "Sound Abuse", "smusic", "Stops the 'Music' Sound.", function(message)
     if HolderFolder:FindFirstChildWhichIsA("Sound") then
         HolderFolder:FindFirstChildWhichIsA("Sound"):Stop()
     end
     vars.Notify('Stopped Music.')
 end)
 
-addCMD("earrape", "Sound Abuse", Prefix.."earrape", "Toggles EarRape.", function(message)
+addCMD("earrape", "Sound Abuse", "earrape", "Toggles EarRape.", function(message)
     KAHHax.ControllerSettings.EarRape = not KAHHax.ControllerSettings.EarRape
     vars.Notify('EarRape Toggle: '.. (not KAHHax.ControllerSettings.EarRape and "Disabled." or "Enabled."))
 end)
 
 -- // CMDs: Server OOF Module
-addCMD("movebaseplate", "Server OOF", Prefix.."movebaseplate", "Makes you able to move the baseplate.", function(message)
+addCMD("movebaseplate", "Server OOF", "movebaseplate", "Makes you able to move the baseplate.", function(message)
     local Spawn = WorkspaceFolder.Spawn3
     local Baseplate = WorkspaceFolder.Baseplate
     LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Spawn.Position.X, Baseplate.Position.Y + 1, Spawn.Position.Z)
@@ -583,19 +586,19 @@ addCMD("movebaseplate", "Server OOF", Prefix.."movebaseplate", "Makes you able t
     vars.Notify("Done!")
 end)
 
-addCMD("partspam", "Server OOF", Prefix.."partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
+addCMD("partspam", "Server OOF", "partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
     KAHHax.ControllerSettings.PS = not KAHHax.ControllerSettings.PS
     getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.PS
     vars.Notify('Part Spam Toggle: '.. (not KAHHax.ControllerSettings.PS and "Disabled." or "Enabled."))
 end)
 
-addCMD("respam", "Server OOF", Prefix.."respam", "Toggles Server Respawn-Explode Spam.", function(message)
+addCMD("respam", "Server OOF", "respam", "Toggles Server Respawn-Explode Spam.", function(message)
     KAHHax.ControllerSettings.RE = not KAHHax.ControllerSettings.RE
     getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.RE
     vars.Notify('Respawn-Explode Spam Toggle: '.. (not KAHHax.ControllerSettings.RE and "Disabled." or "Enabled."))
 end)
 
-addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake' baseplate.", function(message)
+addCMD("makepbaseplate", "Server OOF", "makepbaseplate", "Makes a 'fake' baseplate.", function(message)
     local Baseplate = Instance.new("Part", WorkspaceFolder)
     Baseplate.Name = "PhantomBaseplate"
     Baseplate.BrickColor = BrickColor.new("Bright green")
@@ -605,7 +608,7 @@ addCMD("makepbaseplate", "Server OOF", Prefix.."makepbaseplate", "Makes a 'fake'
     vars.Notify("Made Fake Baseplate.")
 end)
 
-addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes all 'fake' baseplates.", function(message)
+addCMD("removepbaseplates", "Server OOF", "removepbaseplates", "Removes all 'fake' baseplates.", function(message)
     for i,v in pairs(WorkspaceFolder:GetChildren()) do
         if v.Name == "PhantomBaseplate" then
             v:Destroy()
@@ -614,7 +617,7 @@ addCMD("removepbaseplates", "Server OOF", Prefix.."removepbaseplates", "Removes 
     vars.Notify("Removed Fake Baseplates.")
 end)
 
-addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random') | Obby Box", "Paints the specified section as the specified colour.", function(message)
+addCMD("paintarea", "Server OOF", "paintarea | 255 0 0 (RGB or 'random') | Obby Box", "Paints the specified section as the specified colour.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] then
         SelectedColor = Color3.new(0, 0, 0)
@@ -670,7 +673,7 @@ addCMD("paintarea", "Server OOF", Prefix.."paintarea | 255 0 0 (RGB or 'random')
     end
 end)
 
-addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player.", function(message)
+addCMD("tlag", "Server OOF", "tlag EpicGamer69", "Toggles lagging player.", function(message)
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] then
         local targetUser = splitString[2]
@@ -687,13 +690,13 @@ addCMD("tlag", "Server OOF", Prefix.."tlag EpicGamer69", "Toggles lagging player
     checkLagging()
 end)
 
-addCMD("svrlag", "Server OOF", Prefix.."svrlag", "Toggles lagging the whole server.", function(message)
+addCMD("svrlag", "Server OOF", "svrlag", "Toggles lagging the whole server.", function(message)
     getgenv().chatSpyEnabled = KAHHax.ControllerSettings.lagServer
     KAHHax.ControllerSettings.lagServer = not KAHHax.ControllerSettings.lagServer
     vars.Notify('Lag Server Toggle: '.. (not KAHHax.ControllerSettings.lagServer and "Disabled." or "Enabled."))
 end)
 
-addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", function(message)
+addCMD("spam", "Server OOF", "spam kill all", "Spams a message.", function(message)
     local Str = Prefix.."spam  "
     local givenPhrase = string.sub(message, #Str, -1)
     if not givenPhrase then
@@ -716,7 +719,7 @@ addCMD("spam", "Server OOF", Prefix.."spam kill all", "Spams a message.", functi
     end
 end)
 
-addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message.", function(message)
+addCMD("rspam", "Server OOF", "rspam kill all", "Removes a spam message.", function(message)
     local Str = Prefix.."rspam  "
     local givenPhrase = string.sub(message, #Str, -1)
     if #vars.SpamList < 1 then getgenv().chatSpyEnabled = true end
@@ -728,7 +731,7 @@ addCMD("rspam", "Server OOF", Prefix.."rspam kill all", "Removes a spam message.
     end
 end)
 
-addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said.", function(message)
+addCMD("blphrase", "Server OOF", "blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3] and splitString[4] then
         local targetPlayer = vars.getPlayer(splitString[2])
@@ -746,7 +749,7 @@ addCMD("blphrase", "Server OOF", Prefix.."blphrase | EpicGamer69 | kill all | re
     end
 end)
 
-addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase.", function(message)
+addCMD("rblphrase", "Server OOF", "rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase.", function(message)
     local splitString = string.split(message, " | ")
     if splitString[1] and splitString[2] and splitString[3]then
         local targetPlayer = vars.getPlayer(splitString[2])
@@ -765,7 +768,7 @@ addCMD("rblphrase", "Server OOF", Prefix.."rblphrase | EpicGamer69 | kill all", 
     end
 end)
 
-addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whitelisted Users.", function(message)
+addCMD("crash", "Server OOF", "crash", "Crashes Server. Only for Whitelisted Users.", function(message)
     if vars.checkWhitelisted(LocalPlayer.UserId) then
         Players:Chat(":char me 489163522")
         wait(1)
@@ -779,12 +782,12 @@ addCMD("crash", "Server OOF", Prefix.."crash", "Crashes Server. Only for Whiteli
     end
 end)
 
-addCMD("epilepsy", "Server OOF", Prefix.."epilepsy", "Spams Colours.", function(message)
+addCMD("epilepsy", "Server OOF", "epilepsy", "Spams Colours.", function(message)
     KAHHax.ControllerSettings.Epilepsy = not KAHHax.ControllerSettings.Epilepsy
     vars.Notify("Toggle - Epilepsy: ".. (KAHHax.ControllerSettings.Epilepsy and "Enabled." or "Disabled."))
 end)
 
-addCMD("tturret", "Server OOF", Prefix.."tturret others", "Gives you the Teapot Turret!", function(message)
+addCMD("tturret", "Server OOF", "tturret others", "Gives you the Teapot Turret!", function(message)
     local Str = Prefix.."tturret  "
     if string.sub(message, #Str, -1) then
         Players:Chat(":hat "..string.sub(message, #Str, -1).." 1055299")
@@ -795,15 +798,15 @@ addCMD("tturret", "Server OOF", Prefix.."tturret others", "Gives you the Teapot 
 end)
 
 -- // CMDs: Music Commands
-addCMD("getmusic", "Music Commands", Prefix.."getmusic", "Prints all of the playable music.", function(message)
+addCMD("getmusic", "Music Commands", "getmusic", "Prints all of the playable music.", function(message)
     vars.MusicAPI.returnMusic(false)
 end)
 
-addCMD("refreshmusic", "Music Commands", Prefix.."refreshmusic", "Refreshes the music table.", function(message)
+addCMD("refreshmusic", "Music Commands", "refreshmusic", "Refreshes the music table.", function(message)
     vars.MusicAPI.refreshSounds()
 end)
 
-addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at the number.", function(message)
+addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the number.", function(message)
     local SoundId
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] and tonumber(splitString[2]) then
@@ -816,16 +819,22 @@ addCMD("play", "Music Commands", Prefix.."play 53", "Plays the sound indexed at 
 end)
 
 -- // CMDs: Misc. Commands
-addCMD("rj", "Misc", Prefix.."rj", "Rejoins the game.", function(message)
+addCMD("rj", "Misc", "rj", "Rejoins the game.", function(message)
     game:GetService('TeleportService'):Teleport(game.PlaceId)
 end)
 
-addCMD("execute", "Misc", Prefix.."execute print('hi'))", "Executes whatever you want.", function(message)
+addCMD("execute", "Misc", "execute print('hi'))", "Executes whatever you want.", function(message)
     local Str = Prefix.."execute  "
     loadstring(string.sub(message, #Str, -1))()
 end)
 
-addCMD("country", "Misc", Prefix.."country EpicGamer69", "Shows Country of Player in Game and Notificaiton", function(message)
+addCMD("bypass", "Misc", "bypass whats up my niga", "Auto-bypasses a phrase.", function(message)
+    local Str = Prefix.."bypass  "
+    local BypassedText = vars.ChatBypasser.bypassText(string.sub(message, #Str, -1), true)
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(BypassedText, "All")
+end)
+
+addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game and A Notification of it.", function(message)
     local Str = Prefix.."execute  "
     local Target = string.sub(message, #Str, -1)
     if Target and vars.getPlayer(Target) and vars.getPlayer(Target)[1] then
@@ -845,7 +854,7 @@ addCMD("country", "Misc", Prefix.."country EpicGamer69", "Shows Country of Playe
     end
 end)
 
-addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to your clipboard.", function(message)
+addCMD("copycmds", "Misc", "copycmds", "Copies all of the commands to your clipboard.", function(message)
     local CommandCount = 0
     for i,v in pairs(KAHHax.CMDs) do
         CommandCount = CommandCount + 1
@@ -898,7 +907,7 @@ addCMD("copycmds", "Misc", Prefix.."copycmds", "Copies all of the commands to yo
 end)
 
 -- // CMDs: Misc. Commands - CMD GUI
-addCMD("xcmds", "Misc", Prefix.."xcmds", "Shows all of the CMDs.", function(message)
+addCMD("xcmds", "Misc", "xcmds", "Shows all of the CMDs.", function(message)
     local ScriptCMDs = Instance.new("ScreenGui")
     local Container = Instance.new("Frame")
     local Header = Instance.new("Frame")
