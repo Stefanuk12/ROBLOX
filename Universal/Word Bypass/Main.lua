@@ -32,5 +32,4 @@ end)
 setreadonly(mt, true)
 
 -- // Finish
-print('Initialised Chat Bypass!')
 return getgenv().ChatBypasser
