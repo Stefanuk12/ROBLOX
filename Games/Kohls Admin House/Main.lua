@@ -849,7 +849,7 @@ addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Playe
             --game:GetService("Players"):Chat(":h "..Chat)
             --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
             vars.Notify(Chat)
-            wait(1.5)
+            wait(2)
         end
     else
         vars.Alert("Invalid Arguments!")
@@ -869,7 +869,7 @@ addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Gam
             --game:GetService("Players"):Chat(":h "..Chat)
             --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
             vars.Notify(Chat)
-            wait(1.5)
+            wait(2)
         end
     else
         vars.Alert("Invalid Arguments!")
