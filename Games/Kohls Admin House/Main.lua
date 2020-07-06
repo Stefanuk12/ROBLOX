@@ -373,7 +373,7 @@ end)()
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
     while wait() do
         for i,v in pairs(vars.PlayerManager) do
-            if v and v.Lagging then
+            if v and v.Lagging == true then
                 Players:Chat(":pm "..i.." "..vars.largeText)
             end
         end
