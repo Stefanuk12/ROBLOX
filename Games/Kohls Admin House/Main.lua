@@ -839,8 +839,25 @@ addCMD("tbypass", "Misc", "tbypass", "Toggles global bypass on all of your chats
     vars.Notify("Toggle - Chat Bypass: ".. (vars.ChatBypasser.ChatBypassEnabled and "Enabled." or "Disabled."))
 end)
 
-addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game and A Notification of it.", function(message)
-    local Str = Prefix.."execute  "
+addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Player.", function(message)
+    local Str = Prefix.."os  "
+    local Target = string.sub(message, #Str, -1)
+    if Target and vars.getPlayer(Target) and vars.getPlayer(Target)[1] then
+        local targetPlayer = vars.getPlayer(Target)
+        for _, plr in pairs(targetPlayer) do
+            local Chat = plr.Name.."'s Platform is: "..plr.OsPlatform
+            --game:GetService("Players"):Chat(":h "..Chat)
+            --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
+            vars.Notify(Chat)
+            wait(1.5)
+        end
+    else
+        vars.Alert("Invalid Arguments!")
+    end
+end)
+
+addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game.", function(message)
+    local Str = Prefix.."country  "
     local Target = string.sub(message, #Str, -1)
     if Target and vars.getPlayer(Target) and vars.getPlayer(Target)[1] then
         if not gethiddenproperty then vars.Alert("Your exploit does not support this!") return end
@@ -849,8 +866,8 @@ addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Gam
             local targetPlayerCountryCode = gethiddenproperty(plr, "CountryRegionCodeReplicate")
             local targetPlayerCountryName = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://restcountries.eu/rest/v2/alpha/"..targetPlayerCountryCode)).name
             local Chat = plr.Name.." is located in "..targetPlayerCountryName.." ("..targetPlayerCountryCode..")."
-            game:GetService("Players"):Chat(":h "..Chat)
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
+            --game:GetService("Players"):Chat(":h "..Chat)
+            --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
             vars.Notify(Chat)
             wait(1.5)
         end
