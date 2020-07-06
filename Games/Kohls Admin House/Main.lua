@@ -834,6 +834,11 @@ addCMD("bypass", "Misc", "bypass whats up my niga", "Auto-bypasses a phrase.", f
     game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(BypassedText, "All")
 end)
 
+addCMD("tbypass", "Misc", "tbypass", "Toggles global bypass on all of your chats.", function(message)
+    vars.ChatBypasser.ChatBypassEnabled = not vars.ChatBypasser.ChatBypassEnabled
+    vars.Notify("Toggle - Chat Bypass: ".. (vars.ChatBypasser.ChatBypassEnabled and "Enabled." or "Disabled."))
+end)
+
 addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game and A Notification of it.", function(message)
     local Str = Prefix.."execute  "
     local Target = string.sub(message, #Str, -1)
