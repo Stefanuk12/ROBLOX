@@ -32,9 +32,9 @@ KAHHax["vars"] = {
     ]]},
     RainbowColor = Color3.fromRGB(0, 0, 0),
     WhitelistedUsers = {91318356, 23294806},
+    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     ChatBypasser = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))(),
     largeText = game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
-    MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))(),
     gearList = {
         PaintBucket = 18474459,
         Hyperlaser = 130113146,
