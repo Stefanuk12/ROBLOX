@@ -34,7 +34,9 @@ getgenv().Orbit = {
     offSet = 10,
     Mode = "Visualiser",
     targetPlayer = LocalPlayer,
-    Parts = {}
+    Parts = {},
+    CMDs = {},
+    Prefix = ":",
 }
 Orbit = getgenv().Orbit
 
@@ -88,8 +90,10 @@ Folder.ChildRemoved:Connect(function(child)
     end
 end)
 
+-- // Makes 100 parts
 Orbit.commenceParts(100)
 
+-- // Makes it spiny spiny spin
 RunService.RenderStepped:Connect(function()
     if Folder and Orbit.Enabled then
         rotX = rotX + Orbit.Speed / 100
@@ -120,4 +124,79 @@ RunService.RenderStepped:Connect(function()
             end
         end
     end
+end)
+
+-- // CMD So you can give it to other peeps
+function getPlayer(String)
+    local Found = {}
+    local Target = string.lower(String)
+    if Target == "all" then
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            table.insert(Found, v)
+        end
+    elseif Target == "others" then
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v ~= game:GetService("Players").LocalPlayer then
+                table.insert(Found, v)
+            end
+        end
+    elseif Target == "me" then
+        table.insert(Found, game:GetService("Players").LocalPlayer)
+    else
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name:lower():sub(1, #String) == String:lower() then
+                table.insert(Found, v)
+            end
+        end
+    end
+    return Found
+end
+
+function addCMD(CommandName, ModuleName, Example, Description, Function)
+    if not CommandName or not ModuleName or not Example or not Description or not Function then
+        vars.Alert("addCMDs invalid! ".. CommandName)
+        return
+    end
+    local CMDs = Orbit.CMDs
+    local Prefix = Orbit.Prefix
+    CMDs[CommandName] = {
+        ModuleName = ModuleName,
+        Example = Example,
+        Description = Prefix..Description,
+        Function = Function,
+    }
+end
+
+LocalPlayer.Chatted:Connect(function(message)
+    for i,v in pairs(Orbit.CMDs) do
+        local Command = Orbit.Prefix..i
+        if not message then message = "" end
+        if v.Function and string.sub(message, 1, #Command) == Command then
+            v.Function(message)
+        end
+    end
+end)
+
+addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to someone.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] then
+        for _,v in pairs(getPlayer(splitString[2])) do
+            Orbit.targetPlayer = v
+            break
+        end
+    end
+end)
+
+addCMD("refreshorbit", "Orbiter", "refreshorbiter", "Refreshes the parts.", function(message)
+    Players:Chat("clr")
+    wait(0.5)
+    local count = 0
+    for _,v in pairs(Folder:GetChildren()) do
+        if v:IsA("Part") and v.Size == Vector3.new(1, 1, 1) and not v.Anchored then
+            count = count + 1
+        end
+    end
+    if count < 100 then
+        Orbit.commenceParts(100 - count)
+    end  
 end)
