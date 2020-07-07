@@ -51,6 +51,7 @@ KAHHax["vars"] = {
     },
     SpamList = {},
     Prefix = ":",
+    NetworkOwner = true,
 }
 vars = KAHHax.vars
 vars.ChatBypasser.ChatBypassEnabled = false
@@ -63,6 +64,15 @@ end
 vars.Notify = function(...)
     local text = tostring(...)
     NotificationHandler.newNotification("SUCCESS", text, "Success")
+end
+
+if sethiddenproperty then
+    game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
+        if vars.NetworkOwner then
+            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+            sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", math.huge)
+        end
+    end)
 end
 
 function KAHHax.vars.getPlayer(String)
@@ -370,18 +380,21 @@ KAHHax.ServerOOFController.EpilepsyCoroutine = coroutine.wrap(function() -- // E
     end
 end)()
 
-KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
-    while wait() do
-        for i,v in pairs(vars.PlayerManager) do
-            if v and v.Lagging == true then
-                Players:Chat(":pm "..i.." "..vars.largeText)
-            end
+function pmLargeText()
+    for i,v in pairs(vars.PlayerManager) do
+        if v and v.Lagging then
+            Players:Chat(":pm "..i.." "..vars.largeText)
         end
+    end
+end
+KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
+    while wait(0.1) do
+        pmLargeText()
     end
 end)()
 
 KAHHax.ServerOOFController.SVRLagCoroutine = coroutine.wrap(function() -- // Server Lag
-    while wait() do
+    while wait(0.1) do
         if KAHHax.ControllerSettings.lagServer and not vars.checkAllWhitelisted() then
             Players:Chat(":pm others "..vars.largeText)
         end
@@ -401,7 +414,7 @@ KAHHax.SoundAbuseController.mainCoroutine = coroutine.wrap(function()
 end)()
 
 SpamListCoroutine = coroutine.wrap(function()
-    while wait() do
+    while wait(0.1) do
         if vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
                 Players:Chat(v.Phrase)
@@ -841,9 +854,10 @@ end)
 
 addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Player.", function(message)
     local Str = Prefix.."os  "
-    local Target = string.split(message, " ")[2]
+    local Target = string.sub(message, #Str, -1)
     local targetPlayer = vars.getPlayer(Target)
-    if Target and targetPlayer and vars.targetPlayer[1] then
+
+    if Target and targetPlayer and targetPlayer[1] then
         for _, plr in pairs(targetPlayer) do
             local Chat = plr.Name.."'s Platform is: "..plr.OsPlatform
             --game:GetService("Players"):Chat(":h "..Chat)
@@ -852,7 +866,11 @@ addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Playe
             wait(2)
         end
     else
-        vars.Alert("Invalid Arguments!")
+        if not targetPlayer[1] then
+            vars.Alert("This Player does not exist!")
+        else
+            vars.Alert("Invalid Arguments!")
+        end
     end
 end)
 
@@ -872,7 +890,11 @@ addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Gam
             wait(2)
         end
     else
-        vars.Alert("Invalid Arguments!")
+        if not targetPlayer[1] then
+            vars.Alert("This Player does not exist!")
+        else
+            vars.Alert("Invalid Arguments!")
+        end
     end
 end)
 
