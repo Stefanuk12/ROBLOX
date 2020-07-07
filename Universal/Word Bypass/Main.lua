@@ -21,6 +21,7 @@ local backupnamecall = mt.__namecall
 
 -- // Function that bypasses the text
 function ChatBypasser.bypassText(text, removepunctuation)
+    if removepunctuation == nil then removepunctuation = true end
     if removepunctuation then
         text = string.gsub(text, "[%p]+", "")
     end
