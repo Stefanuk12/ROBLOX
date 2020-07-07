@@ -51,7 +51,7 @@ KAHHax["vars"] = {
     },
     SpamList = {},
     Prefix = ":",
-    NetworkOwner = true,
+    NetworkOwner = false,
 }
 vars = KAHHax.vars
 vars.ChatBypasser.ChatBypassEnabled = false
@@ -68,7 +68,7 @@ end
 
 if sethiddenproperty then
     game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-        if vars.NetworkOwner then
+        if vars.NetworkOwner and gethiddenproperty(LocalPlayer, "SimulationRadius") ~= math.huge then
             sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
             sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", math.huge)
         end
