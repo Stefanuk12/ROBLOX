@@ -29,13 +29,13 @@ end
 
 -- // Orbit
 getgenv().Orbit = {
-	Enabled = true,
-	Speed = 15,
-	offSet = 10,
-	Mode = "Visualiser",
+    Enabled = true,
+    Speed = 15,
+    offSet = 10,
+    Mode = "Visualiser",
     TweenSpeed = 5,
-	TweenEasingStyle = Enum.EasingStyle.Quad,
-	TweenEasingDirection = Enum.EasingDirection.In,
+    TweenEasingStyle = Enum.EasingStyle.Quad,
+    TweenEasingDirection = Enum.EasingDirection.In,
     targetPlayer = LocalPlayer,
     Parts = {}
 }
@@ -59,8 +59,8 @@ end
 
 function Orbit.commenceParts(numOfParts)
 	for i = 1, numOfParts do
-		-- // Create Part
-		Players:Chat("part/1/1/1")
+        -- // Create Part
+        Players:Chat("part/1/1/1")
     end
 end
 
