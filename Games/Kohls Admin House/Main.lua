@@ -667,7 +667,7 @@ addCMD("paintarea", "Server OOF", "paintarea | 255 0 0 (RGB or 'random') | Obby 
             end
         end
         LocalPlayer.Character.PaintBucket.Parent = LocalPlayer.Backpack
-        vars.Notify("Painted: Section - ".. Section.." ".. "Color -".. (string.lower(splitString[2]) == "random" and "Random Color" or SelectedColor))
+        vars.Notify("Painted: Section - ".. tostring(Section).." ".. "Color -".. (string.lower(splitString[2]) == "random" and "Random Color" or tostring(SelectedColor)))
     else
         vars.Alert("Invalid Arguments!")
     end
