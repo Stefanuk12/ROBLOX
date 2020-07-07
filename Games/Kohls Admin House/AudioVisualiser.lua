@@ -33,9 +33,6 @@ getgenv().Orbit = {
     Speed = 15,
     offSet = 10,
     Mode = "Visualiser",
-    TweenSpeed = 5,
-    TweenEasingStyle = Enum.EasingStyle.Quad,
-    TweenEasingDirection = Enum.EasingDirection.In,
     targetPlayer = LocalPlayer,
     Parts = {}
 }
