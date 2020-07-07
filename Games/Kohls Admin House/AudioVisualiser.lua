@@ -114,10 +114,12 @@ RunService.RenderStepped:Connect(function()
                     targetPrimaryPart = Orbit.targetPlayer.Character.PrimaryPart.Position
                 end
 
-                local newPos = targetPrimaryPart + Vector3.new(0, Y, 0)
-                local EndCFrame = CFrame.new(newPos) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
-                local EndCFrame2 = CFrame.new(targetPrimaryPart) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
-                v.CFrame = EndCFrame
+                if targetPrimaryPart then
+                    local newPos = targetPrimaryPart + Vector3.new(0, Y, 0)
+                    local EndCFrame = CFrame.new(newPos) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
+                    local EndCFrame2 = CFrame.new(targetPrimaryPart) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
+                    v.CFrame = EndCFrame
+                end
             end
         end
     end
