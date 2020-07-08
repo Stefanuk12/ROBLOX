@@ -453,9 +453,7 @@ end)()
 if getconnections then
     for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
         if v:IsA("TouchTransmitter") then
-            for _, connection in pairs(getconnections(v.Parent.Touched)) do
-                connection:Disable()
-            end
+            v:Destroy()
         end
     end
 end
