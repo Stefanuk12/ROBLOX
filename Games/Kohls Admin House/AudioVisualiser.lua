@@ -184,6 +184,7 @@ end)
 addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to someone.", function(message)
     local splitString = string.split(message, " ")
     if splitString[2] then
+        Orbit.LoopOrbit = false
         for _,v in pairs(getPlayer(splitString[2])) do
             Orbit.targetPlayer = v
             NotificationHandler.newNotification("SUCCESS", "Gave Orbiter to: "..v.Name, "Success")
