@@ -212,7 +212,7 @@ addCMD("looporbit", "Orbiter", "looporbit", "Everyone takes turns with the Orbit
     NotificationHandler.newNotification("SUCCESS", "Toggle - Loop Orbiter: "..(Orbit.LoopOrbit and "Enabled." or "Disabled."), "Success")
 end)
 
-addCMD("looporbittime", "Orbiter", "looporbit", "Set the time of the turns of the Orbiter.", function(message)
+addCMD("timelooporbit", "Orbiter", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
     local splitString = string.split(message, " ")
     if splitString[2] and tonumber(splitString[2]) then
         Orbit.LoopOrbitTime = tonumber(splitString[2])
