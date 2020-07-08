@@ -10,7 +10,6 @@ local LocalPlayer = Players.LocalPlayer
 local DefaultChatSystemChatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents")
 local SayMessageRequest = DefaultChatSystemChatEvents:WaitForChild("SayMessageRequest")
 local OnMessageDoneFiltering = DefaultChatSystemChatEvents:WaitForChild("OnMessageDoneFiltering")
-
 getgenv().ChatSpy = {
     Enabled = true,
     SpyOnSelf = true,

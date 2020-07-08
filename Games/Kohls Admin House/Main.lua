@@ -450,9 +450,13 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
 end)()
 
 -- // Anti Lava Blocks
-for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
-    if v:IsA("TouchTransmitter") then
-        v:Destroy()
+if getconnections then
+    for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
+        if v:IsA("TouchTransmitter") then
+            for _, connection in pairs(getconnections(v.Parent.Touched)) do
+                connection:Disable()
+            end
+        end
     end
 end
 
@@ -601,13 +605,13 @@ end)
 
 addCMD("partspam", "Server OOF", "partspam", "Toggles Spam Parts (Persons299's Admin Needed!).", function(message)
     KAHHax.ControllerSettings.PS = not KAHHax.ControllerSettings.PS
-    getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.PS
+    if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = not KAHHax.ControllerSettings.PS end
     vars.Notify('Part Spam Toggle: '.. (not KAHHax.ControllerSettings.PS and "Disabled." or "Enabled."))
 end)
 
 addCMD("respam", "Server OOF", "respam", "Toggles Server Respawn-Explode Spam.", function(message)
     KAHHax.ControllerSettings.RE = not KAHHax.ControllerSettings.RE
-    getgenv().chatSpyEnabled = not KAHHax.ControllerSettings.RE
+    if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = not KAHHax.ControllerSettings.RE end
     vars.Notify('Respawn-Explode Spam Toggle: '.. (not KAHHax.ControllerSettings.RE and "Disabled." or "Enabled."))
 end)
 
@@ -693,7 +697,7 @@ addCMD("tlag", "Server OOF", "tlag EpicGamer69", "Toggles lagging player.", func
         for i,v in pairs(vars.getPlayer(targetUser)) do
             if not vars.checkWhitelisted(v.UserId) then
                 vars.PlayerManager[v.Name].Lagging = not vars.PlayerManager[v.Name].Lagging
-                getgenv().chatSpyEnabled = not vars.PlayerManager[v.Name].Lagging
+                if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = not vars.PlayerManager[v.Name].Lagging end
                 vars.Notify(vars.PlayerManager[v.Name].Lagging and v.Name.." is being lagged." or v.Name.." has stopped being lagged.")
             end
         end
@@ -704,7 +708,7 @@ addCMD("tlag", "Server OOF", "tlag EpicGamer69", "Toggles lagging player.", func
 end)
 
 addCMD("svrlag", "Server OOF", "svrlag", "Toggles lagging the whole server.", function(message)
-    getgenv().chatSpyEnabled = KAHHax.ControllerSettings.lagServer
+    if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = KAHHax.ControllerSettings.lagServer end
     KAHHax.ControllerSettings.lagServer = not KAHHax.ControllerSettings.lagServer
     vars.Notify('Lag Server Toggle: '.. (not KAHHax.ControllerSettings.lagServer and "Disabled." or "Enabled."))
 end)
@@ -716,7 +720,7 @@ addCMD("spam", "Server OOF", "spam kill all", "Spams a message.", function(messa
         vars.Alert("Invalid Arguments!")
         return
     end
-    getgenv().chatSpyEnabled = false
+    if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = false end
     if not vars.SpamList[1] then
         table.insert(vars.SpamList, {Phrase = givenPhrase})
         vars.Notify('Successfully added to Spam List, Message: '.. givenPhrase)
@@ -735,7 +739,7 @@ end)
 addCMD("rspam", "Server OOF", "rspam kill all", "Removes a spam message.", function(message)
     local Str = Prefix.."rspam  "
     local givenPhrase = string.sub(message, #Str, -1)
-    if #vars.SpamList < 1 then getgenv().chatSpyEnabled = true end
+    if #vars.SpamList < 1 then if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = true end end
     for i,v in pairs(vars.SpamList) do
         if v.Phrase == givenPhrase then
             table.remove(vars.SpamList, i)

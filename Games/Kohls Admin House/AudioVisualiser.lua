@@ -10,6 +10,8 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local primaryPart = Character:WaitForChild("HumanoidRootPart")
 local GameFolder = game:GetService("Workspace").Terrain["_Game"]
 local Folder = GameFolder.Folder
+local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
+NotificationHandler["StorageLocation"] = game:GetService("CoreGui")
 if not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then warn("You don't have Persons299 admin!") return end
 
 -- // Network Ownership
@@ -37,6 +39,8 @@ getgenv().Orbit = {
     Parts = {},
     CMDs = {},
     Prefix = ":",
+    LoopOrbit = false,
+    LoopOrbitTime = 1,
 }
 Orbit = getgenv().Orbit
 
@@ -182,6 +186,7 @@ addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to someone.", 
     if splitString[2] then
         for _,v in pairs(getPlayer(splitString[2])) do
             Orbit.targetPlayer = v
+            NotificationHandler.newNotification("SUCCESS", "Gave Orbiter to: "..v.Name, "Success")
             break
         end
     end
@@ -198,5 +203,29 @@ addCMD("refreshorbit", "Orbiter", "refreshorbiter", "Refreshes the parts.", func
     end
     if count < 100 then
         Orbit.commenceParts(100 - count)
+        NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
     end  
 end)
+
+addCMD("looporbit", "Orbiter", "looporbit", "Everyone takes turns with the Orbiter.", function(message)
+    Orbit.LoopOrbit = not Orbit.LoopOrbit
+    NotificationHandler.newNotification("SUCCESS", "Toggle - Loop Orbiter: "..(Orbit.LoopOrbit and "Enabled." or "Disabled."), "Success")
+end)
+
+addCMD("looporbittime", "Orbiter", "looporbit", "Set the time of the turns of the Orbiter.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(spitString[2]) then
+        Orbit.LoopOrbitTime = tonumber(splitString[2])
+        NotificationHandler.newNotification("SUCCESS", "Loop Orbiter Time: "..splitString[2], "Success")
+    end
+end)
+
+-- // Coroutine
+coroutine.wrap(function()
+    while wait() do
+        for _,v in pairs(Players:GetPlayers()) do
+            Orbit.targetPlayer = v
+            wait(Orbit.LoopOrbitTime)
+        end
+    end
+)()
