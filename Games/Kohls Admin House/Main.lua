@@ -77,7 +77,7 @@ end
 
 function KAHHax.vars.getPlayer(String)
     local Found = {}
-    local Target = string.lower(String)
+    local Target = String:lower()
     if Target == "all" then
         for i,v in pairs(game:GetService("Players"):GetPlayers()) do
             table.insert(Found, v)
@@ -136,7 +136,7 @@ function KAHHax.vars.addPlayerToManager(Player)
         end
         vars.PlayerManager[Player.Name].BlacklistConnection.A = Player.Chatted:Connect(function(message)
             for i,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
-                if string.match(message, v.Phrase) then
+                if message:match(v.Phrase) then
                     Players:Chat(v.Punishment)
                 end
             end
@@ -334,7 +334,7 @@ for _,v in pairs(vars.WhitelistedUsers) do
     if Players:FindFirstChild(Player) then
         local Player = Players:FindFirstChild(Player)
         Player.Chatted:Connect(function(chat)
-            if string.lower(chat) == "hi gamers" then
+            if chat:lower() == "hi gamers" then
                 wait(0.5)
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
             end
@@ -436,7 +436,7 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
     
     while wait() do       
         if KAHHax.ControllerSettings.PersistantAdmin and LocalPlayer.Character:FindFirstChildWhichIsA("BasePart") then
-            if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
+            if Pad.Name:match("admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
                 fireCommand("regen")
             end
             Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
@@ -480,7 +480,7 @@ LocalPlayer.Chatted:Connect(function(message)
     for i,v in pairs(KAHHax.CMDs) do
         local Command = vars.Prefix..i
         if not message then message = "" end
-        if v.Function and string.sub(message, 1, #Command) == Command then
+        if v.Function and message:sub(1, #Command) == Command then
             v.Function(message)
         end
     end
@@ -489,14 +489,14 @@ end)
 local Prefix = vars.Prefix
 -- // CMDs: Admin Module
 addCMD("regen", "Admin", "regen", "Regens the admin.", function(message)
-    local verbrose = string.split(message, " ")[2]
+    local verbrose = message:split(" ")[2]
     local RegenPad = AdminFolder.Regen
     fireclickdetector(AdminFolder.Regen.ClickDetector, 0)
     if verbrose then print('Regened Admin.') end
 end)
 
 addCMD("getadmin", "Admin", "getadmin", "Gets admin.", function(message)
-    local verbrose = string.split(message, " ")[2]
+    local verbrose = message:split(" ")[2]
     fireCommand("regen")
     wait(0.25)
     if firetouchinterest then
@@ -538,7 +538,7 @@ end)
 
 -- // CMDs: Gear Giver Module
 addCMD("give", "Gear Giver", "give me SuperRLauncher", "Give yourself and others gears!", function(message)
-    local splitString = string.split(message, " ")
+    local splitString = message:split(" ")
     if splitString[2] and splitString[3] and vars.gearList[splitString[3]] then
         Players:Chat(":gear "..splitString[2].." "..vars.gearList[splitString[3]])
     elseif not splitString[2] or not splitString[3] then
@@ -635,16 +635,16 @@ addCMD("removepbaseplates", "Server OOF", "removepbaseplates", "Removes all 'fak
 end)
 
 addCMD("paintarea", "Server OOF", "paintarea | 255 0 0 (RGB or 'random') | Obby Box", "Paints the specified section as the specified colour.", function(message)
-    local splitString = string.split(message, " | ")
+    local splitString = message:split(" | ")
     if splitString[1] and splitString[2] and splitString[3] then
         SelectedColor = Color3.new(0, 0, 0)
-        Color = string.lower(splitString[2])
-        local Section = string.lower(splitString[3]) 
-        vars.Notify("Painting: Section - ".. Section.." ".. "Color - ".. (string.lower(splitString[2]) == "random" and "Random Color" or Color))
+        Color = splitString[2]:lower()
+        local Section = splitString[3]:lower()
+        vars.Notify("Painting: Section - ".. Section.." ".. "Color - ".. (splitString[2]:lower() == "random" and "Random Color" or Color))
         
-        if string.gmatch(Color, "[%d%s]+") then
+        if Color:gmatch("[%d%s]+") then
             R, G, B = 0, 0, 0
-            local colorSplit = string.split(splitString[2], " ")
+            local colorSplit = splitString[2]:split(" ")
             if colorSplit[1] and tonumber(colorSplit[1]) then R = tonumber(colorSplit[1]) end
             if colorSplit[2] and tonumber(colorSplit[2]) then G = tonumber(colorSplit[2]) end
             if colorSplit[3] and tonumber(colorSplit[3]) then B = tonumber(colorSplit[3]) end
@@ -672,7 +672,7 @@ addCMD("paintarea", "Server OOF", "paintarea | 255 0 0 (RGB or 'random') | Obby 
             end          
         else
             for i,v in pairs(WorkspaceFolder:GetChildren()) do
-                if string.match(string.lower(v.Name), Section) then
+                if v.Name:lower():match(Section) then
                     for _, part in pairs(v:GetDescendants()) do
                         coroutine.wrap(function()
                             if part:IsA("BasePart") then
@@ -684,14 +684,14 @@ addCMD("paintarea", "Server OOF", "paintarea | 255 0 0 (RGB or 'random') | Obby 
             end
         end
         LocalPlayer.Character.PaintBucket.Parent = LocalPlayer.Backpack
-        vars.Notify("Painted: Section - ".. tostring(Section).." ".. "Color -".. (string.lower(splitString[2]) == "random" and "Random Color" or tostring(SelectedColor)))
+        vars.Notify("Painted: Section - ".. tostring(Section).." ".. "Color -".. (splitString[2]:lower() == "random" and "Random Color" or tostring(SelectedColor)))
     else
         vars.Alert("Invalid Arguments!")
     end
 end)
 
 addCMD("tlag", "Server OOF", "tlag EpicGamer69", "Toggles lagging player.", function(message)
-    local splitString = string.split(message, " ")
+    local splitString = message:split(" ")
     if splitString[1] and splitString[2] then
         local targetUser = splitString[2]
         for i,v in pairs(vars.getPlayer(targetUser)) do
@@ -715,7 +715,7 @@ end)
 
 addCMD("spam", "Server OOF", "spam kill all", "Spams a message.", function(message)
     local Str = Prefix.."spam  "
-    local givenPhrase = string.sub(message, #Str, -1)
+    local givenPhrase = message:sub(#Str, -1)
     if not givenPhrase then
         vars.Alert("Invalid Arguments!")
         return
@@ -738,7 +738,7 @@ end)
 
 addCMD("rspam", "Server OOF", "rspam kill all", "Removes a spam message.", function(message)
     local Str = Prefix.."rspam  "
-    local givenPhrase = string.sub(message, #Str, -1)
+    local givenPhrase = message:sub(#Str, -1)
     if #vars.SpamList < 1 then if getgenv().ChatSpy then getgenv().ChatSpy.Enabled = true end end
     for i,v in pairs(vars.SpamList) do
         if v.Phrase == givenPhrase then
@@ -749,7 +749,7 @@ addCMD("rspam", "Server OOF", "rspam kill all", "Removes a spam message.", funct
 end)
 
 addCMD("blphrase", "Server OOF", "blphrase | EpicGamer69 | kill all | reset all", "When Player says Phrase, Punishment is said.", function(message)
-    local splitString = string.split(message, " | ")
+    local splitString = message:split(" | ")
     if splitString[1] and splitString[2] and splitString[3] and splitString[4] then
         local targetPlayer = vars.getPlayer(splitString[2])
         for _,v in pairs(targetPlayer) do
@@ -767,7 +767,7 @@ addCMD("blphrase", "Server OOF", "blphrase | EpicGamer69 | kill all | reset all"
 end)
 
 addCMD("rblphrase", "Server OOF", "rblphrase | EpicGamer69 | kill all", "Remove Blacklisted Phrase.", function(message)
-    local splitString = string.split(message, " | ")
+    local splitString = message:split(" | ")
     if splitString[1] and splitString[2] and splitString[3]then
         local targetPlayer = vars.getPlayer(splitString[2])
         for _,v in pairs(targetPlayer) do
@@ -806,12 +806,12 @@ end)
 
 addCMD("tturret", "Server OOF", "tturret others", "Gives you the Teapot Turret!", function(message)
     local Str = Prefix.."tturret  "
-    if string.sub(message, #Str, -1) then
-        Players:Chat(":hat "..string.sub(message, #Str, -1).." 1055299")
+    if message:sub(#Str, -1) then
+        Players:Chat(":hat "..message:sub(#Str, -1).." 1055299")
     else
         Players:Chat(":hat me 1055299")
     end
-    vars.Notify("Given Teapot Turret"..(string.sub(message, #Str, -1) and " to "..string.sub(message, #Str, -1).."!" or " self!"))
+    vars.Notify("Given Teapot Turret"..(message:sub(#Str, -1) and " to "..message:sub(#Str, -1).."!" or " self!"))
 end)
 
 -- // CMDs: Music Commands
@@ -825,7 +825,7 @@ end)
 
 addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the number.", function(message)
     local SoundId
-    local splitString = string.split(message, " ")
+    local splitString = message:split(" ")
     if splitString[1] and splitString[2] and tonumber(splitString[2]) then
         if not vars.MusicAPI.musicTable[tonumber(splitString[2])] then vars.Alert("This sound does not exist!") return end
         Players:Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
@@ -842,12 +842,12 @@ end)
 
 addCMD("execute", "Misc", "execute print('hi'))", "Executes whatever you want.", function(message)
     local Str = Prefix.."execute  "
-    loadstring(string.sub(message, #Str, -1))()
+    loadstring(message:sub(#Str, -1))()
 end)
 
 addCMD("bypass", "Misc", "bypass whats up my niga", "Auto-bypasses a phrase.", function(message)
     local Str = Prefix.."bypass  "
-    local BypassedText = vars.ChatBypasser.bypassText(string.sub(message, #Str, -1), true)
+    local BypassedText = vars.ChatBypasser.bypassText(message:sub(#Str, -1), true)
     game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(BypassedText, "All")
 end)
 
@@ -858,7 +858,7 @@ end)
 
 addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Player.", function(message)
     local Str = Prefix.."os  "
-    local Target = string.sub(message, #Str, -1)
+    local Target = message:sub(#Str, -1)
     local targetPlayer = vars.getPlayer(Target)
 
     if Target and targetPlayer and targetPlayer[1] then
@@ -880,7 +880,7 @@ end)
 
 addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game.", function(message)
     local Str = Prefix.."country  "
-    local Target = string.sub(message, #Str, -1)
+    local Target = message:sub(#Str, -1)
     local targetPlayer = vars.getPlayer(Target)
     if Target and targetPlayer and targetPlayer[1] then
         if not gethiddenproperty then vars.Alert("Your exploit does not support this!") return end      
@@ -1120,17 +1120,17 @@ addCMD("xcmds", "Misc", "xcmds", "Shows all of the CMDs.", function(message)
             v.Connection:Disconnect()
         end
         for i,v in pairs(ScriptCMDs:GetDescendants()) do
-            if string.match(v.ClassName, "Frame") then
+            if v.ClassName:match("Frame") then
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
             end
-            if string.match(v.ClassName, "Text") then
+            if v.ClassName:match("Text") then
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {TextTransparency = 1}):Play()
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {TextTransparency = 1}):Play()
                 v.TextStrokeTransparency = 1
             end
-            if string.match(v.ClassName, "ScrollingFrame") then
+            if v.ClassName:match("ScrollingFrame") then
                 game:GetService("TweenService"):Create(v, TweenInfo.new(1), {ScrollBarImageTransparency = 1}):Play()
             end
         end
