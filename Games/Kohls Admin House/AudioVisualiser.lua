@@ -224,7 +224,9 @@ end)
 coroutine.wrap(function()
     while wait() do
         for _,v in pairs(Players:GetPlayers()) do
-            Orbit.targetPlayer = v
+            if Orbit.LoopOrbit then
+                Orbit.targetPlayer = v           
+            end
             wait(Orbit.LoopOrbitTime)
         end
     end
