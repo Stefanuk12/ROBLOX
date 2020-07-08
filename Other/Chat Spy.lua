@@ -23,7 +23,7 @@ getgenv().ChatSpy = {
     },
     IgnoreList = {
         "part/1/1/1"
-    }
+    },
 }
 
 -- // Function
@@ -51,7 +51,7 @@ function onChatted(targetPlayer, message)
         end)
         wait(1)
         Connection:Disconnect()
-        if Hidden and ChatSpy.Enabled not checkIgnored(message, true) then
+        if Hidden and ChatSpy.Enabled and not checkIgnored(message, true) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
