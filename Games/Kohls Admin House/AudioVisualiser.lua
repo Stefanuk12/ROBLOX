@@ -214,7 +214,7 @@ end)
 
 addCMD("looporbittime", "Orbiter", "looporbit", "Set the time of the turns of the Orbiter.", function(message)
     local splitString = string.split(message, " ")
-    if splitString[2] and tonumber(spitString[2]) then
+    if splitString[2] and tonumber(splitString[2]) then
         Orbit.LoopOrbitTime = tonumber(splitString[2])
         NotificationHandler.newNotification("SUCCESS", "Loop Orbiter Time: "..splitString[2], "Success")
     end
