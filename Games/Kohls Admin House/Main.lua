@@ -68,9 +68,9 @@ end
 
 if sethiddenproperty then
     game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-        if vars.NetworkOwner and gethiddenproperty(LocalPlayer, "SimulationRadius") ~= math.huge then
-            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-            sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", math.huge)
+        if vars.NetworkOwner and gethiddenproperty(LocalPlayer, "SimulationRadius") ~= 1/0 then
+            sethiddenproperty(LocalPlayer, "SimulationRadius", 1/0)
+            sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", 1/0)
         end
     end)
 end
