@@ -2,9 +2,9 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "jsoncons/json.hpp"
-#include <cassert>
 #include "curl/curl.h"
+#include <jsoncons/json.hpp>
+#include <cassert>
 
 using namespace jsoncons;
 
@@ -14,13 +14,10 @@ size_t WriteCallback(char *contents, size_t size, size_t nmemb, void *userp){
 }
 
 bool checkMusic(std::string SoundId){
-    std::string url = "https://www.roblox.com/library/"+SoundId;
+    std::string url = "https://www.roblox.com/library/" + SoundId;
     std::vector<std::string> removedAssets = {
-        "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
-        "https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04",
-        "This audio asset has been blocked due to copyright violations.",
-        "(Removed for copyright)",
-        "[ Content Deleted ]",
+        "70608418c648be7ac4e323e3294bb059",
+        "d28c1b5eed271a7aa76f16689e74ca04",
     };
 
     curl_global_init(CURL_GLOBAL_ALL);
@@ -43,6 +40,7 @@ bool checkMusic(std::string SoundId){
 };
 
 int main(){
+    /*
     std::ifstream target("./MusicTable.json");
     jsoncons::json jsondata = jsoncons::json::parse(target);
     
@@ -52,16 +50,18 @@ int main(){
             std::string Name = item["Name"].as<std::string>();
             std::string SoundId = item["SoundId"].as<std::string>();
 
-            /*
             if ( !checkMusic(SoundId) && jsondata[i].is_object() ){
                 jsondata.remove_range(i, i);
                 std::cout << "Removed: " << Name << " - " << SoundId << "\n";
             };
             
             std::cout << jsondata << "\n";
-            */
         };
     }
+    */
+
+    std::string SoundId = "55435453";
+    std::cout << checkMusic(SoundId) << "\n";
     
     return 0;
 };
