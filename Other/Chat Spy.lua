@@ -21,16 +21,18 @@ getgenv().ChatSpy = {
         Text = "",
     },
     IgnoreList = {
-        "part/1/1/1",
-        game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
+        {Message = "part/1/1/1", ExactMatch = false},
+        {Message = "A???????????????????????????????????????????????????????????????????", ExactMatch = false}
     },
 }
 
 -- // Function
 function checkIgnored(message, exactMatch)
     for _,v in pairs(ChatSpy.IgnoreList) do
-        if (exactMatch and string.match(v, message)) or v == message then
-            return true
+        if v.ExactMatch then 
+            return (message == v.Message) 
+        else
+            return (string.match(message, v.Message))
         end
     end
     return false
@@ -51,7 +53,7 @@ function onChatted(targetPlayer, message)
         end)
         wait(1)
         Connection:Disconnect()
-        if Hidden and ChatSpy.Enabled and not checkIgnored(message, false) then
+        if Hidden and ChatSpy.Enabled and checkIgnored(message, false) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
