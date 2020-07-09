@@ -269,7 +269,7 @@ addCMD("orbitcmds", "Misc", "orbitcmds", "Prints the Orbiter Commands.", functio
     NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Printed in Console!", "Success")
 end)
 
-addCMD("copyorbitercmds", "Misc", "copyorbitercmds", "Copies all of the orbiter commands to your clipboard", function(message)
+addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter commands to your clipboard", function(message)
     local CommandCount = 0
     for i,v in pairs(Orbit.CMDs) do
         CommandCount = CommandCount + 1
