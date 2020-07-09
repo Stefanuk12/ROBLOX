@@ -176,8 +176,8 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
     local Prefix = Orbit.Prefix
     CMDs[CommandName] = {
         ModuleName = ModuleName,
-        Example = Example,
-        Description = Prefix..Description,
+        Example = Prefix..Example,
+        Description = Description,
         Function = Function,
     }
 end
@@ -259,6 +259,46 @@ end)
 addCMD("looporbit", "Orbiter Settings", "looporbit", "Everyone takes turns with the Orbiter.", function(message)
     Orbit.LoopOrbit = not Orbit.LoopOrbit
     NotificationHandler.newNotification("SUCCESS", "Toggle - Loop Orbiter: "..(Orbit.LoopOrbit and "Enabled." or "Disabled."), "Success")
+end)
+
+-- // Misc
+addCMD("orbitcmds", "Misc", "orbitcmds", "Prints the Orbiter Commands.", function(message)
+    for i,v in pairs(Orbit.CMDs) do
+        print("> "..i.." - Description: "..v.Description.." - Example: "..v.Example)
+    end
+    NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Printed in Console!", "Success")
+end)
+
+addCMD("copyorbitercmds", "Misc", "copyorbitercmds", "Copies all of the orbiter commands to your clipboard", function(message)
+    local CommandCount = 0
+    for i,v in pairs(Orbit.CMDs) do
+        CommandCount = CommandCount + 1
+    end
+    local Holder = "Audio Visualiser Command List | Total Commands: "..CommandCount.." | Prefix - "..Orbit.Prefix
+
+    Holder = Holder.."--~~-- Orbiter Module --~~--\n"
+    for i,v in pairs(Orbit.CMDs) do
+        if v.ModuleName == "Orbiter" then
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+
+    Holder = Holder.."--~~-- Orbiter Settings Module --~~--\n"
+    for i,v in pairs(Orbit.CMDs) do
+        if v.ModuleName == "Orbiter Settings" then
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+
+    Holder = Holder.."--~~-- Misc Module --~~--\n"
+    for i,v in pairs(Orbit.CMDs) do
+        if v.ModuleName == "Misc" then
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+
+    setclipboard(Holder)
+    NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Copied To Clipboard!", "Success")
 end)
 
 -- // Coroutine
