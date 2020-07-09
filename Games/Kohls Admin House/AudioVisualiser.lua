@@ -34,13 +34,14 @@ getgenv().Orbit = {
     Enabled = true,
     Speed = 15,
     offSet = 10,
-    Mode = "Visualiser",
+    Mode = true,
     targetPlayer = LocalPlayer,
     Parts = {},
     CMDs = {},
     Prefix = ":",
     LoopOrbit = false,
     LoopOrbitTime = 1,
+    TargetParts = 100,
 }
 Orbit = getgenv().Orbit
 
@@ -84,18 +85,28 @@ function Orbit.updateTable()
     end
 end
 
+function Orbit.partCount()
+    local count = 0
+    for _,v in pairs(Folder:GetChildren()) do
+        if v:IsA("Part") and v.Size == Vector3.new(1, 1, 1) and not v.Anchored then
+            count = count + 1
+        end
+    end
+    return count
+end
+
 Folder.ChildAdded:Connect(function(child)
     Orbit.updateTable()
 end)
 
 Folder.ChildRemoved:Connect(function(child)
-    if child:IsA("Part") and child.Size == Vector3.new(1, 1, 1) and Orbit.Enabled then
+    if child:IsA("Part") and child.Size == Vector3.new(1, 1, 1) and Orbit.Enabled and (Orbit.partCount() <= Orbit.TargetParts)  then
         Orbit.commenceParts(1)
     end
 end)
 
 -- // Makes 100 parts
-Orbit.commenceParts(100)
+Orbit.commenceParts(Orbit.TargetParts)
 
 -- // Makes it spiny spiny spin
 RunService.RenderStepped:Connect(function()
@@ -110,7 +121,7 @@ RunService.RenderStepped:Connect(function()
         for i,v in pairs(Orbit.Parts) do
             if v:IsA("BasePart") and not v.Anchored then
                 -- // Audio Visualiser
-                if Orbit.Mode == "Visualiser" and Audio then
+                if Orbit.Mode and Audio then
                     Y = math.clamp(roundDecimals((Audio.PlaybackLoudness / 200) / 1.5, 3), 0, 5)
                 end
 
@@ -196,29 +207,58 @@ end)
 addCMD("refreshorbit", "Orbiter", "refreshorbiter", "Refreshes the parts.", function(message)
     Players:Chat("clr")
     wait(0.5)
-    local count = 0
-    for _,v in pairs(Folder:GetChildren()) do
-        if v:IsA("Part") and v.Size == Vector3.new(1, 1, 1) and not v.Anchored then
-            count = count + 1
-        end
-    end
-    if count < 100 then
-        Orbit.commenceParts(100 - count)
-        NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
-    end  
+    local count = Orbit.partCount()
+    Orbit.commenceParts(Orbit.TargetParts - count)
+    NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
 end)
 
-addCMD("looporbit", "Orbiter", "looporbit", "Everyone takes turns with the Orbiter.", function(message)
-    Orbit.LoopOrbit = not Orbit.LoopOrbit
-    NotificationHandler.newNotification("SUCCESS", "Toggle - Loop Orbiter: "..(Orbit.LoopOrbit and "Enabled." or "Disabled."), "Success")
-end)
-
-addCMD("timelooporbit", "Orbiter", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
+addCMD("timelooporbit", "Orbiter Settings", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
     local splitString = string.split(message, " ")
     if splitString[2] and tonumber(splitString[2]) then
         Orbit.LoopOrbitTime = tonumber(splitString[2])
-        NotificationHandler.newNotification("SUCCESS", "Loop Orbiter Time: "..splitString[2], "Success")
+        NotificationHandler.newNotification("SUCCESS", "Loop Orbiter Time: "..splitString[2].." seconds.", "Success")
     end
+end)
+
+addCMD("offset", "Orbiter Settings", "offset 20", "Set the offset of the Orbiter, how far away it is from the targetPlayer.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(splitString[2]) then
+        Orbit.offSet = tonumber(splitString[2])
+        NotificationHandler.newNotification("SUCCESS", "Orbiter Offset: "..splitString[2]..".", "Success")
+    end
+end)
+
+addCMD("speed", "Orbiter Settings", "speed 20", "Set the speed of the Orbiter, how fast it spins.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(splitString[2]) then
+        Orbit.Speed = tonumber(splitString[2])
+        NotificationHandler.newNotification("SUCCESS", "Orbiter Speed: "..splitString[2]..".", "Success")
+    end
+end)
+
+addCMD("partamount", "Orbiter Settings", "partamount 50", "Set the amount of parts for the Orbiter.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(splitString[2]) then
+        Orbit.TargetParts = tonumber(splitString[2])
+        Orbit.CMDs["refreshorbit"].Function()
+        NotificationHandler.newNotification("SUCCESS", "Orbiter Parts: "..splitString[2].." Parts.", "Success")
+    end
+end)
+
+-- // Toggles
+addCMD("torbiter", "Orbiter Settings", "torbiter", "Toggles the Orbiter.", function(message)
+    Orbit.Enabled = not Orbit.Enabled
+    NotificationHandler.newNotification("SUCCESS", "Orbiter: "..(Orbit.Enabled and "Enabled" or "Disabled")..".", "Success")
+end)
+
+addCMD("tvisualise", "Orbiter Settings", "tvisualise", "Toggles the Orbiter Visualiser.", function(message)
+    Orbit.Mode = not Orbit.Mode
+    NotificationHandler.newNotification("SUCCESS", "Orbiter Visualiser: "..(Orbit.Mode and "Enabled" or "Disabled")..".", "Success")
+end)
+
+addCMD("looporbit", "Orbiter Settings", "looporbit", "Everyone takes turns with the Orbiter.", function(message)
+    Orbit.LoopOrbit = not Orbit.LoopOrbit
+    NotificationHandler.newNotification("SUCCESS", "Toggle - Loop Orbiter: "..(Orbit.LoopOrbit and "Enabled." or "Disabled."), "Success")
 end)
 
 -- // Coroutine
