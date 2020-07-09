@@ -53,7 +53,7 @@ function onChatted(targetPlayer, message)
         end)
         wait(1)
         Connection:Disconnect()
-        if Hidden and ChatSpy.Enabled and checkIgnored(message, false) then
+        if Hidden and ChatSpy.Enabled and not checkIgnored(message) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
