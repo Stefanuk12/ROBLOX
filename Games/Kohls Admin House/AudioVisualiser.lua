@@ -125,7 +125,7 @@ RunService.RenderStepped:Connect(function()
                     Y = math.clamp(roundDecimals((Audio.PlaybackLoudness / 200) / 1.5, 3), 0, 5)
                 end
 
-                targetPrimaryPart = nil
+                local targetPrimaryPart = nil
                 if Orbit.targetPlayer and Orbit.targetPlayer.Character and Orbit.targetPlayer.Character.PrimaryPart then
                     targetPrimaryPart = Orbit.targetPlayer.Character.PrimaryPart.Position
                 end
@@ -169,7 +169,6 @@ end
 
 function addCMD(CommandName, ModuleName, Example, Description, Function)
     if not CommandName or not ModuleName or not Example or not Description or not Function then
-        vars.Alert("addCMDs invalid! ".. CommandName)
         return
     end
     local CMDs = Orbit.CMDs
@@ -274,7 +273,7 @@ addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter co
     for i,v in pairs(Orbit.CMDs) do
         CommandCount = CommandCount + 1
     end
-    local Holder = "Audio Visualiser Command List | Total Commands: "..CommandCount.." | Prefix - "..Orbit.Prefix
+    local Holder = "Audio Visualiser Command List | Total Commands: "..CommandCount.." | Prefix - "..Orbit.Prefix.."\n"
 
     Holder = Holder.."--~~-- Orbiter Module --~~--\n"
     for i,v in pairs(Orbit.CMDs) do
