@@ -21,7 +21,8 @@ getgenv().ChatSpy = {
         Text = "",
     },
     IgnoreList = {
-        "part/1/1/1"
+        "part/1/1/1",
+        game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/LongText.txt"),
     },
 }
 
@@ -50,7 +51,7 @@ function onChatted(targetPlayer, message)
         end)
         wait(1)
         Connection:Disconnect()
-        if Hidden and ChatSpy.Enabled and not checkIgnored(message, true) then
+        if Hidden and ChatSpy.Enabled and not checkIgnored(message, false) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
