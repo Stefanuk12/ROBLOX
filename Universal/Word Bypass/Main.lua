@@ -6,6 +6,8 @@
     You can also just make a phrase then copy the character they use that way.
 
     Probably 13+ too.
+
+    09/07/2020: Updated and stole the character from: https://v3rmillion.net/showthread.php?tid=1006944
 ]]
 
 -- // Initialise
@@ -16,7 +18,7 @@ if not getgenv().ChatBypasser then getgenv().ChatBypasser = {} end
 local ChatBypasser = getgenv().ChatBypasser
 ChatBypasser.ChatBypassEnabled = true
 ChatBypasser.DefaultCharReplace = 1
-ChatBypasser.SpecialChar1 = "ꜝ"
+ChatBypasser.SpecialChar1 = "'ٓأأ"
 
 -- // Base MT Vars
 local mt = getrawmetatable(game)
