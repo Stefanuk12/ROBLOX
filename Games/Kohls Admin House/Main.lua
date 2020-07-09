@@ -450,11 +450,9 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
 end)()
 
 -- // Anti Lava Blocks
-if getconnections then
-    for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
-        if v:IsA("TouchTransmitter") then
-            v:Destroy()
-        end
+for _,v in pairs(WorkspaceFolder.Obby:GetDescendants()) do
+    if v:IsA("TouchTransmitter") then
+        v:Destroy()
     end
 end
 
@@ -862,6 +860,28 @@ addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Playe
     if Target and targetPlayer and targetPlayer[1] then
         for _, plr in pairs(targetPlayer) do
             local Chat = plr.Name.."'s Platform is: "..plr.OsPlatform
+            --game:GetService("Players"):Chat(":h "..Chat)
+            --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
+            vars.Notify(Chat)
+            wait(2)
+        end
+    else
+        if not targetPlayer[1] then
+            vars.Alert("This Player does not exist!")
+        else
+            vars.Alert("Invalid Arguments!")
+        end
+    end
+end)
+
+addCMD("age", "Misc", "age EpicGamer69", "Returns the Account Age of the Player.", function(message)
+    local Str = Prefix.."age  "
+    local Target = string.sub(message, #Str, -1)
+    local targetPlayer = vars.getPlayer(Target)
+
+    if Target and targetPlayer and targetPlayer[1] then
+        for _, plr in pairs(targetPlayer) do
+            local Chat = plr.Name.."'s Account Age is: "..plr.AccountAge
             --game:GetService("Players"):Chat(":h "..Chat)
             --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
             vars.Notify(Chat)
