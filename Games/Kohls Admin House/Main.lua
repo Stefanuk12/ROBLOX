@@ -466,8 +466,8 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
     local Prefix = vars.Prefix
     CMDs[CommandName] = {
         ModuleName = ModuleName,
-        Example = Example,
-        Description = Prefix..Description,
+        Example = Prefix..Example,
+        Description = Description,
         Function = Function,
     }
 end
