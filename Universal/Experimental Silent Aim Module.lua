@@ -190,3 +190,23 @@ end)
 setreadonly(mt, true)
 
 ]]
+
+--[[
+__namecall Silent Aim Explained:
+
+So what we are doing is hooking the namecall metamethod. This metamethod is fired whenever the game uses ":" on something, for example "Remote:FireServer". Since multiple args can
+be passed, we sum it all into {...}, a table that contains all of the args. Then, we get the method. In this instance, FireServer. Then we check if we got the correct remote, we can
+also provide the full path of the remote (game.ReplicatedStorage.RemoteEvent, for example) or do args[1].Name, however, I decided to do it this way by tostring-ing it. If you didn't know,
+args[1] is the thing before the ":". So in the previous example of "Remote:FireServer", args[1] would be "Remote", the method would be the thing after the ":", so "FireServer". After this,
+you may change what arguments you need to change, for example if the first argument is the target player, you would do: "args[2] = ValiantAimHacks["Selected"]". Then, we return the new and
+changed arguments. Finally, the return on the bottom just catches anything that didnt fit our checks and just doesn't change anything to it (it passes right through). 
+
+__index Silent Aim Explained:
+
+Like in __namecall, we are hooking it. This is a lot simplier. We just check if the table is our Mouse and if it is, check if the key is "Hit" or "Target" - (Mouse.Hit, Mouse.Target). Then,
+we check if the Silent Aim can be used, if it can, we get the closest player and see if that closest player has a character and a head. If they do then they check if the key is Hit or if it's
+Target. On the Roblox Docs, it says Hit returns a CFrame value so we return the Closest Player's Head CFrame. Then if it's Target, we return the Closest Player's Head as on the Roblox Docs, it
+says that Target returns an Instance. Finally, we need a catcher like the __namecall hook, so anything that doesnt pass those checks can go through, untouched and basically pass right through.
+
+Any Questions? Ask me them on Discord @ Stefanuk12#5820. If you're experiencing errors, please contact me on Discord and include the dev console errors so I can help you ASAP!
+]]
