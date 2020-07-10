@@ -55,7 +55,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     local Chance = math.chance(ValiantAimHacks["HitChance"])
     local ShortestDistance = math.huge
     if not Chance then ValiantAimHacks["Selected"] = (Chance and LocalPlayer or LocalPlayer) return (Chance and LocalPlayer or LocalPlayer) end
-    function ValiantAimHacks.isPartVisible(Part, PartDescendant)
+    function isPartVisible(Part, PartDescendant)
         local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
         local Origin = CurrentCamera.CFrame.p
         local _, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, Part.Position)
@@ -67,7 +67,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         end
         return false
     end
-    function ValiantAimHacks.checkTeam(localPlayer, targetPlayer)
+    function checkTeam(localPlayer, targetPlayer)
         if targetPlayer.Team ~= localPlayer.Team then
             for _,v in pairs(ValiantAimHacks.BlacklistedTeams) do
                 if targetPlayer.Team ~= v.Team and targetPlayer.TeamColor ~= v.TeamColor then
@@ -77,7 +77,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         end
         return false
     end
-    function ValiantAimHacks.checkPlayer(targetPlayer)
+    function checkPlayer(targetPlayer)
         for i,v in pairs(ValiantAimHacks.BlacklistedPlayers) do
             if v ~= targetPlayer then
                 return true
@@ -85,7 +85,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         end
         return false
     end
-    function ValiantAimHacks.checkWhitelisted(targetPlayer)
+    function checkWhitelisted(targetPlayer)
         for i,v in pairs(ValiantAimHacks.WhitelistedPUIDs) do
             if targetPlayer.UserId == v then
                 return true
@@ -94,12 +94,12 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         return false
     end
     for _,plr in pairs(Players.GetPlayers(Players)) do
-        if not ValiantAimHacks.checkWhitelisted(plr) and ValiantAimHacks.checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
-            if (ValiantAimHacks["TeamCheck"] and not ValiantAimHacks.checkTeam(LocalPlayer, plr)) then break end
+        if not checkWhitelisted(plr) and checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
+            if (ValiantAimHacks["TeamCheck"] and not checkTeam(LocalPlayer, plr)) then break end
             local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude  
             if (Magnitude < (ValiantAimHacks["FOV"] * 6 - 8)) and (Magnitude < ShortestDistance) then
-                if ValiantAimHacks["VisibleCheck"] and ValiantAimHacks.isPartVisible(plr.Character.PrimaryPart, plr.Character) then
+                if ValiantAimHacks["VisibleCheck"] and isPartVisible(plr.Character.PrimaryPart, plr.Character) then
                     ClosestPlayer = plr
                     ShortestDistance = Magnitude
                 elseif not ValiantAimHacks["VisibleCheck"] then
