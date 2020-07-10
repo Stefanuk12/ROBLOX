@@ -192,6 +192,13 @@ setreadonly(mt, true)
 ]]
 
 --[[
+
+Some General Info:
+
+> You must get the raw metatable of the game as the game metatable is usually locked and you can't look into it/get it normally.
+> You must make a backup of the metamethod you're hooking so you can return it, if you dont, you break your game.
+> You must unlock the game metatable or else we can not change it and lock it after just in case.
+
 __namecall Silent Aim Explained:
 
 So what we are doing is hooking the namecall metamethod. This metamethod is fired whenever the game uses ":" on something, for example "Remote:FireServer". Since multiple args can
