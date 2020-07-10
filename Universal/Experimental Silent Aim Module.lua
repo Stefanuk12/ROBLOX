@@ -1,18 +1,15 @@
 if getgenv().ValiantAimHacks then return getgenv().ValiantAimHacks end
--- // Valiant ENV
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
 
 -- // Vars
-local Heartbeat = RunService.Heartbeat
-local LocalPlayer = Players.LocalPlayer
+local Heartbeat = game.GetService(game, "RunService").Heartbeat
+local LocalPlayer = game.GetService(game, "Players").LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
-local CurrentCamera = Workspace.CurrentCamera
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
 
 -- // Silent Aim Vars
 getgenv().ValiantAimHacks = {
     SilentAimEnabled = true,
-    AimbotEnabled = false,
     ShowFOV = true,
     VisibleCheck = true,
     TeamCheck = true,
@@ -25,7 +22,7 @@ getgenv().ValiantAimHacks = {
             TeamColor = LocalPlayer.TeamColor,
         },
     },
-    BlacklistedPlayers = {game:GetService("Players").LocalPlayer},
+    BlacklistedPlayers = {game.GetService(game, "Players").LocalPlayer},
     WhitelistedPUIDs = {91318356},
 }
 
@@ -63,8 +60,9 @@ function ValiantAimHacks.isPartVisible(Part, PartDescendant)
     end
     return false
 end
-function ValiantAimHacks.checkTeam(localPlayer, targetPlayer)
-    if targetPlayer.Team ~= localPlayer.Team then
+
+function ValiantAimHacks.checkTeam(targetPlayer)
+    if targetPlayer.Team ~= LocalPlayer.Team then
         for _,v in pairs(ValiantAimHacks.BlacklistedTeams) do
             if targetPlayer.Team ~= v.Team and targetPlayer.TeamColor ~= v.TeamColor then
                 return true
@@ -73,6 +71,7 @@ function ValiantAimHacks.checkTeam(localPlayer, targetPlayer)
     end
     return false
 end
+
 function ValiantAimHacks.checkPlayer(targetPlayer)
     for i,v in pairs(ValiantAimHacks.BlacklistedPlayers) do
         if v ~= targetPlayer then
@@ -81,6 +80,7 @@ function ValiantAimHacks.checkPlayer(targetPlayer)
     end
     return false
 end
+
 function ValiantAimHacks.checkWhitelisted(targetPlayer)
     for i,v in pairs(ValiantAimHacks.WhitelistedPUIDs) do
         if targetPlayer.UserId == v then
