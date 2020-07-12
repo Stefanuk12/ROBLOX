@@ -49,6 +49,9 @@ KAHHax["vars"] = {
         Transmorph = 29099749,
         ShiftingPolarity = 61459706,
     },
+    WhitelistedCMDs = {
+        "play"
+    },
     SpamList = {},
     Prefix = ":",
     NetworkOwner = false,
@@ -101,21 +104,16 @@ function KAHHax.vars.getPlayer(String)
 end
 
 function KAHHax.vars.checkWhitelisted(UserId)
-    for _,v in pairs(vars.WhitelistedUsers) do
-        if UserId == v then
-            return true
-        end
+    local PlayerName = Players:GetNameFromUserIdAsync(UserId)
+    if vars.PlayerManager[PlayerName] and vars.PlayerManager[PlayerName]["Whitelisted"] then
+        return true
     end
     return false
 end
 
 function KAHHax.vars.checkAllWhitelisted()
     for _,v in pairs(Players:GetPlayers()) do
-        for _,x in pairs(vars.WhitelistedUsers) do
-            if v ~= LocalPlayer and v.UserId == x then
-                return true
-            end
-        end
+        if KAHHax.vars.checkWhitelisted(v.UserId) then return true end
     end
     return false
 end
@@ -126,18 +124,20 @@ function KAHHax.vars.addPlayerToManager(Player)
             ["Lagging"] = false,
             ["BlacklistedPhrases"] = {},
             ["BlacklistConnection"] = {},
+            ["Whitelisted"] = false,
         }
-        for i,v in pairs(vars.WhitelistedUsers) do
-            if Player.UserId == v then
-                vars.PlayerManager[Player.Name]["Whitelisted"] = true
-            else
-                vars.PlayerManager[Player.Name]["Whitelisted"] = false
-            end
-        end
         vars.PlayerManager[Player.Name].BlacklistConnection.A = Player.Chatted:Connect(function(message)
-            for i,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
+            for _,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
                 if string.match(message, v.Phrase) then
                     Players:Chat(v.Punishment)
+                end
+            end
+            if vars.PlayerManager[Player.Name]["Whitelisted"] then
+                for _, v in pairs(vars.WhitelistedCMDs) do
+                    local Command = vars.Prefix..v
+                    if string.match(message, vars.Prefix..v) and string.sub(message, 1, #Command) == Command then
+                        KAHHax.CMDs[v].Function(message)
+                    end
                 end
             end
         end)
@@ -203,7 +203,6 @@ KAHHax.ControllerSettings = {
     PersistantAdmin = false,
     Epilepsy = false,
     LaggerRunning = false,
-    SpammerRunning = false,
     antiPunish = false,
     antiBlind = false,
     antiKill = false,
@@ -347,7 +346,7 @@ KAHHax.ControllerSettings.RECoroutine = coroutine.wrap(function() -- // Respawn 
     while wait() do
         if KAHHax.ControllerSettings.RE then
             for i,v in pairs(vars.getPlayer("others")) do
-                if not vars.checkWhitelisted(v.UserId) then
+                if not vars.checkAllWhitelisted() then
                     Players:Chat(":respawn others")
                     wait(0.1)
                     Players:Chat(":explode others")
@@ -831,6 +830,28 @@ addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the numb
     end
 end)
 
+-- // CMDs: Control
+addCMD("whitelist", "Control", "whitelist EpicGamer69", "Whitelists the player to be able to use whitelisted commands.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] then
+        for _, v in pairs(vars.getPlayer(splitString[2])) do
+            vars.PlayerManager[v.Name]["Whitelisted"] = true
+            vars.Notify("Whitelisted "..v.Name.."!")
+        end
+    end
+end)
+
+addCMD("rwhitelist", "Control", "rwhitelist EpicGamer69", "Removes the whitelist from the player.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] then
+        local playerTable = vars.getPlayer(splitString[2])
+        for _, v in pairs(playerTable) do
+            vars.PlayerManager[v.Name]["Whitelisted"] = false
+            vars.Notify("Removed "..v.Name.." from the Whitelist!")
+        end
+    end
+end)
+
 -- // CMDs: Misc. Commands
 addCMD("rj", "Misc", "rj", "Rejoins the game.", function(message)
     game:GetService('TeleportService'):Teleport(game.PlaceId)
@@ -959,6 +980,12 @@ addCMD("copycmds", "Misc", "copycmds", "Copies all of the commands to your clipb
     Holder = Holder.."--~~-- Anti Module --~~--\n"
     for i,v in pairs(KAHHax.CMDs) do
         if v.ModuleName == "Anti" then
+            Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
+        end
+    end
+    Holder = Holder.."-~~-- Control Module --~~--\n"
+    for i,v in pairs(KAHHax.CMDs) do
+        if v.ModuleName == "Control" then
             Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
