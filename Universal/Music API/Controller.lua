@@ -11,11 +11,9 @@ function ValiantMusicAPI.checkBadSound(SoundId)
     local url = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId)
     if url then
         for _,v in pairs(ValiantMusicAPI.removedAssets) do
-            coroutine.wrap(function()
-                if string.match(url, v) then
-                    return true
-                end
-            end)()
+            if string.match(url, v) then
+                return true
+            end
         end
     end
     --[[
@@ -52,6 +50,7 @@ function ValiantMusicAPI.testAllSounds(mode)
             coroutine.wrap(function()
                 wait(math.random(2, 5))
                 if ValiantMusicAPI.checkBadSound(v.SoundId) then
+                    wait(math.random(2, 5))
                     ValiantMusicAPI.oldMusicTable[i] = nil
                     if mode then print('Removed:', v.Name) end
                 end
