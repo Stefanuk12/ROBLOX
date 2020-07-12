@@ -1,3 +1,22 @@
+--[[
+    Documentation:
+        Variables:
+            <table> ValiantMusicAPI - The main holder table with all of the functions and most variables.
+            <string> ValiantMusicAPI.GitHubTable - The table that holds all of the IDs and Names of the audios that will be filtered through.
+            <table> ValiantMusicAPI.removedAssets - Things that indicate that the audio has been deleted
+            <table> ValiantMusicAPI.musicTable - holds all of the filtered audios
+
+        Functions:
+            <bool> ValiantMusicAPI.checkBadSound(<string> SoundId, <string> SoundName, <bool> UseMarketplace, <bool> Verbose) - Returns true/false depending on whether the audio has been removed or not
+            <table> ValiantMusicAPI.removeDuplicates(<table> targetTable) - Removes any duplicate SoundIds from the table
+            <table> ValiantMusicAPI.testAllSounds(<bool> Verbose, <number> waitTime, <bool> UseMarketplace) - Tests all of the sounds in the ValiantMusicAPI.GitHubTable table then updates the ValiantMusicAPI.musicTable table
+            <void> ValiantMusicAPI.printMusic(<void>) - Prints all of the Sound Names + their indexes
+            <string/number idk> ValiantMusicAPI.getSound(<number> Index) - Returns the SoundId of the Sound present at the Index of the ValiantMusicAPI.musicTable table
+            <string> ValiantMusicAPI.getSoundName(<number> Index) - Returns the Sound Name of the Sound present at the Index of the ValiantMusicAPI.musicTable table
+            <void> ValiantMusicAPI.saveMusicTableJSON(<bool> Verbose) - Saves the filtered Music Table as .json to your workspace folder
+            <void> ValiantMusicAPI.exportMusicToClipboard(<bool> Verbose) - Saves the filtered Music Table to your clipboard in a formatted version
+]]
+
 -- // Initialise
 if getgenv().ValiantMusicAPI then return getgenv().ValiantMusicAPI end
 
@@ -15,7 +34,10 @@ local MarketplaceService = game:GetService("MarketplaceService")
 function ValiantMusicAPI.checkBadSound(SoundId, SoundName, UseMarketplace, Verbose)
     -- // Fail-safing
     if not SoundId then return false end
-
+    if not SoundName then SoundName = "No Sound Name Provided" end
+    if not UseMarketplace then UseMarketplace = false end
+    if not Verbose then Verbose = false end
+    
     -- // Checking 
     local TargetURL = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId) -- // Gets the source
     if not UseMarketplace and TargetURL then
