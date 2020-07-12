@@ -1,4 +1,16 @@
--- Note: Ty to Aztup#8540 on Discord for basically doing all of this for me!
+--[[
+    Note: Ty to Aztup#8540 on Discord for basically doing all of this for me!
+
+    Required Functions:
+        getrawmetatable
+        getfenv
+        setreadonly
+        newcclosure
+        debug.validlevel
+        pcall
+        gethiddenproperty
+        sethiddenproperty
+]]
 
 -- // MT Vars
 local mt = getrawmetatable(game)
