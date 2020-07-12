@@ -98,9 +98,9 @@ end
 function ValiantMusicAPI.exportMusicToClipboard(Verbose)
     local Holder = "Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios):".."\n"
     for i,v in pairs(ValiantMusicAPI.musicTable) do
-        Holder = Holder.."["..v.SoundId.."] - "..v.Name.."\n"
+        Holder = Holder.."["..v.SoundId.."] | "..v.Name.."\n"
     end
-    Holder = Holder.."Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios):".."\n"
+    Holder = Holder.."Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios)".."\n"
     setclipboard(Holder)
     if Verbose then print("Exported Music Table to Clipboard!") end
 
