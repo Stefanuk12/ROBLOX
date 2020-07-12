@@ -324,12 +324,13 @@ HolderFolder.ChildAdded:Connect(function(child) -- // Anti Jail
 end)
 
 -- // Identifier ;)
+local fgpfPHrase = ":m hi gamer"
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
     for _,x in pairs(vars.WhitelistedUsers) do
         if v == LocalPlayer and v.UserId == x then
         elseif v.UserId == x then
             wait(0.5)
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
         end
     end
 end
@@ -337,7 +338,7 @@ end
 game:GetService("Players").PlayerAdded:Connect(function(plr)
     if vars.checkWhitelisted(plr.UserId) and not vars.checkWhitelisted(LocalPlayer) then
         wait(0.5)
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
     end
 end)
  
@@ -348,7 +349,7 @@ for _,v in pairs(vars.WhitelistedUsers) do
         Player.Chatted:Connect(function(chat)
             if string.lower(chat) == "hi gamers" then
                 wait(0.5)
-                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("h Hi Epic Gamers! v2", "All")
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
             end
         end)
     end
