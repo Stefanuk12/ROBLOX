@@ -812,11 +812,11 @@ end)
 
 -- // CMDs: Music Commands
 addCMD("getmusic", "Music Commands", "getmusic", "Prints all of the playable music.", function(message)
-    vars.MusicAPI.returnMusic(false)
+    vars.MusicAPI.printMusic()
 end)
 
 addCMD("refreshmusic", "Music Commands", "refreshmusic", "Refreshes the music table.", function(message)
-    vars.MusicAPI.refreshSounds()
+    vars.MusicAPI.testAllSounds()
 end)
 
 addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the number.", function(message)

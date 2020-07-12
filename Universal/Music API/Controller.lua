@@ -1,82 +1,78 @@
-getgenv().ValiantMusicAPI = {}
-ValiantMusicAPI.GHMusicTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json'
-ValiantMusicAPI.musicTable = {}
-ValiantMusicAPI.oldMusicTable = {}
+-- // Initialise
+if getgenv().ValiantMusicAPI then return getgenv().ValiantMusicAPI end
 
+-- // Vars
+getgenv().ValiantMusicAPI = {} 
+ValiantMusicAPI.GitHubTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json'
+ValiantMusicAPI.musicTable = {}
 ValiantMusicAPI.removedAssets = {
-    "70608418c648be7ac4e323e3294bb059",
-    "d28c1b5eed271a7aa76f16689e74ca04",
+    "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
+    "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
 }
-function ValiantMusicAPI.checkBadSound(SoundId)
-    local url = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId)
-    if url then
+local MarketplaceService = game:GetService("MarketplaceService")
+
+-- // Check if a Sound has been removed
+function ValiantMusicAPI.checkBadSound(SoundId, SoundName, UseMarketplace, Verbose)
+    -- // Fail-safing
+    if not SoundId then return false end
+
+    -- // Checking 
+    local TargetURL = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId) -- // Gets the source
+    if not UseMarketplace and TargetURL then
         for _,v in pairs(ValiantMusicAPI.removedAssets) do
-            if string.match(url, v) then
-                return true
+            if string.find(TargetURL, v) then
+                if Verbose then print(SoundName.."("..SoundId..")".." removed!") end
+                return true -- // The Sound has been removed, return true
             end
         end
     end
-    --[[
-    Easily Rate Limited.
-    if SoundId then
-        local GPI = game:GetService("MarketplaceService"):GetProductInfo(SoundId, Enum.InfoType.Asset)
+
+    -- // Checking w/ Marketplace
+    if UseMarketplace then
+        local ProductInfo = MarketplaceService:GetProductInfo(SoundId, Enum.InfoType.Asset)
         return (GPI.Description == '(Removed for copyright)' or GPI.Description == '[ Content Deleted ]')
     end
-    ]]
-    return false
+
+    return false -- // The sound stil exists, return false
 end
 
-function ValiantMusicAPI.removeDuplicates(tbl)
-    local checkTable = {}
-    local function checkInTable(tbl, SoundId)
-        for i,v in pairs(tbl) do
-            return (v.SoundId == SoundId)
+-- // Remove any duplicate SoundIds
+function ValiantMusicAPI.removeDuplicates(targetTable)
+    local CheckTable = targetTable
+    for i, v in pairs(targetTable) do
+        if table.find(CheckTable, v.SoundId) then
+            table.remove(targetTable, i)
         end
     end
-    for i,v in pairs(tbl) do
-        if not checkInTable(checkTable, v.SoundId) then
-            table.insert(checkTable, v)
-        end
+    
+    return targetTable
+end
+
+-- // Test All Of the Sounds
+function ValiantMusicAPI.testAllSounds(Verbose, waitTime, UseMarketplace)
+    if not waitTime then waitTime = 15 end 
+    ValiantMusicAPI.musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GitHubTable))
+    warn("Starting Music Checks, please wait "..waitTime.." seconds!")
+
+    -- // Remove Duplicates
+    ValiantMusicAPI.musicTable = ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.musicTable)
+
+    -- // Check over all of the sounds
+    for i,v in pairs(ValiantMusicAPI.musicTable) do
+        coroutine.wrap(function() -- // Coroutine to speed everything up
+            if ValiantMusicAPI.checkBadSound(v.SoundId, v.Name, UseMarketplace, Verbose) then
+                ValiantMusicAPI.musicTable[i] = nil
+            end
+        end)()
     end
-    return checkTable
+    wait(waitTime)
+    
+    -- // Finishing up
+    warn("Music Checks Finished!")
+    return ValiantMusicAPI.musicTable
 end
 
-function ValiantMusicAPI.testAllSounds(mode)
-    if not ValiantMusicAPI.testingInProgress then
-        ValiantMusicAPI.testingInProgress = true
-        warn('--~~-- Commencing Music Checks - Allow upto 30 seconds! --~~--')  
-        ValiantMusicAPI.oldMusicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GHMusicTable))
-        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-            coroutine.wrap(function()
-                wait(math.random(2, 5))
-                if ValiantMusicAPI.checkBadSound(v.SoundId) then
-                    wait(math.random(2, 5))
-                    ValiantMusicAPI.oldMusicTable[i] = nil
-                    if mode then print('Removed:', v.Name) end
-                end
-            end)()
-        end
-        wait(25)
-        ValiantMusicAPI.musicTable = {}
-        ValiantMusicAPI.oldMusicTable = ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.oldMusicTable)
-        for i,v in pairs(ValiantMusicAPI.oldMusicTable) do
-            table.insert(ValiantMusicAPI.musicTable, v)
-        end
-        warn('--~~-- Music Checks Finished! --~~--')
-        ValiantMusicAPI.testingInProgress = false
-    else
-        warn('--~~-- Music Checks Already In Progress! --~~--')
-    end
-end
-ValiantMusicAPI.testAllSounds(mode)
-
-function ValiantMusicAPI.refreshSounds(mode)
-    ValiantMusicAPI.musicTable = {}
-    ValiantMusicAPI.oldMusicTable = {}
-    ValiantMusicAPI.testAllSounds(mode)
-end
-
-function ValiantMusicAPI.returnMusic(mode)
+function ValiantMusicAPI.printMusic()
     for i,v in pairs(ValiantMusicAPI.musicTable) do
         print(i, "|", v.Name)
     end
@@ -90,14 +86,15 @@ function ValiantMusicAPI.getSoundName(Index)
     return ValiantMusicAPI.musicTable[Index].Name
 end
 
-function ValiantMusicAPI.saveMusicTableJSON(verbose)
+function ValiantMusicAPI.saveMusicTableJSON(Verbose)
     local contents = game:GetService("HttpService"):JSONEncode(ValiantMusicAPI.musicTable)
     local success = false
     if writefile then
         writefile("MusicTable.json", contents)
-        success = true
+        if Verbose then print('Successfully saved MusicTable.json to workspace!') end
     end
-    if verbose and success then print('Successfully saved MusicTable.json to workspace!') end
 end
 
-return ValiantMusicAPI
+ValiantMusicAPI.testAllSounds(true)
+
+return getgenv().ValiantMusicAPI
