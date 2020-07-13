@@ -36,7 +36,7 @@ getgenv().ChatSpy = {
 -- // Function
 function ChatSpy.checkIgnored(message)
     for _,v in pairs(ChatSpy.IgnoreList) do
-        if (v.ExactMatch and (message == v.Message)) or (not v.ExactMatch and string.find(message, v.Message)) then 
+        if (v.ExactMatch and message == v.Message) or (not v.ExactMatch and string.match(v.Message, message)) then 
             return true
         end
     end
