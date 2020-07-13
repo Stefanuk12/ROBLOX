@@ -17,8 +17,8 @@ if not getgenv().ChatBypasser then getgenv().ChatBypasser = {} end
 -- // Vars
 local ChatBypasser = getgenv().ChatBypasser
 ChatBypasser.ChatBypassEnabled = true
-ChatBypasser.DefaultCharReplace = 1
-ChatBypasser.SpecialChar1 = "'ٓأأ"
+ChatBypasser.DefaultCharReplace = 3
+ChatBypasser.SpecialChar1 = "ꜝ"
 
 -- // Base MT Vars
 local mt = getrawmetatable(game)
