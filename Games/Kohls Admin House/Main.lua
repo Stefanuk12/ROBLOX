@@ -68,6 +68,7 @@ KAHHax["vars"] = {
     SpamList = {},
     Prefix = ":",
     NetworkOwner = false,
+    WhileWait = 0.01,
 }
 vars = KAHHax.vars
 vars.ChatBypasser.ChatBypassEnabled = false
@@ -357,7 +358,7 @@ end
 
 -- // All of the Coroutines
 KAHHax.ControllerSettings.RECoroutine = coroutine.wrap(function() -- // Respawn Explode Spam
-    while wait() do
+    while wait(vars.WhileWait) do
         if KAHHax.ControllerSettings.RE then
             for i,v in pairs(vars.getPlayer("others")) do
                 if not vars.checkAllWhitelisted() then
@@ -371,7 +372,7 @@ KAHHax.ControllerSettings.RECoroutine = coroutine.wrap(function() -- // Respawn 
 end)()
 
 KAHHax.ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part Spam
-    while wait() do
+    while wait(vars.WhileWait) do
         if not KAHHax.ControllerSettings.PSCan then break end
         if KAHHax.ControllerSettings.PS then
             Players:Chat("part/10/10/10")
@@ -381,7 +382,7 @@ end)()
 if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then vars.Alert("You do not have Person299's Admin, cannot part spam!") end
 
 KAHHax.ServerOOFController.EpilepsyCoroutine = coroutine.wrap(function() -- // Epilepsy
-    while wait() do
+    while wait(vars.WhileWait) do
         if KAHHax.ControllerSettings.Epilepsy then
             Players:Chat(":colorshifttop 10000 0 0"); wait()
             Players:Chat(":colorshiftbottom 10000 0 0"); wait()
@@ -401,13 +402,13 @@ function pmLargeText()
     end
 end
 KAHHax.ServerOOFController.PMCoroutine = coroutine.wrap(function() -- // PM Lag Spammer
-    while wait(0.1) do
+    while wait(vars.WhileWait) do
         pmLargeText()
     end
 end)()
 
 KAHHax.ServerOOFController.SVRLagCoroutine = coroutine.wrap(function() -- // Server Lag
-    while wait(0.1) do
+    while wait(vars.WhileWait) do
         if KAHHax.ControllerSettings.lagServer and not vars.checkAllWhitelisted() then
             Players:Chat(":pm others "..vars.largeText)
         end
@@ -427,7 +428,7 @@ KAHHax.SoundAbuseController.mainCoroutine = coroutine.wrap(function()
 end)()
 
 SpamListCoroutine = coroutine.wrap(function()
-    while wait(0.1) do
+    while wait(vars.WhileWait) do
         if vars.SpamList[1] then
             for _,v in pairs(vars.SpamList) do
                 Players:Chat(v.Phrase)
