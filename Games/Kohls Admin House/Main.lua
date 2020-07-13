@@ -327,7 +327,7 @@ end)
 -- // Identifier ;)
 local fgpfPHrase = ":m hi gamer"
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
-    if table.find(WhitelistedUsers, v.UserId) and LocalPlayer.UserId ~= Player.UserId then
+    if table.find(vars.WhitelistedUsers, v.UserId) and LocalPlayer.UserId ~= v.UserId then
         wait(0.5)
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
         Players:Chat(fgpfPHrase)
@@ -335,7 +335,7 @@ for _,v in pairs(game:GetService("Players"):GetPlayers()) do
 end
  
 game:GetService("Players").PlayerAdded:Connect(function(plr)
-    if vars.checkWhitelisted(plr.UserId) and not table.find(WhitelistedUsers, LocalPlayer.UserId) then
+    if vars.checkWhitelisted(plr.UserId) and not table.find(vars.WhitelistedUsers, LocalPlayer.UserId) then
         wait(0.5)
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
         Players:Chat(fgpfPHrase)
