@@ -115,7 +115,7 @@ end
 function ValiantAimHacks.getClosestPlayerToCursor()
     local ClosestPlayer = nil
     local Chance = math.chance(ValiantAimHacks["HitChance"])
-    local ShortestDistance = math.huge
+    local ShortestDistance = 1/0
     if not Chance then ValiantAimHacks["Selected"] = (Chance and LocalPlayer or LocalPlayer) return (Chance and LocalPlayer or LocalPlayer) end
     for _,plr in pairs(Players.GetPlayers(Players)) do
         if not ValiantAimHacks.checkWhitelisted(plr) and ValiantAimHacks.checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0 then
