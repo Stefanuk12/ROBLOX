@@ -23,12 +23,12 @@ getgenv().ChatSpy = {
     IgnoreList = {
         {Message = "part/1/1/1", ExactMatch = false},
         {Message = "A?????????", ExactMatch = false},
-        {Message = ":colorshifttop 10000 0 0", ExactMatch = true},
-        {Message = ":colorshiftbottom 10000 0 0", ExactMatch = true},
-        {Message = ":colorshifttop 0 10000 0", ExactMatch = true},
-        {Message = ":colorshiftbottom 0 10000 0", ExactMatch = true},
-        {Message = ":colorshifttop 0 0 10000", ExactMatch = true},
-        {Message = ":colorshiftbottom 0 0 10000", ExactMatch = true},
+        {Message = "colorshifttop 10000 0 0", ExactMatch = false},
+        {Message = "colorshiftbottom 10000 0 0", ExactMatch = false},
+        {Message = "colorshifttop 0 10000 0", ExactMatch = false},
+        {Message = "colorshiftbottom 0 10000 0", ExactMatch = false},
+        {Message = "colorshifttop 0 0 10000", ExactMatch = false},
+        {Message = "colorshiftbottom 0 0 10000", ExactMatch = false},
     },
 }
 
