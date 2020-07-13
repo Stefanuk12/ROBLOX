@@ -33,18 +33,17 @@ getgenv().ChatSpy = {
 }
 
 -- // Function
-function checkIgnored(message)
+function ChatSpy.checkIgnored(message)
+    local Check = false
     for _,v in pairs(ChatSpy.IgnoreList) do
-        if v.ExactMatch then 
-            return (message == v.Message) 
-        else
-            return (string.find(message, v.Message))
+        if (v.ExactMatch and (message == v.Message)) or (not v.ExactMatch and string.find(message, v.Message)) then 
+            Check = true
         end
     end
-    return false
+    return Check
 end
 
-function onChatted(targetPlayer, message)
+function ChatSpy.onChatted(targetPlayer, message)
     if targetPlayer == LocalPlayer and string.lower(message):sub(1, 4) == "/spy" then
         ChatSpy.Enabled = not ChatSpy.Enabled; wait(0.3)
         ChatSpy.Chat.Text = "[SPY] - "..(ChatSpy.Enabled and "Enabled." or "Disabled.")
@@ -90,4 +89,4 @@ StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
 -- // Update Chat Frame
 local chatFrame = LocalPlayer.PlayerGui.Chat.Frame
 chatFrame.ChatChannelParentFrame.Visible = true
-chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position + UDim2.new(UDim.new() ,chatFrame.ChatChannelParentFrame.Size.Y)
+chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position + UDim2.new(UDim.new(), chatFrame.ChatChannelParentFrame.Size.Y)
