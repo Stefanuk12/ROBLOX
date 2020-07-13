@@ -64,7 +64,7 @@ end
 function Orbit.commenceParts(numOfParts)
 	for i = 1, numOfParts do
         -- // Create Part
-        Players:Chat("part/1/1/1")
+        Players:Chat(":part/1/1/1")
     end
 end
 

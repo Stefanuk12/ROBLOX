@@ -375,7 +375,7 @@ KAHHax.ServerOOFController.PartCoroutine = coroutine.wrap(function() -- // Part 
     while wait(vars.WhileWait) do
         if not KAHHax.ControllerSettings.PSCan then break end
         if KAHHax.ControllerSettings.PS then
-            Players:Chat("part/10/10/10")
+            Players:Chat(":part/10/10/10")
         end
     end
 end)()
