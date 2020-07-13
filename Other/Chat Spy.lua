@@ -58,7 +58,7 @@ function ChatSpy.onChatted(targetPlayer, message)
         end)
         wait(1)
         Connection:Disconnect()
-        if Hidden and ChatSpy.Enabled and not checkIgnored(message) then
+        if Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
@@ -72,13 +72,13 @@ end
 -- // Handling Chats
 for _, player in pairs(Players:GetPlayers()) do 
     player.Chatted:Connect(function(message)
-        onChatted(player, message)
+        ChatSpy.onChatted(player, message)
     end)
 end
 
 Players.PlayerAdded:Connect(function(player)
     player.Chatted:Connect(function(message)
-        onChatted(player, message)
+        ChatSpy.onChatted(player, message)
     end)
 end)
 
