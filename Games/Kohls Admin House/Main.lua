@@ -327,19 +327,18 @@ end)
 -- // Identifier ;)
 local fgpfPHrase = ":m hi gamer"
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
-    for _,x in pairs(vars.WhitelistedUsers) do
-        if v == LocalPlayer and v.UserId == x then
-        elseif v.UserId == x then
-            wait(0.5)
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
-        end
+    if table.find(WhitelistedUsers, v.UserId) and not v == LocalPlayer then
+        wait(0.5)
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
+        Players:Chat(fgpfPHrase)
     end
 end
  
 game:GetService("Players").PlayerAdded:Connect(function(plr)
-    if vars.checkWhitelisted(plr.UserId) and not vars.checkWhitelisted(LocalPlayer) then
+    if vars.checkWhitelisted(plr.UserId) and not table.find(WhitelistedUsers, LocalPlayer.UserId) then
         wait(0.5)
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
+        Players:Chat(fgpfPHrase)
     end
 end)
  
@@ -348,9 +347,10 @@ for _,v in pairs(vars.WhitelistedUsers) do
     if Players:FindFirstChild(Player) then
         local Player = Players:FindFirstChild(Player)
         Player.Chatted:Connect(function(chat)
-            if string.lower(chat) == "hi gamers" then
+            if string.lower(chat) == "hi gamers" and not LocalPlayer.UserId == v then
                 wait(0.5)
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
+                Players:Chat(fgpfPHrase)
             end
         end)
     end
@@ -855,8 +855,10 @@ addCMD("rwhitelist", "Control", "rwhitelist EpicGamer69", "Removes the whitelist
     if splitString[2] then
         local playerTable = vars.getPlayer(splitString[2])
         for _, v in pairs(playerTable) do
-            vars.PlayerManager[v.Name]["Whitelisted"] = false
-            vars.Notify("Removed "..v.Name.." from the Whitelist!")
+            if not table.find(vars.WhitelistedUsers, v.UserId) then
+                vars.PlayerManager[v.Name]["Whitelisted"] = false
+                vars.Notify("Removed "..v.Name.." from the Whitelist!")
+            end
         end
     end
 end)
