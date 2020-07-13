@@ -35,13 +35,12 @@ getgenv().ChatSpy = {
 
 -- // Function
 function ChatSpy.checkIgnored(message)
-    local Check = false
     for _,v in pairs(ChatSpy.IgnoreList) do
         if (v.ExactMatch and (message == v.Message)) or (not v.ExactMatch and string.find(message, v.Message)) then 
-            Check = true
+            return true
         end
     end
-    return Check
+    return false
 end
 
 function ChatSpy.onChatted(targetPlayer, message)
