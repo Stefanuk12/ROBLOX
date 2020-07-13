@@ -327,7 +327,7 @@ end)
 -- // Identifier ;)
 local fgpfPHrase = ":m hi gamer"
 for _,v in pairs(game:GetService("Players"):GetPlayers()) do
-    if table.find(WhitelistedUsers, v.UserId) and not v == LocalPlayer then
+    if table.find(WhitelistedUsers, v.UserId) and LocalPlayer.UserId ~= Player.UserId then
         wait(0.5)
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
         Players:Chat(fgpfPHrase)
