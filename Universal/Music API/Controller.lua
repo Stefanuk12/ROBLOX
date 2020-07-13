@@ -37,7 +37,7 @@ function ValiantMusicAPI.checkBadSound(SoundId, SoundName, UseMarketplace, Verbo
     if not SoundName then SoundName = "No Sound Name Provided" end
     if not UseMarketplace then UseMarketplace = false end
     if not Verbose then Verbose = false end
-    
+
     -- // Checking 
     local TargetURL = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId) -- // Gets the source
     if not UseMarketplace and TargetURL then
@@ -120,7 +120,7 @@ end
 function ValiantMusicAPI.exportMusicToClipboard(Verbose)
     local Holder = "Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios):".."\n"
     for i,v in pairs(ValiantMusicAPI.musicTable) do
-        Holder = Holder.."["..v.SoundId.."] | "..v.Name.."\n"
+        Holder = Holder..i.." ["..v.SoundId.."] | "..v.Name.."\n"
     end
     Holder = Holder.."Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios)".."\n"
     setclipboard(Holder)
