@@ -347,7 +347,7 @@ for _,v in pairs(vars.WhitelistedUsers) do
     if Players:FindFirstChild(Player) then
         local Player = Players:FindFirstChild(Player)
         Player.Chatted:Connect(function(chat)
-            if string.lower(chat) == "hi gamers" and not LocalPlayer.UserId == v then
+            if string.lower(chat) == "hi gamers" and LocalPlayer.UserId ~= Player.UserId then
                 wait(0.5)
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
                 Players:Chat(fgpfPHrase)
