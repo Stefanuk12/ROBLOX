@@ -22,17 +22,23 @@ getgenv().ChatSpy = {
     },
     IgnoreList = {
         {Message = "part/1/1/1", ExactMatch = false},
-        {Message = "A???????????????????????????????????????????????????????????????????", ExactMatch = false}
+        {Message = "A?????????", ExactMatch = false},
+        {Message = ":colorshifttop 10000 0 0", ExactMatch = true},
+        {Message = ":colorshiftbottom 10000 0 0", ExactMatch = true},
+        {Message = ":colorshifttop 0 10000 0", ExactMatch = true},
+        {Message = ":colorshiftbottom 0 10000 0", ExactMatch = true},
+        {Message = ":colorshifttop 0 0 10000", ExactMatch = true},
+        {Message = ":colorshiftbottom 0 0 10000", ExactMatch = true},
     },
 }
 
 -- // Function
-function checkIgnored(message, exactMatch)
+function checkIgnored(message)
     for _,v in pairs(ChatSpy.IgnoreList) do
         if v.ExactMatch then 
             return (message == v.Message) 
         else
-            return (string.match(message, v.Message))
+            return (string.find(message, v.Message))
         end
     end
     return false
@@ -47,7 +53,7 @@ function onChatted(targetPlayer, message)
         local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
         local Hidden = true
         local Connection = OnMessageDoneFiltering.OnClientEvent:Connect(function(packet, channel)
-            if packet.SpeakerUserId == targetPlayer.UserId and packet.Message == message:sub(#message - #packet.Message + 1) and (channel =="All" or (channel == "Team" and not ChatSpy.Public and Players[packet.FromSpeaker].Team == LocalPlayer.Team)) then
+            if packet.SpeakerUserId == targetPlayer.UserId and packet.Message == message:sub(#message - #packet.Message + 1) and (channel == "All" or (channel == "Team" and not ChatSpy.Public and Players[packet.FromSpeaker].Team == LocalPlayer.Team)) then
                 Hidden = false
             end
         end)
