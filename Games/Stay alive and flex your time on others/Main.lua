@@ -29,6 +29,10 @@ local mt = getrawmetatable(game)
 local backupindex = mt.__index 
 setreadonly(mt, false)
 
+-- // Anti Kick
+hookfunction(LocalPlayer.Kick, warn)
+hookfunction(LocalPlayer.kick, warn)
+
 -- // MT Spoofing
 mt.__index = newcclosure(function(t, k)
     if not checkcaller() then
