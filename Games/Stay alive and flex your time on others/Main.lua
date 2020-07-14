@@ -27,11 +27,17 @@ getgenv().spoofValues = {
 -- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
 local backupindex = mt.__index 
+local backupnamecall = mt.__namecall
 setreadonly(mt, false)
 
 -- // Anti Kick
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
+mt.__namecall = newcclosure(function(...)
+    if string.lower(getnamecallmethod()) == "kick" then return end
+    return backupnamecall(...)
+end)
+
 
 -- // MT Spoofing
 mt.__index = newcclosure(function(t, k)
@@ -40,7 +46,7 @@ mt.__index = newcclosure(function(t, k)
             return Vector3.new(1, 0.8, 4)
         elseif tostring(t) == "Sword" and k == "GripPos" then
             return Vector3.new(0, 0, -1.7)
-        elseif t == Humanoid and rawget(spoofValues, k) then
+        elseif rawget(spoofValues, k) then
             return rawget(spoofValues, k)
         end
     end

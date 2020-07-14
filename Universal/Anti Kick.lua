@@ -20,3 +20,8 @@ setreadonly(mt, false)
 -- // Anti kick
 hookfunction(LocalPlayer.Kick, warn)
 hookfunction(LocalPlayer.kick, warn)
+
+mt.__namecall = newcclosure(function(...)
+    if string.lower(getnamecallmethod()) == "kick" then return end
+    return backupnamecall(...)
+end)
