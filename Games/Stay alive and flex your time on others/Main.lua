@@ -43,7 +43,7 @@ function removeAC() -- // I couldve done better but cba
                 end
             end
             if debug.getinfo(v).name == "tpcheck" then
-                hookfunction(v, function() return end)
+                hookfunction(v, function() end)
             end
         end
     end
