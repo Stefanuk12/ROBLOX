@@ -109,7 +109,14 @@ function ValiantMusicAPI.getSoundName(Index)
 end
 
 function ValiantMusicAPI.saveMusicTableJSON(Verbose)
-    local contents = game:GetService("HttpService"):JSONEncode(ValiantMusicAPI.musicTable)
+    local tbl = {}
+    for i = 1, #ValiantMusicAPI.musicTable do 
+        if ValiantMusicAPI.musicTable[i] then
+            table.insert(tbl, ValiantMusicAPI.musicTable[i]) 
+        end
+    end
+
+    local contents = game:GetService("HttpService"):JSONEncode(tbl)
     local success = false
     if writefile then
         writefile("MusicTable.json", contents)
