@@ -60,7 +60,7 @@ function removeIdentifying()
         if v:IsA("Accessory") then v:Destroy() end
         if v:FindFirstChild("HUD") then v.HUD:Destroy() end
         if v:FindFirstChildWhichIsA("Decal") then v:FindFirstChildWhichIsA("Decal"):Destroy() end
-        if v:IsA("Humanoid") then v.HealthDisplayType = "AlwaysOff" v.NameDisplayDistance = 0 end
+        if v:IsA("Humanoid") then v.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff v.NameDisplayDistance = Enum.HumanoidDisplayDistanceType.None end
     end
 end
 
