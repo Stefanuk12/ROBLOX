@@ -851,10 +851,11 @@ end)
 addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the number.", function(message)
     local SoundId
     local splitString = string.split(message, " ")
-    if splitString[1] and splitString[2] and tonumber(splitString[2]) then
-        if not vars.MusicAPI.musicTable[tonumber(splitString[2])] then vars.Alert("This sound does not exist!") return end
-        Players:Chat(":music "..vars.MusicAPI.getSound(tonumber(splitString[2])))
-        vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(tonumber(splitString[2])))
+    if splitString[1] and splitString[2] and string.gsub(splitString[2], "%D", "") ~= "" then
+        local SoundId =  tonumber(string.gsub(splitString[2], "%D", ""))
+        if not vars.MusicAPI.musicTable[SoundId] then vars.Alert("This sound does not exist!") return end
+        Players:Chat(":music "..vars.MusicAPI.getSound(SoundId))
+        vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(SoundId))
     else
         vars.Alert("Invalid Arguments!")
     end
