@@ -81,10 +81,10 @@ function removeAC() -- // I couldve done better but cba
             end
         end
     end  
-    removeIdentifying()
 end
 
 
-
-removeAC()
-LocalPlayer.CharacterAdded:Connect(removeAC)
+LocalPlayer.CharacterAdded:Connect(function()
+    removeIdentifying()
+    removeAC()
+end)
