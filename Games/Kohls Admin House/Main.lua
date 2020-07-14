@@ -48,6 +48,7 @@ KAHHax["vars"] = {
         IceStaff = 19704064,
         Transmorph = 29099749,
         ShiftingPolarity = 61459706,
+        PortableJustice = 82357101,
     },
     WhitelistedCMDs = {
         "play",
