@@ -36,7 +36,7 @@ mt.__index = newcclosure(function(t, k)
             return Vector3.new(1, 0.8, 4)
         elseif tostring(t) == "Sword" and k == "GripPos" then
             return Vector3.new(0, 0, -1.7)
-        elseif tostring(t) == "Humanoid" and rawget(spoofValues, k) then
+        elseif t == Humanoid and rawget(spoofValues, k) then
             return rawget(spoofValues, k)
         end
     end
@@ -46,10 +46,10 @@ end)
 -- // Functions
 function removeAC() -- // I couldve done better but cba
     Character:WaitForChild("Head")
-    for _, v in pairs(getgc()) do
-        if typeof(v) == 'function' then
-            if debug.getinfo(v).name == "tpcheck" then
-                hookfunction(v, function() end)
+    for _,v in pairs(getgc()) do
+        if debug.getinfo(v).name == "tpcheck" then
+            for a,x in pairs(debug.getconstants(v)) do
+                debug.setconstant(v, a, nil)
             end
         end
     end
