@@ -48,13 +48,6 @@ function removeAC() -- // I couldve done better but cba
     Character:WaitForChild("Head")
     for _, v in pairs(getgc()) do
         if typeof(v) == 'function' then
-            if getfenv(v).script then
-                if getfenv(v).script.Name == "HUDSettings" then
-                    for a, x in pairs(debug.getconstants(v)) do
-                        debug.setconstant(v, a, nil)
-                    end
-                end
-            end
             if debug.getinfo(v).name == "tpcheck" then
                 hookfunction(v, function() end)
             end
