@@ -55,6 +55,15 @@ mt.__index = newcclosure(function(t, k)
 end)
 
 -- // Functions
+function removeIdentifying()
+    for _,v in pairs(Character:GetChildren()) do
+        if v:IsA("Accessory") then v:Destroy() end
+        if v:FindFirstChild("HUD") then v.HUD:Destroy() end
+        if v:FindFirstChildWhichIsA("Decal") then v:FindFirstChildWhichIsA("Decal"):Destroy() end
+        if v:IsA("Humanoid") then v.HealthDisplayType = "AlwaysOff" v.NameDisplayDistance = 0 end
+    end
+end
+
 function removeAC() -- // I couldve done better but cba
     Character:WaitForChild("Head")
     for _,v in pairs(getgc()) do
@@ -72,7 +81,10 @@ function removeAC() -- // I couldve done better but cba
             end
         end
     end  
+    removeIdentifying()
 end
+
+
 
 removeAC()
 LocalPlayer.CharacterAdded:Connect(removeAC)
