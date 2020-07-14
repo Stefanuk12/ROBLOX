@@ -852,7 +852,7 @@ addCMD("play", "Music Commands", "play 53", "Plays the sound indexed at the numb
     local SoundId
     local splitString = string.split(message, " ")
     if splitString[1] and splitString[2] and string.gsub(splitString[2], "%D", "") ~= "" then
-        local SoundId =  tonumber(string.gsub(splitString[2], "%D", ""))
+        local SoundId = string.gsub(splitString[2], "%D", ""); SoundId = tonumber(SoundId)
         if not vars.MusicAPI.musicTable[SoundId] then vars.Alert("This sound does not exist!") return end
         Players:Chat(":music "..vars.MusicAPI.getSound(SoundId))
         vars.Notify("Now Playing: "..vars.MusicAPI.getSoundName(SoundId))
