@@ -1,17 +1,10 @@
 -- Game: https://roblox.com/games/5278850819
 
--- // Valiant ENV
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ValiantENV.lua"))()
-
 -- // Vars
-local RenderStepped = RunService.RenderStepped
-local Heartbeat = RunService.Heartbeat
-local LocalPlayer = Players.LocalPlayer
+local LocalPlayer = game:GetService("Players").LocalPlayer
 local Backpack = LocalPlayer.Backpack
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
-local Humanoid = Character.WaitForChild(Character, "Humanoid")
-local CurrentCamera = Workspace.CurrentCamera
-local Mouse = LocalPlayer.GetMouse(LocalPlayer)
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
 local Connections = {
     LocalPlayer.Character.AntiExploit.Changed,
     Character.Head.HUD.HealthDisplay.TextLabel.HealthUpdater.Changed,
@@ -22,13 +15,33 @@ local Connections = {
     Workspace.Structure.KillPart.Changed,
     Workspace.Structure.KillRoof.Changed,
 }
+getgenv().spoofValues = {
+    WalkSpeed = 16,
+    JumpPower = 50,
+    HipHeight = 0.1,
+    Health = 100,
+    MaxHealth = 100,
+    PlatformStand = false,
+}
 
 -- // Base MT Vars + Funs
 local mt = getrawmetatable(game)
-local backupnamecall = mt.__namecall
-local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
 setreadonly(mt, false)
+
+-- // MT Spoofing
+mt.__index = newcclosure(function(t, k)
+    if not checkcaller() then
+        if tostring(t) == "Handle" and k == "Size" then
+            return Vector3.new(1, 0.8, 4)
+        elseif tostring(t) == "Sword" and k == "GripPos" then
+            return Vector3.new(0, 0, -1.7)
+        elseif tostring(t) == "Humanoid" and rawget(spoofValues, k) then
+            return rawget(spoofValues, k)
+        end
+    end
+    return backupindex(t, k)
+end)
 
 -- // Functions
 function removeAC() -- // I couldve done better but cba
@@ -58,16 +71,3 @@ end
 
 removeAC()
 LocalPlayer.CharacterAdded:Connect(removeAC)
-
--- // MT Spoofing
-mt.__index = newcclosure(function(t, k)
-    if not checkcaller() then
-        if tostring(t) == "Handle" and k == "Size" then
-            return Vector3.new(1, 0.8, 4)
-        end
-        if tostring(t) == "Sword" and k == "GripPos" then
-            return Vector3.new(0, 0, -1.7)
-        end
-    end
-    return backupindex(t, k)
-end)
