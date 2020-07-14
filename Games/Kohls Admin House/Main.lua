@@ -50,6 +50,9 @@ KAHHax["vars"] = {
         ShiftingPolarity = 61459706,
         PortableJustice = 82357101,
     },
+    BlacklistedGears = {
+        "82357101",
+    },
     WhitelistedCMDs = {
         "play",
         "give",
@@ -142,12 +145,29 @@ function KAHHax.vars.addPlayerToManager(Player)
             ["Whitelisted"] = false,
         }
         vars.PlayerManager[Player.Name].BlacklistConnection.A = Player.Chatted:Connect(function(message)
+            local Whitelisted = vars.PlayerManager[Player.Name].Whitelisted
+
+            -- // Blacklist Phrases
             for _,v in pairs(vars.PlayerManager[Player.Name].BlacklistedPhrases) do
                 if string.match(message, v.Phrase) then
                     Players:Chat(v.Punishment)
                 end
             end
-            if vars.PlayerManager[Player.Name]["Whitelisted"] then
+
+            -- // Blacklist Gears
+            local splitString = string.split(message, " ")
+            if not Whitelisted and string.match(splitString[1], "gear") then
+                for _,v in pairs(vars.BlacklistedGears) do
+                    if string.match(message, v) and splitString[2] then
+                        if string.lower(splitString[2]) == 'me' then splitString[2] = Player.Name end
+                        wait(0.5)
+                        Players:Chat(":removetools "..splitString[2])
+                    end
+                end
+            end
+
+            -- // Whitelist CMDs
+            if Player ~= LocalPlayer and vars.PlayerManager[Player.Name]["Whitelisted"] then
                 for _, v in pairs(vars.WhitelistedCMDs) do
                     local Command = vars.Prefix..v
                     if string.match(message, vars.Prefix..v) and string.sub(message, 1, #Command) == Command then
@@ -859,6 +879,26 @@ addCMD("rwhitelist", "Control", "rwhitelist EpicGamer69", "Removes the whitelist
             if not table.find(vars.WhitelistedUsers, v.UserId) then
                 vars.PlayerManager[v.Name]["Whitelisted"] = false
                 vars.Notify("Removed "..v.Name.." from the Whitelist!")
+            end
+        end
+    end
+end)
+
+addCMD("blgear", "Control", "blgear 19704064", "Makes it so no one can give others or themselves the blacklisted gear.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(splitString[2]) and not table.find(vars.BlacklistedGears, splitString[2]) then
+        table.insert(vars.BlacklistedGears, splitString[2])
+        vars.Notify("Blacklisted Gear ("..splitString[2]..")!")
+    end
+end)
+
+addCMD("rblgear", "Control", "rblgear 19704064", "Removes the gear as being Blacklisted.", function(message)
+    local splitString = string.split(message, " ")
+    if splitString[2] and tonumber(splitString[2]) then
+        for i,v in pairs(vars.BlacklistedGears) do
+            if v == splitString[2] then
+                table.remove(vars.BlacklistedGears, i)
+                vars.Notify("Removed Blacklisted Gear ("..splitString[2]..")!")
             end
         end
     end
