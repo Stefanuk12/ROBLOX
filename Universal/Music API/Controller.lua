@@ -112,7 +112,7 @@ function ValiantMusicAPI.saveMusicTableJSON(Verbose)
     local tbl = {}
     for i = 1, #ValiantMusicAPI.musicTable do 
         if ValiantMusicAPI.musicTable[i] then
-            ValiantMusicAPI.musicTable[i].UUID = i
+            ValiantMusicAPI.musicTable[i].UUID = tostring(i)
             table.insert(tbl, ValiantMusicAPI.musicTable[i]) 
         end
     end
