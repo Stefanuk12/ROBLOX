@@ -45,7 +45,7 @@ mt.__index = newcclosure(function(t, k)
     if not checkcaller() then
         if tostring(t) == "Handle" and k == "Size" then
             return Vector3.new(1, 0.8, 4)
-        elseif tostring(t) == "Sword" and k == "GripPos" then
+        elseif string.match(tostring(t), "Sword") and k == "GripPos" then
             return Vector3.new(0, 0, -1.7)
         elseif t == Humanoid and rawget(spoofValues, k) then
             return rawget(spoofValues, k)
@@ -83,6 +83,26 @@ function removeAC() -- // I couldve done better but cba
     end  
 end
 
+function killAll() -- // crashse on synapse but added bc why not
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Sword = LocalPlayer.Character:FindFirstChild("Sword")
+    
+    if Sword then
+        local SwordHandle = Sword.Handle
+        for _,v in pairs(Players:GetPlayers()) do
+            coroutine.wrap(function()
+                if v ~= LocalPlayer and v.Character and v.Character.PrimaryPart then
+                    local targetPart = v.Character.PrimaryPart
+                    repeat
+                        firetouchinterest(Sword, targetPart, 0); wait()
+                        firetouchinterest(Sword, targetPart, 1); wait()
+                    until not v or not v.Character or (v and v.Character and v.Character.Humanoid.Health > 0 )
+                end
+            end)()
+        end
+    end
+end
 
 LocalPlayer.CharacterAdded:Connect(function()
     removeIdentifying()
