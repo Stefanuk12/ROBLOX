@@ -1,19 +1,20 @@
 -- Game: https://roblox.com/games/5278850819
 
 -- // Vars
+local Workspace = game:GetService("Workspace")
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Backpack = LocalPlayer.Backpack
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Humanoid = Character:WaitForChild("Humanoid")
 local Connections = {
-    LocalPlayer.Character.AntiExploit.Changed,
-    Character.Head.HUD.HealthDisplay.TextLabel.HealthUpdater.Changed,
-    Character.Head.HUD.HUDSettings.Changed,
-    Character.Head.HUD.TimeDisplay.TextLabel.TimeUpdater.Changed,
-    Workspace.Structure.Leaderboard.Changed,
-    Workspace.Structure.Floor.Changed,
-    Workspace.Structure.KillPart.Changed,
-    Workspace.Structure.KillRoof.Changed,
+    {Part = LocalPlayer.Character.AntiExploit, Disabled = false, Remove = true},
+    {Part = Character.Head.HUD.HealthDisplay.TextLabel.HealthUpdater, Disabled = false, Remove = true},
+    {Part = Character.Head.HUD.HUDSettings, Disabled = false, Remove = true},
+    {Part = Character.Head.HUD.TimeDisplay.TextLabel.TimeUpdater, Disabled = false, Remove = true},
+    {Part = Workspace.Structure.Leaderboard, Disabled = false},
+    {Part = Workspace.Structure.Floor, Disabled = false},
+    {Part = Workspace.Structure.KillPart, Disabled = false, Remove = true},
+    {Part = Workspace.Structure.KillRoof, Disabled = false, Remove = true},
 }
 getgenv().spoofValues = {
     WalkSpeed = 16,
@@ -46,7 +47,7 @@ mt.__index = newcclosure(function(t, k)
             return Vector3.new(1, 0.8, 4)
         elseif tostring(t) == "Sword" and k == "GripPos" then
             return Vector3.new(0, 0, -1.7)
-        elseif rawget(spoofValues, k) then
+        elseif t == Humanoid and rawget(spoofValues, k) then
             return rawget(spoofValues, k)
         end
     end
@@ -63,13 +64,14 @@ function removeAC() -- // I couldve done better but cba
             end
         end
     end
-    pcall(function()
-        for i, v in pairs(Connections) do
-            for _, connection in pairs(getconnections(v)) do
-                connection:Disable()
+    for _, v in pairs(Connections) do
+        if v.Part then
+            for _, connection in pairs(getconnections(v.Part.Changed)) do
+                connection:Disable() -- // why doesnt this work :(
+                v.Disabled = true
             end
         end
-    end) 
+    end  
 end
 
 removeAC()
