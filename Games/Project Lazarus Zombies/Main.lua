@@ -8,6 +8,7 @@
         Auto Kill All Zombies
         Point Farm
         Anti Crash
+        Teleport All Zombies to Cursor
 ]]
 
 -- // Valiant ENV
