@@ -933,26 +933,20 @@ addCMD("tbypass", "Misc", "tbypass", "Toggles global bypass on all of your chats
     vars.Notify("Toggle - Chat Bypass: ".. (vars.ChatBypasser.ChatBypassEnabled and "Enabled." or "Disabled."))
 end)
 
-addCMD("os", "Misc", "os EpicGamer69", "Returns the Platform/Device of the Player.", function(message)
-    local Str = Prefix.."os  "
-    local Target = string.sub(message, #Str, -1)
-    local targetPlayer = vars.getPlayer(Target)
-
-    if Target and targetPlayer and targetPlayer[1] then
-        for _, plr in pairs(targetPlayer) do
-            local Chat = plr.Name.."'s Platform is: "..plr.OsPlatform
-            --game:GetService("Players"):Chat(":h "..Chat)
-            --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
-            vars.Notify(Chat)
-            wait(2)
-        end
-    else
-        if not targetPlayer[1] then
-            vars.Alert("This Player does not exist!")
-        else
-            vars.Alert("Invalid Arguments!")
-        end
+addCMD("cbtools", "Misc", "cbtools me", "Gears you the BTool gears. (Client-sided)", function(message)
+    local splitString = string.split(message, " ")
+    if not splitString[2] then splitString[2] = "me" end
+    local btoolGears = {
+        "16200204",
+        "16200402",
+        "16969792",
+        "73089190",
+        "21001552",
+    }
+    for _,v in pairs(btoolGears) do
+        Players:Chat(":gear "..splitString[2].." "..v)
     end
+    vars.Notify("Successfully geared "..splitString[2].." clientsided btools.")
 end)
 
 addCMD("age", "Misc", "age EpicGamer69", "Returns the Account Age of the Player.", function(message)
@@ -963,30 +957,6 @@ addCMD("age", "Misc", "age EpicGamer69", "Returns the Account Age of the Player.
     if Target and targetPlayer and targetPlayer[1] then
         for _, plr in pairs(targetPlayer) do
             local Chat = plr.Name.."'s Account Age is: "..plr.AccountAge
-            --game:GetService("Players"):Chat(":h "..Chat)
-            --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
-            vars.Notify(Chat)
-            wait(2)
-        end
-    else
-        if not targetPlayer[1] then
-            vars.Alert("This Player does not exist!")
-        else
-            vars.Alert("Invalid Arguments!")
-        end
-    end
-end)
-
-addCMD("country", "Misc", "country EpicGamer69", "Shows Country of Player in Game.", function(message)
-    local Str = Prefix.."country  "
-    local Target = string.sub(message, #Str, -1)
-    local targetPlayer = vars.getPlayer(Target)
-    if Target and targetPlayer and targetPlayer[1] then
-        if not gethiddenproperty then vars.Alert("Your exploit does not support this!") return end      
-        for _, plr in pairs(targetPlayer) do
-            local targetPlayerCountryCode = gethiddenproperty(plr, "CountryRegionCodeReplicate")
-            local targetPlayerCountryName = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://restcountries.eu/rest/v2/alpha/"..targetPlayerCountryCode)).name
-            local Chat = plr.Name.." is located in "..targetPlayerCountryName.." ("..targetPlayerCountryCode..")."
             --game:GetService("Players"):Chat(":h "..Chat)
             --game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Chat, "All")
             vars.Notify(Chat)
