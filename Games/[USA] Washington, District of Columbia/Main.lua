@@ -21,9 +21,6 @@ local PlayerGui = LocalPlayer.PlayerGui
 local Humanoid = Character.WaitForChild(Character, "Humanoid")
 local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
-
-local SilentAim = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
-SilentAim.TeamCheck = false
 getgenv().USADC = {}
 USADC.GunMods = {
     ["A"] = {
@@ -78,12 +75,11 @@ function USADC.disableConnections()
 
         for _, connection in pairs(getconnections(targetConnection)) do 
             if checkScript then
-                local connectionFunction = connection.Function 
+                local connectionFunction = connection.Function -- // Crashes on Synapse :(
                 if getfenv(connectionFunction).script and getfenv(connectionFunction).script.Name == Script1 or getfenv(connectionFunction).script.Name == Script2 then
                     connection:Disable()
+                    print('Disabled')
                 end
-            else
-                connection:Disable()
             end
         end
     end
@@ -91,37 +87,22 @@ end
 USADC.disableConnections()
 LocalPlayer.CharacterAdded:Connect(USADC.disableConnections)
 
--- // Silent Aim Function
-function ValiantAimHacks.checkTeam(targetPlayer)
-    if targetPlayer.Team ~= LocalPlayer.Team then
-        for _,v in pairs(ValiantAimHacks.BlacklistedTeams) do
-            if targetPlayer.Team ~= v.Team and targetPlayer.TeamColor ~= v.TeamColor and (targetPlayer.Clan.Value ~= LocalPlayer.Clan.Value) or (targetPlayer.Clan.Value == "" and LocalPlayer.Clan.Value == "") then
-                return true
-            end
-        end
-    end
-    return false
-end
-
 -- // AC Bypass 
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
 
     if method == "FireServer" then
-        if tostring(args[1]) == "BanningPlayer" then
-            if args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
-                return nil
-            end
-        elseif tostring(args[1]) == "AE" then
-            if args[2] == "Exploit" and typeof(args[3]) == 'number' and args[2] > 0 and args[2] < 10 and args[2] ~= 7 then
+        if tostring(args[1]) == "BanningPlayer" and args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
+            return nil
+        end
+        if tostring(args[1]) == "AE" then
+            if args[2] == "Exploit" and args[3] and typeof(args[3]) == 'number' and args[3] > 0 and args[3] < 10 and args[3] ~= 7 then
                 return nil
             elseif args[2] == "ReplicatedPartCheck" then
                 return nil
             end
         end
-    elseif method == "InvokeServer" then
-
     end
     return backupnamecall(...)
 end)
@@ -130,10 +111,10 @@ end)
 function USADC.returnGunTable(targetGun)
     local returnA, returnB
     for _,v in pairs(getgc(true)) do
-        if typeof(v) == 'table' then
-            if tostring(rawget(v, "Tool")) == tostring(targetGun) then
+        if v and typeof(v) == 'table' then
+            if v and typeof(v) == 'table' and tostring(rawget(v, "Tool")) == tostring(targetGun) then
                 returnA = v
-            elseif rawget(v, "BULLET_SPEED") then
+            elseif v and typeof(v) == 'table' and rawget(v, "BULLET_SPEED") then
                 returnB = v
             end
         end
@@ -182,11 +163,13 @@ Character.ChildAdded:Connect(function(child)
 end)
 
 -- // Silent Aim
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
+ValiantAimHacks["TeamCheck"] = false
 mt.__index = newcclosure(function(t, k)
     if t:IsA("Mouse") and (k == "Hit" or k == "Target") then
         if ValiantAimHacks.checkSilentAim() then
             local CPlayer = rawget(ValiantAimHacks, "Selected")
-            if CPlayer and CPlayer.Character and CPlayer.Character.FindFirstChild(CPlayer.Character, "Head") then
+            if CPlayer and CPlayer.Character and CPlayer.Character:FindFirstChild("Head") then
                 return (k == "Hit" and CPlayer.Character.Head.CFrame or CPlayer.Character.Head)
             end
         end
