@@ -1033,7 +1033,7 @@ end)
 
 -- // CMDs: Misc. Commands - CMD GUI
 addCMD("xcmds", "Misc", "xcmds", "Shows all of the CMDs.", function(message)
-    vars.Notify("Please go to bit.ly/doofhubv2 for further info!")
+    vars.Notify("Please go to bit.ly/doofkohlsv2 for further info!")
     local ScriptCMDs = Instance.new("ScreenGui")
     local Container = Instance.new("Frame")
     local Header = Instance.new("Frame")
