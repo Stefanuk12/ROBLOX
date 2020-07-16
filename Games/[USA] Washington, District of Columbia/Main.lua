@@ -44,6 +44,20 @@ local backupnewindex = mt.__newindex
 local backupindex = mt.__index 
 setreadonly(mt, false)
 
+-- // Reload func - Bypasses anti inf ammo
+function USADC.reloadWeapon(targetWeapon)
+    if not targetWeapon then targetWeapon = Character:FindFirstChildWhichIsA("Tool") end
+    game:GetService("ReplicatedStorage").Events.BulletHandler:FireServer("reload", {["tool"] = targetWeapon})
+end
+
+coroutine.wrap(function()
+    while wait() do
+        if Character:FindFirstChildWhichIsA("Tool") then
+            USADC.reloadWeapon(Character:FindFirstChildWhichIsA("Tool"))
+        end
+    end
+end)()
+
 -- // Disable Connections (AC)
 function USADC.disableConnections()
     local Connections = {
