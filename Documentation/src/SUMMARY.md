@@ -23,3 +23,5 @@
 
 - [Universal](./Scripts/Universal/main.md)
     - [Music API](./Scripts/Universal/MusicAPI/main.md)
+        - [Variables](./Scripts/Universal/MusicAPI/Variables.md)
+        - [Functions](./Scripts/Universal/MusicAPI/Functions.md)
