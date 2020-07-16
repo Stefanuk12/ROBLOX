@@ -1,4 +1,4 @@
-oofkohls v2 Command List | Total Commands: 43 | Prefix - :
+oofkohls v2 Command List | Total Commands: 44 | Prefix - :
 --~~-- Admin Module --~~--
 > peradmin - Description: Toggles Persistant Admin. - Example: :peradmin
 > getadmin - Description: Gets admin. - Example: :getadmin
@@ -38,15 +38,16 @@ oofkohls v2 Command List | Total Commands: 43 | Prefix - :
 > antikill - Description: Toggles Anti Kill. - Example: :antiKill
 > antiblind - Description: Toggles Anti Blind. - Example: :antiBlind
 -~~-- Control Module --~~--
-> rwhitelist - Description: Removes the whitelist from the player. - Example: :rwhitelist EpicGamer69
+> rblgear - Description: Removes the gear as being Blacklisted. - Example: :rblgear 19704064
 > whitelist - Description: Whitelists the player to be able to use whitelisted commands. - Example: :whitelist EpicGamer69
+> blgear - Description: Makes it so no one can give others or themselves the blacklisted gear. - Example: :blgear 19704064
+> rwhitelist - Description: Removes the whitelist from the player. - Example: :rwhitelist EpicGamer69
 --~~-- Misc Module --~~--
 > xcmds - Description: Shows all of the CMDs. - Example: :xcmds
 > execute - Description: Executes whatever you want. - Example: :execute print('hi'))
 > tbypass - Description: Toggles global bypass on all of your chats. - Example: :tbypass
 > copycmds - Description: Copies all of the commands to your clipboard. - Example: :copycmds
 > age - Description: Returns the Account Age of the Player. - Example: :age EpicGamer69
-> os - Description: Returns the Platform/Device of the Player. - Example: :os EpicGamer69
+> cbtools - Description: Gears you the BTool gears. (Client-sided) - Example: :cbtools me
 > bypass - Description: Auto-bypasses a phrase. - Example: :bypass whats up my niga
-> country - Description: Shows Country of Player in Game. - Example: :country EpicGamer69
 > rj - Description: Rejoins the game. - Example: :rj
