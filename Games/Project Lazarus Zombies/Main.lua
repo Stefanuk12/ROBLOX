@@ -86,7 +86,7 @@ ZombieHax.ModTable = tableHandler({}, function(givenTable) -- // Auto change val
     doGunMods(ZombieHax.ModTable)
 end)
 
-ZombieHax.ModTable = { -- // Setting default values
+local ModTable = { -- // Setting default values
     MagSize = 1/0,
     StoredAmmo = 1/0,
     MaxAmmo = 1/0,
@@ -103,6 +103,8 @@ ZombieHax.ModTable = { -- // Setting default values
     Splash = {Damage = {Min = 1/0, Max = 1/0}, Radius = 15},
     ProjectileSpeed = 100000000
 }
+for i,v in pairs(ModTable) do ZombieHax.ModTable[i] = v end
+ModTable = nil
 doGunMods(ZombieHax.ModTable)
 
 Character.ChildAdded:Connect(function(child)
