@@ -137,7 +137,7 @@ function KAHHax.vars.checkAllWhitelisted()
 end
 
 function KAHHax.vars.addPlayerToManager(Player)
-    if typeof(Player) == 'Instance' and Player.Parent == Players then
+    if typeof(Player) == 'Instance' and Player.Parent == Players and Player ~= LocalPlayer then
         vars.PlayerManager[Player.Name] = {
             ["Lagging"] = false,
             ["BlacklistedPhrases"] = {},
