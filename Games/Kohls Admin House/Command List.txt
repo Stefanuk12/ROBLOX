@@ -1,1 +1,1 @@
-visit: https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Documentation/src/Scripts/KohlsAdminHouse/oofkohlsv2.md
+visit: https://stefanuk12.github.io/ROBLOX/Documentation/book/Scripts/KohlsAdminHouse/oofkohlsv2.html
