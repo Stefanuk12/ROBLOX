@@ -93,13 +93,13 @@ mt.__namecall = newcclosure(function(...)
     local method = getnamecallmethod()
 
     if method == "FireServer" then
-        if tostring(args[1]) == "BanningPlayer" and #args == 5 and args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
+        if tostring(args[1]) == "BanningPlayer" and args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
             return
         end
         if tostring(args[1]) == "AE" then
-            if args[2] == "Exploit" and #args == 4 and typeof(args[3]) == 'number' and args[3] > 0 and args[3] < 10 and args[3] ~= 7 then
+            if args[2] == "Exploit" and typeof(args[3]) == 'number' and args[3] > 0 and args[3] < 10 and args[3] ~= 7 then
                 return
-            elseif #args == 3 and args[2] == "ReplicatedPartCheck" then
+            elseif args[2] == "ReplicatedPartCheck" then
                 return 
             end
         end
@@ -168,9 +168,9 @@ ValiantAimHacks["TeamCheck"] = false
 mt.__index = newcclosure(function(t, k)
     if t:IsA("Mouse") and (k == "Hit" or k == "Target") then
         if ValiantAimHacks.checkSilentAim() then
-            local CPlayer = rawget(ValiantAimHacks, "Selected")
-            if CPlayer and CPlayer.Character and CPlayer.Character:FindFirstChild("Head") then
-                return (k == "Hit" and CPlayer.Character.Head.CFrame or CPlayer.Character.Head)
+            local CPlayer = rawget(ValiantAimHacks, "Selected").Character
+            if CPlayer and CPlayer:FindFirstChild("Head") then
+                return (k == "Hit" and CPlayer.Head.CFrame or CPlayer.Head)
             end
         end
     end
