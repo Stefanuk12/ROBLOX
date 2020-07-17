@@ -43,7 +43,7 @@ function ValiantMusicAPI.checkBadSound(SoundId, SoundName, UseMarketplace, Verbo
     if not UseMarketplace and TargetURL then
         for _,v in pairs(ValiantMusicAPI.removedAssets) do
             if string.find(TargetURL, v) then
-                if Verbose then print(SoundName.."("..SoundId..")".." removed!") end
+                if Verbose then print(SoundName.." ("..SoundId..")".." removed!") end
                 return true -- // The Sound has been removed, return true
             end
         end
