@@ -106,7 +106,7 @@ function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMu
 end
 
 function ValiantAimHacks.checkSilentAim()
-    if ValiantAimHacks.SilentAimEnabled and ValiantAimHacks["Selected"] ~= LocalPlayer then
+    if rawget(ValiantAimHacks, "SilentAimEnabled") == true and rawget(ValiantAimHacks, "Selected") ~= LocalPlayer then
         return true
     end
     return false
