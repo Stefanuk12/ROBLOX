@@ -78,35 +78,39 @@ hookfunction(LocalPlayer.kick, warn)
 
 local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 ValiantAimHacks["TeamCheck"] = false
+ValiantAimHacks["HitChance"] = 100
 
 mt.__namecall = newcclosure(function(...)
     local args = {...}
     local method = getnamecallmethod()
     if not checkcaller() then
-        if method == "FireServer" then
-            if args[1] == Remotes.RayDrawer and ValiantAimHacks.checkSilentAim() then
-                local CPlayer = ValiantAimHacks["Selected"].Character
-                local WSArgs = {
-                    "Player",
-                    CPlayer.Humanoid,
-                    returnGun(),
-                    CPlayer.Head,
-                }
-                Remotes.WeaponServer:FireServer(unpack(WSArgs))
-                args[2] = CPlayer.Head.Position
-                warn("Silent Aim Activated")
-                return backupnamecall(unpack(args))
-            end
-        elseif method == "Fire" then
-            if tostring(args[1]) == "GunDetailClient" and ValiantAimHacks.checkSilentAim() then
-                args[2] = ValiantAimHacks["Selected"].Character.Head.Position
-                return backupnamecall(unpack(args))
-            end
-        elseif string.lower(method) == "kick" then
+        if string.lower(method) == "kick" then
             return nil
         end
     end
     return backupnamecall(...)
+end)
+
+local randomBodyPart = {
+    "Head",
+    "UpperTorso",
+    "LowerTorso",
+    "LeftUpperLeg",
+    "RightUpperLeg"
+}
+
+mt.__index = newcclosure(function(t, k)
+    if not checkcaller() and t:IsA("Mouse") and (k == "Hit" or k == "Target") then
+        if ValiantAimHacks.checkSilentAim() then
+            local CPlayer = rawget(ValiantAimHacks, "Selected").Character
+            local randomNum = math.random(1, 5)
+            local targetPart = rawget(randomBodyPart, randomNum) -- // bc of stoopid "anti aimbot" that limits legit players
+            if CPlayer and CPlayer.FindFirstChild(CPlayer, targetPart) then
+                return (k == "Hit" and CPlayer[targetPart].CFrame or CPlayer[targetPart])
+            end
+        end
+    end
+    return backupindex(t, k)
 end)
 print('Done Silent Aim!')
 
