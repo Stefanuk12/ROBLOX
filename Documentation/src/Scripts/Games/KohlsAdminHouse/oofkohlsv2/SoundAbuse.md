@@ -1,6 +1,6 @@
 # Sound Abuse
 
-#### earrape
+## earrape
 This feature toggles the "ear rape" function. This constantly plays all of the sounds in the gear every tenth second.
 
 Usage:
@@ -8,7 +8,7 @@ Usage:
 :earrape
 ```
 
-#### smusic
+## smusic
 This feature stops the music. This is untraceable in logs.
 
 Usage:
@@ -16,7 +16,7 @@ Usage:
 :smusic
 ```
 
-#### pmusic
+## pmusic
 This feature plays the music. This is untraceable in logs.
 
 Usage:
@@ -24,7 +24,7 @@ Usage:
 :pmusic
 ```
 
-#### sallsounds
+## sallsounds
 This feature stops all sounds. This is untraceable in logs.
 
 Usage:
@@ -32,7 +32,7 @@ Usage:
 :sallsounds
 ```
 
-#### pasounds
+## pasounds
 This feature plays all sounds. This is untraceable in logs.
 
 Usage:

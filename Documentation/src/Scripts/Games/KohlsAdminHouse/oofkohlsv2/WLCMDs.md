@@ -4,7 +4,7 @@ Hello, you may be wondering what is this page? Well, you've been whitelisted to 
 
 The redirect link to this page is: **bit.ly/wlcmds**
 
-#### Perimitted Commands
+## Perimitted Commands
 
 - [play](https://stefanuk12.github.io/ROBLOX/Documentation/book/Scripts/Games/KohlsAdminHouse/oofkohlsv2/MusicCommands.html#play)
 - [give](https://stefanuk12.github.io/ROBLOX/Documentation/book/Scripts/Games/KohlsAdminHouse/oofkohlsv2/GearGiver.html#give)

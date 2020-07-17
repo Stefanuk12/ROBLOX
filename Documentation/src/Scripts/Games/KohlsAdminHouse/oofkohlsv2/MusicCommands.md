@@ -2,7 +2,7 @@
 
 Note: You can see the music table [here](https://stefanuk12.github.io/ROBLOX/Universal/Music%20API/Web%20Version/index.html)
 
-#### refreshmusic
+## refreshmusic
 This feature will refresh the music table.
 
 Usage:
@@ -10,7 +10,7 @@ Usage:
 :refreshmusic
 ```
 
-#### play
+## play
 This feature will play a certain sound from the music table. Note, you this feature requires admin. To get the correct `IndexOfSoundId` then follow one of these methods:
 
 **Method 1:**
@@ -32,7 +32,7 @@ Examples:
 :play 45 -- Or you can just do this
 ```
 
-#### getmusic
+## getmusic
 This feature will print the music table in the Developer Console (F9).
 
 Usage:

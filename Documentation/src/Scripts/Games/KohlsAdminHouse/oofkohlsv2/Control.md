@@ -1,6 +1,6 @@
 # Control
 
-#### rblgear
+## rblgear
 This feature un-blacklists a blacklisted gear.
 
 Usage:
@@ -13,7 +13,7 @@ Example:
 :rblgear 19704064
 ```
 
-#### rwhitelist
+## rwhitelist
 This feature un-whitelists a player(s). You may provide the user's shorterned name, or use "all", "others", and "me"
 
 Usage:
@@ -26,7 +26,7 @@ Example:
 :rwhitelist EpicGamer69
 ```
 
-#### blgear
+## blgear
 This feature blacklists a gear, meaning no one but the whitelisted users can give themselves or others the specificed gear id.
 
 Usage:
@@ -39,7 +39,7 @@ Example:
 :blgear 19704064
 ```
 
-#### whitelist
+## whitelist
 This feature whitelists a user, this feature gives these users access to certain commands and they aren't affected by certain commands
 
 Whitelisted Command List:

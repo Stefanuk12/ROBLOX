@@ -1,6 +1,6 @@
 # Misc
 
-#### xcmds
+## xcmds
 This feature shows a GUI with all of the commands, however, they aren't as informative and are just as a quick reference. Please use these docs for more info.
 
 Usage:
@@ -8,7 +8,7 @@ Usage:
 :xcmds
 ```
 
-#### execute
+## execute
 This feature executes any code after you put after the command.
 
 Usage:
@@ -21,7 +21,7 @@ Example:
 :execute print('hi') -- This prints hi in the Developer Console (F9)
 ```
 
-#### tbypass
+## tbypass
 This toggable feature toggles "global bypass" on all of your chats. This allows you to bypass the ROBLOX Safe Chat, more than likely this is only 13+ and the characters usually get patched. If you use certain characters more, like shown in the example, you may get around it.
 
 Usage:
@@ -34,7 +34,7 @@ Example:
 seeeeeeeeex offender -- This will attempted to be bypassed
 ```
 
-#### copycmds
+## copycmds
 This feature copies the whole command list to your clipboard.
 
 Usage:
@@ -42,7 +42,7 @@ Usage:
 :copycmds
 ```
 
-#### age
+## age
 This feature displays the Account Age of user(s). You may specify one user or use certain keywords like "me", "others" and "all".
 
 Usage:
@@ -55,7 +55,7 @@ Example:
 :age EpicGamer69
 ```
 
-#### bypass
+## bypass
 This feature has a similar concept to tbypass, however, it's not toggled but it bypasses the text you put after the command
 
 Usage:
@@ -68,7 +68,7 @@ Example:
 :bypass seeeeeeeeex offender -- This will attempted to be bypassed
 ```
 
-#### rj
+## rj
 This feature makes you rejoin the game, this doesn't work all the time!
 
 Usage:
@@ -76,7 +76,7 @@ Usage:
 :rj
 ```
 
-#### cbtools
+## cbtools
 This feature gears can gear you and others client btools. This means only you can see what you're building. You may specify one user or use certain keywords like "me", "others" and "all".
 
 Usage:
