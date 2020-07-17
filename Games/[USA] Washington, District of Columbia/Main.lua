@@ -93,14 +93,14 @@ mt.__namecall = newcclosure(function(...)
     local method = getnamecallmethod()
 
     if method == "FireServer" then
-        if tostring(args[1]) == "BanningPlayer" and args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
-            return nil
+        if tostring(args[1]) == "BanningPlayer" and #args == 5 and args[2] == "Kick" and args[3] == nil and args[4] == "Invisible Exploiting" then
+            return
         end
         if tostring(args[1]) == "AE" then
-            if args[2] == "Exploit" and args[3] and typeof(args[3]) == 'number' and args[3] > 0 and args[3] < 10 and args[3] ~= 7 then
-                return nil
-            elseif args[2] == "ReplicatedPartCheck" then
-                return nil
+            if args[2] == "Exploit" and #args == 4 and typeof(args[3]) == 'number' and args[3] > 0 and args[3] < 10 and args[3] ~= 7 then
+                return
+            elseif #args == 3 and args[2] == "ReplicatedPartCheck" then
+                return 
             end
         end
     end
