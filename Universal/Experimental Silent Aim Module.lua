@@ -2,6 +2,7 @@ if getgenv().ValiantAimHacks then return getgenv().ValiantAimHacks end
 
 -- // Vars
 local Heartbeat = game.GetService(game, "RunService").Heartbeat
+local GuiService = game.GetService(game, "GuiService")
 local LocalPlayer = game.GetService(game, "Players").LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
 local CurrentCamera = game:GetService("Workspace").CurrentCamera
