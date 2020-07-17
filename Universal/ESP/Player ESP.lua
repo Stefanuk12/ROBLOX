@@ -116,7 +116,13 @@ end
 
 function getPlayerText(Player, Health, Distance, Visbility)
     local PlayerHumanoid = Player.Character.FindFirstChildWhichIsA(Player.Character, "Humanoid")
-    local HealthText = tostring(math.floor(PlayerHumanoid.Health / PlayerHumanoid.MaxHealth) * 100).."%"
+
+    local Health = math.floor(PlayerHumanoid.Health)
+    local MaxHealth = math.floor(PlayerHumanoid.MaxHealth)
+    local HealthPercentage = math.clamp(Health/MaxHealth, 0, 1/0) * 100
+    if tostring(HealthPercentage) == "-nan(ind)" then HealthPercentage = 100 end
+    local HealthText = tostring(HealthPercentage).."%"
+    
     local DistanceText = tostring("["..math.floor(game.GetService(game, "Players").LocalPlayer.DistanceFromCharacter(game.GetService(game, "Players").LocalPlayer, Player.Character.PrimaryPart.Position)).."]")
     local PlayerText = tostring(Player.Name)
     local VisbilityText = (Visbility and PlayerESPOptions["VisibleText"] or PlayerESPOptions["NotVisibleText"])
