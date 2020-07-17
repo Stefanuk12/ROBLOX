@@ -13,6 +13,7 @@
             - [Anti](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/Anti.md)
             - [Control](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/Control.md)
             - [Misc](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/Misc.md)
+            - [Whitelist CMDs](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/WLCMDs.md)
         - [Audio Visualiser](./Scripts/Games/KohlsAdminHouse/AudioVisualiser/AudioVisualiser.md)
             - [Orbiter](./Scripts/Games/KohlsAdminHouse/AudioVisualiser/Orbiter.md)
             - [Orbiter Settings](./Scripts/Games/KohlsAdminHouse/AudioVisualiser/OrbiterSettings.md)
