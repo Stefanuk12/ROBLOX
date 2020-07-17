@@ -25,3 +25,7 @@
     - [Music API](./Scripts/Universal/MusicAPI/main.md)
         - [Variables](./Scripts/Universal/MusicAPI/Variables.md)
         - [Functions](./Scripts/Universal/MusicAPI/Functions.md)
+
+- [Developer Resources](./DeveloperResources/main.md)
+    - [Metatables](./DeveloperResources/Metatables/main.md)
+        - [Hooking metamethods](./DeveloperResources/Metatables/Hookingmetamethods.md)
