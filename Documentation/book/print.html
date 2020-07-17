@@ -527,57 +527,57 @@
 <p>If you wish to check out the Music Table then go to this <a href="https://stefanuk12.github.io/ROBLOX/Universal/Music%20API/Web%20Version/index.html">link</a>. 
 <strong>Please note these are not automatically updated as soon as an audio is removed, instead it is removed manually as I don't know how to automate it in JS</strong></p>
 <p>This is formatted like this:</p>
-<pre><code class="language-markdown">&lt;return type&gt; examplefunction(&lt;argument type&gt; argument name)
+<pre><code class="language-lua">&lt;returntype&gt; examplefunction(&lt;argumenttype&gt; argument name)
 </code></pre>
 <h1><a class="header" href="#variables" id="variables">Variables</a></h1>
 <h4><a class="header" href="#valiantmusicapi" id="valiantmusicapi">ValiantMusicAPI</a></h4>
 <p>This is the main holder with all of the functions and majority of the variables.</p>
-<pre><code class="language-markdown">&lt;table&gt; ValiantMusicAPI
+<pre><code class="language-lua">&lt;table&gt; ValiantMusicAPI
 </code></pre>
 <h4><a class="header" href="#valiantmusicapigithubtable" id="valiantmusicapigithubtable">ValiantMusicAPI.GitHubTable</a></h4>
 <p>This is a link to the json table that holds all of the audios that will be filtered through.</p>
-<pre><code class="language-markdown">&lt;string&gt; ValiantMusicAPI.GitHubTable
+<pre><code class="language-lua">&lt;string&gt; ValiantMusicAPI.GitHubTable
 </code></pre>
 <h4><a class="header" href="#valiantmusicapiremovedassets" id="valiantmusicapiremovedassets">ValiantMusicAPI.removedAssets</a></h4>
 <p>Things that possibly show that the audio/SoundId is removed.</p>
-<pre><code class="language-markdown">&lt;table&gt; ValiantMusicAPI.removedAssets
+<pre><code class="language-lua">&lt;table&gt; ValiantMusicAPI.removedAssets
 </code></pre>
 <h4><a class="header" href="#valiantmusicapimusictable" id="valiantmusicapimusictable">ValiantMusicAPI.musicTable</a></h4>
 <p>Holds all of the filtered audios.</p>
-<pre><code class="language-markdown">&lt;table&gt; ValiantMusicAPI.musicTable
+<pre><code class="language-lua">&lt;table&gt; ValiantMusicAPI.musicTable
 </code></pre>
 <h1><a class="header" href="#functions" id="functions">Functions</a></h1>
 <h4><a class="header" href="#valiantmusicapicheckbadsound" id="valiantmusicapicheckbadsound">ValiantMusicAPI.checkBadSound</a></h4>
 <p>This checks if a SoundId is removed or not.</p>
-<pre><code class="language-markdown">&lt;bool&gt; ValiantMusicAPI.checkBadSound(&lt;string&gt; SoundId, &lt;string&gt; SoundName, &lt;bool&gt; UseMarketplace, &lt;bool&gt; Verbose)
+<pre><code class="language-lua">&lt;bool&gt; ValiantMusicAPI.checkBadSound(&lt;string&gt; SoundId, &lt;string&gt; SoundName, &lt;bool&gt; UseMarketplace, &lt;bool&gt; Verbose)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapiremoveduplicates" id="valiantmusicapiremoveduplicates">ValiantMusicAPI.removeDuplicates</a></h4>
 <p>Removes any duplicate Sound Ids.</p>
-<pre><code class="language-markdown">&lt;table&gt; ValiantMusicAPI.removeDuplicates(&lt;table&gt; targetTable)
+<pre><code class="language-lua">&lt;table&gt; ValiantMusicAPI.removeDuplicates(&lt;table&gt; targetTable)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapitestallsounds" id="valiantmusicapitestallsounds">ValiantMusicAPI.testAllSounds</a></h4>
 <p>Tests all of the sounds in the GitHub Table and then updates the music table.</p>
-<pre><code class="language-markdown">&lt;table&gt; ValiantMusicAPI.testAllSounds(&lt;bool&gt; Verbose, &lt;number&gt; waitTime, &lt;bool&gt; UseMarketplace)
+<pre><code class="language-lua">&lt;table&gt; ValiantMusicAPI.testAllSounds(&lt;bool&gt; Verbose, &lt;number&gt; waitTime, &lt;bool&gt; UseMarketplace)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapiprintmusic" id="valiantmusicapiprintmusic">ValiantMusicAPI.printMusic</a></h4>
 <p>Prints all of the music table in a formatted way.</p>
-<pre><code class="language-markdown">&lt;void&gt; ValiantMusicAPI.printMusic(&lt;void&gt;)
+<pre><code class="language-lua">&lt;void&gt; ValiantMusicAPI.printMusic(&lt;void&gt;)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapigetsound" id="valiantmusicapigetsound">ValiantMusicAPI.getSound</a></h4>
 <p>Returns the Sound Id at the Index of the music table.</p>
-<pre><code class="language-markdown">&lt;string&gt; ValiantMusicAPI.getSound(&lt;number&gt; Index)
+<pre><code class="language-lua">&lt;string&gt; ValiantMusicAPI.getSound(&lt;number&gt; Index)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapigetsoundname" id="valiantmusicapigetsoundname">ValiantMusicAPI.getSoundName</a></h4>
 <p>Returns the Sound Name at the Index of the music table.</p>
-<pre><code class="language-markdown">&lt;string&gt; ValiantMusicAPI.getSoundName(&lt;number&gt; Index)
+<pre><code class="language-lua">&lt;string&gt; ValiantMusicAPI.getSoundName(&lt;number&gt; Index)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapisavemusictablejson" id="valiantmusicapisavemusictablejson">ValiantMusicAPI.saveMusicTableJSON</a></h4>
 <p>Saves the Music Table as a json file to your workspace.</p>
-<pre><code class="language-markdown">&lt;void&gt; ValiantMusicAPI.saveMusicTableJSON(&lt;bool&gt; Verbose)
+<pre><code class="language-lua">&lt;void&gt; ValiantMusicAPI.saveMusicTableJSON(&lt;bool&gt; Verbose)
 </code></pre>
 <h4><a class="header" href="#valiantmusicapiexportmusictoclipboard" id="valiantmusicapiexportmusictoclipboard">ValiantMusicAPI.exportMusicToClipboard</a></h4>
 <p>Copies the Music Table to your Clipboard in a formatted way.</p>
-<pre><code class="language-markdown">ValiantMusicAPI.exportMusicToClipboard(&lt;bool&gt; Verbose)
+<pre><code class="language-lua">ValiantMusicAPI.exportMusicToClipboard(&lt;bool&gt; Verbose)
 </code></pre>
 <h1><a class="header" href="#developer-resources" id="developer-resources">Developer Resources</a></h1>
 <p>In this chapter, I will cover and share to you my knowledge. Note that I may be wrong at times, so if you notice an error, please tell me on my discord @ Stefanuk12#5820!</p>

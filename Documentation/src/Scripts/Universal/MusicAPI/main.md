@@ -4,6 +4,6 @@ If you wish to check out the Music Table then go to this [link](https://stefanuk
 **Please note these are not automatically updated as soon as an audio is removed, instead it is removed manually as I don't know how to automate it in JS**
 
 This is formatted like this:
-```markdown
-<return type> examplefunction(<argument type> argument name)
+```lua
+<returntype> examplefunction(<argumenttype> argument name)
 ```
