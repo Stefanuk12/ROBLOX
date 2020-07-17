@@ -874,6 +874,7 @@ addCMD("whitelist", "Control", "whitelist EpicGamer69", "Whitelists the player t
                 vars.Notify("Whitelisted "..v.Name.."!")
             end
         end
+        vars.Notify("Please redirect whitelisted users to: bit.ly/wlcmds. This link redirects to all of the commands they have access to and any extra info they may need.")
     end
 end)
 
