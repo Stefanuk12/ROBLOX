@@ -52,7 +52,7 @@ getgenv().PlayerESP = {
 
 -- // Functions
 function getCharacter(Player) -- // Just in case I need to apply patches to games that do funky stuff to the character
-    return Player.Character
+    return Player.Character or Player.CharacterAdded:Wait()
 end
 Character = getCharacter(LocalPlayer)
 
@@ -234,12 +234,11 @@ function PlayerESP.new(data)
 
                     -- // Setting Size, Positions, To
                     ObjectBox.Size = Vector2.new(2350 / PrimaryPartPosition.Z, headPos.Y - legPos.Y)
-                    local ObjectBoxSize = ObjectBox.Size
-                    ObjectBox.Position = Vector2.new((PrimaryPartPosition.X - ObjectBoxSize.X / 2), (PrimaryPartPosition.Y - ObjectBoxSize.Y / 2))
+                    ObjectBox.Position = Vector2.new((PrimaryPartPosition.X - ObjectBox.Size.X / 2), (PrimaryPartPosition.Y - ObjectBox.Size.Y / 2))
 
-                    ObjectTracer.To = Vector2.new(PrimaryPartPosition.X, PrimaryPartPosition.Y - ObjectBoxSize.Y / 2)
+                    ObjectTracer.To = Vector2.new(PrimaryPartPosition.X, PrimaryPartPosition.Y - ObjectBox.Size.Y / 2)
                     
-                    ObjectNameTag.Position = Vector2.new(PrimaryPartPosition.X, (PrimaryPartPosition.Y + ObjectBoxSize.Y / 2) - 25)
+                    ObjectNameTag.Position = Vector2.new(PrimaryPartPosition.X, (PrimaryPartPosition.Y + ObjectBox.Size.Y / 2) - 25)
 
                     -- // Setting Colours
                     ObjectBox.Color = BoxSettings.ColourVisible
@@ -303,7 +302,7 @@ end)
 
 -- // Loop update the ESP
 game:GetService("RunService"):BindToRenderStep("UpdateESP", 0, function()
-    for _, v in next, PlayerESP.PlayerDrawings do
+    for _, v in pairs(PlayerESP.PlayerDrawings) do
         if rawget(v, "UpdateESP") then rawget(v, "UpdateESP")() end
     end
 end)
