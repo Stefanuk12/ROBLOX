@@ -11,6 +11,7 @@ local LocalPlayer = Players.LocalPlayer
 local Character = nil
 local CurrentCamera = workspace.CurrentCamera
 local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
+local Verbose = true
 
 getgenv().PlayerESP = {
     Settings = {
@@ -73,19 +74,17 @@ function initialisePlayer(Player, Verbose)
 end
 
 -- // Deinitalise a player
-function deInitialisePlayer(Player, Verbose)
+function deInitialisePlayer(Player)
     if PlayerESP.PlayerDrawings[Player.Name] then
-        local tCount = 1
-        for i,v in next, PlayerESP.PlayerDrawings do
+        for i,v in pairs(PlayerESP.PlayerDrawings) do
             if i == Player.Name then
                 if v.ObjectBox then v.ObjectBox:Remove() end
                 if v.ObjectTracer then v.ObjectTracer:Remove() end
                 if v.ObjectNameTag then v.ObjectTracer:Remove() end
-                table.remove(PlayerESP.PlayerDrawings, tCount)
+                PlayerESP.PlayerDrawings[i] = nil
                 if Verbose then print('Deinitialised Player ESP for '..Player.Name) end
                 break 
             end
-            tCount = tCount + 1
         end
     else
         if Verbose then warn(Player.Name.." has not been drawn yet!") return end
@@ -217,14 +216,14 @@ function PlayerESP.new(data)
             local NameTagSettings = Settings.NameTagSettings
 
             -- // Check if they have a PrimaryPart
-            if Character and Character.PrimaryPart and ObjectBox and ObjectTracer and ObjectNameTag then
+            if Character and Character.PrimaryPart then
                 -- // Vars
                 local PrimaryPart = Character.PrimaryPart
                 local PrimaryPartPosition, PrimaryPartVisible = WorldToViewportPoint(CurrentCamera, PrimaryPart.Position)
                 local TeamCheck = (PlayerESP.Settings.TeamCheck and Player.TeamColor ~= LocalPlayer.TeamColor) or (not PlayerESP.Settings.TeamCheck)
 
                 -- // Check if PrimaryPart is visible on Screen
-                if PrimaryPartVisible and ObjectBox and ObjectTracer and ObjectNameTag then
+                if PrimaryPartVisible then
                     -- // Vars
                     local headPos = WorldToViewportPoint(CurrentCamera, Character.Head.Position + Vector3.new(0, 0.5, 0))
                     local legPos = WorldToViewportPoint(CurrentCamera, PrimaryPart.Position - Vector3.new(0, 3, 0))
@@ -256,6 +255,7 @@ function PlayerESP.new(data)
                     ObjectBox.Visible = --[[BoxSettings.Enabled and TeamCheck]] true
                     ObjectTracer.Visible = --[[TracerSettings.Enabled and TeamCheck]] true
                     ObjectNameTag.Visible = --[[NameTagSettings.Enabled and TeamCheck]] true
+                    print(Player)
                 else
                     ObjectBox.Visible = false
                     ObjectTracer.Visible = false
@@ -275,7 +275,7 @@ function PlayerESP.new(data)
 end
 
 -- // Creates an ESP for a Player
-function newESP(Player, Verbose)
+function newESP(Player)
     if PlayerESP.PlayerDrawings[Player.Name] then return end
     local initialised = initialisePlayer(Player)
     local makeESP = PlayerESP.new({
@@ -288,21 +288,21 @@ end
 -- // Makes ESP on all players except LocalPlayer
 for _, Player in next, Players:GetPlayers() do
     if Player ~= LocalPlayer then
-        newESP(Player, true)
+        newESP(Player)
     end
 end
 
 -- // Making/Removing ESP when Players join and leave
 Players.PlayerAdded:Connect(function(Player)
-    newESP(Player, true)
+    newESP(Player)
 end)
 Players.PlayerRemoving:Connect(function(Player)
-    deInitialisePlayer(Player, true)
+    deInitialisePlayer(Player)
 end)
 
 -- // Loop update the ESP
 game:GetService("RunService"):BindToRenderStep("UpdateESP", 0, function()
-    for _, v in pairs(PlayerESP.PlayerDrawings) do
+    for i, v in pairs(PlayerESP.PlayerDrawings) do
         if rawget(v, "UpdateESP") then rawget(v, "UpdateESP")() end
     end
 end)
