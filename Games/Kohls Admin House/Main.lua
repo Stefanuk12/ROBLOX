@@ -821,8 +821,11 @@ addCMD("crash", "Server OOF", "crash", "Crashes Server. Only for Whitelisted Use
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher")
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher)
         LocalPlayer.Character:WaitForChild("VampireVanquisher")
+        wait(1)
         Players:Chat(":size me .3")
+        wait(1)
         Players:Chat(":size me .3")
+        wait(1)
         Players:Chat(":size me .3")
     end
 end)

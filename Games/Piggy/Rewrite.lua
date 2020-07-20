@@ -43,7 +43,7 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(Local
 local Humanoid = Character.WaitForChild(Character, "Humanoid")
 local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer.GetMouse(LocalPlayer)
-local ItemFolder = Workspace:FindFirstChild("ItemFolder")
+local ItemFolder = Workspace:WaitForChild("ItemFolder")
 local GameFolder = Workspace:FindFirstChild("GameFolder")
 local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
 
@@ -73,14 +73,18 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Anti Obfuscation
-LocalPlayer.PlayerGui.GameGUI.ChildAdded:Connect(function(child)
-    wait()
-    if child.Name == "Crouch" and child:FindFirstChild("DoorScript") then
-        child.DoorScript:Destroy()
-        print('Avoided Obfuscation!')
-    end
-end)
-print('Initialised Anti Item Obfuscation')
+function antiObfuscation()
+    LocalPlayer.PlayerGui.GameGUI.ChildAdded:Connect(function(child)
+        wait()
+        if child.Name == "Crouch" and child:FindFirstChild("DoorScript") then
+            child.DoorScript:Destroy()
+            print('Avoided Obfuscation!')
+        end
+    end)
+    print('Initialised Anti Item Obfuscation')
+end
+antiObfuscation()
+PlayerGui.ChildAdded:ConnecT(antiObfuscation)
 
 -- // Functions
 function noRagFall()
@@ -94,6 +98,18 @@ function PiggyHax.teleport(targetCFrame)
         Character.HumanoidRootPart.CFrame = targetCFrame
         print('Teleported!')
     end
+end
+
+function PiggyHax.getBots()
+    local allPlayers = {}
+    local bots = {}
+    for _,v in next, game:GetService("Players"):GetPlayers() do table.insert(allPlayers, v.Name) end
+    for _,v in pairs(workspace:GetDescendants()) do
+        if v:IsA("Humanoid") and not table.find(allPlayers, v.Parent.Name) and not table.find(bots, v.Parent) then
+            table.insert(bots, v.Parent)
+        end
+    end
+    return bots
 end
 
 function PiggyHax.inGame()
@@ -235,7 +251,7 @@ function PiggyHax.destroyAllHazards()
 end
 
 function PiggyHax.RemoveBots()
-    if inGame() then
+    if PiggyHax.inGame() then
         for _,v in pairs(Workspace.PeppaNPC:GetDescendants()) do
             if v:IsA("TouchTransmitter") then
                 v:Destroy()
