@@ -814,8 +814,6 @@ addCMD("rblphrase", "Server OOF", "rblphrase | EpicGamer69 | kill all", "Remove 
 end)
 
 addCMD("crash", "Server OOF", "crash", "Crashes Server.", function(message)
-    Players:Chat(":char me 489163522")
-    wait(1)
     Players:Chat(":gear me 94794847")
     LocalPlayer.Backpack:WaitForChild("VampireVanquisher")
     LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher)
