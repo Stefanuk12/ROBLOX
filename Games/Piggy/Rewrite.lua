@@ -39,6 +39,7 @@ local RenderStepped = RunService.RenderStepped
 local Stepped = RunService.Stepped
 local Heartbeat = RunService.Heartbeat
 local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
 local Humanoid = Character.WaitForChild(Character, "Humanoid")
 local CurrentCamera = Workspace.CurrentCamera
@@ -84,7 +85,7 @@ function antiObfuscation()
     print('Initialised Anti Item Obfuscation')
 end
 antiObfuscation()
-PlayerGui.ChildAdded:ConnecT(antiObfuscation)
+PlayerGui.ChildAdded:Connect(antiObfuscation)
 
 -- // Functions
 function noRagFall()
