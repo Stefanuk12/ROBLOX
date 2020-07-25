@@ -252,8 +252,8 @@ function PiggyHax.destroyAllHazards()
 end
 
 function PiggyHax.RemoveBots()
-    if PiggyHax.inGame() then
-        for _,v in pairs(Workspace.PeppaNPC:GetDescendants()) do
+    if PiggyHax.inGame() and #PiggyHax.getBots() > 0 then
+        for _,v in pairs(PiggyHax.getBots():GetDescendants()) do
             if v:IsA("TouchTransmitter") then
                 v:Destroy()
             end
