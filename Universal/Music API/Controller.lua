@@ -60,14 +60,22 @@ end
 
 -- // Remove any duplicate SoundIds
 function ValiantMusicAPI.removeDuplicates(targetTable)
-    local CheckTable = targetTable
-    for i, v in pairs(targetTable) do
-        if table.find(CheckTable, v.SoundId) then
-            table.remove(targetTable, i)
+    local CheckTable = {}
+    local function isInTable(targetTable, SoundId)
+        for _,v in pairs(targetTable) do
+            if v and v.SoundId == SoundId then
+               return true
+            end
+        end
+        return false
+    end
+    for i,v in pairs(targetTable) do
+        if not isInTable(CheckTable, v.SoundId) then
+            table.insert(CheckTable, v)
         end
     end
-    
-    return targetTable
+
+    return CheckTable
 end
 
 -- // Test All Of the Sounds
