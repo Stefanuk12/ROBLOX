@@ -1,6 +1,7 @@
 -- // Initialise
 if getgenv().ChatSpy then return getgenv().ChatSpy end
 repeat wait() until game:GetService("ContentProvider").RequestQueueSize == 0
+repeat wait() until game:IsLoaded()
 
 -- // Vars
 local Players = game:GetService("Players")
