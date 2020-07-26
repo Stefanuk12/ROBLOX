@@ -169,17 +169,19 @@ end
 function PiggyHax.retriveItem(ItemName, GoTo)
     if PiggyHax.returnItem(ItemName) then
         local Item = PiggyHax.returnItem(ItemName)
-        local SavedPos = Character.PrimaryPart.CFrame
-        function getItem()
-            PiggyHax.teleport(Item.CFrame); wait(0.25)
-            Item:FindFirstChildWhichIsA("ClickDetector").MaxActivationDistance = 15; wait(0.25)
-            Item.Transparency = 0; wait(0.25)
-            fireclickdetector(Item:FindFirstChildWhichIsA("ClickDetector"), 0); wait(0.5)
-            if not GoTo then PiggyHax.teleport(SavedPos); wait(0.25) else PiggyHax.autoDoItem(ItemName) end
+        if Item then
+            local SavedPos = Character.PrimaryPart.CFrame
+            function getItem()
+                PiggyHax.teleport(Item.CFrame); wait(0.25)
+                Item:FindFirstChildWhichIsA("ClickDetector").MaxActivationDistance = 15; wait(0.25)
+                Item.Transparency = 0; wait(0.25)
+                fireclickdetector(Item:FindFirstChildWhichIsA("ClickDetector"), 0); wait(0.5)
+                if not GoTo then PiggyHax.teleport(SavedPos); wait(0.25) else PiggyHax.autoDoItem(ItemName) end
+            end
+            getItem()
+            Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(ItemName))
+            wait(0.1)
         end
-        getItem()
-        Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(ItemName))
-        wait(0.1)
 
         if Character:FindFirstChild(ItemName) then
             NotificationHandler.newNotification('SUCCESS', 'Got '..ItemName.."!", 'Success')
@@ -298,7 +300,7 @@ end)()
 Humanoid.WalkSpeed = PiggyHax["WalkSpeed"]
 Humanoid.JumpPower = PiggyHax["JumpPower"]
 mt.__newindex = newcclosure(function(t, k, v)
-    if not checkcaller() and i == "WalkSpeed" or i == "JumpPower" then
+    if not checkcaller() and k == "WalkSpeed" or k == "JumpPower" and t == LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") then
         return backupnewindex(t, i, PiggyHax[i])
     end
     return backupnewindex(t, k, v)

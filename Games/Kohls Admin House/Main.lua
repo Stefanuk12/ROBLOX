@@ -465,7 +465,7 @@ KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
             Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
             Pad.Head.CanCollide = false
             Pad.Head.Transparency = 1
-            Pad.Head.CFrame = LocalPlayer.Character["Left Leg"].CFrame
+            Pad.Head.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
             if not string.match(Pad.Name, LocalPlayer.Name) and Pad.Head.BrickColor == BrickColor.new("Really red") then
                 fireCommand("regen")
             end
