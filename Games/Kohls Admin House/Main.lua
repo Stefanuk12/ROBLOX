@@ -52,6 +52,7 @@ KAHHax["vars"] = {
     },
     BlacklistedGears = {
         "82357101",
+        "94794847",
     },
     WhitelistedCMDs = {
         "play",
