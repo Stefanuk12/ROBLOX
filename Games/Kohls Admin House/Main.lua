@@ -456,26 +456,18 @@ end)()
 
 KAHHax.AdminController.PAdminCoroutine = coroutine.wrap(function()
     fireCommand("regen")
-
-    local Pad = Pads:FindFirstChildWhichIsA("Model")
-    local PadClone = Pad:Clone()
-
-    PadClone.Parent = Pads
-    PadClone.Name = "ClonedPad"
-    if Pad:FindFirstChildWhichIsA("Humanoid") then Pad:FindFirstChildWhichIsA("Humanoid"):Destroy() end
-    if PadClone:FindFirstChildWhichIsA("Humanoid") then PadClone:FindFirstChildWhichIsA("Humanoid"):Destroy() end
+    wait(math.random())
+    local Pad = Pads:FindFirstChild("Touch to get admin")
     
     while wait() do       
         if KAHHax.ControllerSettings.PersistantAdmin and LocalPlayer.Character:FindFirstChildWhichIsA("BasePart") then
-            if string.match(Pad.Name, "admin") and Pad.Head.BrickColor == BrickColor.new("Really red") then
-                fireCommand("regen")
-            end
             Pad.Head.Size = Vector3.new(0.1, 0.1, 0.1)
             Pad.Head.CanCollide = false
             Pad.Head.Transparency = 1
             Pad.Head.CFrame = LocalPlayer.Character["Left Leg"].CFrame
-
-            PadClone.Head.BrickColor = BrickColor.new("Really red")
+            if not string.match(Pad.Name, LocalPlayer.Name) and Pad.Head.BrickColor == BrickColor.new("Really red") then
+                fireCommand("regen")
+            end
         end
     end       
 end)()
