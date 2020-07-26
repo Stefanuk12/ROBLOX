@@ -83,7 +83,7 @@ function ValiantMusicAPI.testAllSounds(Verbose, waitTime, UseMarketplace)
     for i,v in pairs(ValiantMusicAPI.musicTable) do
         coroutine.wrap(function() -- // Coroutine to speed everything up
             if ValiantMusicAPI.checkBadSound(v.SoundId, v.Name, UseMarketplace, Verbose) then
-                ValiantMusicAPI.musicTable[i] = nil
+                table.remove(ValiantMusicAPI.musicTable, i)
             end
         end)()
     end
