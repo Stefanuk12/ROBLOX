@@ -114,7 +114,7 @@ function PiggyHax.getBots()
 end
 
 function PiggyHax.inGame()
-    return GameFolder.Phase == "GameInProgress"
+    return GameFolder.Phase.Value == "GameInProgress"
 end
 
 function PiggyHax.returnMap()
