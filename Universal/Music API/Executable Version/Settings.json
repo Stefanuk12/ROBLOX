@@ -1,0 +1,8 @@
+
+			{
+				"MusicTableURL" : "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json",
+				"outputMusicTableName" : "MusicTable",
+				"waitTime" : 60,
+				"Verbose" : true
+			}
+		
