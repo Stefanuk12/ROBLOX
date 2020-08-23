@@ -7,7 +7,7 @@
 #include <windows.h>
 #include <conio.h>
 
-size_t WriteCallback(char* contents, size_t size, size_t nmemb, void* userp){
+size_t WriteCallbackCURL(char* contents, size_t size, size_t nmemb, void* userp){
 	((std::string*)userp)->append((char*)contents, size * nmemb);
 	return size * nmemb;
 }
@@ -24,7 +24,7 @@ std::string getWebSource(std::string websiteURL) {
 		// Set curl options
 		curl_easy_setopt(curl, CURLOPT_URL, websiteURL.c_str());
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, TRUE);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallbackCURL);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &webSource);
 
 		// Perform curl get request, check result and cleanup
