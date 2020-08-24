@@ -357,6 +357,13 @@ game:GetService("Players").PlayerAdded:Connect(function(plr)
         wait(0.5)
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
         Players:Chat(fgpfPHrase)
+        plr.Chatted:Connect(function(chat)
+            if string.lower(chat) == "hi gamers" and LocalPlayer.UserId ~= plr.UserId then
+                wait(0.5)
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(fgpfPHrase, "All")
+                Players:Chat(fgpfPHrase)
+            end
+        end)
     end
 end)
  
