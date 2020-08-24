@@ -114,7 +114,7 @@ namespace MusicChecker
 
         public static void UpdateMusicTableFile(JArray MusicTable)
         {
-            string jsonString = MusicTable.ToString();
+            string jsonString = MusicTable.ToString(Formatting.None); // had to make sure there was no formatting or else roblox cant handle large json files lol
             JObject Settings = GetSettings();
             string MusicTableLocation = (string)Settings["MusicTableLocation"];
 
