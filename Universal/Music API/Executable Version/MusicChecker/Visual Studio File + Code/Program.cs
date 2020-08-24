@@ -10,12 +10,6 @@ namespace MusicChecker
 {
     static class Program
     {
-        // Vars
-        static string[] defaultFilter = {
-            "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
-            "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
-        };
-
         // Removes all files in a directory
         public static void Empty(this System.IO.DirectoryInfo directory)
         {
@@ -98,8 +92,10 @@ namespace MusicChecker
             };
 
             // Getting Sound Name
-            MusicAPI.ConsoleWarn("Please enter the Sound Name.");
+            MusicAPI.ConsoleWarn("Please enter the Sound Name. Say -exit to exit.");
             string Name = Console.ReadLine();
+
+            if (Name == "-exit") return;
 
             // Adding the sound to the music table
             MusicAPI.ConsoleWarn("Do you wish to add the sound to the Music Table? Y/N");
