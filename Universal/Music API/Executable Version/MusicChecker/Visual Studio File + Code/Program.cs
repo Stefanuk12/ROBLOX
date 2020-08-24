@@ -32,7 +32,7 @@ namespace MusicChecker
             string[] Filter = Settings["Filter"].ToObject<string[]>();
             bool PreviewSounds = (bool)Settings["PreviewSounds"];
             bool RemoveAudioOnExit = (bool)Settings["RemoveAudioOnExit"];
-            string StorageFolderName = "\\" + (string)Settings["StorageFolderName"];
+            string StorageFolderName = "\\" + (string)Settings["PreviewStorageFolder"];
 
             // Get the Sound Id
             MusicAPI.ConsoleWarn("Please enter the Sound ID");
@@ -49,17 +49,18 @@ namespace MusicChecker
 
             // Play Sound Preview
             string StorageAudioLocation = Directory.GetCurrentDirectory() + StorageFolderName;
-            string SoundStorageName = StorageAudioLocation + "\\" + "Preview Audio" + " (" + SoundId + ")";
+
+            // Create Audio Preview Storage
+            if (!Directory.Exists(StorageAudioLocation))
+            {
+                Directory.CreateDirectory(StorageAudioLocation);
+            };
+
+            string SoundStorageName = StorageAudioLocation + "\\" + StorageFolderName + " (" + SoundId + ")";
             if (PreviewSounds)
             {
                 try
                 {
-                    // Create Audio Preview Storage
-                    if (!Directory.Exists(StorageAudioLocation))
-                    {
-                        Directory.CreateDirectory(StorageAudioLocation);
-                    };
-
                     // Download the file
                     using (WebClient webClient = new WebClient())
                     {

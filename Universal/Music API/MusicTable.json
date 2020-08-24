@@ -653,5 +653,225 @@
     "Name": "XXXTentacion - Vice City",
     "SoundId": "4441373141",
     "UUID": 131
+  },
+  {
+    "Name": "Lil Pump - Lil Pump",
+    "SoundId": "5560343943",
+    "UUID": 132
+  },
+  {
+    "Name": "Playboi Carti - Broke Boi",
+    "SoundId": "5558308723",
+    "UUID": 133
+  },
+  {
+    "Name": "Shoreline Mafia - Bottle Service",
+    "SoundId": "5554768071",
+    "UUID": 134
+  },
+  {
+    "Name": "Shoreline Mafia - Pressure",
+    "SoundId": "5492482729",
+    "UUID": 135
+  },
+  {
+    "Name": "Crazy Frog",
+    "SoundId": "5588418484",
+    "UUID": 136
+  },
+  {
+    "Name": "Jonathan Axelsson - All Girls Are The Same",
+    "SoundId": "5070441615",
+    "UUID": 137
+  },
+  {
+    "Name": "MC Virgins - Anime Thighs",
+    "SoundId": "5306171522",
+    "UUID": 138
+  },
+  {
+    "Name": "YBN Nahmir - Pain Away",
+    "SoundId": "5585463003",
+    "UUID": 139
+  },
+  {
+    "Name": "[Parody] Lil Mosey - Blueberry Faygo",
+    "SoundId": "5532794340",
+    "UUID": 140
+  },
+  {
+    "Name": "$NOT - Northface",
+    "SoundId": "5428836682",
+    "UUID": 141
+  },
+  {
+    "Name": "ZillaKami - Countdown",
+    "SoundId": "5579883307",
+    "UUID": 142
+  },
+  {
+    "Name": "[Parody] My cock is in your ass",
+    "SoundId": "5529086898",
+    "UUID": 143
+  },
+  {
+    "Name": "[Parody] YBN Nahmir - Bounce Out With That",
+    "SoundId": "5370443711",
+    "UUID": 144
+  },
+  {
+    "Name": "Pop Smoke - Mood Swings",
+    "SoundId": "5582713134",
+    "UUID": 145
+  },
+  {
+    "Name": "Zack Fox - Jesus",
+    "SoundId": "5566880218",
+    "UUID": 146
+  },
+  {
+    "Name": "LMFAO - Party Rock",
+    "SoundId": "5565576480",
+    "UUID": 147
+  },
+  {
+    "Name": "lil ricefield - TRAPANESE",
+    "SoundId": "5600019442",
+    "UUID": 148
+  },
+  {
+    "Name": "Lil Xan - Betrayed",
+    "SoundId": "5361759113",
+    "UUID": 149
+  },
+  {
+    "Name": "YBN Nahmir - No Hook",
+    "SoundId": "5489571442",
+    "UUID": 150
+  },
+  {
+    "Name": "Spongebob Swearing",
+    "SoundId": "5523285102",
+    "UUID": 151
+  },
+  {
+    "Name": "Tay K - Crunch Time",
+    "SoundId": "5586043328",
+    "UUID": 152
+  },
+  {
+    "Name": "Lil Darkie - Electric Dandelions",
+    "SoundId": "5606367159",
+    "UUID": 153
+  },
+  {
+    "Name": "Cupcakke - Deepthroat",
+    "SoundId": "5539998829",
+    "UUID": 154
+  },
+  {
+    "Name": "Yung Gravy - 1 Thot 2 Thot Red Thot Blue Thot",
+    "SoundId": "5578886136",
+    "UUID": 155
+  },
+  {
+    "Name": "Yelling + Glizzy Gobbler",
+    "SoundId": "5603798536",
+    "UUID": 156
+  },
+  {
+    "Name": "Gutterboysouz - Trenchboy",
+    "SoundId": "5156273661",
+    "UUID": 157
+  },
+  {
+    "Name": "M24 - A Town Matters",
+    "SoundId": "5602381746",
+    "UUID": 158
+  },
+  {
+    "Name": "Headie One - Rose Gold",
+    "SoundId": "5602528196",
+    "UUID": 159
+  },
+  {
+    "Name": "Playboi Carti - Brand New Bih",
+    "SoundId": "5494903014",
+    "UUID": 160
+  },
+  {
+    "Name": "Tay K - I Love My Choppa",
+    "SoundId": "5142690024",
+    "UUID": 161
+  },
+  {
+    "Name": "[Parody] Rae Sremmurd - Swang",
+    "SoundId": "5465871186",
+    "UUID": 162
+  },
+  {
+    "Name": "6ix9ine - Punani",
+    "SoundId": "5487894997",
+    "UUID": 163
+  },
+  {
+    "Name": "Lil Darkie - Red Dot",
+    "SoundId": "5141973246",
+    "UUID": 164
+  },
+  {
+    "Name": "Lil Darkie - Holocaust",
+    "SoundId": "5130014126",
+    "UUID": 165
+  },
+  {
+    "Name": "Lil Darkie - I Eat Fungi",
+    "SoundId": "5156678826",
+    "UUID": 166
+  },
+  {
+    "Name": "Lil Darkie - Death Squad",
+    "SoundId": "4980755719",
+    "UUID": 167
+  },
+  {
+    "Name": "Lil Darkie - Colossal Confict",
+    "SoundId": "5105381180",
+    "UUID": 168
+  },
+  {
+    "Name": "Lil Darkie - Aussie",
+    "SoundId": "5141743024",
+    "UUID": 169
+  },
+  {
+    "Name": "Lil Peep - Save That Shit",
+    "SoundId": "5487916662",
+    "UUID": 170
+  },
+  {
+    "Name": "Smokepurpp - Do Not Disturb",
+    "SoundId": "5491063749",
+    "UUID": 171
+  },
+  {
+    "Name": "[Parody] 6ix9ine - Gummo",
+    "SoundId": "5364183889",
+    "UUID": 172
+  },
+  {
+    "Name": "Lil Uzi Vert - XO Tour Lif3",
+    "SoundId": "4997564247",
+    "UUID": 173
+  },
+  {
+    "Name": "Pop Smoke - Foreigner",
+    "SoundId": "5347664556",
+    "UUID": 174
+  },
+  {
+    "Name": "N.W.A. - Straight Outta Compton",
+    "SoundId": "5156342864",
+    "UUID": 175
   }
 ]
