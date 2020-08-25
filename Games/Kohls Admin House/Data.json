@@ -20,6 +20,24 @@
         }
     },
     "Blacklist": {
+        "Select Gear ID": {
+            "Admin": false,
+            "Description": "Please specify a gear ID.",
+            "Name": "Select Gear ID",
+            "Type": "TextField"
+        },
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
         "Blacklist Gear": {
             "Admin": true,
             "Description": "Whenever an unwhitelisted player is given this gear, it is immediately removed from them.",
@@ -46,6 +64,12 @@
         }
     },
     "Commands": {
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
         "Spam Phrase": {
             "Admin": true,
             "Description": "Spams the specified phrase",
@@ -60,6 +84,12 @@
         }
     },
     "Misc": {
+        "Select Paint Colour": {
+            "Admin": false,
+            "Description": "Please select a colour.",
+            "Name": "Select Paint Colour",
+            "Type": "ColorPicker"
+        },
         "Paint Area": {
             "Admin": true,
             "Description": "Paints the selected area with the selected colour.",
@@ -88,6 +118,12 @@
         }
     },
     "Player": {
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
         "Get Age": {
             "Admin": false,
             "Description": "Gets the age of the selected player.",
@@ -180,7 +216,7 @@
             "Admin": true,
             "Description": "Gets you in a state which allows you to move the baseplate by tping, skydiving, etc.",
             "Name": "Move Baseplate",
-            "Type": "Toggle"
+            "Type": "Button"
         },
         "Part Spam": {
             "Admin": true,
@@ -234,6 +270,12 @@
         }
     },
     "Whitelist": {
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
         "Unwhitelist Player": {
             "Admin": false,
             "Description": "Unwhitelists a player, they are no longer excempt from abusive commands.",
