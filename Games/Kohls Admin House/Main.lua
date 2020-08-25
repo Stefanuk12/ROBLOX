@@ -868,7 +868,7 @@ addCMD("whitelist", "Control", "whitelist EpicGamer69", "Whitelists the player t
     local splitString = string.split(message, " ")
     if splitString[2] then
         for _, v in pairs(vars.getPlayer(splitString[2])) do
-            if vars.PlayerManager[v.Name] and not vars.PlayerManager[v.Name]["Whitelisted"] then
+            if v ~= LocalPlayer and vars.PlayerManager[v.Name] and not vars.PlayerManager[v.Name]["Whitelisted"] then
                 vars.PlayerManager[v.Name]["Whitelisted"] = true
                 vars.Notify("Whitelisted "..v.Name.."!")
                 Players:Chat(":pm " .. v.Name .. " You have been whitelisted to use oof kohls created by Stefanuk12, follow the link in logs for further info.")
@@ -884,7 +884,7 @@ addCMD("rwhitelist", "Control", "rwhitelist EpicGamer69", "Removes the whitelist
     if splitString[2] then
         local playerTable = vars.getPlayer(splitString[2])
         for _, v in pairs(playerTable) do
-            if not table.find(vars.WhitelistedUsers, v.UserId) and vars.PlayerManager[v.Name] and vars.PlayerManager[v.Name]["Whitelisted"] then
+            if v ~= LocalPlayer and not table.find(vars.WhitelistedUsers, v.UserId) and vars.PlayerManager[v.Name] and vars.PlayerManager[v.Name]["Whitelisted"] then
                 vars.PlayerManager[v.Name]["Whitelisted"] = false
                 vars.Notify("Removed "..v.Name.." from the Whitelist!")
             end
