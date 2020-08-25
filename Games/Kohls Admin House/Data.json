@@ -1,0 +1,250 @@
+{
+    "Sound Abuse": {
+        "Ear Rape": {
+            "Type": "Toggle",
+            "Name": "Ear Rape",
+            "Description": "Every 0.1 second every sound in the game is played. Undetectable in logs.",
+            "Admin": false
+        },
+        "Play Music": {
+            "Type": "Button",
+            "Name": "Play Music",
+            "Description": "Calls :Play() on the Music Sound. Undetectable in logs.",
+            "Admin": false
+        },
+        "Play All Sounds": {
+            "Type": "Button",
+            "Name": "Play All Sounds",
+            "Description": "Calls :Play() on every sound in the game. Undetectable in logs.",
+            "Admin": false
+        },
+        "Stop Music": {
+            "Type": "Button",
+            "Name": "Stop Music",
+            "Description": "Calls :Stop() on the Music Sound. Undetectable in logs.",
+            "Admin": false
+        },
+        "Stop All Sounds": {
+            "Type": "Button",
+            "Name": "Stop All Sounds",
+            "Description": "Calls :Stop() on every sound in the game. Undetectable in logs.",
+            "Admin": false
+        }
+    },
+    "Admin": {
+        "Get Admin": {
+            "Type": "Button",
+            "Name": "Get Admin",
+            "Description": "Gets admin. You may be teleported to an available admin pad.",
+            "Admin": false
+        },
+        "Regenerate Admin": {
+            "Type": "Button",
+            "Name": "Regenerate Admin",
+            "Description": "Regenerates the Admin. Requires fireclickdetector().",
+            "Admin": false
+        },
+        "Permanant Admin": {
+            "Type": "Toggle",
+            "Name": "Permanant Admin",
+            "Description": "Automatically gets admin if it is regenerated.",
+            "Admin": false
+        }
+    },
+    "Music Commands": {
+        "Play Sound": {
+            "Type": "Button",
+            "Name": "Play Sound",
+            "Description": "Plays the selected sound.",
+            "Admin": true
+        },
+        "Refresh Sounds": {
+            "Type": "Button",
+            "Name": "Refresh Sounds",
+            "Description": "Refreshes the sounds, grabs any new ones if they are any.",
+            "Admin": false
+        }
+    },
+    "Protections": {
+        "Anti Blind": {
+            "Type": "Toggle",
+            "Name": "Anti Blind",
+            "Description": "As soon as you are blinded, the blind effect is removed.",
+            "Admin": false
+        },
+        "Anti Jail": {
+            "Type": "Toggle",
+            "Name": "Anti Jail",
+            "Description": "As soon as you are jailed, all jails are removed.",
+            "Admin": true
+        },
+        "Anti Kill": {
+            "Type": "Toggle",
+            "Name": "Anti Kill",
+            "Description": "As soon as you are killed, you are reset.",
+            "Admin": true
+        },
+        "Anti Punish": {
+            "Type": "Toggle",
+            "Name": "Anti Punish",
+            "Description": "As soon as you are punished, you are reset.",
+            "Admin": true
+        }
+    },
+    "Whitelist": {
+        "Whitelist Player": {
+            "Type": "Button",
+            "Name": "Whitelist Player",
+            "Description": "Whitelists a player, they are excempt from abusive commands.",
+            "Admin": false
+        },
+        "Unwhitelist Player": {
+            "Type": "Button",
+            "Name": "Unwhitelist Player",
+            "Description": "Unwhitelists a player, they are no longer excempt from abusive commands.",
+            "Admin": false
+        }
+    },
+    "Blacklist": {
+        "Blacklist Gear": {
+            "Type": "Button",
+            "Name": "Blacklist Gear",
+            "Description": "Whenever an unwhitelisted player is given this gear, it is immediately removed from them.",
+            "Admin": true
+        },
+        "Unblacklist Gear": {
+            "Type": "Button",
+            "Name": "Unblacklist Gear",
+            "Description": "Unblacklists a gear, allows unwhitelisted gears to recieve this gear.",
+            "Admin": false
+        },
+        "Blacklist Phrase": {
+            "Type": "Button",
+            "Name": "Blacklist Phrase",
+            "Description": "Whenever the selected player says the blacklisted phrase, a selected punishment phrase is said to counter it.",
+            "Admin": true
+        },
+        "Unblacklist Phrase": {
+            "Type": "Button",
+            "Name": "Unblacklist Phrase",
+            "Description": "Unwhitelists a phrase from the selected player, allowing them to say it without any repercussions.",
+            "Admin": false
+        }
+    },
+    "Player": {
+        "Get Age": {
+            "Type": "Button",
+            "Name": "Get Age",
+            "Description": "Gets the age of the selected player.",
+            "Admin": false
+        },
+        "Give Client BTools": {
+            "Type": "Button",
+            "Name": "Give Client BTools",
+            "Description": "The selected player will be given client-sided btools",
+            "Admin": true
+        },
+        "Give Teapot Turret": {
+            "Type": "Button",
+            "Name": "Give Teapot Turret",
+            "Description": "Gives the Teapot Turret to the selected player.",
+            "Admin": true
+        },
+        "Lag Player": {
+            "Type": "Button",
+            "Name": "Lag Player",
+            "Description": "Lags the selected player with PMs that contain lots of text.",
+            "Admin": true
+        },
+        "Stop Lag Player": {
+            "Type": "Button",
+            "Name": "Stop Lag Player",
+            "Description": "Stops lagging the selected player.",
+            "Admin": false
+        },
+        "Give Gear": {
+            "Type": "Button",
+            "Name": "Give Gear",
+            "Description": "Gives the selected gear to the selected player.",
+            "Admin": true
+        }
+    },
+    "Server": {
+        "Crash Server": {
+            "Type": "Button",
+            "Name": "Crash Server",
+            "Description": "Crashes the server by equiping a gear then shrinking self.",
+            "Admin": true
+        },
+        "Lag Server": {
+            "Type": "Button",
+            "Name": "Lag Server",
+            "Description": "Lags the server by sending everyone PMs with large text.",
+            "Admin": true
+        },
+        "Create Phantom Baseplate": {
+            "Type": "Button",
+            "Name": "Create Phantom Baseplate",
+            "Description": "Creates a phantom baseplate, clientsided.",
+            "Admin": false
+        },
+        "Remove Phantom Baseplates": {
+            "Type": "Button",
+            "Name": "Remove Phantom Baseplates",
+            "Description": "Removes all phantom baseplates created.",
+            "Admin": false
+        },
+        "Respawn Explode": {
+            "Type": "Toggle",
+            "Name": "Respawn Explode",
+            "Description": "Spams respawn and explode on everyone.",
+            "Admin": true
+        },
+        "Epilepsy": {
+            "Type": "Toggle",
+            "Name": "Epilepsy",
+            "Description": "Creates an epilepsy effect, colourshifting.",
+            "Admin": true
+        },
+        "Move Baseplate": {
+            "Type": "Toggle",
+            "Name": "Move Baseplate",
+            "Description": "Gets you in a state which allows you to move the baseplate by tping, skydiving, etc.",
+            "Admin": true
+        },
+        "Part Spam": {
+            "Type": "Toggle",
+            "Name": "Part Spam",
+            "Description": "Spams 10 by 10 by 10 parts.",
+            "Admin": true
+        }
+    },
+    "Misc": {
+        "Rejoin": {
+            "Type": "Button",
+            "Name": "Rejoin",
+            "Description": "Rejoins the game. May not work at times.",
+            "Admin": false
+        },
+        "Paint Area": {
+            "Type": "Button",
+            "Name": "Paint Area",
+            "Description": "Paints the selected area with the selected colour.",
+            "Admin": true
+        }
+    },
+    "Commands": {
+        "Spam Phrase": {
+            "Type": "Button",
+            "Name": "Spam Phrase",
+            "Description": "Spams the specified phrase",
+            "Admin": true
+        },
+        "Stop Spam Phrase": {
+            "Type": "Button",
+            "Name": "Stop Spam Phrase",
+            "Description": "Stops spamming the specified phrase",
+            "Admin": false
+        }
+    }
+}
