@@ -871,6 +871,8 @@ addCMD("whitelist", "Control", "whitelist EpicGamer69", "Whitelists the player t
             if vars.PlayerManager[v.Name] and not vars.PlayerManager[v.Name]["Whitelisted"] then
                 vars.PlayerManager[v.Name]["Whitelisted"] = true
                 vars.Notify("Whitelisted "..v.Name.."!")
+                Players:Chat(":pm " + v.Name + " You have been whitelisted to use oof kohls created by Stefanuk12, follow the link in logs for further info.")
+                Players:Chat(":pm me bit.ly/wlcmds")
             end
         end
         vars.Notify("Please redirect whitelisted users to: bit.ly/wlcmds. This link redirects to all of the commands they have access to and any extra info they may need.")
