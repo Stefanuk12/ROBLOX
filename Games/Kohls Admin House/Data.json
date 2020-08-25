@@ -101,6 +101,12 @@
             "Description": "Rejoins the game. May not work at times.",
             "Name": "Rejoin",
             "Type": "Button"
+        },
+        "Save Settings": {
+            "Admin": false,
+            "Description": "Saves all of your settings.",
+            "Name": "Save Settings",
+            "Type": "Button"
         }
     },
     "Music Commands": {
