@@ -104,6 +104,12 @@
         }
     },
     "Music Commands": {
+        "Select Sound": {
+            "Admin": false,
+            "Description": "Selects a sound to play.",
+            "Name": "Select Sound",
+            "Type": "Dropdown"
+        },
         "Play Sound": {
             "Admin": true,
             "Description": "Plays the selected sound.",
