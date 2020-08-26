@@ -565,11 +565,11 @@ local GiveClientBTools = SetupTextMenu(Player, "Give Client BTools", {
         });
         if (not FailSafeResult) then return; end;
 
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16200204");
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16200402");
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16969792");
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "73089190");
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "21001552");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " 16200204");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " 16200402");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " 16969792");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " 73089190");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " 21001552");
     end;
 });
 
