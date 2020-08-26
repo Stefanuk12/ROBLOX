@@ -207,7 +207,7 @@ local Whitelist = createPage("Whitelist");
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
         local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
-        if (firetouchinterest or true) then
+        if (firetouchinterest and false) then
             firetouchinterest(Character.HumanoidRootPart, TargetPad.Head, 0); -- // doesn't work on synap(sex) :(
         else
             local savedPos = Character.HumanoidRootPart.CFrame;
