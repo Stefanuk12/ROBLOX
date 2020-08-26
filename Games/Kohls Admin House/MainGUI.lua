@@ -719,10 +719,10 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
         local testCFrame = Baseplate.CFrame;
         local testPosition = Spawn.Position;
         local X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = testCFrame:GetComponents();
-        local X, Y, Z = testPosition.X, Y + 1, testPosition.Z;
+        local X, Y, Z = testPosition.X, Y + 3, testPosition.Z;
         local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
         
-        Character.HumanoidRootPart.CFrame = newCFrame;
+        Character:SetPrimaryPartCFrame(newCFrame);
         wait(1.5);
         Players:Chat(":stun me");
         Material.Banner({
