@@ -26,11 +26,24 @@ for i = 1, #musicTable do
 end;
 
 local GearGiverGears = {
-
+    {Name = "PaintBucket", Id = 18474459},
+    {Name = "Hyperlaser", Id = 130113146},
+    {Name = "RainbowCarpet", Id = 225921000},
+    {Name = "Airstrike", Id = 88885539},
+    {Name = "SuperRLauncher", Id = 190094159},
+    {Name = "RLauncher", Id = 32356064},
+    {Name = "SSTripmine", Id = 11999247},
+    {Name = "ASSentry", Id = 68603151},
+    {Name = "RPOSword", Id = 159229806},
+    {Name = "IceStaff", Id = 19704064},
+    {Name = "Transmorph", Id = 29099749},
+    {Name = "ShiftingPolarity", Id = 61459706},
+    {Name = "PortableJustice", Id = 82357101},
 };
 local GearGiverGearNames = {};
-for i, _ in pairs(Gears) do
-    table.insert(GearGiverGearNames, i);
+for i = 1, #GearGiverGears do
+    local v = GearGiverGears[i];
+    table.insert(GearGiverGearNames, v["Name"]);
 end;
 
 local Settings = {
@@ -387,7 +400,7 @@ local MiscSelectPaintArea = SetupTextMenu(Misc, "Select Painting Area", {
         "Obby",
         "Building Bricks",
         "Obby Box",
-    }
+    },
     Callback = function(Value)
         Settings["MiscSelectPaintArea"] = Value
     end;
@@ -566,11 +579,23 @@ local GiveGear = SetupTextMenu(Player, "Give Gear", {
             {
                 Requirement = Settings["PlayerSelectPlayer"],
                 Error = "Please select a player."
+            },
+            {
+                Requirement = Settings["PlayerSelectGear"],
+                Error = "Please select a gear."
             }
         });
         if (not FailSafeResult) then return; end;
 
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " " .. GearGiverGears[Settings["PlayerSelectGear"]]);
+        local GearId;
+        for i = 1, #GearGiverGears do
+            local v = GearGiverGears[i];
+            if (v.Name == Settings["PlayerSelectGear"]) then
+                GearId = v.Id;
+            end;
+        end;
+
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " " .. GearId]);
     end;
 });
 
