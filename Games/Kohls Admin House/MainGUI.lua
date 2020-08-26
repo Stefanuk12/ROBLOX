@@ -23,6 +23,14 @@ for i = 1, #musicTable do
     table.insert(MusicTable, v["Name"]);
 end;
 
+local GearGiverGears = {
+
+};
+local GearGiverGearNames = {};
+for i, _ in pairs(Gears) do
+    table.insert(GearGiverGearNames, i);
+end;
+
 local Settings = {
     AdminPermanantAdmin = false,
     ProtectionsAntiBlind = false,
@@ -30,6 +38,10 @@ local Settings = {
     ProtectionsAntiKill = false,
     ProtectionsAntiPunish = false,
     SoundAbuseEarRape = false,
+    ServerEpilepsy = false,
+    ServerLagServer = false,
+    ServerRespawnExplode = false,
+    ServerPartSpam = false,
     MusicCommandsSelectSound = "Not selected",
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
@@ -37,6 +49,7 @@ local Settings = {
     CommandsSelectPhrase = "Not selected",
     MiscSelectPaintColour = "Not selected",
     PlayerSelectPlayer = "Not selected",
+    PlayerSelectGear = "Not selected",
     WhitelistSelectPlayer = "Not selected"
 };
 if (writefile) then
@@ -206,14 +219,14 @@ local Whitelist = createPage("Whitelist");
 -- // Admin
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
-        local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
+        local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin").Head;
         if (firetouchinterest and false) then
-            firetouchinterest(Character.HumanoidRootPart, TargetPad.Head, 0); -- // doesn't work on synap(sex) :(
+            firetouchinterest(Character.HumanoidRootPart, TargetPad, 0); -- // doesn't work on synap(sex) :(
         else
             local savedPos = Character.HumanoidRootPart.CFrame;
-            Character.HumanoidRootPart.CFrame = TargetPad.Head.CFrame;
+            Character:SetPrimaryPartCFrame(TargetPad.CFrame);
             wait(1);
-            Character.HumanoidRootPart.CFrame = savedPos;
+            Character:SetPrimaryPartCFrame(savedPos);
         end;
 
         Material.Banner({
@@ -450,6 +463,13 @@ local PlayerSelectPlayer = SetupTextMenu(Player, "Select Player", {
     end;
 });
 
+local PlayerSelectGear = SetupTextMenu(Player, "Select Gear", {
+    Options = GearGiverGearNames;
+    Callback = function(Value)
+        Settings["PlayerSelectGear"] = Value;
+    end;
+});
+
 local GetAge = SetupTextMenu(Player, "Get Age", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Player, "Get Age", {
@@ -459,6 +479,10 @@ local GetAge = SetupTextMenu(Player, "Get Age", {
             }
         });
         if (not FailSafeResult) then return; end;
+        local TargetPlayer = Settings["PlayerSelectPlayer"];
+        Material.Banner({
+			Text = TargetPlayer .. "'s Account Age is: " .. Players[TargetPlayer]["AccountAge"] .. " days.";
+		});
     end;
 });
 
@@ -471,6 +495,12 @@ local GiveClientBTools = SetupTextMenu(Player, "Give Client BTools", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16200204");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16200402");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "16969792");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "73089190");
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. "21001552");
     end;
 });
 
@@ -483,6 +513,8 @@ local GiveGear = SetupTextMenu(Player, "Give Gear", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " " .. GearGiverGears[Settings["PlayerSelectGear"]]);
     end;
 });
 
@@ -495,6 +527,8 @@ local GiveTeapotTurret = SetupTextMenu(Player, "Give Teapot Turret", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        Players:Chat(":hat " .. Settings["PlayerSelectPlayer"] .. " 1055299");
     end;
 });
 
@@ -555,56 +589,92 @@ local AntiPunish = SetupTextMenu(Protections, "Anti Punish", {
 local CrashServer = SetupTextMenu(Server, "Crash Server", {
     Enabled = false,
     Callback = function()
-        
+        Players:Chat(":gear me 94794847");
+        LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
+        Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
+        Character:WaitForChild("VampireVanquisher");
+        for i = 1, 3 do
+            Players:Chat(":size me .3");
+            wait(1);
+        end;
     end;
 });
 
 local CreatePhantomBaseplate = SetupTextMenu(Server, "Create Phantom Baseplate", {
     Enabled = false,
     Callback = function()
-        
+        local Baseplate = Instance.new("Part", GameFolder["Workspace"])
+        Baseplate.Name = "PhantomBaseplate"
+        Baseplate.BrickColor = BrickColor.new("Bright green")
+        Baseplate.Size = Vector3.new(1000, 1.2, 1000)
+        Baseplate.TopSurface = "Studs"
+        Baseplate.Anchored = true
+        Material.Banner({
+			Text = "Made Phantom Baseplate."
+		});
     end;
 });
 
 local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
     Enabled = false,
     Callback = function(Value)
-        
+        Settings["ServerEpilepsy"] = Value;
     end;
 });
 
 local LagServer = SetupTextMenu(Server, "Lag Server", {
     Enabled = false,
-    Callback = function()
-        
+    Callback = function(Value)
+        Settings["ServerLagServer"] = Value;
     end;
 });
 
 local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
     Enabled = false,
     Callback = function()
+        local WorkspaceFolder = GameFolder["Workspace"];
+        local Spawn = WorkspaceFolder.Spawn3;
+        local Baseplate = WorkspaceFolder.Baseplate;
+
+        local testCFrame = Baseplate.CFrame;
+        local testPosition = Spawn.Position;
+        local X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = testCFrame:GetComponents();
+        local X, Y, Z = testPosition.X, Y + 1, testPosition.Z;
+        local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
         
+        Character.HumanoidRootPart.CFrame = newCFrame;
+        wait(1.5);
+        Players:Chat(":stun me");
+        Material.Banner({
+			Text = "Put you in the position to move the baseplate."
+		});
     end;
 });
 
 local PartSpam = SetupTextMenu(Server, "Part Spam", {
     Enabled = false,
     Callback = function(Value)
-        
+        Settings["ServerPartSpam"] = Value;
     end;
 });
 
 local RemovePhantomBaseplate = SetupTextMenu(Server, "Remove Phantom Baseplates", {
     Enabled = false,
     Callback = function()
-        
+        local PhantomBaseplates = GameFolder["Workspace"]:GetChildren();
+        for i = 1, #PhantomBaseplates do
+            local v = PhantomBaseplates[i];
+            if v.Name == "PhantomBaseplate" then
+                v:Destroy();
+            end;
+        end;
     end;
 });
 
 local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     Enabled = false,
     Callback = function(Value)
-        
+        Settings["ServerRespawnExplode"] = Value;
     end;
 });
 
