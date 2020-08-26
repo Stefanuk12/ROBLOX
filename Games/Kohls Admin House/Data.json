@@ -71,7 +71,7 @@
             "Type": "TextField"
         },
         "Say Phrase": {
-            "Admin": true,
+            "Admin": false,
             "Description": "Says the phrase using Players:Chat(). Detectable.",
             "Name": "Say Phrase",
             "Type": "Button"
