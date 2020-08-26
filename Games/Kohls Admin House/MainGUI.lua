@@ -207,8 +207,8 @@ local Whitelist = createPage("Whitelist");
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
         local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
-        if (firetouchinterest) then
-            firetouchinterest(Character.HumanoidRootPart, TargetPad.Head, 0);
+        if (firetouchinterest or true) then
+            firetouchinterest(Character.HumanoidRootPart, TargetPad.Head, 0); -- // doesn't work on synap(sex) :(
         else
             local savedPos = Character.HumanoidRootPart.CFrame;
             Character.HumanoidRootPart.CFrame = TargetPad.Head.CFrame;
@@ -224,17 +224,16 @@ local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
 
 local RegenerateAdmin = SetupTextMenu(Admin, "Regenerate Admin", {
     Callback = function()
-        if (fireclickdetector) then
-            fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
-            Material.Banner({
-				Text = "Regenerated admin."
-			});
-        else
+        if (not fireclickdetector) then
             Material.Banner({
 				Text = "Your exploit does not support this feature."
 			});
             return;
         end;
+        fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
+        Material.Banner({
+			Text = "Regenerated admin."
+		});
     end;
 });
 
