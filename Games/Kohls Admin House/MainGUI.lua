@@ -2,6 +2,7 @@
 
 -- // Services
 local Players = game:GetService("Players");
+local RunService = game:GetService("RunService");
 local HttpService = game:GetService("HttpService");
 local Workspace = game:GetService("Workspace");
 local MarketplaceService = game:GetService("MarketplaceService");
@@ -138,6 +139,97 @@ function isAdmin(Player)
     end;
 	return false;
 end;
+
+-- // Stuff
+local WhitelistedPlayers = {};
+local ProtectedWhitelistedPlayers = {};
+local CommandsSpamPhrase = {};
+local LaggingPlayers = {};
+local LongText = "";
+
+function IsWhitelisted(PlayerID)
+    local Whitelisted = false;
+    local ProtectedWhitelist = false;
+    local Index = "Not defined";
+    for i = 1, #WhitelistedPlayers do
+        local v = WhitelistedPlayers[i];
+        if (v == PlayerID) then Whitelisted = true; Index = i; end;
+    end;
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = WhitelistedPlayers[i];
+        if (v == PlayerID) then Whitelisted = true; Index = i; end;
+    end;
+
+    return Whitelisted, ProtectedWhitelist, Index;
+end;
+
+function GetUnblacklistedPlayers()
+    local AllPlayers = Players:GetPlayers();
+    for i = 1, #AllPlayers do
+        local v = AllPlayers[i];
+        if (IsWhitelisted(v.UserId)) then
+            table.remove(AllPlayers, i);
+        end;
+    end;
+
+    return AllPlayers;
+end;
+
+function AddPhrase(_Phrase)
+    local IsInSpammer = false;
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == Phrase) then
+            IsInSpammer = true;
+            break;
+        end;
+    end;
+
+    if (not IsInSpammer) then
+        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
+        return true;
+    end;
+
+    return false;
+end;
+
+function RemovePhrase(_Phrase)
+    local IsInSpammer = false;
+    local Index = 1;
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == Phrase) then
+            IsInSpammer = true;
+            Index = i;
+            break;
+        end;
+    end;
+
+    if (IsInSpammer) then
+        table.remove(CommandsSpamPhrase, i);
+        return true;
+    end;
+
+    return false;
+end;
+
+RunService.RenderStepped:Connect(function()
+    -- // Phrase Spammer
+    coroutine.wrap(function()
+        for i = 1, #CommandsSpamPhrase do
+            local v = CommandsSpamPhrase[i];
+            Players:Chat(v.Phrase);
+        end;
+    end)();
+
+    -- // Lagger
+    coroutine.wrap(function()
+        for i = 1, #LaggingPlayers do
+            local v = LaggingPlayers[i];
+            Players:Chat(":pm " .. v["PlayerName"] .. " " .. LongText);
+        end;
+    end)();
+end)
 
 -- // Building GUI
 local Pages = {};
@@ -369,6 +461,17 @@ local SpamPhrase = SetupTextMenu(Commands, "Spam Phrase", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        local InsertIntoSpammer = AddPhrase(Settings["CommandsSelectPhrase"]);
+        if (InsertIntoSpammer) then
+            Material.Banner({
+				Text = "Successfully added phrase to spammer."
+			});
+        else
+            Material.Banner({
+				Text = "Phrase is already in the spammer."
+			});
+        end;
     end;
 });
 
@@ -381,6 +484,17 @@ local StopSpamPhrase = SetupTextMenu(Commands, "Stop Spam Phrase", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        local InsertIntoSpammer = RemovePhrase(Settings["CommandsSelectPhrase"]);
+        if (InsertIntoSpammer) then
+            Material.Banner({
+				Text = "Successfully added phrase to spammer."
+			});
+        else
+            Material.Banner({
+				Text = "Phrase is not in the spammer."
+			});
+        end;
     end;
 });
 
@@ -700,6 +814,18 @@ local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
     Enabled = false,
     Callback = function(Value)
         Settings["ServerEpilepsy"] = Value;
+        local EpilepsyCommands = {}
+        if (Settings["ServerEpilepsy"]) then
+            for i = 1, #EpilepsyCommands do
+                local v = EpilepsyCommands[i];
+                AddPhrase(v);
+            end;
+        else
+            for i = 1, #EpilepsyCommands do
+                local v = EpilepsyCommands[i];
+                RemovePhrase(v);
+            end;
+        end;
     end;
 });
 
@@ -707,6 +833,11 @@ local LagServer = SetupTextMenu(Server, "Lag Server", {
     Enabled = false,
     Callback = function(Value)
         Settings["ServerLagServer"] = Value;
+        if (Settings["ServerLagServer"]) then
+
+        else
+        
+        end;
     end;
 });
 
@@ -734,7 +865,19 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
 local PartSpam = SetupTextMenu(Server, "Part Spam", {
     Enabled = false,
     Callback = function(Value)
+        if (not MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 35748)) then
+            Material.Banner({
+                Text = "You need Persons299 admin for this command to function."
+            });
+            return;
+        end;
         Settings["ServerPartSpam"] = Value;
+
+        if (Settings["ServerPartSpam"]) then
+
+        else
+
+        end;
     end;
 });
 
@@ -755,6 +898,11 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     Enabled = false,
     Callback = function(Value)
         Settings["ServerRespawnExplode"] = Value;
+        if (Settings["ServerRespawnExplode"]) then
+
+        else
+
+        end;
     end;
 });
 
@@ -763,6 +911,11 @@ local SoundAbuseEarRape = SetupTextMenu(SoundAbuse, "Ear Rape", {
     Enabled = false,
     Callback = function(Value)
         Settings["SoundAbuseEarRape"] = Value;
+        if (Settings["SoundAbuseEarRape"]) then
+
+        else
+
+        end;
     end;
 });
 
@@ -843,11 +996,34 @@ local UnwhitelistPlayer = SetupTextMenu(Whitelist, "Unwhitelist Player", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Whitelist, "Unwhitelist Player", {
             {
-                Requirement = Settings["PlayerSelectPlayer"],
+                Requirement = Settings["WhitelistSelectPlayer"],
                 Error = "Please select a player."
             }
         });
         if (not FailSafeResult) then return; end;
+
+        local PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
+        local Whitelisted = IsWhitelisted(PlayerId);
+        local Index = Whitelisted[3];
+        if (Whitelisted[1]) then
+            table.remove(WhitelistedPlayers, Index);
+            Material.Banner({
+				Text = "Unwhitelisted Player."
+            });
+            return;
+        end;
+        if (Whitelisted[2]) then
+            Material.Banner({
+				Text = "This player cannot be unwhitelisted, they are protected."
+            });
+            return;
+        end;
+        if (not Whitelisted[1]) then
+            Material.Banner({
+				Text = "This player is not whitelisted."
+            });
+            return;
+        end;
     end;
 });
 
@@ -855,10 +1031,31 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Whitelist, "Whitelist Player", {
             {
-                Requirement = Settings["PlayerSelectPlayer"],
+                Requirement = Settings["WhitelistSelectPlayer"],
                 Error = "Please select a player."
             }
         });
         if (not FailSafeResult) then return; end;
+
+        local _, PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
+        local Whitelisted = IsWhitelisted(PlayerId);
+        if (Whitelisted[2]) then
+            Material.Banner({
+				Text = "This player has already been whitelisted."
+            });
+            return;
+        end;
+        if (not Whitelisted[1]) then
+            table.insert(WhitelistedPlayers, PlayerId);
+            Material.Banner({
+				Text = "Whitelisted Player."
+            });
+            return;
+        else
+            Material.Banner({
+				Text = "This player is already whitelisted."
+            });
+            return;
+        end;
     end;
 });
