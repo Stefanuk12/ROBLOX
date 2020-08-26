@@ -5,6 +5,7 @@ local Players = game:GetService("Players");
 local HttpService = game:GetService("HttpService");
 local Workspace = game:GetService("Workspace");
 local MarketplaceService = game:GetService("MarketplaceService");
+local TeleportService = game:GetService("TeleportService");
 
 -- // Vars
 local GameFolder = Workspace.Terrain["_Game"];
@@ -28,7 +29,15 @@ local Settings = {
     ProtectionsAntiJail = false,
     ProtectionsAntiKill = false,
     ProtectionsAntiPunish = false,
-    MusicCommandsSelectSound = "Not selected"
+    SoundAbuseEarRape = false,
+    MusicCommandsSelectSound = "Not selected",
+    BlacklistSelectGearId = "Not selected",
+    BlacklistSelectPhrase = "Not selected",
+    BlacklistSelectPhrase = "Not selected",
+    CommandsSelectPhrase = "Not selected",
+    MiscSelectPaintColour = "Not selected",
+    PlayerSelectPlayer = "Not selected",
+    WhitelistSelectPlayer = "Not selected"
 };
 if (writefile) then
     if (not isfile("oofkohlsSettings.json")) then
@@ -85,7 +94,7 @@ end);
 function updateDropdownPlayers()
     for i = 1, #DropdownPlayers do
         local v = DropdownPlayers[i];
-        if (v.SetOptions) then v.SetOptions(PlayerTable); end;
+        v.SetOptions(PlayerTable);
     end;
 end;
 
@@ -173,7 +182,9 @@ function SetupTextMenu(Page, CommandName, Options)
     local Type = ComamndInfoTable["Type"];
 
     local Object = Page[Type](Creation);
-    if (CommandName == "Select Player") then table.insert(DropdownPlayers, Object); end;
+    if (CommandName == "Select Player") then 
+        table.insert(DropdownPlayers, Object); 
+    end;
 
     return Object;
 end;
@@ -236,88 +247,138 @@ local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
 -- // Blacklist
 local BlacklistSelectGearId = SetupTextMenu(Blacklist, "Select Gear ID", {
     Callback = function(Value)
-        
+        Settings["BlacklistSelectGearId"] = Value;
     end;
 });
 
 local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
     Callback = function(Value)
-        
+        Settings["BlacklistSelectPhrase"] = Value;
     end;
 });
 
 local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
     Callback = function(Value)
-        
+        Settings["BlacklistSelectPlayer"] = Value;
     end;
 });
 
 local BlacklistGear = SetupTextMenu(Blacklist, "Blacklist Gear", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Blacklist, "Blacklist Gear", {
+            {
+                Requirement = Settings["BlacklistSelectGearId"],
+                Error = "Please select a gear."
+            };
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Blacklist, "Blacklist Phrase", {
+            {
+                Requirement = Settings["BlacklistPhrase"],
+                Error = "Please input a phrase."
+            };
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local UnblacklistGear = SetupTextMenu(Blacklist, "Unblacklist Gear", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Blacklist, "Unblacklist Gear", {
+            {
+                Requirement = Settings["BlacklistSelectGearId"],
+                Error = "Please select a gear."
+            };
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Blacklist, "Unblacklist Phrase", {
+            {
+                Requirement = Settings["BlacklistPhrase"],
+                Error = "Please input a phrase."
+            };
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 -- // Commands
 local CommandsSelectPhrase = SetupTextMenu(Commands, "Select Phrase", {
     Callback = function(Value)
-        
+        Settings["CommandsSelectPhrase"] = Value;
     end;
 });
 
 local SayPhrase = SetupTextMenu(Commands, "Say Phrase", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Commands, "Say Phrase", {
+            {
+                Requirement = Settings["CommandsSelectPhrase"],
+                Error = "Please input a phrase."
+            }
+        });
+        if (not FailSafeResult) then return; end;
+
+        Players:Chat(Settings["CommandsSelectPhrase"]);
     end;
 });
 
 local SpamPhrase = SetupTextMenu(Commands, "Spam Phrase", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Commands, "Spam Phrase", {
+            {
+                Requirement = Settings["CommandsSelectPhrase"],
+                Error = "Please input a phrase."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local StopSpamPhrase = SetupTextMenu(Commands, "Stop Spam Phrase", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Commands, "Stop Spam Phrase", {
+            {
+                Requirement = Settings["CommandsSelectPhrase"],
+                Error = "Please input a phrase."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 -- // Misc
 local MiscSelectPaintColour = SetupTextMenu(Misc, "Select Paint Colour", {
     Default = Color3.fromRGB(255, 150, 150);
-    Callback = function()
-
+    Callback = function(Value)
+        Settings["MiscSelectPaintColour"] = Value;
     end;
 });
 
 local PaintArea = SetupTextMenu(Misc, "Paint Area", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Misc, "Select Paint Colour", {
+            {
+                Requirement = Settings["MiscSelectPaintColour"],
+                Error = "Please input a colour."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local Rejoin = SetupTextMenu(Misc, "Rejoin", {
     Callback = function()
-        
+        TeleportService:Teleport(game.PlaceId);
     end;
 });
 
@@ -342,7 +403,8 @@ local SelectSound = SetupTextMenu(MusicCommands, "Select Sound", {
     Callback = function(Value)       
         Settings["MusicCommandsSelectSound"] = musicTable[table.find(MusicTable, Value)].SoundId;
     end;
-})
+});
+
 local PlaySound = SetupTextMenu(MusicCommands, "Play Sound", {
     Callback = function()
         local Failsafe = FailSafeCommand(MusicCommands, "Play Sound", {
@@ -385,43 +447,79 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
 -- // Player
 local PlayerSelectPlayer = SetupTextMenu(Player, "Select Player", {
     Callback = function(Value)
-        
+        Settings["PlayerSelectPlayer"] = Value;
     end;
 });
 
 local GetAge = SetupTextMenu(Player, "Get Age", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Get Age", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local GiveClientBTools = SetupTextMenu(Player, "Give Client BTools", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Give Client BTools", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local GiveGear = SetupTextMenu(Player, "Give Gear", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Give Gear", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local GiveTeapotTurret = SetupTextMenu(Player, "Give Teapot Turret", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Give Teapot Turret", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local LagPlayer = SetupTextMenu(Player, "Lag Player", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Lag Player", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local StopLagPlayer = SetupTextMenu(Player, "Stop Lag Player", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Player, "Stop Lag Player", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
@@ -512,52 +610,106 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
 });
 
 -- // Sound Abuse
-local EarRape = SetupTextMenu(SoundAbuse, "Ear Rape", {
+local SoundAbuseEarRape = SetupTextMenu(SoundAbuse, "Ear Rape", {
     Enabled = false,
     Callback = function(Value)
-        
+        Settings["SoundAbuseEarRape"] = Value;
     end;
 });
 
 local PlayAllSounds = SetupTextMenu(SoundAbuse, "Play All Sounds", {
     Callback = function()
-        
+        local WorkspaceDescendants = Workspace:GetDescendants();
+        for i = 1, #WorkspaceDescendants do
+            local v = WorkspaceDescendants[i];
+            if (v:IsA("Sound")) then
+                v:Play();
+            end;
+        end;
+
+        Material.Banner({
+            Text = "Played all sounds."
+        });
     end;
 });
 
 local PlayMusic = SetupTextMenu(SoundAbuse, "Play Music", {
     Callback = function()
-        
+        local Sound = GameFolder:FindFirstChildWhichIsA("Sound");
+		if (Sound) then
+            Sound:Play();
+            Material.Banner({
+				Text = "Played music."
+			});
+		else
+			Material.Banner({
+				Text = "There is no music sound."
+			});
+			return;
+		end;
     end;
 });
 
 local StopAllSounds = SetupTextMenu(SoundAbuse, "Stop All Sounds", {
     Callback = function()
-        
+        local WorkspaceDescendants = Workspace:GetDescendants();
+        for i = 1, #WorkspaceDescendants do
+            local v = WorkspaceDescendants[i];
+            if (v:IsA("Sound")) then
+                v:Stop();
+            end;
+        end;
+
+        Material.Banner({
+            Text = "Stop all sounds."
+        });
     end;
 });
 
 local StopMusic = SetupTextMenu(SoundAbuse, "Stop Music", {
     Callback = function()
-        
+        local Sound = GameFolder:FindFirstChildWhichIsA("Sound");
+		if (Sound) then
+            Sound:Stop();
+            Material.Banner({
+				Text = "Stopped music."
+			});
+		else
+			Material.Banner({
+				Text = "There is no music sound."
+			});
+			return;
+		end;
     end;
 });
 
 -- // Whitelist
 local WhitelistSelectPlayer = SetupTextMenu(Whitelist, "Select Player", {
     Callback = function(Value)
-        
+        Settings["WhitelistSelectPlayer"] = Value;
     end;
 });
 
 local UnwhitelistPlayer = SetupTextMenu(Whitelist, "Unwhitelist Player", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Whitelist, "Unwhitelist Player", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
 
 local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
     Callback = function()
-        
+        local FailSafeResult = FailSafeCommand(Whitelist, "Whitelist Player", {
+            {
+                Requirement = Settings["PlayerSelectPlayer"],
+                Error = "Please select a player."
+            }
+        });
+        if (not FailSafeResult) then return; end;
     end;
 });
