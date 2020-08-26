@@ -15,8 +15,8 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
 local CommandInfo = HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))();
 local musicTable = MusicAPI.musicTable;
 local MusicTable = {};
-for _, v in next, musicTable do
-    table.insert(MusicTable, v.Name);
+for i = 1, #musicTable do
+    table.insert(MusicTable, musicTable[i]["Name"]);
 end;
 local Settings;
 if (writefile) then
@@ -58,8 +58,9 @@ local Material = MaterialUI.Load({
 });
 
 -- // Add new/existing players and remove old players from PlayerTable
-for _, v in next, Players:GetPlayers() do
-    table.insert(PlayerTable, v.Name)
+local GetPlayers = Players:GetPlayers();
+for i = 1, #GetPlayers do
+    table.insert(PlayerTable, GetPlayers[i].Name);
 end;
 
 Players.PlayerAdded:Connect(function(plr)
@@ -68,8 +69,8 @@ Players.PlayerAdded:Connect(function(plr)
 end);
 
 Players.PlayerRemoving:Connect(function(plr)
-    for i,v in next, PlayerTable do
-        if v == plr.Name then
+    for i = 1, #PlayerTable do
+        if (PlayerTable[i] == plr.Name)then
             table.remove(PlayerTable, i);
         end;
     end;
@@ -78,8 +79,8 @@ end);
 
 -- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
 function updateDropdownPlayers()
-    for _,v in next, DropdownPlayers do
-        if (v.SetOptions) then v.SetOptions(PlayerTable) end;
+    for i = 1, #DropdownPlayers do
+        if (DropdownPlayers[i].SetOptions) then DropdownPlayers[i].SetOptions(PlayerTable); end;
     end;
 end;
 
@@ -87,9 +88,10 @@ end;
 function isAdmin(Player)
 	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
 	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
-	for _,v in next, GameFolder["Admin"]["Pads"]:GetChildren() do
-		if (v.Name == Player .. "'s admin") then return true; end;
-	end;
+    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
+    for i = 1, #Pads do
+        if (Pads[i].Name == Player .. "'s admin") then return true; end;
+    end;
 	return false;
 end;
 
@@ -239,6 +241,12 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
 -- // Commands
 local CommandsSelectPhrase = SetupTextMenu(Commands, "Select Phrase", {
     Callback = function(Value)
+        
+    end;
+});
+
+local SayPhrase = SetupTextMenu(Commands, "Say Phrase", {
+    Callback = function()
         
     end;
 });

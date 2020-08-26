@@ -70,6 +70,12 @@
             "Name": "Select Phrase",
             "Type": "TextField"
         },
+        "Say Phrase": {
+            "Admin": true,
+            "Description": "Says the phrase using Players:Chat(). Detectable.",
+            "Name": "Say Phrase",
+            "Type": "Button"
+        },
         "Spam Phrase": {
             "Admin": true,
             "Description": "Spams the specified phrase",
