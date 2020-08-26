@@ -16,7 +16,8 @@ local CommandInfo = HttpService:JSONDecode(game:HttpGet("https://raw.githubuserc
 local musicTable = MusicAPI.musicTable;
 local MusicTable = {};
 for i = 1, #musicTable do
-    table.insert(MusicTable, musicTable[i]["Name"]);
+    local v = musicTable[i];
+    table.insert(MusicTable, v["Name"]);
 end;
 local Settings;
 if (writefile) then
@@ -60,7 +61,8 @@ local Material = MaterialUI.Load({
 -- // Add new/existing players and remove old players from PlayerTable
 local GetPlayers = Players:GetPlayers();
 for i = 1, #GetPlayers do
-    table.insert(PlayerTable, GetPlayers[i].Name);
+    local v = GetPlayers[i];
+    table.insert(PlayerTable, v.Name);
 end;
 
 Players.PlayerAdded:Connect(function(plr)
@@ -70,7 +72,8 @@ end);
 
 Players.PlayerRemoving:Connect(function(plr)
     for i = 1, #PlayerTable do
-        if (PlayerTable[i] == plr.Name)then
+        local v = PlayerTable[i];
+        if (v == plr.Name)then
             table.remove(PlayerTable, i);
         end;
     end;
@@ -80,7 +83,8 @@ end);
 -- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
 function updateDropdownPlayers()
     for i = 1, #DropdownPlayers do
-        if (DropdownPlayers[i].SetOptions) then DropdownPlayers[i].SetOptions(PlayerTable); end;
+        local v = DropdownPlayers[i];
+        if (v.SetOptions) then v.SetOptions(PlayerTable); end;
     end;
 end;
 
@@ -90,7 +94,8 @@ function isAdmin(Player)
 	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
     local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
     for i = 1, #Pads do
-        if (Pads[i].Name == Player .. "'s admin") then return true; end;
+        local v = Pads[i];
+        if (v.Name == Player .. "'s admin") then return true; end;
     end;
 	return false;
 end;
