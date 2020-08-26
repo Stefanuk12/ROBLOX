@@ -595,7 +595,7 @@ local GiveGear = SetupTextMenu(Player, "Give Gear", {
             end;
         end;
 
-        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " " .. GearId]);
+        Players:Chat(":gear " .. Settings["PlayerSelectPlayer"] .. " " .. GearId);
     end;
 });
 
