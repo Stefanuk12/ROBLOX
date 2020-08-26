@@ -10,38 +10,39 @@ local MarketplaceService = game:GetService("MarketplaceService");
 local GameFolder = Workspace.Terrain["_Game"];
 local LocalPlayer = Players.LocalPlayer;
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
+local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
 
 -- // Settings + Command Info
-local CommandInfo = HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))();
-local musicTable = MusicAPI.musicTable;
+local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
+local musicTable = MusicAPI.CheckAllSounds();
 local MusicTable = {};
+
 for i = 1, #musicTable do
     local v = musicTable[i];
     table.insert(MusicTable, v["Name"]);
 end;
-local Settings;
+
+local Settings = {
+    AdminPermanantAdmin = false,
+    ProtectionsAntiBlind = false,
+    ProtectionsAntiJail = false,
+    ProtectionsAntiKill = false,
+    ProtectionsAntiPunish = false,
+    MusicCommandsSelectSound = "Not selected"
+};
 if (writefile) then
     if (not isfile("oofkohlsSettings.json")) then
-        local jsonObj = {
-            AdminPermanantAdmin = false,
-            ProtectionsAntiBlind = false,
-            ProtectionsAntiJail = false,
-            ProtectionsAntiKill = false,
-            ProtectionsAntiPunish = false
-        };
-        writefile("oofkohlsSettings.json", tostring(HttpService:JSONEncode(jsonObj)));
+        writefile("oofkohlsSettings.json", tostring(HttpService:JSONEncode(Settings)));
     end;
-    Settings = HttpService:JSONDecode(readfile("oofkohlsSettings.json"));
-else
-    Settings = {
-        AdminPermanantAdmin = false,
-        ProtectionsAntiBlind = false,
-        ProtectionsAntiJail = false,
-        ProtectionsAntiKill = false,
-        ProtectionsAntiPunish = false
-    };
+    local SettingsHolder = HttpService:JSONDecode(readfile("oofkohlsSettings.json"));
+    for i,v in pairs(Settings) do -- // Make it so you can add new settings
+        if (not SettingsHolder[i]) then
+            SettingsHolder[i] = v;
+        end;
+    end;
+    Settings = SettingsHolder;
+    writefile("oofkohlsSettings.json", HttpService:JSONEncode(Settings) );
 end;
-
 
 -- // GUI Settings + Vars
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
@@ -106,6 +107,38 @@ function createPage(PageName)
     local mt = setmetatable(Material.New({Title = PageName}), {__tostring = function() return PageName end});
     table.insert(Pages, mt);
     return mt;
+end
+
+-- // Failsafing commadns
+function FailSafeCommand(Page, CommandName, ...)
+    local Module = tostring(Page)
+    local ComamndInfoTableModule = CommandInfo[Module];
+    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
+    local SelectionArgs = {...};
+
+    -- // Admin checking
+    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
+        Material.Banner({
+            Text = "You don't have admin, this command requries admin."
+        });
+
+        return false;
+    end;
+
+    -- // Selection
+    for i = 1, #SelectionArgs do
+        local v = SelectionArgs[i];
+        if (v.Requirement and v.Requirement == "Not selected") then
+            Material.Banner({
+                Text = v.Error;
+            });
+
+            return false;
+        end;
+    end;
+
+    -- // Final return
+    return true;
 end
 
 -- // Automatically setup the Text and Menu
@@ -291,7 +324,10 @@ local Rejoin = SetupTextMenu(Misc, "Rejoin", {
 local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
     Callback = function()
         if (writefile) then
-            writefile("oofkohlsSettings.json", tostring(HttpService:JSONEncode(jsonObj)));
+            writefile("oofkohlsSettings.json", HttpService:JSONEncode(Settings) );
+            Material.Banner({
+				Text = "Settings have been saved."
+			});
         else 
             Material.Banner({
 				Text = "Your exploit does not support this feature."
@@ -303,19 +339,46 @@ local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
 -- // Music Commands
 local SelectSound = SetupTextMenu(MusicCommands, "Select Sound", {
     Options = MusicTable,
-    Callback = function()
-
+    Callback = function(Value)       
+        Settings["MusicCommandsSelectSound"] = musicTable[table.find(MusicTable, Value)].SoundId;
     end;
 })
 local PlaySound = SetupTextMenu(MusicCommands, "Play Sound", {
     Callback = function()
-        
+        local Failsafe = FailSafeCommand(MusicCommands, "Play Sound", {
+            {
+                Requirement = Settings["MusicCommandsSelectSound"],
+                Error = "Please select a sound."
+            }
+        });
+        if (not Failsafe) then return; end;
+
+        Players:Chat(":music " .. Settings["MusicCommandsSelectSound"]);
+        Material.Banner({
+            Text = "Played Sound."
+        });
     end;
 });
 
 local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
     Callback = function()
+        Material.Banner({
+            Text = "Refreshing Sounds, please wait."
+        });
+    
+        musicTable = MusicAPI.CheckAllSounds();
+        MusicTable = {};
+
+        for i = 1, #musicTable do
+            local v = musicTable[i];
+            table.insert(MusicTable, v["Name"]);
+        end;
         
+        SelectSound.SetOptions(MusicTable);
+        
+        Material.Banner({
+            Text = "Refreshed Sounds."
+        });
     end;
 });
 
@@ -364,30 +427,30 @@ local StopLagPlayer = SetupTextMenu(Player, "Stop Lag Player", {
 
 -- // Protections
 local AntiBlind = SetupTextMenu(Protections, "Anti Blind", {
-    Enabled = false,
+    Enabled = Settings["ProtectionsAntiBlind"],
     Callback = function(Value)
-        
+        Settings["ProtectionsAntiBlind"] = Value
     end;
 });
 
 local AntiJail = SetupTextMenu(Protections, "Anti Jail", {
-    Enabled = false,
+    Enabled = Settings["ProtectionsAntiJail"],
     Callback = function(Value)
-        
+        Settings["ProtectionsAntiJail"] = Value
     end;
 });
 
 local AntiKill = SetupTextMenu(Protections, "Anti Kill", {
-    Enabled = false,
+    Enabled = Settings["ProtectionsAntiKill"],
     Callback = function(Value)
-        
+        Settings["ProtectionsAntiKill"] = Value
     end;
 });
 
 local AntiPunish = SetupTextMenu(Protections, "Anti Punish", {
-    Enabled = false,
+    Enabled = Settings["ProtectionsAntiPunish"],
     Callback = function(Value)
-        
+        Settings["ProtectionsAntiPunish"] = Value
     end;
 });
 
