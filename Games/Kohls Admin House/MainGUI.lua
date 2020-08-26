@@ -392,7 +392,7 @@ local MiscSelectPaintColour = SetupTextMenu(Misc, "Select Paint Colour", {
     end;
 });
 
-local MiscSelectPaintArea = SetupTextMenu(Misc, "Select Painting Area", {
+local MiscSelectPaintArea = SetupTextMenu(Misc, "Select Paint Area", {
     Options = {
         "All",
         "Admin Dividers",
