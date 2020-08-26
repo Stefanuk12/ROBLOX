@@ -10,8 +10,10 @@ local TeleportService = game:GetService("TeleportService");
 -- // Vars
 local GameFolder = Workspace.Terrain["_Game"];
 local LocalPlayer = Players.LocalPlayer;
+local Backpack = LocalPlayer.Backpack;
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
+local WorkspaceFolder = GameFolder["Workspace"];
 
 -- // Settings + Command Info
 local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
@@ -48,6 +50,7 @@ local Settings = {
     BlacklistSelectPhrase = "Not selected",
     CommandsSelectPhrase = "Not selected",
     MiscSelectPaintColour = "Not selected",
+    MiscSelectPaintArea = "Not selected",
     PlayerSelectPlayer = "Not selected",
     PlayerSelectGear = "Not selected",
     WhitelistSelectPlayer = "Not selected"
@@ -376,15 +379,68 @@ local MiscSelectPaintColour = SetupTextMenu(Misc, "Select Paint Colour", {
     end;
 });
 
+local MiscSelectPaintArea = SetupTextMenu(Misc, "Select Painting Area", {
+    Options = {
+        "All",
+        "Admin Dividers",
+        "Basic House",
+        "Obby",
+        "Building Bricks",
+        "Obby Box",
+    }
+    Callback = function(Value)
+        Settings["MiscSelectPaintArea"] = Value
+    end;
+});
+
 local PaintArea = SetupTextMenu(Misc, "Paint Area", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Misc, "Select Paint Colour", {
             {
                 Requirement = Settings["MiscSelectPaintColour"],
                 Error = "Please input a colour."
+            },
+            {
+                Requirement = Settings["MiscSelectPaintArea"],
+                Error = "Please select an area to paint."
             }
         });
         if (not FailSafeResult) then return; end;
+
+        -- // Check if you already have a Paint Bucket   
+        if (not ( Backpack:FindFirstChild("PaintBucket") or Character:FindFirstChild("PaintBucket") )) then
+            Players:Chat(":gear me 18474459");
+        end;
+        Backpack:WaitForChild("PaintBucket");
+        Character.Humanoid:EquipTool(Backpack.PaintBucket);
+        Character:WaitForChild("PaintBucket");
+
+        -- // Painting
+        local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
+        local SelectedArea = Settings["MiscSelectPaintArea"];
+        local SelectedColour = Settings["MiscSelectPaintColour"];
+
+        if (SelectedArea == "All") then
+            local AllDescendants = WorkspaceFolder:GetDescendants();
+            for i = 1, #AllDescendants do
+                local part = AllDescendants[i];
+                coroutine.wrap(function()
+                    if (part:IsA("BasePart")) then   
+                        Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColour});
+                    end;
+                end)();
+            end;
+        else
+            local AreaDescendants = WorkspaceFolder[SelectedArea]:GetDescendants();
+            for i = 1, #AreaDescendants do
+                local part = AreaDescendants[i];
+                coroutine.wrap(function()
+                    if (part:IsA("BasePart")) then   
+                        Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColour});
+                    end;
+                end)();
+            end;
+        end;
     end;
 });
 
@@ -632,7 +688,6 @@ local LagServer = SetupTextMenu(Server, "Lag Server", {
 local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
     Enabled = false,
     Callback = function()
-        local WorkspaceFolder = GameFolder["Workspace"];
         local Spawn = WorkspaceFolder.Spawn3;
         local Baseplate = WorkspaceFolder.Baseplate;
 

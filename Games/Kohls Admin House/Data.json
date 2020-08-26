@@ -96,6 +96,12 @@
             "Name": "Select Paint Colour",
             "Type": "ColorPicker"
         },
+        "Select Paint Area": {
+            "Admin": false,
+            "Description": "Please select an area to paint.",
+            "Name": "Select Paint Area",
+            "Type": "Dropdown"
+        },
         "Paint Area": {
             "Admin": true,
             "Description": "Paints the selected area with the selected colour.",
