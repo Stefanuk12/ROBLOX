@@ -10,8 +10,8 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Minerock = workspace.Minerock
-local MMHax.captureGems = {"Diamond", "Emerald", "Crystal"}
-local MMHax.tRemoveLava = true 
+MMHax.captureGems = {"Diamond", "Emerald", "Crystal"}
+MMHax.tRemoveLava = true 
 
 -- // Funcs
 function MMHax.removeLava()

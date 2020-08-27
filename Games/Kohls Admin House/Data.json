@@ -236,12 +236,6 @@
             "Name": "Epilepsy",
             "Type": "Toggle"
         },
-        "Lag Server": {
-            "Admin": true,
-            "Description": "Lags the server by sending everyone PMs with large text.",
-            "Name": "Lag Server",
-            "Type": "Button"
-        },
         "Move Baseplate": {
             "Admin": true,
             "Description": "Gets you in a state which allows you to move the baseplate by tping, skydiving, etc.",

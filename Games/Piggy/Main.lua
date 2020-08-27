@@ -82,17 +82,6 @@ if game.PlaceId == 4623386862 then
             },
             ["Category"] = 'Keys',
         },
-        ["OrangeKey"] = {
-            ["SpecialMesh"] = {
-                ["MeshId"] = "rbxassetid://456878024",
-                ["Scale"] = Vector3.new(5, 5, 5),
-                ["VertexColor"] = Vector3.new(1, 1, 1)
-            },
-            ["ParticleEmitter"] = {
-                ["Color"] = "0 1 0.333333 0 0 1 1 0.333333 0 0 ",
-            },
-            ["Category"] = 'Keys',
-        },
         ["Hammer"] = {
             ["SpecialMesh"] = {
                 ["MeshId"] = "http://www.roblox.com/asset/?id=16198309",

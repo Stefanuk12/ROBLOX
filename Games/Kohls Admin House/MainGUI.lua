@@ -11,8 +11,6 @@ local TeleportService = game:GetService("TeleportService");
 -- // Vars
 local GameFolder = Workspace.Terrain["_Game"];
 local LocalPlayer = Players.LocalPlayer;
-local Backpack = LocalPlayer.Backpack;
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
 local WorkspaceFolder = GameFolder["Workspace"];
 
@@ -61,14 +59,14 @@ local Settings = {
     MusicCommandsSelectSound = "Not selected",
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
-    BlacklistSelectPhrase = "Not selected",
     CommandsSelectPhrase = "Not selected",
-    MiscSelectPaintColour = "Not selected",
+    MiscSelectPaintColour = Color3.fromRGB(255, 150, 150),
     MiscSelectPaintArea = "Not selected",
     PlayerSelectPlayer = "Not selected",
     PlayerSelectGear = "Not selected",
     WhitelistSelectPlayer = "Not selected"
 };
+
 if (writefile) then
     if (not isfile("oofkohlsSettings.json")) then
         writefile("oofkohlsSettings.json", tostring(HttpService:JSONEncode(Settings)));
@@ -108,6 +106,11 @@ end;
 Players.PlayerAdded:Connect(function(plr)
     table.insert(PlayerTable, plr.Name);
     updateDropdownPlayers();
+
+    if (Settings["ServerRespawnExplode"]) then
+        AddPhrase(":respawn " .. plr.Name);
+        AddPhrase(":explode " .. plr.Name);
+    end;
 end);
 
 Players.PlayerRemoving:Connect(function(plr)
@@ -118,6 +121,11 @@ Players.PlayerRemoving:Connect(function(plr)
         end;
     end;
     updateDropdownPlayers();
+
+    if (Settings["ServerRespawnExplode"]) then
+        RemovePhrase(":respawn " .. plr.Name);
+        RemovePhrase(":explode " .. plr.Name);
+    end;
 end);
 
 -- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
@@ -142,7 +150,7 @@ end;
 
 -- // Stuff
 local WhitelistedPlayers = {};
-local ProtectedWhitelistedPlayers = {};
+local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 local CommandsSpamPhrase = {};
 local LaggingPlayers = {};
 local LongText = "";
@@ -153,11 +161,13 @@ function IsWhitelisted(PlayerID)
     local Index = "Not defined";
     for i = 1, #WhitelistedPlayers do
         local v = WhitelistedPlayers[i];
-        if (v == PlayerID) then Whitelisted = true; Index = i; end;
+        if (v) then
+            if (tonumber(v) == tonumber(PlayerID)) then Whitelisted = true; Index = i; end;
+        end;
     end;
     for i = 1, #ProtectedWhitelistedPlayers do
-        local v = WhitelistedPlayers[i];
-        if (v == PlayerID) then Whitelisted = true; Index = i; end;
+        local v = ProtectedWhitelistedPlayers[i];
+        if (tonumber(v) == tonumber(PlayerID)) then ProtectedWhitelist = true; Index = i; end;
     end;
 
     return Whitelisted, ProtectedWhitelist, Index;
@@ -167,8 +177,11 @@ function GetUnblacklistedPlayers()
     local AllPlayers = Players:GetPlayers();
     for i = 1, #AllPlayers do
         local v = AllPlayers[i];
-        if (IsWhitelisted(v.UserId)) then
-            table.remove(AllPlayers, i);
+        if (v) then 
+            local WL, PWL, _ = IsWhitelisted(v.UserId);
+            if (WL or PWL) then
+                table.remove(AllPlayers, i);
+            end;
         end;
     end;
 
@@ -179,7 +192,7 @@ function AddPhrase(_Phrase)
     local IsInSpammer = false;
     for i = 1, #CommandsSpamPhrase do
         local v = CommandsSpamPhrase[i];
-        if (v.Phrase == Phrase) then
+        if (v.Phrase == _Phrase) then
             IsInSpammer = true;
             break;
         end;
@@ -198,15 +211,14 @@ function RemovePhrase(_Phrase)
     local Index = 1;
     for i = 1, #CommandsSpamPhrase do
         local v = CommandsSpamPhrase[i];
-        if (v.Phrase == Phrase) then
+        if (v.Phrase == _Phrase) then
             IsInSpammer = true;
             Index = i;
-            break;
         end;
     end;
 
     if (IsInSpammer) then
-        table.remove(CommandsSpamPhrase, i);
+        table.remove(CommandsSpamPhrase, Index);
         return true;
     end;
 
@@ -328,13 +340,13 @@ local Whitelist = createPage("Whitelist");
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
         local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin").Head;
-        if (firetouchinterest and false) then
-            firetouchinterest(Character.HumanoidRootPart, TargetPad, 0); -- // doesn't work on synap(sex) :(
+        if (firetouchinterest) then
+            firetouchinterest(LocalPlayer.Character.HumanoidRootPart, TargetPad, 0);
         else
-            local savedPos = Character.HumanoidRootPart.CFrame;
-            Character:SetPrimaryPartCFrame(TargetPad.CFrame);
+            local savedPos = LocalPlayer.Character.HumanoidRootPart.CFrame;
+            LocalPlayer.Character:SetPrimaryPartCFrame(TargetPad.CFrame);
             wait(1);
-            Character:SetPrimaryPartCFrame(savedPos);
+            LocalPlayer.Character:SetPrimaryPartCFrame(savedPos);
         end;
 
         Material.Banner({
@@ -535,15 +547,15 @@ local PaintArea = SetupTextMenu(Misc, "Paint Area", {
         if (not FailSafeResult) then return; end;
 
         -- // Check if you already have a Paint Bucket   
-        if (not ( Backpack:FindFirstChild("PaintBucket") or Character:FindFirstChild("PaintBucket") )) then
+        if (not ( LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket") )) then
             Players:Chat(":gear me 18474459");
         end;
-        Backpack:WaitForChild("PaintBucket");
-        Character.Humanoid:EquipTool(Backpack.PaintBucket);
-        Character:WaitForChild("PaintBucket");
+        LocalPlayer.Backpack:WaitForChild("PaintBucket");
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket);
+        LocalPlayer.Character:WaitForChild("PaintBucket");
 
         -- // Painting
-        local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
+        local Remote = LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
         local SelectedArea = Settings["MiscSelectPaintArea"];
         local SelectedColour = Settings["MiscSelectPaintColour"];
 
@@ -785,9 +797,9 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
     Enabled = false,
     Callback = function()
         Players:Chat(":gear me 94794847");
-        LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
-        Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
-        Character:WaitForChild("VampireVanquisher");
+        LocalPlayer.LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.LocalPlayer.Backpack.VampireVanquisher);
+        LocalPlayer.Character:WaitForChild("VampireVanquisher");
         for i = 1, 3 do
             Players:Chat(":size me .3");
             wait(1);
@@ -829,18 +841,6 @@ local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
     end;
 });
 
-local LagServer = SetupTextMenu(Server, "Lag Server", {
-    Enabled = false,
-    Callback = function(Value)
-        Settings["ServerLagServer"] = Value;
-        if (Settings["ServerLagServer"]) then
-
-        else
-        
-        end;
-    end;
-});
-
 local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
     Enabled = false,
     Callback = function()
@@ -853,7 +853,7 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
         local X, Y, Z = testPosition.X, Y + 3, testPosition.Z;
         local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
         
-        Character:SetPrimaryPartCFrame(newCFrame);
+        LocalPlayer.Character:SetPrimaryPartCFrame(newCFrame);
         wait(1.5);
         Players:Chat(":stun me");
         Material.Banner({
@@ -865,7 +865,7 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
 local PartSpam = SetupTextMenu(Server, "Part Spam", {
     Enabled = false,
     Callback = function(Value)
-        if (not MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 35748)) then
+        if (not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748)) then
             Material.Banner({
                 Text = "You need Persons299 admin for this command to function."
             });
@@ -874,9 +874,9 @@ local PartSpam = SetupTextMenu(Server, "Part Spam", {
         Settings["ServerPartSpam"] = Value;
 
         if (Settings["ServerPartSpam"]) then
-
+            AddPhrase("part/10/10/10");
         else
-
+            RemovePhrase("part/10/10/10");
         end;
     end;
 });
@@ -898,10 +898,22 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     Enabled = false,
     Callback = function(Value)
         Settings["ServerRespawnExplode"] = Value;
+        local UnblacklistedPlayers = GetUnblacklistedPlayers();
+        
         if (Settings["ServerRespawnExplode"]) then
-
-        else
-
+            print('a')
+            for i = 1, #UnblacklistedPlayers do
+                local v = UnblacklistedPlayers[i];
+                AddPhrase(":respawn " .. v.Name);
+                AddPhrase(":explode " .. v.Name);
+            end;
+        elseif (not Settings["ServerRespawnExplode"]) then
+            print('b')
+            for i = 1, #UnblacklistedPlayers do
+                local v = UnblacklistedPlayers[i];
+                RemovePhrase(":respawn " .. v.Name);
+                RemovePhrase(":explode " .. v.Name);
+            end;
         end;
     end;
 });
@@ -1003,22 +1015,21 @@ local UnwhitelistPlayer = SetupTextMenu(Whitelist, "Unwhitelist Player", {
         if (not FailSafeResult) then return; end;
 
         local PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
-        local Whitelisted = IsWhitelisted(PlayerId);
-        local Index = Whitelisted[3];
-        if (Whitelisted[1]) then
+        local WL, PWL, Index = IsWhitelisted(PlayerId);
+        if (WL) then
             table.remove(WhitelistedPlayers, Index);
             Material.Banner({
 				Text = "Unwhitelisted Player."
             });
             return;
         end;
-        if (Whitelisted[2]) then
+        if (PWL) then
             Material.Banner({
 				Text = "This player cannot be unwhitelisted, they are protected."
             });
             return;
         end;
-        if (not Whitelisted[1]) then
+        if (not WL) then
             Material.Banner({
 				Text = "This player is not whitelisted."
             });
@@ -1038,14 +1049,14 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
         if (not FailSafeResult) then return; end;
 
         local _, PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
-        local Whitelisted = IsWhitelisted(PlayerId);
-        if (Whitelisted[2]) then
+        local WL, PWL, Index = IsWhitelisted(PlayerId);
+        if (PWL) then
             Material.Banner({
 				Text = "This player has already been whitelisted."
             });
             return;
         end;
-        if (not Whitelisted[1]) then
+        if (not WL) then
             table.insert(WhitelistedPlayers, PlayerId);
             Material.Banner({
 				Text = "Whitelisted Player."
