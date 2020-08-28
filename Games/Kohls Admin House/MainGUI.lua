@@ -16,14 +16,19 @@ local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com
 local WorkspaceFolder = GameFolder["Workspace"];
 local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
+local CommandsSpamPhrase = {};
+local LongText = "";
+local DropdownPlayers = {};
+
+-- // Music Table
 local musicTable = MusicAPI.CheckAllSounds();
 local MusicTable = {};
-
 for i = 1, #musicTable do
     local v = musicTable[i];
     table.insert(MusicTable, v["Name"]);
 end;
 
+-- // Gear Giver
 local GearGiverGears = {
     {Name = "PaintBucket", Id = 18474459},
     {Name = "Hyperlaser", Id = 130113146},
@@ -46,6 +51,7 @@ for i = 1, #GearGiverGears do
     table.insert(GearGiverGearNames, v["Name"]);
 end;
 
+-- // Saved Settings
 local Settings = {
     AdminPermanantAdmin = false,
     ProtectionsAntiBlind = false,
@@ -69,27 +75,379 @@ local Settings = {
     WhitelistSelectPlayer = "Not selected"
 };
 
+-- // Load settings
 if (writefile) then
     if (not isfile("oofkohlsSettings.json")) then
         writefile("oofkohlsSettings.json", tostring(HttpService:JSONEncode(Settings)));
     end;
     local SettingsHolder = HttpService:JSONDecode(readfile("oofkohlsSettings.json"));
-    for i,v in pairs(Settings) do -- // Make it so you can add new settings
+
+    -- // Make it so you can add new settings
+    for i,v in pairs(Settings) do 
         if (not SettingsHolder[i]) then
             SettingsHolder[i] = v;
         end;
     end;
+
     Settings = SettingsHolder;
     writefile("oofkohlsSettings.json", HttpService:JSONEncode(Settings) );
 end;
 
--- // GUI Settings + Vars
-local DropdownPlayers = {};
-local PlayerTable = {};
+-- // Check if the User is a Protected Whitelisted User
+function isPWL(PlayerID)
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = ProtectedWhitelistedPlayers[i];
+        if (v == PlayerID) then
+            return true;
+        end;
+    end;
+    
+    return false;
+end;
 
--- // Stuff
-local CommandsSpamPhrase = {};
-local LongText = "";
+-- // Configuring and adding the Player to the PlayerTable
+local PlayerTable = {};
+local GetPlayers = Players:GetPlayers();
+for i = 1, #GetPlayers do
+    local v = GetPlayers[i];
+    if (v ~= LocalPlayer) then 
+        -- // Main Table that holds Player Data
+        local tbl = {
+            Instance = v,
+            Name = v.Name,
+            UserId = v.UserId,
+            Whitelisted = false,
+            Lagging = false,
+            BlacklistedPhrases = {}
+        };
+        local Index = #PlayerTable + 1;
+        table.insert(PlayerTable, tbl);
+    
+        -- // Configuring
+        v.Chatted:Connect(function(msg)
+            local PlrTable = GetPlayerTableFromId(v.UserId);
+            local BLPhrases = PlrTable.BlacklistedPhrases;
+
+            -- // Checking if the player has said any Blacklisted Phrases
+            for i = 1, #BLPhrases do
+                local BlacklistedPhrase = BLPhrases[i];
+                if (msg:match(BlacklistedPhrase.Phrase)) then
+                    Players:Chat(BlacklistedPhrase.Punishment);
+                end;
+            end;
+
+            -- // Checking if the player has given anyone a blacklisted gear
+            for i = 1, #BlacklistedGears do
+                local v = BlacklistedGears[i];
+                local msg = msg:split(" ");
+                if (msg[2] == v and not isWhitelisted(v.UserId)) then
+                    Players:Chat(":removetools " + msg[3]);
+                end;
+            end;
+
+            -- // Identifier ;)
+            if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
+                Players:Chat("Hi gamer!");
+            end;
+        end);
+    else 
+        -- // Main Table that holds Player Data
+        local tbl = {
+            Instance = v,
+            Name = v.Name,
+            UserId = v.UserId,
+            Whitelisted = false,
+            Lagging = false,
+            BlacklistedPhrases = {}
+        };
+        table.insert(PlayerTable, tbl);
+    end;
+end;
+
+-- // Configuring and adding the Player to the PlayerTable
+Players.PlayerAdded:Connect(function(v)
+    -- // Main Table that holds Player Data
+    local tbl = {
+        Instance = v,
+        Name = v.Name,
+        UserId = v.UserId,
+        Whitelisted = false,
+        Lagging = false,
+        BlacklistedPhrases = {}
+    };
+    local Index = #PlayerTable + 1;
+    table.insert(PlayerTable, tbl);
+    updateDropdownPlayers();
+
+    -- // Configuring
+    v.Chatted:Connect(function(msg)
+        local PlrTable = GetPlayerTableFromId(v.UserId);
+        local BLPhrases = PlrTable.BlacklistedPhrases;
+    
+        -- // Checking if the player has said any Blacklisted Phrases
+        for i = 1, #BLPhrases do
+            local BlacklistedPhrase = BLPhrases[i];
+            if (msg:match(BlacklistedPhrase.Phrase)) then
+                Players:Chat(BlacklistedPhrase.Punishment);
+            end;
+        end;
+
+        -- // Checking if the player has given anyone a blacklisted gear
+        for i = 1, #BlacklistedGears do
+            local v = BlacklistedGears[i];
+            local msg = msg:split(" ");
+            if (msg[2] == v and not isWhitelisted(v.UserId)) then
+                Players:Chat(":removetools " + msg[3]);
+            end;
+        end;
+
+        -- // Identifier ;)
+        if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
+            Players:Chat("Hi gamer!");
+        end;
+    end);
+
+    -- // If the Respawn Explode is happening, update the spammer.
+    if (Settings["ServerRespawnExplode"]) then
+        AddPhrase(":respawn " .. v.Name);
+        AddPhrase(":explode " .. v.Name);
+    end;
+end);
+
+Players.PlayerRemoving:Connect(function(v)
+    -- // Remove from the Player Table
+    for i = 1, #PlayerTable do
+        local PlrTable = PlayerTable[i];
+        if (PlrTable and PlrTable.UserId == v.UserId)then
+            table.remove(PlayerTable, i);
+        end;
+    end;
+    updateDropdownPlayers();
+
+    -- // If the Respawn Explode is happening, update the spammer.
+    if (Settings["ServerRespawnExplode"]) then
+        RemovePhrase(":respawn " .. v.Name);
+        RemovePhrase(":explode " .. v.Name);
+    end;
+end);
+
+-- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
+function updateDropdownPlayers()
+    for i = 1, #DropdownPlayers do
+        local v = DropdownPlayers[i];
+        v.SetOptions(GetAllPlayerNamesAsTable());
+    end;
+end;
+
+-- // Check if a Player is admin
+function isAdmin(Player)
+	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
+	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
+    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
+    for i = 1, #Pads do
+        local v = Pads[i];
+        if (v.Name == Player .. "'s admin") then return true; end;
+    end;
+	return false;
+end;
+
+-- // Get All Player Name in a Table
+function GetAllPlayerNamesAsTable()
+    local tbl = {};
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        table.insert(tbl, v.Name);
+    end;
+
+    return tbl;
+end;
+
+-- // Get Player Data from the Player Name
+function GetPlayerTableFromName(Name)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.Name == Name) then
+            return v;
+        end;
+    end;
+end;
+
+-- // Get Player Data from the Player Id
+function GetPlayerTableFromId(PlayerId)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.UserId == PlayerId) then
+            return v;
+        end;
+    end;
+end;
+
+-- // Checking if a Player is whitelisted
+function IsWhitelisted(PlayerID)
+    -- // Handling if the PlayerID is actually the Player Name
+    if (type(PlayerID) == "string") then
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Name == PlayerID) then
+                PlayerID = v.UserId;
+            end;
+        end;
+    end;
+
+    -- // Vars
+    local Whitelisted = false;
+    local ProtectedWhitelist = false;
+    local Index = "Not defined";
+
+    -- // Check if Player is whitelisted
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.Whitelisted) then
+            Whitelisted = true;
+            Index = i;
+        end;
+    end;
+
+    -- // Check if Player is Protected
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = ProtectedWhitelistedPlayers[i];
+        if (tonumber(v) == tonumber(PlayerID)) then 
+            ProtectedWhitelist = true; 
+            Index = i; 
+        end;
+    end;
+
+    return Whitelisted, ProtectedWhitelist, Index;
+end;
+
+-- // Get all players that aren't whitelisted
+function GetUnblacklistedPlayers()
+    local AllPlayers = Players:GetPlayers();
+    for i = 1, #AllPlayers do
+        local v = AllPlayers[i];
+        if (v) then 
+            local WL, PWL, _ = IsWhitelisted(v.UserId);
+            if (WL or PWL) then
+                table.remove(AllPlayers, i);
+            end;
+        end;
+    end;
+
+    return AllPlayers;
+end;
+
+-- // Add Phrase to the Spammer
+function AddPhrase(_Phrase)
+    local IsInSpammer = false;
+
+    -- // Check if the phrase is already in the Spammer
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            break;
+        end;
+    end;
+
+    -- // If it's not in the spammer, add it to the spammer
+    if (not IsInSpammer) then
+        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
+        return true;
+    end;
+
+    return false;
+end;
+
+-- // Remove Phrase from the Spammer
+function RemovePhrase(_Phrase)
+    -- // Vars
+    local IsInSpammer = false;
+    local Index = 1;
+
+    -- // Check if the phrase is already in the Spammer
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            Index = i;
+        end;
+    end;
+
+    -- // If it's in the spammer, remove it
+    if (IsInSpammer) then
+        table.remove(CommandsSpamPhrase, Index);
+        return true;
+    end;
+
+    return false;
+end;
+
+-- // Sapmmers
+RunService.RenderStepped:Connect(function()
+    -- // Phrase Spammer
+    coroutine.wrap(function()
+        for i = 1, #CommandsSpamPhrase do
+            local v = CommandsSpamPhrase[i];
+            Players:Chat(v.Phrase);
+        end;
+    end)();
+
+    -- // Lagger
+    coroutine.wrap(function()
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Lagging) then
+                Players:Chat(":pm " .. v.Name .. " " .. LongText);
+            end;
+        end;
+    end)();
+end);
+
+-- // Epilepsy
+coroutine.wrap(function()
+    while wait() do
+        if (Settings["ServerEpilepsy"]) then
+            Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 0 10000"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
+        end;
+    end;
+end)();
+
+-- // Failsafing commadns
+function FailSafeCommand(Page, CommandName, ...)
+    local Module = tostring(Page)
+    local ComamndInfoTableModule = CommandInfo[Module];
+    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
+    local SelectionArgs = {...};
+
+    -- // Admin checking
+    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
+        Material.Banner({
+            Text = "You don't have admin, this command requries admin."
+        });
+
+        return false;
+    end;
+
+    -- // Selection
+    for i = 1, #SelectionArgs do
+        local v = SelectionArgs[i];
+        if (v.Requirement and v.Requirement == "Not selected") then
+            Material.Banner({
+                Text = v.Error;
+            });
+
+            return false;
+        end;
+    end;
+
+    -- // Final return
+    return true;
+end
 
 -- // Automatically setup the Text and Menu
 function SetupTextMenu(Page, CommandName, Options)
@@ -130,318 +488,7 @@ function SetupTextMenu(Page, CommandName, Options)
     return Object;
 end;
 
--- // Failsafing commadns
-function FailSafeCommand(Page, CommandName, ...)
-    local Module = tostring(Page)
-    local ComamndInfoTableModule = CommandInfo[Module];
-    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
-    local SelectionArgs = {...};
-
-    -- // Admin checking
-    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
-        Material.Banner({
-            Text = "You don't have admin, this command requries admin."
-        });
-
-        return false;
-    end;
-
-    -- // Selection
-    for i = 1, #SelectionArgs do
-        local v = SelectionArgs[i];
-        if (v.Requirement and v.Requirement == "Not selected") then
-            Material.Banner({
-                Text = v.Error;
-            });
-
-            return false;
-        end;
-    end;
-
-    -- // Final return
-    return true;
-end;
-
-RunService.RenderStepped:Connect(function()
-    -- // Phrase Spammer
-    coroutine.wrap(function()
-        for i = 1, #CommandsSpamPhrase do
-            local v = CommandsSpamPhrase[i];
-            Players:Chat(v.Phrase);
-        end;
-    end)();
-
-    -- // Lagger
-    coroutine.wrap(function()
-        for i = 1, #PlayerTable do
-            local v = PlayerTable[i];
-            if (v.Lagging) then
-                Players:Chat(":pm " .. v.Name .. " " .. LongText);
-            end;
-        end;
-    end)();
-end);
-
--- // Epilepsy
-coroutine.wrap(function()
-    while wait() do
-        if (Settings["ServerEpilepsy"]) then
-            Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
-            Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
-            Players:Chat(":colorshifttop 0 10000 0"); wait(0.1);
-            Players:Chat(":colorshiftbottom 0 10000 0"); wait(0.1);
-            Players:Chat(":colorshifttop 0 0 10000"); wait(0.1);
-            Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
-        end;
-    end;
-end)();
-
-function AddPhrase(_Phrase)
-    local IsInSpammer = false;
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            break;
-        end;
-    end;
-
-    if (not IsInSpammer) then
-        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
-        return true;
-    end;
-
-    return false;
-end;
-
-function RemovePhrase(_Phrase)
-    local IsInSpammer = false;
-    local Index = 1;
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            Index = i;
-        end;
-    end;
-
-    if (IsInSpammer) then
-        table.remove(CommandsSpamPhrase, Index);
-        return true;
-    end;
-
-    return false;
-end;
-
-function isPWL(PlayerID)
-    for i = 1, #ProtectedWhitelistedPlayers do
-        local v = ProtectedWhitelistedPlayers[i];
-        if (v == PlayerID) then
-            return true;
-        end;
-    end;
-    
-    return false;
-end;
-
-function IsWhitelisted(PlayerID)
-    if (type(PlayerID) == "string") then
-        for i = 1, #PlayerTable do
-            local v = PlayerTable[i];
-            if (v.Name == PlayerID) then
-                PlayerID = v.UserId;
-            end;
-        end;
-    end;
-    local Whitelisted = false;
-    local ProtectedWhitelist = false;
-    local Index = "Not defined";
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.Whitelisted) then
-            Whitelisted = true;
-            Index = i;
-        end;
-    end;
-    for i = 1, #ProtectedWhitelistedPlayers do
-        local v = ProtectedWhitelistedPlayers[i];
-        if (tonumber(v) == tonumber(PlayerID)) then 
-            ProtectedWhitelist = true; 
-            Index = i; 
-        end;
-    end;
-
-    return Whitelisted, ProtectedWhitelist, Index;
-end;
-
-function GetUnblacklistedPlayers()
-    local AllPlayers = Players:GetPlayers();
-    for i = 1, #AllPlayers do
-        local v = AllPlayers[i];
-        if (v) then 
-            local WL, PWL, _ = IsWhitelisted(v.UserId);
-            if (WL or PWL) then
-                table.remove(AllPlayers, i);
-            end;
-        end;
-    end;
-
-    return AllPlayers;
-end;
-
--- // Check if a Player is admin
-function isAdmin(Player)
-	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
-	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
-    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
-    for i = 1, #Pads do
-        local v = Pads[i];
-        if (v.Name == Player .. "'s admin") then return true; end;
-    end;
-	return false;
-end;
-
-function GetAllPlayerNamesAsTable()
-    local tbl = {};
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        table.insert(tbl, v.Name);
-    end;
-
-    return tbl;
-end;
-
-function GetPlayerTableFromName(Name)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.Name == Name) then
-            return v;
-        end;
-    end;
-end;
-
-function GetPlayerTableFromId(PlayerId)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.UserId == PlayerId) then
-            return v;
-        end;
-    end;
-end;
-
--- // Add new/existing players and remove old players from PlayerTable
-local GetPlayers = Players:GetPlayers();
-for i = 1, #GetPlayers do
-    local v = GetPlayers[i];
-    if (v ~= LocalPlayer) then 
-        local tbl = {
-            Instance = v,
-            Name = v.Name,
-            UserId = v.UserId,
-            Whitelisted = false,
-            Lagging = false,
-            BlacklistedPhrases = {}
-        };
-        local Index = #PlayerTable + 1;
-        table.insert(PlayerTable, tbl);
-    
-        v.Chatted:Connect(function(msg)
-            local PlrTable = GetPlayerTableFromId(v.UserId);
-            local BLPhrases = PlrTable.BlacklistedPhrases;
-            for i = 1, #BLPhrases do
-                local BlacklistedPhrase = BLPhrases[i];
-                if (msg:match(BlacklistedPhrase.Phrase)) then
-                    Players:Chat(BlacklistedPhrase.Punishment);
-                end;
-            end;
-            for i = 1, #BlacklistedGears do
-                local v = BlacklistedGears[i];
-                local msg = msg:split(" ");
-                if (msg[2] == v and not isWhitelisted(v.UserId)) then
-                    Players:Chat(":removetools " + msg[3]);
-                end;
-            end;
-            if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
-                Players:Chat("Hi gamer!");
-            end;
-        end);
-    else 
-        local tbl = {
-            Instance = v,
-            Name = v.Name,
-            UserId = v.UserId,
-            Whitelisted = false,
-            Lagging = false,
-            BlacklistedPhrases = {}
-        };
-        table.insert(PlayerTable, tbl);
-    end;
-end;
-
-Players.PlayerAdded:Connect(function(v)
-    local tbl = {
-        Instance = v,
-        Name = v.Name,
-        UserId = v.UserId,
-        Whitelisted = false,
-        Lagging = false,
-        BlacklistedPhrases = {}
-    };
-    local Index = #PlayerTable + 1;
-    table.insert(PlayerTable, tbl);
-    updateDropdownPlayers();
-
-    v.Chatted:Connect(function(msg)
-        local PlrTable = GetPlayerTableFromId(v.UserId);
-        local BLPhrases = PlrTable.BlacklistedPhrases;
-        for i = 1, #BLPhrases do
-            local BlacklistedPhrase = BLPhrases[i];
-            if (msg:match(BlacklistedPhrase.Phrase)) then
-                Players:Chat(BlacklistedPhrase.Punishment);
-            end;
-        end;
-        for i = 1, #BlacklistedGears do
-            local v = BlacklistedGears[i];
-            local msg = msg:split(" ");
-            if (msg[2] == v and not isWhitelisted(v.UserId)) then
-                Players:Chat(":removetools " + msg[3]);
-            end;
-        end;
-        if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
-            Players:Chat("Hi gamer!");
-        end;
-    end);
-
-    if (Settings["ServerRespawnExplode"]) then
-        AddPhrase(":respawn " .. v.Name);
-        AddPhrase(":explode " .. v.Name);
-    end;
-end);
-
-Players.PlayerRemoving:Connect(function(v)
-    for i = 1, #PlayerTable do
-        local PlrTable = PlayerTable[i];
-        if (PlrTable and PlrTable.UserId == v.UserId)then
-            table.remove(PlayerTable, i);
-        end;
-    end;
-    updateDropdownPlayers();
-
-    if (Settings["ServerRespawnExplode"]) then
-        RemovePhrase(":respawn " .. v.Name);
-        RemovePhrase(":explode " .. v.Name);
-    end;
-end);
-
--- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
-function updateDropdownPlayers()
-    for i = 1, #DropdownPlayers do
-        local v = DropdownPlayers[i];
-        v.SetOptions(GetAllPlayerNamesAsTable());
-    end;
-end;
-
--- // Creating the GUI
+-- // Building GUI
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local Material = MaterialUI.Load({
 	Title = "oofkohls",
@@ -454,13 +501,12 @@ local Material = MaterialUI.Load({
 	}
 });
 
--- // Building GUI
 local Pages = {};
 function createPage(PageName)
     local mt = setmetatable(Material.New({Title = PageName}), {__tostring = function() return PageName end});
     table.insert(Pages, mt);
     return mt;
-end
+end;
 
 -- // Create Pages
 local Admin = createPage("Admin");
