@@ -32,6 +32,12 @@
             "Name": "Select Phrase",
             "Type": "TextField"
         },
+        "Select Punishment Phrase": {
+            "Admin": false,
+            "Description": "Please input a punishment phrase that will be said when the selected phrase is said by the player.",
+            "Name": "Select Punishment Phrase",
+            "Type": "TextField"
+        },
         "Select Player": {
             "Admin": false,
             "Description": "Please select a player.",

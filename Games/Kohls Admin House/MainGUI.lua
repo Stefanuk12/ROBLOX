@@ -7,6 +7,7 @@ local HttpService = game:GetService("HttpService");
 local Workspace = game:GetService("Workspace");
 local MarketplaceService = game:GetService("MarketplaceService");
 local TeleportService = game:GetService("TeleportService");
+local Lighting = game:GetService("Lighting");
 
 -- // Vars
 local GameFolder = Workspace.Terrain["_Game"];
@@ -40,6 +41,7 @@ local GearGiverGears = {
     {Name = "PortableJustice", Id = 82357101},
 };
 local GearGiverGearNames = {};
+local BlacklistedGears = {};
 for i = 1, #GearGiverGears do
     local v = GearGiverGears[i];
     table.insert(GearGiverGearNames, v["Name"]);
@@ -59,6 +61,7 @@ local Settings = {
     MusicCommandsSelectSound = "Not selected",
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
+    BlacklistedSelectPunishmentPhrase = "Not selected",
     CommandsSelectPhrase = "Not selected",
     MiscSelectPaintColour = Color3.fromRGB(255, 150, 150),
     MiscSelectPaintArea = "Not selected",
@@ -85,6 +88,35 @@ end;
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local DropdownPlayers = {};
 local PlayerTable = {};
+
+function GetAllPlayerNamesAsTable()
+    local tbl = {};
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[v];
+        table.insert(tbl, v.Name);
+    end;
+
+    return tbl;
+end;
+
+function GetPlayerTableFromName(Name)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[v];
+        if (v.Name == Name) then
+            return v;
+        end;
+    end;
+end;
+
+function GetPlayerTableFromId(PlayerId)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[v];
+        if (v.UserId == PlayerId) then
+            return v;
+        end;
+    end;
+end;
+
 local Material = MaterialUI.Load({
 	Title = "oofkohls",
 	Style = 3,
@@ -100,31 +132,74 @@ local Material = MaterialUI.Load({
 local GetPlayers = Players:GetPlayers();
 for i = 1, #GetPlayers do
     local v = GetPlayers[i];
-    table.insert(PlayerTable, v.Name);
+    if (v == LocalPlayer) then return; end;
+    local tbl = setmetatable({
+        Instance = v,
+        Name = v.Name,
+        UserId = v.UserId,
+        Whitelisted = false,
+        Lagging = false,
+        BlacklistedPhrases = {}
+    }, {
+        __tostring = function() return v.Name; end
+    });
+    table.insert(PlayerTable, tbl);
 end;
 
-Players.PlayerAdded:Connect(function(plr)
-    table.insert(PlayerTable, plr.Name);
+Players.PlayerAdded:Connect(function(v)
+    local tbl = setmetatable({
+        Instance = v,
+        Name = v.Name,
+        UserId = v.UserId,
+        Whitelisted = false,
+        Lagging = false,
+        BlacklistedPhrases = {
+            --[[
+            {Phrase = "hi", Punishment = "bye"}
+            ]]
+        }
+    }, {
+        __tostring = function() return v.Name; end
+    });
+    table.insert(PlayerTable, tbl);
     updateDropdownPlayers();
 
+    v.Chatted:Connect(function(msg)
+        local PlrTable = GetPlayerTableFromId(v.UserId);
+        local BLPhrases = PlrTable.BlacklistedPhrases;
+        for i = 1, #BLPhrases do
+            local BlacklistedPhrase = BLPhrases[i];
+            if (msg:match(BlacklistedPhrase.Phrase)) then
+                Players:Chat(BlacklistedPhrase.Punishment);
+            end;
+        end;
+        for i = 1, #BlacklistedGears do
+            local v = BlacklistedGears[i];
+            local msg = msg:split(" ");
+            if (msg[2] == v and not isWhitelisted(v.UserId)) then
+                Players:Chat(":removetools " + msg[3]);
+            end;
+        end;
+    end);
+
     if (Settings["ServerRespawnExplode"]) then
-        AddPhrase(":respawn " .. plr.Name);
-        AddPhrase(":explode " .. plr.Name);
+        AddPhrase(":respawn " .. v.Name);
+        AddPhrase(":explode " .. v.Name);
     end;
 end);
 
-Players.PlayerRemoving:Connect(function(plr)
+Players.PlayerRemoving:Connect(function(v)
     for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v == plr.Name)then
+        local PlrTable = PlayerTable[i];
+        if (PlrTable.UserId == v.UserId)then
             table.remove(PlayerTable, i);
         end;
     end;
     updateDropdownPlayers();
 
     if (Settings["ServerRespawnExplode"]) then
-        RemovePhrase(":respawn " .. plr.Name);
-        RemovePhrase(":explode " .. plr.Name);
+        RemovePhrase(":respawn " .. v.Name);
+        RemovePhrase(":explode " .. v.Name);
     end;
 end);
 
@@ -132,7 +207,7 @@ end);
 function updateDropdownPlayers()
     for i = 1, #DropdownPlayers do
         local v = DropdownPlayers[i];
-        v.SetOptions(PlayerTable);
+        v.SetOptions(GetAllPlayerNamesAsTable());
     end;
 end;
 
@@ -149,25 +224,35 @@ function isAdmin(Player)
 end;
 
 -- // Stuff
-local WhitelistedPlayers = {};
 local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 local CommandsSpamPhrase = {};
-local LaggingPlayers = {};
 local LongText = "";
 
 function IsWhitelisted(PlayerID)
+    if (type(PlayerID) == "string") then
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Name == PlayerID) then
+                PlayerID = v.UserId;
+            end;
+        end;
+    end;
     local Whitelisted = false;
     local ProtectedWhitelist = false;
     local Index = "Not defined";
-    for i = 1, #WhitelistedPlayers do
-        local v = WhitelistedPlayers[i];
-        if (v) then
-            if (tonumber(v) == tonumber(PlayerID)) then Whitelisted = true; Index = i; end;
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[v];
+        if (v.Whitelisted) then
+            Whitelisted = true;
+            Index = i;
         end;
     end;
     for i = 1, #ProtectedWhitelistedPlayers do
         local v = ProtectedWhitelistedPlayers[i];
-        if (tonumber(v) == tonumber(PlayerID)) then ProtectedWhitelist = true; Index = i; end;
+        if (tonumber(v) == tonumber(PlayerID)) then 
+            ProtectedWhitelist = true; 
+            Index = i; 
+        end;
     end;
 
     return Whitelisted, ProtectedWhitelist, Index;
@@ -236,12 +321,28 @@ RunService.RenderStepped:Connect(function()
 
     -- // Lagger
     coroutine.wrap(function()
-        for i = 1, #LaggingPlayers do
-            local v = LaggingPlayers[i];
-            Players:Chat(":pm " .. v["PlayerName"] .. " " .. LongText);
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Lagging) then
+                Players:Chat(":pm " .. v.Name .. " " .. LongText);
+            end;
         end;
     end)();
-end)
+end);
+
+-- // Epilepsy
+coroutine.wrap(function()
+    while wait() do
+        if (Settings["ServerEpilepsy"]) then
+            Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 0 10000"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
+        end;
+    end;
+end)();
 
 -- // Building GUI
 local Pages = {};
@@ -303,7 +404,7 @@ function SetupTextMenu(Page, CommandName, Options)
     };
 
     if (CommandName == "Select Player") then
-        Creation.Options = PlayerTable;
+        Creation.Options = GetAllPlayerNamesAsTable();
     end;
 
     for i,v in pairs(Options) do
@@ -389,6 +490,12 @@ local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
     end;
 });
 
+local BlacklistedSelectPunishmentPhrase = SetupTextMenu(Blacklist, "Select Punishment Phrase", {
+    Callback = function(Value)
+        Settings["BlacklistedSelectPunishmentPhrase"] = Value;
+    end;
+});
+
 local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
     Callback = function(Value)
         Settings["BlacklistSelectPlayer"] = Value;
@@ -404,6 +511,18 @@ local BlacklistGear = SetupTextMenu(Blacklist, "Blacklist Gear", {
             };
         });
         if (not FailSafeResult) then return; end;
+
+        for i = 1, #BlacklistedGears do
+            local v = BlacklistedGears[i];
+            if (v == Settings["BlacklistSelectGearId"]) then
+                Material.Banner({
+                    Text = "This gear has already been blacklisted."
+                });
+                return;
+            end;
+        end;
+
+        table.insert(BlacklistedGears, i);
     end;
 });
 
@@ -413,9 +532,26 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
             {
                 Requirement = Settings["BlacklistPhrase"],
                 Error = "Please input a phrase."
+            },
+            {
+                Requirement = Settings["BlacklistedSelectPunishmentPhrase"],
+                Error = "Please input a punishment phrase."
             };
         });
         if (not FailSafeResult) then return; end;
+
+        local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
+        for i = 1, #BLPhrases do
+            local v = BLPhrases[i];
+            if (v.Phrase == Settings["BlacklistPhrase"]) then
+                Material.Banner({
+                    Text = "This phrase has already been blacklisted for this player."
+                });
+                return;
+            end;
+        end;
+        
+        table.insert(BLPhrases, {Phrase = Settings["BlacklistPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
     end;
 });
 
@@ -428,6 +564,21 @@ local UnblacklistGear = SetupTextMenu(Blacklist, "Unblacklist Gear", {
             };
         });
         if (not FailSafeResult) then return; end;
+
+        for i = 1, #BlacklistedGears do
+            local v = BlacklistedGears[i];
+            if (v == Settings["BlacklistSelectGearId"]) then
+                table.remove(BlacklistedGears, i);
+                Material.Banner({
+                    Text = "Unblacklisted gear."
+                });
+                return;
+            end;
+        end;
+
+        Material.Banner({
+            Text = "This gear has not been blacklisted."
+        });
     end;
 });
 
@@ -440,6 +591,19 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
             };
         });
         if (not FailSafeResult) then return; end;
+
+        local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
+        for i = 1, #BLPhrases do
+            local v = BLPhrases[i];
+            if (v.Phrase == Settings["BlacklistPhrase"]) then
+                table.remove(BLPhrases, i);
+                return;
+            end;
+        end;
+
+        Material.Banner({
+            Text = "This phrase has not been blacklisted for this player."
+        });
     end;
 });
 
@@ -764,6 +928,39 @@ local StopLagPlayer = SetupTextMenu(Player, "Stop Lag Player", {
 });
 
 -- // Protections
+Lighting.ChildAdded:Connect(function(child) -- // Anti Punish
+    if (Settings["ProtectionsAntiPunish"] and child.Name == LocalPlayer.Name) then
+        Players:Chat(":reset me");
+    end;
+end);
+
+LocalPlayer.PlayerGui.ChildAdded:Connect(function(child) -- // Anti Blind
+    if (Settings["ProtectionsAntiBlind"] and child.Name == "EFFECTGUIBLIND") then
+        wait(0.1);
+        child:Destroy();
+    end
+end);
+
+LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+    if (Settings["ProtectionsAntiKill"]) then
+        Players:Chat(":reset me"); 
+    end;
+end);
+
+LocalPlayer.CharacterAdded:Connect(function(Character)
+    Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
+        if (Settings["ProtectionsAntiKill"]) then
+            Players:Chat(":reset me");
+        end;
+    end);
+end);
+
+GameFolder["Folder"].ChildAdded:Connect(function(child) -- // Anti Jail
+    if (Settings["ProtectionsAntiJail"] and child.Name == LocalPlayer.Name.."'s jail") then
+        Players:Chat(":removejails");
+    end;
+end);
+
 local AntiBlind = SetupTextMenu(Protections, "Anti Blind", {
     Enabled = Settings["ProtectionsAntiBlind"],
     Callback = function(Value)
@@ -797,8 +994,8 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
     Enabled = false,
     Callback = function()
         Players:Chat(":gear me 94794847");
-        LocalPlayer.LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
-        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.LocalPlayer.Backpack.VampireVanquisher);
+        LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
         LocalPlayer.Character:WaitForChild("VampireVanquisher");
         for i = 1, 3 do
             Players:Chat(":size me .3");
@@ -826,18 +1023,6 @@ local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
     Enabled = false,
     Callback = function(Value)
         Settings["ServerEpilepsy"] = Value;
-        local EpilepsyCommands = {}
-        if (Settings["ServerEpilepsy"]) then
-            for i = 1, #EpilepsyCommands do
-                local v = EpilepsyCommands[i];
-                AddPhrase(v);
-            end;
-        else
-            for i = 1, #EpilepsyCommands do
-                local v = EpilepsyCommands[i];
-                RemovePhrase(v);
-            end;
-        end;
     end;
 });
 
@@ -901,14 +1086,12 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
         local UnblacklistedPlayers = GetUnblacklistedPlayers();
         
         if (Settings["ServerRespawnExplode"]) then
-            print('a')
             for i = 1, #UnblacklistedPlayers do
                 local v = UnblacklistedPlayers[i];
                 AddPhrase(":respawn " .. v.Name);
                 AddPhrase(":explode " .. v.Name);
             end;
         elseif (not Settings["ServerRespawnExplode"]) then
-            print('b')
             for i = 1, #UnblacklistedPlayers do
                 local v = UnblacklistedPlayers[i];
                 RemovePhrase(":respawn " .. v.Name);
@@ -1014,10 +1197,14 @@ local UnwhitelistPlayer = SetupTextMenu(Whitelist, "Unwhitelist Player", {
         });
         if (not FailSafeResult) then return; end;
 
-        local PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
-        local WL, PWL, Index = IsWhitelisted(PlayerId);
+        local WL, PWL, Index = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
         if (WL) then
-            table.remove(WhitelistedPlayers, Index);
+            for i = 1, #PlayerTable do
+                local v = PlayerTable[i];
+                if (v.Name == Settings["WhitelistSelectPlayer"]) then
+                    v.Whitelisted = false;
+                end;
+            end;
             Material.Banner({
 				Text = "Unwhitelisted Player."
             });
@@ -1048,8 +1235,7 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
         });
         if (not FailSafeResult) then return; end;
 
-        local _, PlayerId = Players:GetUserIdFromNameAsync(Settings["WhitelistSelectPlayer"]);
-        local WL, PWL, Index = IsWhitelisted(PlayerId);
+        local WL, PWL, Index = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
         if (PWL) then
             Material.Banner({
 				Text = "This player has already been whitelisted."
@@ -1057,7 +1243,12 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
             return;
         end;
         if (not WL) then
-            table.insert(WhitelistedPlayers, PlayerId);
+            for i = 1, #PlayerTable do
+                local v = PlayerTable[i];
+                if (v.Name == Settings["WhitelistSelectPlayer"]) then
+                    v.Whitelisted = true;
+                end;
+            end;
             Material.Banner({
 				Text = "Whitelisted Player."
             });
