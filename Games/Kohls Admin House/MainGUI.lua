@@ -83,7 +83,7 @@ if (writefile) then
     local SettingsHolder = HttpService:JSONDecode(readfile("oofkohlsSettings.json"));
 
     -- // Make it so you can add new settings
-    for i,v in pairs(Settings) do 
+    for i,v in pairs(Settings) do
         if (not SettingsHolder[i]) then
             SettingsHolder[i] = v;
         end;
@@ -93,24 +93,12 @@ if (writefile) then
     writefile("oofkohlsSettings.json", HttpService:JSONEncode(Settings) );
 end;
 
--- // Check if the User is a Protected Whitelisted User
-function isPWL(PlayerID)
-    for i = 1, #ProtectedWhitelistedPlayers do
-        local v = ProtectedWhitelistedPlayers[i];
-        if (v == PlayerID) then
-            return true;
-        end;
-    end;
-    
-    return false;
-end;
-
 -- // Configuring and adding the Player to the PlayerTable
 local PlayerTable = {};
 local GetPlayers = Players:GetPlayers();
 for i = 1, #GetPlayers do
     local v = GetPlayers[i];
-    if (v ~= LocalPlayer) then 
+    if (v ~= LocalPlayer) then
         -- // Main Table that holds Player Data
         local tbl = {
             Instance = v,
@@ -122,7 +110,7 @@ for i = 1, #GetPlayers do
         };
         local Index = #PlayerTable + 1;
         table.insert(PlayerTable, tbl);
-    
+
         -- // Configuring
         v.Chatted:Connect(function(msg)
             local PlrTable = GetPlayerTableFromId(v.UserId);
@@ -150,7 +138,7 @@ for i = 1, #GetPlayers do
                 Players:Chat("Hi gamer!");
             end;
         end);
-    else 
+    else
         -- // Main Table that holds Player Data
         local tbl = {
             Instance = v,
@@ -183,7 +171,7 @@ Players.PlayerAdded:Connect(function(v)
     v.Chatted:Connect(function(msg)
         local PlrTable = GetPlayerTableFromId(v.UserId);
         local BLPhrases = PlrTable.BlacklistedPhrases;
-    
+
         -- // Checking if the player has said any Blacklisted Phrases
         for i = 1, #BLPhrases do
             local BlacklistedPhrase = BLPhrases[i];
@@ -214,8 +202,8 @@ Players.PlayerAdded:Connect(function(v)
     end;
 end);
 
+-- // Remove from the Player Table
 Players.PlayerRemoving:Connect(function(v)
-    -- // Remove from the Player Table
     for i = 1, #PlayerTable do
         local PlrTable = PlayerTable[i];
         if (PlrTable and PlrTable.UserId == v.UserId)then
@@ -230,26 +218,6 @@ Players.PlayerRemoving:Connect(function(v)
         RemovePhrase(":explode " .. v.Name);
     end;
 end);
-
--- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
-function updateDropdownPlayers()
-    for i = 1, #DropdownPlayers do
-        local v = DropdownPlayers[i];
-        v.SetOptions(GetAllPlayerNamesAsTable());
-    end;
-end;
-
--- // Check if a Player is admin
-function isAdmin(Player)
-	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
-	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
-    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
-    for i = 1, #Pads do
-        local v = Pads[i];
-        if (v.Name == Player .. "'s admin") then return true; end;
-    end;
-	return false;
-end;
 
 -- // Get All Player Name in a Table
 function GetAllPlayerNamesAsTable()
@@ -282,6 +250,26 @@ function GetPlayerTableFromId(PlayerId)
     end;
 end;
 
+-- // Update any Dropdowns that use the PlayerTable when the PlayerTable updates
+function updateDropdownPlayers()
+    for i = 1, #DropdownPlayers do
+        local v = DropdownPlayers[i];
+        v.SetOptions(GetAllPlayerNamesAsTable());
+    end;
+end;
+
+-- // Check if the User is a Protected Whitelisted User
+function isPWL(PlayerID)
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = ProtectedWhitelistedPlayers[i];
+        if (v == PlayerID) then
+            return true;
+        end;
+    end;
+
+    return false;
+end;
+
 -- // Checking if a Player is whitelisted
 function IsWhitelisted(PlayerID)
     -- // Handling if the PlayerID is actually the Player Name
@@ -311,9 +299,9 @@ function IsWhitelisted(PlayerID)
     -- // Check if Player is Protected
     for i = 1, #ProtectedWhitelistedPlayers do
         local v = ProtectedWhitelistedPlayers[i];
-        if (tonumber(v) == tonumber(PlayerID)) then 
-            ProtectedWhitelist = true; 
-            Index = i; 
+        if (tonumber(v) == tonumber(PlayerID)) then
+            ProtectedWhitelist = true;
+            Index = i;
         end;
     end;
 
@@ -325,7 +313,7 @@ function GetUnblacklistedPlayers()
     local AllPlayers = Players:GetPlayers();
     for i = 1, #AllPlayers do
         local v = AllPlayers[i];
-        if (v) then 
+        if (v) then
             local WL, PWL, _ = IsWhitelisted(v.UserId);
             if (WL or PWL) then
                 table.remove(AllPlayers, i);
@@ -336,53 +324,7 @@ function GetUnblacklistedPlayers()
     return AllPlayers;
 end;
 
--- // Add Phrase to the Spammer
-function AddPhrase(_Phrase)
-    local IsInSpammer = false;
-
-    -- // Check if the phrase is already in the Spammer
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            break;
-        end;
-    end;
-
-    -- // If it's not in the spammer, add it to the spammer
-    if (not IsInSpammer) then
-        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
-        return true;
-    end;
-
-    return false;
-end;
-
--- // Remove Phrase from the Spammer
-function RemovePhrase(_Phrase)
-    -- // Vars
-    local IsInSpammer = false;
-    local Index = 1;
-
-    -- // Check if the phrase is already in the Spammer
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            Index = i;
-        end;
-    end;
-
-    -- // If it's in the spammer, remove it
-    if (IsInSpammer) then
-        table.remove(CommandsSpamPhrase, Index);
-        return true;
-    end;
-
-    return false;
-end;
-
--- // Sapmmers
+-- // Spammers
 RunService.RenderStepped:Connect(function()
     -- // Phrase Spammer
     coroutine.wrap(function()
@@ -425,6 +367,17 @@ function FailSafeCommand(Page, CommandName, ...)
     local SelectionArgs = {...};
 
     -- // Admin checking
+    function isAdmin(Player)
+        local targetPlayer = Players:GetUserIdFromNameAsync(Player);
+        if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
+        local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
+        for i = 1, #Pads do
+            local v = Pads[i];
+            if (v.Name == Player .. "'s admin") then return true; end;
+        end;
+        return false;
+    end;
+    
     if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
         Material.Banner({
             Text = "You don't have admin, this command requries admin."
@@ -460,7 +413,7 @@ function SetupTextMenu(Page, CommandName, Options)
             Information = function(self)
                 local Description = ComamndInfoTable["Description"];
                 if (ComamndInfoTable["Admin"]) then Description = Description .. " This command requires Admin." end;
-                    
+
                 Material.Banner({
                     Text = Description
                 });
@@ -481,8 +434,8 @@ function SetupTextMenu(Page, CommandName, Options)
     local Type = ComamndInfoTable["Type"];
 
     local Object = Page[Type](Creation);
-    if (CommandName == "Select Player") then 
-        table.insert(DropdownPlayers, Object); 
+    if (CommandName == "Select Player") then
+        table.insert(DropdownPlayers, Object);
     end;
 
     return Object;
@@ -640,7 +593,7 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
                 return;
             end;
         end;
-        
+
         table.insert(BLPhrases, {Phrase = Settings["BlacklistPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
     end;
 });
@@ -717,6 +670,52 @@ local SayPhrase = SetupTextMenu(Commands, "Say Phrase", {
         Players:Chat(Settings["CommandsSelectPhrase"]);
     end;
 });
+
+-- // Add Phrase to the Spammer
+function AddPhrase(_Phrase)
+    local IsInSpammer = false;
+
+    -- // Check if the phrase is already in the Spammer
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            break;
+        end;
+    end;
+
+    -- // If it's not in the spammer, add it to the spammer
+    if (not IsInSpammer) then
+        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
+        return true;
+    end;
+
+    return false;
+end;
+
+-- // Remove Phrase from the Spammer
+function RemovePhrase(_Phrase)
+    -- // Vars
+    local IsInSpammer = false;
+    local Index = 1;
+
+    -- // Check if the phrase is already in the Spammer
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            Index = i;
+        end;
+    end;
+
+    -- // If it's in the spammer, remove it
+    if (IsInSpammer) then
+        table.remove(CommandsSpamPhrase, Index);
+        return true;
+    end;
+
+    return false;
+end;
 
 local SpamPhrase = SetupTextMenu(Commands, "Spam Phrase", {
     Callback = function()
@@ -800,7 +799,7 @@ local PaintArea = SetupTextMenu(Misc, "Paint Area", {
         });
         if (not FailSafeResult) then return; end;
 
-        -- // Check if you already have a Paint Bucket   
+        -- // Check if you already have a Paint Bucket
         if (not ( LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket") )) then
             Players:Chat(":gear me 18474459");
         end;
@@ -818,7 +817,7 @@ local PaintArea = SetupTextMenu(Misc, "Paint Area", {
             for i = 1, #AllDescendants do
                 local part = AllDescendants[i];
                 coroutine.wrap(function()
-                    if (part:IsA("BasePart")) then   
+                    if (part:IsA("BasePart")) then
                         Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColour});
                     end;
                 end)();
@@ -828,7 +827,7 @@ local PaintArea = SetupTextMenu(Misc, "Paint Area", {
             for i = 1, #AreaDescendants do
                 local part = AreaDescendants[i];
                 coroutine.wrap(function()
-                    if (part:IsA("BasePart")) then   
+                    if (part:IsA("BasePart")) then
                         Remote:InvokeServer("PaintPart", {["Part"] = part, ["Color"] = SelectedColour});
                     end;
                 end)();
@@ -850,7 +849,7 @@ local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
             Material.Banner({
 				Text = "Settings have been saved."
 			});
-        else 
+        else
             Material.Banner({
 				Text = "Your exploit does not support this feature."
 			});
@@ -861,7 +860,7 @@ local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
 -- // Music Commands
 local SelectSound = SetupTextMenu(MusicCommands, "Select Sound", {
     Options = MusicTable,
-    Callback = function(Value)       
+    Callback = function(Value)
         Settings["MusicCommandsSelectSound"] = musicTable[table.find(MusicTable, Value)].SoundId;
     end;
 });
@@ -888,7 +887,7 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
         Material.Banner({
             Text = "Refreshing Sounds, please wait."
         });
-    
+
         musicTable = MusicAPI.CheckAllSounds();
         MusicTable = {};
 
@@ -896,9 +895,9 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
             local v = musicTable[i];
             table.insert(MusicTable, v["Name"]);
         end;
-        
+
         SelectSound.SetOptions(MusicTable);
-        
+
         Material.Banner({
             Text = "Refreshed Sounds."
         });
@@ -1033,7 +1032,7 @@ end);
 
 LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function() -- // Anti Kill
     if (Settings["ProtectionsAntiKill"]) then
-        Players:Chat(":reset me"); 
+        Players:Chat(":reset me");
     end;
 end);
 
@@ -1127,7 +1126,7 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
         local X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = testCFrame:GetComponents();
         local X, Y, Z = testPosition.X, Y + 3, testPosition.Z;
         local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
-        
+
         LocalPlayer.Character:SetPrimaryPartCFrame(newCFrame);
         wait(1.5);
         Players:Chat(":stun me");
@@ -1174,7 +1173,7 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     Callback = function(Value)
         Settings["ServerRespawnExplode"] = Value;
         local UnblacklistedPlayers = GetUnblacklistedPlayers();
-        
+
         if (Settings["ServerRespawnExplode"]) then
             for i = 1, #UnblacklistedPlayers do
                 local v = UnblacklistedPlayers[i];
