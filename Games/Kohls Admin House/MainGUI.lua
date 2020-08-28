@@ -442,6 +442,7 @@ function updateDropdownPlayers()
 end;
 
 -- // Creating the GUI
+local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local Material = MaterialUI.Load({
 	Title = "oofkohls",
 	Style = 3,
@@ -452,8 +453,6 @@ local Material = MaterialUI.Load({
 		MainFrame = Color3.fromRGB(235,235,235)
 	}
 });
-
-local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 
 -- // Building GUI
 local Pages = {};
