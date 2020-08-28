@@ -15,8 +15,6 @@ local LocalPlayer = Players.LocalPlayer;
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
 local WorkspaceFolder = GameFolder["Workspace"];
 local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
-
--- // Settings + Command Info
 local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
 local musicTable = MusicAPI.CheckAllSounds();
 local MusicTable = {};
@@ -86,22 +84,155 @@ if (writefile) then
 end;
 
 -- // GUI Settings + Vars
-local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local DropdownPlayers = {};
 local PlayerTable = {};
 
-local Material = MaterialUI.Load({
-	Title = "oofkohls",
-	Style = 3,
-	SizeX = 500,
-	SizeY = 350,
-	Theme = "Light",
-	ColorOverrides = {
-		MainFrame = Color3.fromRGB(235,235,235)
-	}
-});
+-- // Stuff
+local CommandsSpamPhrase = {};
+local LongText = "";
 
--- // Add new/existing players and remove old players from PlayerTable
+-- // Automatically setup the Text and Menu
+function SetupTextMenu(Page, CommandName, Options)
+    local Module = tostring(Page)
+    local ComamndInfoTableModule = CommandInfo[Module];
+    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
+    local Creation = {
+        Text = ComamndInfoTable["Name"],
+        Menu = {
+            Information = function(self)
+                local Description = ComamndInfoTable["Description"];
+                if (ComamndInfoTable["Admin"]) then Description = Description .. " This command requires Admin." end;
+                    
+                Material.Banner({
+                    Text = Description
+                });
+            end;
+        }
+    };
+
+    if (CommandName == "Select Player") then
+        Creation.Options = GetAllPlayerNamesAsTable();
+    end;
+
+    for i,v in pairs(Options) do
+        if (i ~= "Text" or i ~= "Menu") then
+            Creation[i] = v;
+        end;
+    end;
+
+    local Type = ComamndInfoTable["Type"];
+
+    local Object = Page[Type](Creation);
+    if (CommandName == "Select Player") then 
+        table.insert(DropdownPlayers, Object); 
+    end;
+
+    return Object;
+end;
+
+-- // Failsafing commadns
+function FailSafeCommand(Page, CommandName, ...)
+    local Module = tostring(Page)
+    local ComamndInfoTableModule = CommandInfo[Module];
+    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
+    local SelectionArgs = {...};
+
+    -- // Admin checking
+    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
+        Material.Banner({
+            Text = "You don't have admin, this command requries admin."
+        });
+
+        return false;
+    end;
+
+    -- // Selection
+    for i = 1, #SelectionArgs do
+        local v = SelectionArgs[i];
+        if (v.Requirement and v.Requirement == "Not selected") then
+            Material.Banner({
+                Text = v.Error;
+            });
+
+            return false;
+        end;
+    end;
+
+    -- // Final return
+    return true;
+end;
+
+RunService.RenderStepped:Connect(function()
+    -- // Phrase Spammer
+    coroutine.wrap(function()
+        for i = 1, #CommandsSpamPhrase do
+            local v = CommandsSpamPhrase[i];
+            Players:Chat(v.Phrase);
+        end;
+    end)();
+
+    -- // Lagger
+    coroutine.wrap(function()
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Lagging) then
+                Players:Chat(":pm " .. v.Name .. " " .. LongText);
+            end;
+        end;
+    end)();
+end);
+
+-- // Epilepsy
+coroutine.wrap(function()
+    while wait() do
+        if (Settings["ServerEpilepsy"]) then
+            Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 10000 0"); wait(0.1);
+            Players:Chat(":colorshifttop 0 0 10000"); wait(0.1);
+            Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
+        end;
+    end;
+end)();
+
+function AddPhrase(_Phrase)
+    local IsInSpammer = false;
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            break;
+        end;
+    end;
+
+    if (not IsInSpammer) then
+        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
+        return true;
+    end;
+
+    return false;
+end;
+
+function RemovePhrase(_Phrase)
+    local IsInSpammer = false;
+    local Index = 1;
+    for i = 1, #CommandsSpamPhrase do
+        local v = CommandsSpamPhrase[i];
+        if (v.Phrase == _Phrase) then
+            IsInSpammer = true;
+            Index = i;
+        end;
+    end;
+
+    if (IsInSpammer) then
+        table.remove(CommandsSpamPhrase, Index);
+        return true;
+    end;
+
+    return false;
+end;
+
 function isPWL(PlayerID)
     for i = 1, #ProtectedWhitelistedPlayers do
         local v = ProtectedWhitelistedPlayers[i];
@@ -113,6 +244,92 @@ function isPWL(PlayerID)
     return false;
 end;
 
+function IsWhitelisted(PlayerID)
+    if (type(PlayerID) == "string") then
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Name == PlayerID) then
+                PlayerID = v.UserId;
+            end;
+        end;
+    end;
+    local Whitelisted = false;
+    local ProtectedWhitelist = false;
+    local Index = "Not defined";
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.Whitelisted) then
+            Whitelisted = true;
+            Index = i;
+        end;
+    end;
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = ProtectedWhitelistedPlayers[i];
+        if (tonumber(v) == tonumber(PlayerID)) then 
+            ProtectedWhitelist = true; 
+            Index = i; 
+        end;
+    end;
+
+    return Whitelisted, ProtectedWhitelist, Index;
+end;
+
+function GetUnblacklistedPlayers()
+    local AllPlayers = Players:GetPlayers();
+    for i = 1, #AllPlayers do
+        local v = AllPlayers[i];
+        if (v) then 
+            local WL, PWL, _ = IsWhitelisted(v.UserId);
+            if (WL or PWL) then
+                table.remove(AllPlayers, i);
+            end;
+        end;
+    end;
+
+    return AllPlayers;
+end;
+
+-- // Check if a Player is admin
+function isAdmin(Player)
+	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
+	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
+    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
+    for i = 1, #Pads do
+        local v = Pads[i];
+        if (v.Name == Player .. "'s admin") then return true; end;
+    end;
+	return false;
+end;
+
+function GetAllPlayerNamesAsTable()
+    local tbl = {};
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        table.insert(tbl, v.Name);
+    end;
+
+    return tbl;
+end;
+
+function GetPlayerTableFromName(Name)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.Name == Name) then
+            return v;
+        end;
+    end;
+end;
+
+function GetPlayerTableFromId(PlayerId)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.UserId == PlayerId) then
+            return v;
+        end;
+    end;
+end;
+
+-- // Add new/existing players and remove old players from PlayerTable
 local GetPlayers = Players:GetPlayers();
 for i = 1, #GetPlayers do
     local v = GetPlayers[i];
@@ -224,168 +441,19 @@ function updateDropdownPlayers()
     end;
 end;
 
--- // Check if a Player is admin
-function isAdmin(Player)
-	local targetPlayer = Players:GetUserIdFromNameAsync(Player);
-	if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
-    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
-    for i = 1, #Pads do
-        local v = Pads[i];
-        if (v.Name == Player .. "'s admin") then return true; end;
-    end;
-	return false;
-end;
+-- // Creating the GUI
+local Material = MaterialUI.Load({
+	Title = "oofkohls",
+	Style = 3,
+	SizeX = 500,
+	SizeY = 350,
+	Theme = "Light",
+	ColorOverrides = {
+		MainFrame = Color3.fromRGB(235,235,235)
+	}
+});
 
-function GetAllPlayerNamesAsTable()
-    local tbl = {};
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        table.insert(tbl, v.Name);
-    end;
-
-    return tbl;
-end;
-
-function GetPlayerTableFromName(Name)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.Name == Name) then
-            return v;
-        end;
-    end;
-end;
-
-function GetPlayerTableFromId(PlayerId)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.UserId == PlayerId) then
-            return v;
-        end;
-    end;
-end;
-
--- // Identifier ;)
-
-
--- // Stuff
-local CommandsSpamPhrase = {};
-local LongText = "";
-
-function IsWhitelisted(PlayerID)
-    if (type(PlayerID) == "string") then
-        for i = 1, #PlayerTable do
-            local v = PlayerTable[i];
-            if (v.Name == PlayerID) then
-                PlayerID = v.UserId;
-            end;
-        end;
-    end;
-    local Whitelisted = false;
-    local ProtectedWhitelist = false;
-    local Index = "Not defined";
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.Whitelisted) then
-            Whitelisted = true;
-            Index = i;
-        end;
-    end;
-    for i = 1, #ProtectedWhitelistedPlayers do
-        local v = ProtectedWhitelistedPlayers[i];
-        if (tonumber(v) == tonumber(PlayerID)) then 
-            ProtectedWhitelist = true; 
-            Index = i; 
-        end;
-    end;
-
-    return Whitelisted, ProtectedWhitelist, Index;
-end;
-
-function GetUnblacklistedPlayers()
-    local AllPlayers = Players:GetPlayers();
-    for i = 1, #AllPlayers do
-        local v = AllPlayers[i];
-        if (v) then 
-            local WL, PWL, _ = IsWhitelisted(v.UserId);
-            if (WL or PWL) then
-                table.remove(AllPlayers, i);
-            end;
-        end;
-    end;
-
-    return AllPlayers;
-end;
-
-function AddPhrase(_Phrase)
-    local IsInSpammer = false;
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            break;
-        end;
-    end;
-
-    if (not IsInSpammer) then
-        table.insert(CommandsSpamPhrase, {Phrase = _Phrase});
-        return true;
-    end;
-
-    return false;
-end;
-
-function RemovePhrase(_Phrase)
-    local IsInSpammer = false;
-    local Index = 1;
-    for i = 1, #CommandsSpamPhrase do
-        local v = CommandsSpamPhrase[i];
-        if (v.Phrase == _Phrase) then
-            IsInSpammer = true;
-            Index = i;
-        end;
-    end;
-
-    if (IsInSpammer) then
-        table.remove(CommandsSpamPhrase, Index);
-        return true;
-    end;
-
-    return false;
-end;
-
-RunService.RenderStepped:Connect(function()
-    -- // Phrase Spammer
-    coroutine.wrap(function()
-        for i = 1, #CommandsSpamPhrase do
-            local v = CommandsSpamPhrase[i];
-            Players:Chat(v.Phrase);
-        end;
-    end)();
-
-    -- // Lagger
-    coroutine.wrap(function()
-        for i = 1, #PlayerTable do
-            local v = PlayerTable[i];
-            if (v.Lagging) then
-                Players:Chat(":pm " .. v.Name .. " " .. LongText);
-            end;
-        end;
-    end)();
-end);
-
--- // Epilepsy
-coroutine.wrap(function()
-    while wait() do
-        if (Settings["ServerEpilepsy"]) then
-            Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
-            Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
-            Players:Chat(":colorshifttop 0 10000 0"); wait(0.1);
-            Players:Chat(":colorshiftbottom 0 10000 0"); wait(0.1);
-            Players:Chat(":colorshifttop 0 0 10000"); wait(0.1);
-            Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
-        end;
-    end;
-end)();
+local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 
 -- // Building GUI
 local Pages = {};
@@ -394,77 +462,6 @@ function createPage(PageName)
     table.insert(Pages, mt);
     return mt;
 end
-
--- // Failsafing commadns
-function FailSafeCommand(Page, CommandName, ...)
-    local Module = tostring(Page)
-    local ComamndInfoTableModule = CommandInfo[Module];
-    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
-    local SelectionArgs = {...};
-
-    -- // Admin checking
-    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
-        Material.Banner({
-            Text = "You don't have admin, this command requries admin."
-        });
-
-        return false;
-    end;
-
-    -- // Selection
-    for i = 1, #SelectionArgs do
-        local v = SelectionArgs[i];
-        if (v.Requirement and v.Requirement == "Not selected") then
-            Material.Banner({
-                Text = v.Error;
-            });
-
-            return false;
-        end;
-    end;
-
-    -- // Final return
-    return true;
-end
-
--- // Automatically setup the Text and Menu
-function SetupTextMenu(Page, CommandName, Options)
-    local Module = tostring(Page)
-    local ComamndInfoTableModule = CommandInfo[Module];
-    local ComamndInfoTable = ComamndInfoTableModule[CommandName];
-    local Creation = {
-        Text = ComamndInfoTable["Name"],
-        Menu = {
-            Information = function(self)
-                local Description = ComamndInfoTable["Description"];
-                if (ComamndInfoTable["Admin"]) then Description = Description .. " This command requires Admin." end;
-                    
-                Material.Banner({
-                    Text = Description
-                });
-            end;
-        }
-    };
-
-    if (CommandName == "Select Player") then
-        Creation.Options = GetAllPlayerNamesAsTable();
-    end;
-
-    for i,v in pairs(Options) do
-        if (i ~= "Text" or i ~= "Menu") then
-            Creation[i] = v;
-        end;
-    end;
-
-    local Type = ComamndInfoTable["Type"];
-
-    local Object = Page[Type](Creation);
-    if (CommandName == "Select Player") then 
-        table.insert(DropdownPlayers, Object); 
-    end;
-
-    return Object;
-end;
 
 -- // Create Pages
 local Admin = createPage("Admin");
@@ -477,7 +474,6 @@ local Protections = createPage("Protections");
 local Server = createPage("Server");
 local SoundAbuse = createPage("Sound Abuse");
 local Whitelist = createPage("Whitelist");
--- // Create GUI
 
 -- // Admin
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
