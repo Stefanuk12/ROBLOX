@@ -19,7 +19,7 @@ local WorkspaceFolder = GameFolder["Workspace"];
 local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
 local CommandsSpamPhrase = {};
-local LongText = "";
+local LongText = game:HttpGetAsync("https://github.com/Stefanuk12/ROBLOX/blob/master/Games/Kohls%20Admin%20House/LongText.txt");
 local DropdownPlayers = {};
 
 -- // Music Table
@@ -256,7 +256,7 @@ end;
 function updateDropdownPlayers()
     for i = 1, #DropdownPlayers do
         local v = DropdownPlayers[i];
-        v.SetOptions(GetAllPlayerNamesAsTable());
+        v:SetOptions(GetAllPlayerNamesAsTable());
     end;
 end;
 
@@ -913,7 +913,7 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
             table.insert(MusicTable, v["Name"]);
         end;
 
-        SelectSound.SetOptions(MusicTable);
+        SelectSound:SetOptions(MusicTable);
 
         Material.Banner({
             Text = "Refreshed Sounds."
@@ -1233,7 +1233,7 @@ local PlayAllSounds = SetupTextMenu(SoundAbuse, "Play All Sounds", {
 
 local PlayMusic = SetupTextMenu(SoundAbuse, "Play Music", {
     Callback = function()
-        local Sound = GameFolder:FindFirstChildWhichIsA("Sound");
+        local Sound = GameFolder.Folder:FindFirstChildWhichIsA("Sound");
 		if (Sound) then
             Sound:Play();
             Material.Banner({
@@ -1266,7 +1266,7 @@ local StopAllSounds = SetupTextMenu(SoundAbuse, "Stop All Sounds", {
 
 local StopMusic = SetupTextMenu(SoundAbuse, "Stop Music", {
     Callback = function()
-        local Sound = GameFolder:FindFirstChildWhichIsA("Sound");
+        local Sound = GameFolder.Folder:FindFirstChildWhichIsA("Sound");
 		if (Sound) then
             Sound:Stop();
             Material.Banner({
