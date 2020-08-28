@@ -262,6 +262,16 @@ end;
 
 -- // Check if the User is a Protected Whitelisted User
 function isPWL(PlayerID)
+    -- // Handling if the PlayerID is actually the Player Name
+    if (type(PlayerID) == "string") then
+        for i = 1, #PlayerTable do
+            local v = PlayerTable[i];
+            if (v.Name == PlayerID) then
+                PlayerID = v.UserId;
+            end;
+        end;
+    end;
+
     for i = 1, #ProtectedWhitelistedPlayers do
         local v = ProtectedWhitelistedPlayers[i];
         if (v == PlayerID) then
@@ -1018,6 +1028,26 @@ local LagPlayer = SetupTextMenu(Player, "Lag Player", {
             }
         });
         if (not FailSafeResult) then return; end;
+
+        if (isPWL(Settings["PlayerSelectPlayer"])) then
+            Material.Banner({
+                Text = "This player is protected from abusive commands."
+            });
+            return;
+        end;
+
+        local Lagging = GetPlayerTableFromName(Settings["PlayerSelectPlayer"]).Lagging;
+        if (Lagging) then
+            Material.Banner({
+                Text = "This player is already being lagged."
+            });
+            return;
+        elseif (not Lagging) then
+            Lagging = true;
+            Material.Banner({
+                Text = "Lagging player."
+            });
+        end;
     end;
 });
 
@@ -1030,6 +1060,19 @@ local StopLagPlayer = SetupTextMenu(Player, "Stop Lag Player", {
             }
         });
         if (not FailSafeResult) then return; end;
+        local Lagging = GetPlayerTableFromName(Settings["PlayerSelectPlayer"]).Lagging;
+
+        if (not Lagging) then
+            Material.Banner({
+                Text = "This player is not being lagged at the moment."
+            });
+            return;
+        elseif (Lagging) then
+            Lagging = false;
+            Material.Banner({
+                Text = "Stopped lagging player"
+            });
+        end;
     end;
 });
 
