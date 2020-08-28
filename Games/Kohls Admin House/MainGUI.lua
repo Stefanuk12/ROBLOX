@@ -361,6 +361,21 @@ coroutine.wrap(function()
     end;
 end)();
 
+-- // Ear Rape
+coroutine.wrap(function()
+    while wait(0.5) do
+        if (Settings["SoundAbuseEarRape"]) then
+            local WorkspaceDescendants = Workspace:GetDescendants();
+            for i = 1, #WorkspaceDescendants do
+                local v = WorkspaceDescendants[i];
+                if (v:IsA("Sound")) then
+                    v:Play();
+                end;
+            end;
+        end;
+    end;
+end)();
+
 -- // Failsafing commadns
 function FailSafeCommand(Page, CommandName, ...)
     local Module = tostring(Page)
@@ -1197,11 +1212,6 @@ local SoundAbuseEarRape = SetupTextMenu(SoundAbuse, "Ear Rape", {
     Enabled = false,
     Callback = function(Value)
         Settings["SoundAbuseEarRape"] = Value;
-        if (Settings["SoundAbuseEarRape"]) then
-
-        else
-
-        end;
     end;
 });
 
