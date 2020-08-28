@@ -14,6 +14,7 @@ local GameFolder = Workspace.Terrain["_Game"];
 local LocalPlayer = Players.LocalPlayer;
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
 local WorkspaceFolder = GameFolder["Workspace"];
+local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 
 -- // Settings + Command Info
 local CommandInfo = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/Data.json"));
@@ -89,34 +90,6 @@ local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ki
 local DropdownPlayers = {};
 local PlayerTable = {};
 
-function GetAllPlayerNamesAsTable()
-    local tbl = {};
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[v];
-        table.insert(tbl, v.Name);
-    end;
-
-    return tbl;
-end;
-
-function GetPlayerTableFromName(Name)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[v];
-        if (v.Name == Name) then
-            return v;
-        end;
-    end;
-end;
-
-function GetPlayerTableFromId(PlayerId)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[v];
-        if (v.UserId == PlayerId) then
-            return v;
-        end;
-    end;
-end;
-
 local Material = MaterialUI.Load({
 	Title = "oofkohls",
 	Style = 3,
@@ -129,38 +102,75 @@ local Material = MaterialUI.Load({
 });
 
 -- // Add new/existing players and remove old players from PlayerTable
+function isPWL(PlayerID)
+    for i = 1, #ProtectedWhitelistedPlayers do
+        local v = ProtectedWhitelistedPlayers[i];
+        if (v == PlayerID) then
+            return true;
+        end;
+    end;
+    
+    return false;
+end;
+
 local GetPlayers = Players:GetPlayers();
 for i = 1, #GetPlayers do
     local v = GetPlayers[i];
-    if (v == LocalPlayer) then return; end;
-    local tbl = setmetatable({
+    if (v ~= LocalPlayer) then 
+        local tbl = {
+            Instance = v,
+            Name = v.Name,
+            UserId = v.UserId,
+            Whitelisted = false,
+            Lagging = false,
+            BlacklistedPhrases = {}
+        };
+        local Index = #PlayerTable + 1;
+        table.insert(PlayerTable, tbl);
+    
+        v.Chatted:Connect(function(msg)
+            local PlrTable = GetPlayerTableFromId(v.UserId);
+            local BLPhrases = PlrTable.BlacklistedPhrases;
+            for i = 1, #BLPhrases do
+                local BlacklistedPhrase = BLPhrases[i];
+                if (msg:match(BlacklistedPhrase.Phrase)) then
+                    Players:Chat(BlacklistedPhrase.Punishment);
+                end;
+            end;
+            for i = 1, #BlacklistedGears do
+                local v = BlacklistedGears[i];
+                local msg = msg:split(" ");
+                if (msg[2] == v and not isWhitelisted(v.UserId)) then
+                    Players:Chat(":removetools " + msg[3]);
+                end;
+            end;
+            if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
+                Players:Chat("Hi gamer!");
+            end;
+        end);
+    else 
+        local tbl = {
+            Instance = v,
+            Name = v.Name,
+            UserId = v.UserId,
+            Whitelisted = false,
+            Lagging = false,
+            BlacklistedPhrases = {}
+        };
+        table.insert(PlayerTable, tbl);
+    end;
+end;
+
+Players.PlayerAdded:Connect(function(v)
+    local tbl = {
         Instance = v,
         Name = v.Name,
         UserId = v.UserId,
         Whitelisted = false,
         Lagging = false,
         BlacklistedPhrases = {}
-    }, {
-        __tostring = function() return v.Name; end
-    });
-    table.insert(PlayerTable, tbl);
-end;
-
-Players.PlayerAdded:Connect(function(v)
-    local tbl = setmetatable({
-        Instance = v,
-        Name = v.Name,
-        UserId = v.UserId,
-        Whitelisted = false,
-        Lagging = false,
-        BlacklistedPhrases = {
-            --[[
-            {Phrase = "hi", Punishment = "bye"}
-            ]]
-        }
-    }, {
-        __tostring = function() return v.Name; end
-    });
+    };
+    local Index = #PlayerTable + 1;
     table.insert(PlayerTable, tbl);
     updateDropdownPlayers();
 
@@ -180,6 +190,9 @@ Players.PlayerAdded:Connect(function(v)
                 Players:Chat(":removetools " + msg[3]);
             end;
         end;
+        if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
+            Players:Chat("Hi gamer!");
+        end;
     end);
 
     if (Settings["ServerRespawnExplode"]) then
@@ -191,7 +204,7 @@ end);
 Players.PlayerRemoving:Connect(function(v)
     for i = 1, #PlayerTable do
         local PlrTable = PlayerTable[i];
-        if (PlrTable.UserId == v.UserId)then
+        if (PlrTable and PlrTable.UserId == v.UserId)then
             table.remove(PlayerTable, i);
         end;
     end;
@@ -223,8 +236,38 @@ function isAdmin(Player)
 	return false;
 end;
 
+function GetAllPlayerNamesAsTable()
+    local tbl = {};
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        table.insert(tbl, v.Name);
+    end;
+
+    return tbl;
+end;
+
+function GetPlayerTableFromName(Name)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.Name == Name) then
+            return v;
+        end;
+    end;
+end;
+
+function GetPlayerTableFromId(PlayerId)
+    for i = 1, #PlayerTable do
+        local v = PlayerTable[i];
+        if (v.UserId == PlayerId) then
+            return v;
+        end;
+    end;
+end;
+
+-- // Identifier ;)
+
+
 -- // Stuff
-local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
 local CommandsSpamPhrase = {};
 local LongText = "";
 
@@ -241,7 +284,7 @@ function IsWhitelisted(PlayerID)
     local ProtectedWhitelist = false;
     local Index = "Not defined";
     for i = 1, #PlayerTable do
-        local v = PlayerTable[v];
+        local v = PlayerTable[i];
         if (v.Whitelisted) then
             Whitelisted = true;
             Index = i;
@@ -434,12 +477,18 @@ local Protections = createPage("Protections");
 local Server = createPage("Server");
 local SoundAbuse = createPage("Sound Abuse");
 local Whitelist = createPage("Whitelist");
-
 -- // Create GUI
 
 -- // Admin
 local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
+        if (not fireclickdetector) then
+            Material.Banner({
+				Text = "Your exploit does not support this feature."
+			});
+            return;
+        end;
+        fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
         local TargetPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin").Head;
         if (firetouchinterest) then
             firetouchinterest(LocalPlayer.Character.HumanoidRootPart, TargetPad, 0);
