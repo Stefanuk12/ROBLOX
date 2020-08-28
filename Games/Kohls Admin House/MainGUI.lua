@@ -1,5 +1,7 @@
 -- // Credit to Kinlei for the UI Library: MaterialLUA.
 
+repeat wait() until game:IsLoaded();
+
 -- // Services
 local Players = game:GetService("Players");
 local RunService = game:GetService("RunService");
@@ -377,7 +379,7 @@ function FailSafeCommand(Page, CommandName, ...)
         end;
         return false;
     end;
-    
+
     if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
         Material.Banner({
             Text = "You don't have admin, this command requries admin."
