@@ -1,4 +1,10 @@
--- // Credit to Kinlei for the UI Library: MaterialLUA.
+--[[
+    Credits:
+        Kinlei for the UI Library: MaterialLUA
+    General Infomation:
+        If you crash, it's because of the music api.
+]]
+
 
 repeat wait() until game:IsLoaded();
 
@@ -47,7 +53,7 @@ local GearGiverGears = {
     {Name = "PortableJustice", Id = 82357101},
 };
 local GearGiverGearNames = {};
-local BlacklistedGears = {};
+local BlacklistedGears = {94794847};
 for i = 1, #GearGiverGears do
     local v = GearGiverGears[i];
     table.insert(GearGiverGearNames, v["Name"]);
