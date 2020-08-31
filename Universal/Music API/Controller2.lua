@@ -21,8 +21,8 @@ function MusicAPI.CheckSound(SoundId)
     local SoundSource = game:HttpGetAsync(SoundURL);
 
     for i = 1, #MusicAPI.RemovedAssets do
-        RunService.RenderStepped:Wait();
         local v = MusicAPI.RemovedAssets[i];
+        RunService.RenderStepped:Wait();
         
         if (SoundSource:find(v)) then
             return false;
@@ -70,17 +70,16 @@ function MusicAPI.CheckAllSounds()
     -- // Check over all the sounds
     for i = 1, #MusicTable do
         local v = MusicTable[i];
-        
         RunService.RenderStepped:Wait();
         
         coroutine.wrap(function()
             if (not MusicAPI.CheckSound(v.SoundId)) then
                 table.insert(Cleaned, v);
             end;
+            
             Count = Count + 1;
-            RunService.RenderStepped:Wait();
+            wait(math.random())
         end)();
-        
     end;
 
     -- // Return
@@ -146,4 +145,4 @@ function MusicAPI.SetClipboard()
     setclipboard(String);
 end;
 
-return MusicAPI;
+MusicAPI.CheckAllSounds()

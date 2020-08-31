@@ -121,17 +121,18 @@ for i = 1, #GetPlayers do
             -- // Checking if the player has said any Blacklisted Phrases
             for i = 1, #BLPhrases do
                 local BlacklistedPhrase = BLPhrases[i];
-                if (msg:match(BlacklistedPhrase.Phrase)) then
+                print(BlacklistedPhrase.Phrase);
+                if (BlacklistedPhrase and msg:find(BlacklistedPhrase.Phrase)) then
                     Players:Chat(BlacklistedPhrase.Punishment);
                 end;
             end;
 
             -- // Checking if the player has given anyone a blacklisted gear
             for i = 1, #BlacklistedGears do
-                local v = BlacklistedGears[i];
-                local msg = msg:split(" ");
-                if (msg[2] == v and not isWhitelisted(v.UserId)) then
-                    Players:Chat(":removetools " + msg[3]);
+                local BLGear = BlacklistedGears[i];
+                local splitString = msg:split(" ");
+                if (splitString[2] == BLGear and not isWhitelisted(v.UserId)) then
+                    Players:Chat(":removetools " + splitString[3]);
                 end;
             end;
 
@@ -177,17 +178,17 @@ Players.PlayerAdded:Connect(function(v)
         -- // Checking if the player has said any Blacklisted Phrases
         for i = 1, #BLPhrases do
             local BlacklistedPhrase = BLPhrases[i];
-            if (msg:match(BlacklistedPhrase.Phrase)) then
+            if (BlacklistedPhrase and msg:find(BlacklistedPhrase.Phrase)) then
                 Players:Chat(BlacklistedPhrase.Punishment);
             end;
         end;
 
         -- // Checking if the player has given anyone a blacklisted gear
         for i = 1, #BlacklistedGears do
-            local v = BlacklistedGears[i];
-            local msg = msg:split(" ");
-            if (msg[2] == v and not isWhitelisted(v.UserId)) then
-                Players:Chat(":removetools " + msg[3]);
+            local BLGear = BlacklistedGears[i];
+            local splitString = msg:split(" ");
+            if (splitString[2] == BLGear and not isWhitelisted(v.UserId)) then
+                Players:Chat(":removetools " + splitString[3]);
             end;
         end;
 
@@ -622,6 +623,9 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
         end;
 
         table.insert(BLPhrases, {Phrase = Settings["BlacklistPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
+        Material.Banner({
+            Text = "Blacklisted Phrase."
+        });
     end;
 });
 
@@ -667,6 +671,9 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
             local v = BLPhrases[i];
             if (v.Phrase == Settings["BlacklistPhrase"]) then
                 table.remove(BLPhrases, i);
+                Material.Banner({
+                    Text = "Unlacklisted Phrase."
+                });
                 return;
             end;
         end;
