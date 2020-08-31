@@ -555,6 +555,12 @@ local BlacklistSelectGearId = SetupTextMenu(Blacklist, "Select Gear ID", {
     end;
 });
 
+local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
+    Callback = function(Value)
+        Settings["BlacklistSelectPlayer"] = Value;
+    end;
+});
+
 local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
     Callback = function(Value)
         Settings["BlacklistSelectPhrase"] = Value;
@@ -564,12 +570,6 @@ local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
 local BlacklistedSelectPunishmentPhrase = SetupTextMenu(Blacklist, "Select Punishment Phrase", {
     Callback = function(Value)
         Settings["BlacklistedSelectPunishmentPhrase"] = Value;
-    end;
-});
-
-local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
-    Callback = function(Value)
-        Settings["BlacklistSelectPlayer"] = Value;
     end;
 });
 
@@ -594,6 +594,9 @@ local BlacklistGear = SetupTextMenu(Blacklist, "Blacklist Gear", {
         end;
 
         table.insert(BlacklistedGears, i);
+        Material.Banner({
+            Text = "Blacklisted gear."
+        });
     end;
 });
 
@@ -601,7 +604,7 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Blacklist, "Blacklist Phrase", {
             {
-                Requirement = Settings["BlacklistPhrase"],
+                Requirement = Settings["BlacklistSelectPhrase"],
                 Error = "Please input a phrase."
             },
             {
@@ -614,7 +617,7 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
         local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
         for i = 1, #BLPhrases do
             local v = BLPhrases[i];
-            if (v.Phrase == Settings["BlacklistPhrase"]) then
+            if (v.Phrase == Settings["BlacklistSelectPhrase"]) then
                 Material.Banner({
                     Text = "This phrase has already been blacklisted for this player."
                 });
@@ -622,7 +625,7 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
             end;
         end;
 
-        table.insert(BLPhrases, {Phrase = Settings["BlacklistPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
+        table.insert(BLPhrases, {Phrase = Settings["BlacklistSelectPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
         Material.Banner({
             Text = "Blacklisted Phrase."
         });
@@ -660,7 +663,7 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Blacklist, "Unblacklist Phrase", {
             {
-                Requirement = Settings["BlacklistPhrase"],
+                Requirement = Settings["BlacklistSelectPhrase"],
                 Error = "Please input a phrase."
             };
         });
@@ -669,10 +672,10 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
         local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
         for i = 1, #BLPhrases do
             local v = BLPhrases[i];
-            if (v.Phrase == Settings["BlacklistPhrase"]) then
+            if (v.Phrase == Settings["BlacklistSelectPhrase"]) then
                 table.remove(BLPhrases, i);
                 Material.Banner({
-                    Text = "Unlacklisted Phrase."
+                    Text = "Unblacklisted Phrase."
                 });
                 return;
             end;
