@@ -145,4 +145,4 @@ function MusicAPI.SetClipboard()
     setclipboard(String);
 end;
 
-MusicAPI.CheckAllSounds()
+return MusicAPI;
