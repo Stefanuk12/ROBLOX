@@ -89,6 +89,7 @@ local Settings = {
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
     BlacklistedSelectPunishmentPhrase = "Not selected",
+    BlacklistAlertUse = false,
     CommandsSelectPhrase = "Not selected",
     MiscSelectPaintColour = Color3.fromRGB(255, 150, 150),
     MiscSelectPaintArea = "Not selected",
@@ -140,12 +141,17 @@ function PlayerChatConfig(msg, v)
             local Target = splitString[2];
             if (Target == "me") then Target = v.Name; end;
             Players:Chat(":removetools " + Target);
+            if (Settings["BlacklistAlertUse"]) then
+                Players:Chat("Imagine trying to gear yourself/others a blacklisted gear (" .. BLGear .. "), ahem: " .. v.Name);
+            end;
         end;
     end;
 
-    -- // /c system Alert
-    if (Settings["ServerCSystemAlert"] and msg == "/c system" and NotWhitelisted) then
-        Players:Chat(":h Imagine using /c system to hide your commands, ahem: " .. v.Name);
+    if (NotWhitelisted) then
+        -- // /c system Alert
+        if (Settings["ServerCSystemAlert"] and msg == "/c system") then
+            Players:Chat(":h Imagine using /c system to hide your commands, ahem: " .. v.Name);
+        end;
     end;
 
     -- // Identifier ;)
@@ -695,6 +701,13 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
     end;
 });
 
+local AlertUse = SetupTextMenu(Blacklist, "Alert Use", {
+    Enabled = Settings["BlacklistAlertUse"];
+    Callback = function(Value)
+        Settings["BlacklistAlertUse"] = Value;
+    end;
+});
+
 -- // Commands
 local CommandsSelectPhrase = SetupTextMenu(Commands, "Select Phrase", {
     Callback = function(Value)
@@ -1183,6 +1196,10 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
             Players:Chat(":size me .3");
             wait(1);
         end;
+
+        Material.Banner({
+			Text = "Say :size me .3 to crash the server."
+		});
     end;
 });
 

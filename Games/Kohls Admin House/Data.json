@@ -67,6 +67,12 @@
             "Description": "Unwhitelists a phrase from the selected player, allowing them to say it without any repercussions.",
             "Name": "Unblacklist Phrase",
             "Type": "Button"
+        },
+        "Alert Use": {
+            "Admin": true,
+            "Description": "If an unwhitelisted user tries to get a blacklisted gear, it will be announced to everyone.",
+            "Name": "Alert Use",
+            "Type": "Toggle"
         }
     },
     "Commands": {
