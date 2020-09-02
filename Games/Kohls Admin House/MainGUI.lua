@@ -1297,7 +1297,7 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
         LocalPlayer.Character:WaitForChild("VampireVanquisher");
-        for i = 1, 3 do
+        for i = 1, 10 do
             Players:Chat(":size me .3");
             wait();
         end;
