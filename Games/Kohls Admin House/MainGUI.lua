@@ -583,7 +583,7 @@ coroutine.wrap(function()
                 -- // Constantly tp the Pad to you until you have admin
                 repeat wait()
                     SelectedPad.Head.Size = Vector3.new(1, 1, 1);
-                    SelectedPad.Head.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
+                    SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
                     SelectedPad.Head.CanCollide = false;
                     SelectedPad.Head.Transparency = 1;
                 until SelectedPad.Name == LocalPlayer.Name .."'s admin";
@@ -639,7 +639,7 @@ local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
                 -- // Constantly tp the Pad to you until you have admin
                 repeat wait()
                     SelectedPad.Head.Size = Vector3.new(1, 1, 1);
-                    SelectedPad.Head.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
+                    SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
                     SelectedPad.Head.CanCollide = false;
                     SelectedPad.Head.Transparency = 1;
                 until SelectedPad.Name == LocalPlayer.Name .."'s admin";
