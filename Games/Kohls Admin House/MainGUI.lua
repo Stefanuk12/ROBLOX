@@ -3,6 +3,9 @@
         Kinlei for the UI Library: MaterialLUA
     General Infomation:
         If you crash, it's because of the music api.
+
+    Features to add:
+        - Persistant Admin
 ]]
 
 
@@ -66,7 +69,7 @@ local GearGiverGears = {
     {Name = "PortableJustice", Id = 82357101},
 };
 local GearGiverGearNames = {};
-local BlacklistedGears = {94794847};
+local BlacklistedGears = {"94794847"};
 for i = 1, #GearGiverGears do
     local v = GearGiverGears[i];
     table.insert(GearGiverGearNames, v["Name"]);
@@ -120,7 +123,7 @@ end;
 local PlayerTable = {};
 local GetPlayers = Players:GetPlayers();
 function PlayerChatConfig(msg, v)
-    local PlrTable = GetPlayerTableFromId(v.UserId);
+    local PlrTable = GetPlayerTable(v.UserId);
     local BLPhrases = PlrTable.BlacklistedPhrases;
     local WLCheck = IsWhitelisted(v.UserId);
     local NotWhitelisted = (WLCheck[3] == "Not defined");
@@ -141,8 +144,9 @@ function PlayerChatConfig(msg, v)
             local Target = splitString[2];
             if (Target == "me") then Target = v.Name; end;
             Players:Chat(":removetools " + Target);
+            print('naugthty');
             if (Settings["BlacklistAlertUse"]) then
-                Players:Chat("Imagine trying to gear yourself/others a blacklisted gear (" .. BLGear .. "), ahem: " .. v.Name);
+                Players:Chat(":h Imagine trying to gear yourself/others a blacklisted gear (" .. BLGear .. "), ahem: " .. v.Name);
             end;
         end;
     end;
@@ -247,21 +251,12 @@ function GetAllPlayerNamesAsTable()
     return tbl;
 end;
 
--- // Get Player Data from the Player Name
-function GetPlayerTableFromName(Name)
+-- // Get Player Data
+function GetPlayerTable(Player)
+    if (typeof(Player) == 'Instance') then Player = Player.UserId; end;
     for i = 1, #PlayerTable do
         local v = PlayerTable[i];
-        if (v.Name == Name) then
-            return v;
-        end;
-    end;
-end;
-
--- // Get Player Data from the Player Id
-function GetPlayerTableFromId(PlayerId)
-    for i = 1, #PlayerTable do
-        local v = PlayerTable[i];
-        if (v.UserId == PlayerId) then
+        if (v.Name == Player or v.UserId == Player) then
             return v;
         end;
     end;
@@ -565,25 +560,7 @@ local BlacklistSelectGearId = SetupTextMenu(Blacklist, "Select Gear ID", {
             });
             return;
         end;
-        Settings["BlacklistSelectGearId"] = tonumber(Value); 
-    end;
-});
-
-local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
-    Callback = function(Value)
-        Settings["BlacklistSelectPlayer"] = Value;
-    end;
-});
-
-local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
-    Callback = function(Value)
-        Settings["BlacklistSelectPhrase"] = Value;
-    end;
-});
-
-local BlacklistedSelectPunishmentPhrase = SetupTextMenu(Blacklist, "Select Punishment Phrase", {
-    Callback = function(Value)
-        Settings["BlacklistedSelectPunishmentPhrase"] = Value;
+        Settings["BlacklistSelectGearId"] = tostring(Value); 
     end;
 });
 
@@ -607,41 +584,9 @@ local BlacklistGear = SetupTextMenu(Blacklist, "Blacklist Gear", {
             end;
         end;
 
-        table.insert(BlacklistedGears, i);
+        table.insert(BlacklistedGears, Settings["BlacklistSelectGearId"]);
         Material.Banner({
             Text = "Blacklisted gear."
-        });
-    end;
-});
-
-local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
-    Callback = function()
-        local FailSafeResult = FailSafeCommand(Blacklist, "Blacklist Phrase", {
-            {
-                Requirement = Settings["BlacklistSelectPhrase"],
-                Error = "Please input a phrase."
-            },
-            {
-                Requirement = Settings["BlacklistedSelectPunishmentPhrase"],
-                Error = "Please input a punishment phrase."
-            };
-        });
-        if (not FailSafeResult) then return; end;
-
-        local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
-        for i = 1, #BLPhrases do
-            local v = BLPhrases[i];
-            if (v.Phrase == Settings["BlacklistSelectPhrase"]) then
-                Material.Banner({
-                    Text = "This phrase has already been blacklisted for this player."
-                });
-                return;
-            end;
-        end;
-
-        table.insert(BLPhrases, {Phrase = Settings["BlacklistSelectPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
-        Material.Banner({
-            Text = "Blacklisted Phrase."
         });
     end;
 });
@@ -673,6 +618,63 @@ local UnblacklistGear = SetupTextMenu(Blacklist, "Unblacklist Gear", {
     end;
 });
 
+local AlertUse = SetupTextMenu(Blacklist, "Alert Use", {
+    Enabled = Settings["BlacklistAlertUse"];
+    Callback = function(Value)
+        Settings["BlacklistAlertUse"] = Value;
+    end;
+});
+
+local BlacklistSelectPlayer = SetupTextMenu(Blacklist, "Select Player", {
+    Callback = function(Value)
+        Settings["BlacklistSelectPlayer"] = Value;
+    end;
+});
+
+local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "Select Phrase", {
+    Callback = function(Value)
+        Settings["BlacklistSelectPhrase"] = Value;
+    end;
+});
+
+local BlacklistedSelectPunishmentPhrase = SetupTextMenu(Blacklist, "Select Punishment Phrase", {
+    Callback = function(Value)
+        Settings["BlacklistedSelectPunishmentPhrase"] = Value;
+    end;
+});
+
+local BlacklistPhrase = SetupTextMenu(Blacklist, "Blacklist Phrase", {
+    Callback = function()
+        local FailSafeResult = FailSafeCommand(Blacklist, "Blacklist Phrase", {
+            {
+                Requirement = Settings["BlacklistSelectPhrase"],
+                Error = "Please input a phrase."
+            },
+            {
+                Requirement = Settings["BlacklistedSelectPunishmentPhrase"],
+                Error = "Please input a punishment phrase."
+            };
+        });
+        if (not FailSafeResult) then return; end;
+
+        local BLPhrases = GetPlayerTable(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
+        for i = 1, #BLPhrases do
+            local v = BLPhrases[i];
+            if (v.Phrase == Settings["BlacklistSelectPhrase"]) then
+                Material.Banner({
+                    Text = "This phrase has already been blacklisted for this player."
+                });
+                return;
+            end;
+        end;
+
+        table.insert(BLPhrases, {Phrase = Settings["BlacklistSelectPhrase"], Punishment = Settings["BlacklistedSelectPunishmentPhrase"]});
+        Material.Banner({
+            Text = "Blacklisted Phrase."
+        });
+    end;
+});
+
 local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
     Callback = function()
         local FailSafeResult = FailSafeCommand(Blacklist, "Unblacklist Phrase", {
@@ -683,7 +685,7 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
         });
         if (not FailSafeResult) then return; end;
 
-        local BLPhrases = GetPlayerTableFromName(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
+        local BLPhrases = GetPlayerTable(Settings["BlacklistSelectPlayer"]).BlacklistedPhrases;
         for i = 1, #BLPhrases do
             local v = BLPhrases[i];
             if (v.Phrase == Settings["BlacklistSelectPhrase"]) then
@@ -698,13 +700,6 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "Unblacklist Phrase", {
         Material.Banner({
             Text = "This phrase has not been blacklisted for this player."
         });
-    end;
-});
-
-local AlertUse = SetupTextMenu(Blacklist, "Alert Use", {
-    Enabled = Settings["BlacklistAlertUse"];
-    Callback = function(Value)
-        Settings["BlacklistAlertUse"] = Value;
     end;
 });
 
@@ -1076,14 +1071,14 @@ local LagPlayer = SetupTextMenu(Player, "Lag Player", {
             return;
         end;
 
-        local Lagging = GetPlayerTableFromName(Settings["PlayerSelectPlayer"]).Lagging;
-        if (Lagging) then
+        local PlrTable = GetPlayerTable(Settings["PlayerSelectPlayer"]);
+        if (PlrTable.Lagging) then
             Material.Banner({
                 Text = "This player is already being lagged."
             });
             return;
-        elseif (not Lagging) then
-            Lagging = true;
+        elseif (not PlrTable.Lagging) then
+            PlrTable.Lagging = true;
             Material.Banner({
                 Text = "Lagging player."
             });
@@ -1100,15 +1095,15 @@ local StopLagPlayer = SetupTextMenu(Player, "Stop Lag Player", {
             }
         });
         if (not FailSafeResult) then return; end;
-        local Lagging = GetPlayerTableFromName(Settings["PlayerSelectPlayer"]).Lagging;
+        local PlrTable = GetPlayerTable(Settings["PlayerSelectPlayer"]);
 
-        if (not Lagging) then
+        if (not PlrTable.Lagging) then
             Material.Banner({
                 Text = "This player is not being lagged at the moment."
             });
             return;
-        elseif (Lagging) then
-            Lagging = false;
+        elseif (PlrTable.Lagging) then
+            PlrTable.Lagging = false;
             Material.Banner({
                 Text = "Stopped lagging player"
             });
@@ -1194,7 +1189,7 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
         LocalPlayer.Character:WaitForChild("VampireVanquisher");
         for i = 1, 3 do
             Players:Chat(":size me .3");
-            wait(1);
+            wait();
         end;
 
         Material.Banner({

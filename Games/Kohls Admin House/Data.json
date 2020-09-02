@@ -20,29 +20,11 @@
         }
     },
     "Blacklist": {
-        "Select Gear ID": {
-            "Admin": false,
-            "Description": "Please specify a gear ID.",
-            "Name": "Select Gear ID",
-            "Type": "TextField"
-        },
-        "Select Phrase": {
-            "Admin": false,
-            "Description": "Please input a phrase.",
-            "Name": "Select Phrase",
-            "Type": "TextField"
-        },
-        "Select Punishment Phrase": {
-            "Admin": false,
-            "Description": "Please input a punishment phrase that will be said when the selected phrase is said by the player.",
-            "Name": "Select Punishment Phrase",
-            "Type": "TextField"
-        },
-        "Select Player": {
-            "Admin": false,
-            "Description": "Please select a player.",
-            "Name": "Select Player",
-            "Type": "Dropdown"
+        "Alert Use": {
+            "Admin": true,
+            "Description": "If an unwhitelisted user tries to get a blacklisted gear, it will be announced to everyone.",
+            "Name": "Alert Use",
+            "Type": "Toggle"
         },
         "Blacklist Gear": {
             "Admin": true,
@@ -56,6 +38,30 @@
             "Name": "Blacklist Phrase",
             "Type": "Button"
         },
+        "Select Gear ID": {
+            "Admin": false,
+            "Description": "Please specify a gear ID.",
+            "Name": "Select Gear ID",
+            "Type": "TextField"
+        },
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "Select Punishment Phrase": {
+            "Admin": false,
+            "Description": "Please input a punishment phrase that will be said when the selected phrase is said by the player.",
+            "Name": "Select Punishment Phrase",
+            "Type": "TextField"
+        },
         "Unblacklist Gear": {
             "Admin": false,
             "Description": "Unblacklists a gear, allows unwhitelisted gears to recieve this gear.",
@@ -67,26 +73,20 @@
             "Description": "Unwhitelists a phrase from the selected player, allowing them to say it without any repercussions.",
             "Name": "Unblacklist Phrase",
             "Type": "Button"
-        },
-        "Alert Use": {
-            "Admin": true,
-            "Description": "If an unwhitelisted user tries to get a blacklisted gear, it will be announced to everyone.",
-            "Name": "Alert Use",
-            "Type": "Toggle"
         }
     },
     "Commands": {
-        "Select Phrase": {
-            "Admin": false,
-            "Description": "Please input a phrase.",
-            "Name": "Select Phrase",
-            "Type": "TextField"
-        },
         "Say Phrase": {
             "Admin": false,
             "Description": "Says the phrase using Players:Chat(). Detectable.",
             "Name": "Say Phrase",
             "Type": "Button"
+        },
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
         },
         "Spam Phrase": {
             "Admin": true,
@@ -102,17 +102,11 @@
         }
     },
     "Misc": {
-        "Select Paint Colour": {
+        "Audio Visualiser": {
             "Admin": false,
-            "Description": "Please select a colour.",
-            "Name": "Select Paint Colour",
-            "Type": "ColorPicker"
-        },
-        "Select Paint Area": {
-            "Admin": false,
-            "Description": "Please select an area to paint.",
-            "Name": "Select Paint Area",
-            "Type": "Dropdown"
+            "Description": "Starts the Audio Visualiser, please visit bit.ly/kahvisual for the command documentation",
+            "Name": "Audio Visualiser",
+            "Type": "Button"
         },
         "Paint Area": {
             "Admin": true,
@@ -126,26 +120,26 @@
             "Name": "Rejoin",
             "Type": "Button"
         },
-        "Audio Visualiser": {
-            "Admin": false,
-            "Description": "Starts the Audio Visualiser, please visit bit.ly/kahvisual for the command documentation",
-            "Name": "Audio Visualiser",
-            "Type": "Button"
-        },
         "Save Settings": {
             "Admin": false,
             "Description": "Saves all of your settings.",
             "Name": "Save Settings",
             "Type": "Button"
+        },
+        "Select Paint Area": {
+            "Admin": false,
+            "Description": "Please select an area to paint.",
+            "Name": "Select Paint Area",
+            "Type": "Dropdown"
+        },
+        "Select Paint Colour": {
+            "Admin": false,
+            "Description": "Please select a colour.",
+            "Name": "Select Paint Colour",
+            "Type": "ColorPicker"
         }
     },
     "Music Commands": {
-        "Select Sound": {
-            "Admin": false,
-            "Description": "Selects a sound to play.",
-            "Name": "Select Sound",
-            "Type": "Dropdown"
-        },
         "Play Sound": {
             "Admin": true,
             "Description": "Plays the selected sound.",
@@ -157,21 +151,15 @@
             "Description": "Refreshes the sounds, grabs any new ones if they are any.",
             "Name": "Refresh Sounds",
             "Type": "Button"
+        },
+        "Select Sound": {
+            "Admin": false,
+            "Description": "Selects a sound to play.",
+            "Name": "Select Sound",
+            "Type": "Dropdown"
         }
     },
     "Player": {
-        "Select Player": {
-            "Admin": false,
-            "Description": "Please select a player.",
-            "Name": "Select Player",
-            "Type": "Dropdown"
-        },
-        "Select Gear": {
-            "Admin": false,
-            "Description": "Please select a gear.",
-            "Name": "Select Gear",
-            "Type": "Dropdown"
-        },
         "Get Age": {
             "Admin": false,
             "Description": "Gets the age of the selected player.",
@@ -201,6 +189,18 @@
             "Description": "Lags the selected player with PMs that contain lots of text.",
             "Name": "Lag Player",
             "Type": "Button"
+        },
+        "Select Gear": {
+            "Admin": false,
+            "Description": "Please select a gear.",
+            "Name": "Select Gear",
+            "Type": "Dropdown"
+        },
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
         },
         "Stop Lag Player": {
             "Admin": false,
@@ -262,7 +262,7 @@
         },
         "Move Baseplate": {
             "Admin": true,
-            "Description": "Gets you in a state which allows you to move the baseplate by tping, skydiving, etc.",
+            "Description": "Just punish yourself wait a sec then unpunish then you can move the baseplate.",
             "Name": "Move Baseplate",
             "Type": "Button"
         },
