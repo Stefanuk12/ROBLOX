@@ -545,9 +545,120 @@ local RegenerateAdmin = SetupTextMenu(Admin, "Regenerate Admin", {
     end;
 });
 
+local CSelectedPad;
+local RegenPad;
+local PadSize;
+local PadCFrame;
+coroutine.wrap(function()
+    if (fireclickdetector) then
+        -- // Base Vars
+        CSelectedPad = GameFolder["Admin"]["Pads"]:FindFirstChild(LocalPlayer.Name .."'s admin");
+        warn("Waiting for regen pad...");
+        RegenPad = GameFolder["Admin"]:WaitForChild("Regen");
+        warn("Found regen pad!");
+        SelectedPad = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
+
+        -- // Check if you already have a pad, if not, get one
+        if (not SelectedPad) then
+            if (CSelectedPad) then
+                warn("Trying to get a pad...");
+                SelectedPad = CSelectedPad;
+                warn("Got a pad.");
+            else
+                warn("Trying to get a pad...");
+                fireclickdetector(RegenPad.ClickDetector, 0);
+                SelectedPad = GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin");
+                warn("Got a pad.");
+            end;
+        end;
+
+        PadSize = SelectedPad.Head.Size;
+        PadCFrame = SelectedPad.Head.CFrame;
+
+        -- // Check when the pad is regen
+        SelectedPad:GetPropertyChangedSignal("Name"):Connect(function(Value)
+            -- // Check if the pad is not ours and if Permanant Admin is enabled
+            if (Settings["AdminPermanantAdmin"] and Value ~= LocalPlayer.Name .."'s admin") then
+                fireclickdetector(RegenPad.ClickDetector, 0);
+
+                -- // Constantly tp the Pad to you until you have admin
+                repeat wait()
+                    SelectedPad.Head.Size = Vector3.new(1, 1, 1);
+                    SelectedPad.Head.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
+                    SelectedPad.Head.CanCollide = false;
+                    SelectedPad.Head.Transparency = 1;
+                until SelectedPad.Name == LocalPlayer.Name .."'s admin";
+
+                -- // Reset the Pad's Size and CFrame
+                SelectedPad.Head.Size = PadSize;
+                SelectedPad.Head.CFrame = PadCFrame;
+                SelectedPad.Head.CanCollide = true;
+                SelectedPad.Head.Transparency = 0;
+            end;
+        end);
+    end;         
+end)();
 local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
+    Enabled = Settings["AdminPermanantAdmin"],
     Callback = function(Value)
+        if (not fireclickdetector) then
+            Material.Banner({
+				Text = "Your exploit does not support this feature."
+			});
+            return;
+        end;
         Settings["AdminPermanantAdmin"] = Value;
+
+        if (Value) then
+            if (not RegenPad) then
+                Material.Banner({
+                    Text = "Please find the regen pad for this to work."
+                });
+                warn("Please find the regen pad for this to work.");
+                repeat wait() until SelectedPad ~= nil;
+                Material.Banner({
+                    Text = "Found the regen pad."
+                });
+                warn("Found the regen pad.");
+            end;
+
+            if (not SelectedPad) then
+                Material.Banner({
+                    Text = "Waiting to get a pad..."
+                });
+                warn("Waiting to get a pad...");
+                repeat wait() until SelectedPad ~= nil;
+                Material.Banner({
+                    Text = "Got a pad."
+                });
+                warn("Got a pad.");
+            end;
+
+            if (SelectedPad.Name ~= LocalPlayer.Name .."'s admin") then
+                fireclickdetector(RegenPad.ClickDetector, 0);
+
+                -- // Constantly tp the Pad to you until you have admin
+                repeat wait()
+                    SelectedPad.Head.Size = Vector3.new(1, 1, 1);
+                    SelectedPad.Head.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
+                    SelectedPad.Head.CanCollide = false;
+                    SelectedPad.Head.Transparency = 1;
+                until SelectedPad.Name == LocalPlayer.Name .."'s admin";
+
+                -- // Reset the Pad's Size and CFrame
+                SelectedPad.Head.Size = PadSize;
+                SelectedPad.Head.CFrame = PadCFrame;
+                SelectedPad.Head.CanCollide = true;
+                SelectedPad.Head.Transparency = 0;
+            end;
+        else
+            if (SelectedPad) then
+                SelectedPad.Head.Size = PadSize;
+                SelectedPad.Head.CFrame = PadCFrame;
+                SelectedPad.Head.CanCollide = true;
+                SelectedPad.Head.Transparency = 0;
+            end;
+        end;
     end;
 });
 
