@@ -1,5 +1,5 @@
 -- // Initialise
-if (getgenv().ChatSpy) then return getgenv().ChatSpy; end;
+--if (getgenv().ChatSpy) then return getgenv().ChatSpy; end;
 repeat wait() until game:GetService("ContentProvider").RequestQueueSize == 0;
 repeat wait() until game:IsLoaded();
 
@@ -47,30 +47,31 @@ function ChatSpy.checkIgnored(message)
 end;
 
 function ChatSpy.onChatted(targetPlayer, message)
-    if (#message > 1200) then
-        message = message:sub(1200) .. "...";
-    end
     if (targetPlayer == LocalPlayer and string.lower(message):sub(1, 4) == "/spy") then
         ChatSpy.Enabled = not ChatSpy.Enabled; wait(0.3);
         ChatSpy.Chat.Text = "[SPY] - "..(ChatSpy.Enabled and "Enabled." or "Disabled.");
+
         StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat);
     elseif (ChatSpy.Enabled and (ChatSpy.SpyOnSelf or targetPlayer ~= LocalPlayer)) then
         local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ');
+
+        if (#message > 1200) then
+            message = message:sub(1200) .. "...";
+        end;
+
         local Hidden = true;
-        local Connection = OnMessageDoneFiltering.OnClientEvent:Connect(function(packet, channel);
+        local Connection = OnMessageDoneFiltering.OnClientEvent:Connect(function(packet, channel)
             if (packet.SpeakerUserId == targetPlayer.UserId and packet.Message == message:sub(#message - #packet.Message + 1) and (channel == "All" or (channel == "Team" and not ChatSpy.Public and Players[packet.FromSpeaker].Team == LocalPlayer.Team))) then
                 Hidden = false;
             end;
         end);
+
         wait(1);
         Connection:Disconnect();
+
         if (Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message)) then
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: " .. message;
-            if (ChatSpy.Public) then
-                SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All");
-            else
-                StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat);
-            end;
+            if (ChatSpy.Public) then SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All"); else StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat); end;
         end;
     end;
 end;
