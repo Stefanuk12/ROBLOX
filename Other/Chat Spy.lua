@@ -49,7 +49,7 @@ function ChatSpy.onChatted(targetPlayer, message)
     if targetPlayer == LocalPlayer and string.lower(message):sub(1, 4) == "/spy" then
         ChatSpy.Enabled = not ChatSpy.Enabled; wait(0.3)
         ChatSpy.Chat.Text = "[SPY] - "..(ChatSpy.Enabled and "Enabled." or "Disabled.")
-        pcall(StarterGui.SetCore, StarterGui, "ChatMakeSystemMessage", ChatSpy.Chat)
+        StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
     elseif ChatSpy.Enabled and (ChatSpy.SpyOnSelf or targetPlayer ~= LocalPlayer) then
         local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
         local Hidden = true
@@ -61,11 +61,15 @@ function ChatSpy.onChatted(targetPlayer, message)
         wait(1)
         Connection:Disconnect()
         if Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message) then
-            ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: "..message
+            if #message > 1200 then
+                ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: " .. message:sub(1200) .. "..."
+            else
+                ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: " .. message
+            end
             if ChatSpy.Public then
                 SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All")
-            else      
-                pcall(StarterGui.SetCore, StarterGui, "ChatMakeSystemMessage", ChatSpy.Chat)
+            else
+                StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
             end
         end
     end
