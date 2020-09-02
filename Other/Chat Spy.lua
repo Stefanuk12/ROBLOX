@@ -55,10 +55,6 @@ function ChatSpy.onChatted(targetPlayer, message)
     elseif (ChatSpy.Enabled and (ChatSpy.SpyOnSelf or targetPlayer ~= LocalPlayer)) then
         local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ');
 
-        if (#message > 1200) then
-            message = message:sub(1200) .. "...";
-        end;
-
         local Hidden = true;
         local Connection = OnMessageDoneFiltering.OnClientEvent:Connect(function(packet, channel)
             if (packet.SpeakerUserId == targetPlayer.UserId and packet.Message == message:sub(#message - #packet.Message + 1) and (channel == "All" or (channel == "Team" and not ChatSpy.Public and Players[packet.FromSpeaker].Team == LocalPlayer.Team))) then
@@ -70,6 +66,9 @@ function ChatSpy.onChatted(targetPlayer, message)
         Connection:Disconnect();
 
         if (Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message)) then
+            if (#message > 1200) then
+                message = message:sub(1200) .. "...";
+            end;
             ChatSpy.Chat.Text = "[SPY] - ["..targetPlayer.Name.."]: " .. message;
             if (ChatSpy.Public) then SayMessageRequest:FireServer(ChatSpy.Chat.Text, "All"); else StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat); end;
         end;
@@ -80,7 +79,9 @@ end;
 local AllPlayers = Players:GetPlayers();
 for i = 1, #AllPlayers do
     local player = AllPlayers[i];
-    ChatSpy.onChatted(player, message);
+    player.Chatted:Connect(function(message)
+        ChatSpy.onChatted(player, message);
+    end);
 end;
 
 Players.PlayerAdded:Connect(function(player)
