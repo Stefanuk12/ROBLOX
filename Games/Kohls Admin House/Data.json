@@ -120,6 +120,12 @@
             "Name": "Rejoin",
             "Type": "Button"
         },
+        "Audio Visualiser": {
+            "Admin": false,
+            "Description": "Starts the Audio Visualiser, please visit bit.ly/kahvisual for the command documentation",
+            "Name": "Audio Visualiser",
+            "Type": "Button"
+        },
         "Save Settings": {
             "Admin": false,
             "Description": "Saves all of your settings.",
@@ -224,6 +230,12 @@
         }
     },
     "Server": {
+        "/c system Alert": {
+            "Admin": true,
+            "Description": "Sends a message to everyone if someone is detected using /c system.",
+            "Name": "/c system Alert",
+            "Type": "Toggle"
+        },
         "Crash Server": {
             "Admin": true,
             "Description": "Crashes the server by equiping a gear then shrinking self.",
@@ -264,12 +276,6 @@
             "Admin": true,
             "Description": "Spams respawn and explode on everyone.",
             "Name": "Respawn Explode",
-            "Type": "Toggle"
-        },
-        "/c system Alert": {
-            "Admin": true,
-            "Description": "Sends a message to everyone if someone is detected using /c system.",
-            "Name": "/c system Alert",
             "Type": "Toggle"
         }
     },

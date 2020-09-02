@@ -887,6 +887,15 @@ local Rejoin = SetupTextMenu(Misc, "Rejoin", {
     end;
 });
 
+local StartAudioVisualiser = SetupTextMenu(Misc, "Audio Visualiser", {
+    Callback = function()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/AudioVisualiser.lua"))();
+        Material.Banner({
+            Text = "Audio Visualiser Started."
+        });
+    end;
+});
+
 local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
     Callback = function()
         if (writefile) then
@@ -1157,6 +1166,13 @@ local AntiPunish = SetupTextMenu(Protections, "Anti Punish", {
 });
 
 -- // Server
+local csystemAlert = SetupTextMenu(Server, "/c system Alert", {
+    Enabled = Settings["ServerCSystemAlert"],
+    Callback = function(Value)
+        Settings["ServerCSystemAlert"] = Value;
+    end;
+});
+
 local CrashServer = SetupTextMenu(Server, "Crash Server", {
     Callback = function()
         Players:Chat(":gear me 94794847");
@@ -1261,13 +1277,6 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
                 RemovePhrase(":explode " .. v.Name);
             end;
         end;
-    end;
-});
-
-local csystemAlert = SetupTextMenu(Server, "/c system Alert", {
-    Enabled = Settings["ServerCSystemAlert"],
-    Callback = function(Value)
-        Settings["ServerCSystemAlert"] = Value;
     end;
 });
 
