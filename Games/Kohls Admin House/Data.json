@@ -102,10 +102,10 @@
         }
     },
     "Misc": {
-        "Audio Visualiser": {
+        "Start Audio Visualiser": {
             "Admin": false,
             "Description": "Starts the Audio Visualiser, please visit bit.ly/kahvisual for the command documentation",
-            "Name": "Audio Visualiser",
+            "Name": "Start Audio Visualiser",
             "Type": "Button"
         },
         "Paint Area": {
