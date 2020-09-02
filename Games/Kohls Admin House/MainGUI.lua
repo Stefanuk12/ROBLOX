@@ -544,7 +544,7 @@ local RegenerateAdmin = SetupTextMenu(Admin, "Regenerate Admin", {
 
 local CSelectedPad;
 local RegenPad;
-local PadSize;
+local PadSize = Vector3.new(3, 0.4, 3);
 local PadCFrame;
 coroutine.wrap(function()
     if (fireclickdetector) then
@@ -571,7 +571,6 @@ coroutine.wrap(function()
             end;
         end;
 
-        PadSize = SelectedPad.Head.Size;
         PadCFrame = SelectedPad.Head.CFrame;
 
         -- // Check when the pad is regen
