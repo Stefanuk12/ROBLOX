@@ -36,6 +36,19 @@ for i = 1, #musicTable do
     table.insert(MusicTable, v["Name"]);
 end;
 
+-- // GUI
+local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
+local Material = MaterialUI.Load({
+	Title = "oofkohls",
+	Style = 3,
+	SizeX = 500,
+	SizeY = 350,
+	Theme = "Light",
+	ColorOverrides = {
+		MainFrame = Color3.fromRGB(235,235,235)
+	}
+});
+
 -- // Gear Giver
 local GearGiverGears = {
     {Name = "PaintBucket", Id = 18474459},
@@ -105,6 +118,41 @@ end;
 -- // Configuring and adding the Player to the PlayerTable
 local PlayerTable = {};
 local GetPlayers = Players:GetPlayers();
+function PlayerChatConfig(msg, v)
+    local PlrTable = GetPlayerTableFromId(v.UserId);
+    local BLPhrases = PlrTable.BlacklistedPhrases;
+    local WLCheck = IsWhitelisted(v.UserId);
+    local NotWhitelisted = (WLCheck[3] == "Not defined");
+
+    -- // Checking if the player has said any Blacklisted Phrases
+    for i = 1, #BLPhrases do
+        local BlacklistedPhrase = BLPhrases[i];
+        if (BlacklistedPhrase and msg:find(BlacklistedPhrase.Phrase)) then
+            Players:Chat(BlacklistedPhrase.Punishment);
+        end;
+    end;
+
+    -- // Checking if the player has given anyone a blacklisted gear
+    for i = 1, #BlacklistedGears do
+        local BLGear = BlacklistedGears[i];
+        local splitString = msg:split(" ");
+        if (splitString[3] == BLGear and not Whitelisted) then
+            local Target = splitString[2];
+            if (Target == "me") then Target = v.Name; end;
+            Players:Chat(":removetools " + Target);
+        end;
+    end;
+
+    -- // /c system Alert
+    if (Settings["ServerCSystemAlert"] and msg == "/c system" and NotWhitelisted) then
+        Players:Chat(":h Imagine using /c system to hide your commands, ahem: " .. v.Name);
+    end;
+
+    -- // Identifier ;)
+    if (WLCheck[2] and v ~= LocalPlayer and msg.lower() == "hi gamers") then
+        Players:Chat("Hi gamer!");
+    end;
+end;
 for i = 1, #GetPlayers do
     local v = GetPlayers[i];
     if (v ~= LocalPlayer) then
@@ -122,33 +170,7 @@ for i = 1, #GetPlayers do
 
         -- // Configuring
         v.Chatted:Connect(function(msg)
-            local PlrTable = GetPlayerTableFromId(v.UserId);
-            local BLPhrases = PlrTable.BlacklistedPhrases;
-
-            -- // Checking if the player has said any Blacklisted Phrases
-            for i = 1, #BLPhrases do
-                local BlacklistedPhrase = BLPhrases[i];
-                print(BlacklistedPhrase.Phrase);
-                if (BlacklistedPhrase and msg:find(BlacklistedPhrase.Phrase)) then
-                    Players:Chat(BlacklistedPhrase.Punishment);
-                end;
-            end;
-
-            -- // Checking if the player has given anyone a blacklisted gear
-            for i = 1, #BlacklistedGears do
-                local BLGear = BlacklistedGears[i];
-                local splitString = msg:split(" ");
-                if (splitString[3] and splitString[3]:find(tostring(BLGear)) and not isWhitelisted(v.UserId)) then
-                    local Target = splitString[2];
-                    if (Target == "me") then Target = v.Name; end;
-                    Players:Chat(":removetools " + Target);
-                end;
-            end;
-
-            -- // Identifier ;)
-            if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
-                Players:Chat("Hi gamer!");
-            end;
+            PlayerChatConfig(msg, v);
         end);
     else
         -- // Main Table that holds Player Data
@@ -181,38 +203,7 @@ Players.PlayerAdded:Connect(function(v)
 
     -- // Configuring
     v.Chatted:Connect(function(msg)
-        local PlrTable = GetPlayerTableFromId(v.UserId);
-        local BLPhrases = PlrTable.BlacklistedPhrases;
-        local WLCheck = IsWhitelisted(v.UserId);
-
-        -- // Checking if the player has said any Blacklisted Phrases
-        for i = 1, #BLPhrases do
-            local BlacklistedPhrase = BLPhrases[i];
-            if (BlacklistedPhrase and msg:find(BlacklistedPhrase.Phrase)) then
-                Players:Chat(BlacklistedPhrase.Punishment);
-            end;
-        end;
-
-        -- // Checking if the player has given anyone a blacklisted gear
-        for i = 1, #BlacklistedGears do
-            local BLGear = BlacklistedGears[i];
-            local splitString = msg:split(" ");
-            if (splitString[3] == BLGear and (not WLCheck[1] and not WLCheck[2]) ) then
-                local Target = splitString[2];
-                if (Target == "me") then Target = v.Name; end;
-                Players:Chat(":removetools " + Target);
-            end;
-        end;
-
-        -- // /c system Alert
-        if (Settings["ServerCSystemAlert"] and (not WLCheck[1] and not WLCheck[2]) and msg == "/c system") then
-            Players:Chat("Imagine using /c system to hide your commands, ahem: " .. v.Name);
-        end;
-
-        -- // Identifier ;)
-        if (isPWL(v.UserId) and v ~= LocalPlayer and msg.lower() == "hi gamers") then
-            Players:Chat("Hi gamer!");
-        end;
+        PlayerChatConfig(msg, v);
     end);
 
     -- // If the Respawn Explode is happening, update the spammer.
@@ -335,7 +326,7 @@ function IsWhitelisted(PlayerID)
         end;
     end;
 
-    return Whitelisted, ProtectedWhitelist, Index;
+    return {Whitelisted, ProtectedWhitelist, Index};
 end;
 
 -- // Get all players that aren't whitelisted
@@ -344,8 +335,8 @@ function GetUnblacklistedPlayers()
     for i = 1, #AllPlayers do
         local v = AllPlayers[i];
         if (v) then
-            local WL, PWL, _ = IsWhitelisted(v.UserId);
-            if (WL or PWL) then
+            local WL = IsWhitelisted(v.UserId)[3];
+            if (WL == "Not defined") then
                 table.remove(AllPlayers, i);
             end;
         end;
@@ -487,18 +478,6 @@ function SetupTextMenu(Page, CommandName, Options)
 end;
 
 -- // Building GUI
-local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
-local Material = MaterialUI.Load({
-	Title = "oofkohls",
-	Style = 3,
-	SizeX = 500,
-	SizeY = 350,
-	Theme = "Light",
-	ColorOverrides = {
-		MainFrame = Color3.fromRGB(235,235,235)
-	}
-});
-
 local Pages = {};
 function createPage(PageName)
     local mt = setmetatable(Material.New({Title = PageName}), {__tostring = function() return PageName end});
@@ -552,10 +531,16 @@ local RegenerateAdmin = SetupTextMenu(Admin, "Regenerate Admin", {
 			});
             return;
         end;
-        fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
+        if (GameFolder["Admin"]:FindFirstChild("Regen")) then
+            fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
+            Material.Banner({
+                Text = "Regenerated admin."
+            });
+            return;
+        end;
         Material.Banner({
-			Text = "Regenerated admin."
-		});
+            Text = "Could not find regen button, it's likely been tp'd away and you need to load it in first."
+        });
     end;
 });
 
@@ -1279,7 +1264,6 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     end;
 });
 
-
 local csystemAlert = SetupTextMenu(Server, "/c system Alert", {
     Enabled = Settings["ServerCSystemAlert"],
     Callback = function(Value)
@@ -1378,7 +1362,8 @@ local UnwhitelistPlayer = SetupTextMenu(Whitelist, "Unwhitelist Player", {
         });
         if (not FailSafeResult) then return; end;
 
-        local WL, PWL, Index = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
+        local Whitelisted = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
+        local WL, PWL, Index = Whitelisted[1], Whitelisted[2], Whitelisted[3];
         if (WL) then
             for i = 1, #PlayerTable do
                 local v = PlayerTable[i];
@@ -1416,7 +1401,8 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist Player", {
         });
         if (not FailSafeResult) then return; end;
 
-        local WL, PWL, Index = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
+        local Whitelisted = IsWhitelisted(Settings["WhitelistSelectPlayer"]);
+        local WL, PWL, Index = Whitelisted[1], Whitelisted[2], Whitelisted[3];
         if (PWL) then
             Material.Banner({
 				Text = "This player has already been whitelisted."
