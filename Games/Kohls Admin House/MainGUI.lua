@@ -71,6 +71,7 @@ local Settings = {
     ServerLagServer = false,
     ServerRespawnExplode = false,
     ServerPartSpam = false,
+    ServerCSystemAlert = false,
     MusicCommandsSelectSound = "Not selected",
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
@@ -137,8 +138,10 @@ for i = 1, #GetPlayers do
             for i = 1, #BlacklistedGears do
                 local BLGear = BlacklistedGears[i];
                 local splitString = msg:split(" ");
-                if (splitString[2] == BLGear and not isWhitelisted(v.UserId)) then
-                    Players:Chat(":removetools " + splitString[3]);
+                if (splitString[3] and splitString[3]:find(tostring(BLGear)) and not isWhitelisted(v.UserId)) then
+                    local Target = splitString[2];
+                    if (Target == "me") then Target = v.Name; end;
+                    Players:Chat(":removetools " + Target);
                 end;
             end;
 
@@ -180,6 +183,7 @@ Players.PlayerAdded:Connect(function(v)
     v.Chatted:Connect(function(msg)
         local PlrTable = GetPlayerTableFromId(v.UserId);
         local BLPhrases = PlrTable.BlacklistedPhrases;
+        local WLCheck = IsWhitelisted(v.UserId);
 
         -- // Checking if the player has said any Blacklisted Phrases
         for i = 1, #BLPhrases do
@@ -193,9 +197,16 @@ Players.PlayerAdded:Connect(function(v)
         for i = 1, #BlacklistedGears do
             local BLGear = BlacklistedGears[i];
             local splitString = msg:split(" ");
-            if (splitString[2] == BLGear and not isWhitelisted(v.UserId)) then
-                Players:Chat(":removetools " + splitString[3]);
+            if (splitString[3] == BLGear and (not WLCheck[1] and not WLCheck[2]) ) then
+                local Target = splitString[2];
+                if (Target == "me") then Target = v.Name; end;
+                Players:Chat(":removetools " + Target);
             end;
+        end;
+
+        -- // /c system Alert
+        if (Settings["ServerCSystemAlert"] and (not WLCheck[1] and not WLCheck[2]) and msg == "/c system") then
+            Players:Chat("Imagine using /c system to hide your commands, ahem: " .. v.Name);
         end;
 
         -- // Identifier ;)
@@ -557,7 +568,13 @@ local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
 -- // Blacklist
 local BlacklistSelectGearId = SetupTextMenu(Blacklist, "Select Gear ID", {
     Callback = function(Value)
-        Settings["BlacklistSelectGearId"] = Value;
+        if (not tonumber(Value)) then
+            Material.Banner({
+                Text = "Please enter a number."
+            });
+            return;
+        end;
+        Settings["BlacklistSelectGearId"] = tonumber(Value); 
     end;
 });
 
@@ -588,7 +605,7 @@ local BlacklistGear = SetupTextMenu(Blacklist, "Blacklist Gear", {
             };
         });
         if (not FailSafeResult) then return; end;
-
+        
         for i = 1, #BlacklistedGears do
             local v = BlacklistedGears[i];
             if (v == Settings["BlacklistSelectGearId"]) then
@@ -808,7 +825,7 @@ local StopSpamPhrase = SetupTextMenu(Commands, "Stop Spam Phrase", {
 
 -- // Misc
 local MiscSelectPaintColour = SetupTextMenu(Misc, "Select Paint Colour", {
-    Default = Color3.fromRGB(255, 150, 150);
+    Default = Settings["MiscSelectPaintColour"];
     Callback = function(Value)
         Settings["MiscSelectPaintColour"] = Value;
     end;
@@ -1156,7 +1173,6 @@ local AntiPunish = SetupTextMenu(Protections, "Anti Punish", {
 
 -- // Server
 local CrashServer = SetupTextMenu(Server, "Crash Server", {
-    Enabled = false,
     Callback = function()
         Players:Chat(":gear me 94794847");
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
@@ -1170,7 +1186,6 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
 });
 
 local CreatePhantomBaseplate = SetupTextMenu(Server, "Create Phantom Baseplate", {
-    Enabled = false,
     Callback = function()
         local Baseplate = Instance.new("Part", GameFolder["Workspace"])
         Baseplate.Name = "PhantomBaseplate"
@@ -1185,14 +1200,13 @@ local CreatePhantomBaseplate = SetupTextMenu(Server, "Create Phantom Baseplate",
 });
 
 local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
-    Enabled = false,
+    Enabled = Settings["ServerEpilepsy"],
     Callback = function(Value)
         Settings["ServerEpilepsy"] = Value;
     end;
 });
 
 local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
-    Enabled = false,
     Callback = function()
         local Spawn = WorkspaceFolder.Spawn3;
         local Baseplate = WorkspaceFolder.Baseplate;
@@ -1213,7 +1227,7 @@ local MoveBaseplate = SetupTextMenu(Server, "Move Baseplate", {
 });
 
 local PartSpam = SetupTextMenu(Server, "Part Spam", {
-    Enabled = false,
+    Enabled = Settings["ServerPartSpam"],
     Callback = function(Value)
         if (not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748)) then
             Material.Banner({
@@ -1232,7 +1246,6 @@ local PartSpam = SetupTextMenu(Server, "Part Spam", {
 });
 
 local RemovePhantomBaseplate = SetupTextMenu(Server, "Remove Phantom Baseplates", {
-    Enabled = false,
     Callback = function()
         local PhantomBaseplates = GameFolder["Workspace"]:GetChildren();
         for i = 1, #PhantomBaseplates do
@@ -1245,7 +1258,7 @@ local RemovePhantomBaseplate = SetupTextMenu(Server, "Remove Phantom Baseplates"
 });
 
 local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
-    Enabled = false,
+    Enabled = Settings["ServerRespawnExplode"],
     Callback = function(Value)
         Settings["ServerRespawnExplode"] = Value;
         local UnblacklistedPlayers = GetUnblacklistedPlayers();
@@ -1266,9 +1279,17 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
     end;
 });
 
+
+local csystemAlert = SetupTextMenu(Server, "/c system Alert", {
+    Enabled = Settings["ServerCSystemAlert"],
+    Callback = function(Value)
+        Settings["ServerCSystemAlert"] = Value;
+    end;
+});
+
 -- // Sound Abuse
 local SoundAbuseEarRape = SetupTextMenu(SoundAbuse, "Ear Rape", {
-    Enabled = false,
+    Enabled = Settings["SoundAbuseEarRape"],
     Callback = function(Value)
         Settings["SoundAbuseEarRape"] = Value;
     end;

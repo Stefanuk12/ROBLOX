@@ -265,6 +265,12 @@
             "Description": "Spams respawn and explode on everyone.",
             "Name": "Respawn Explode",
             "Type": "Toggle"
+        },
+        "/c system Alert": {
+            "Admin": true,
+            "Description": "Sends a message to everyone if someone is detected using /c system.",
+            "Name": "/c system Alert",
+            "Type": "Toggle"
         }
     },
     "Sound Abuse": {
