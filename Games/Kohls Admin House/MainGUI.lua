@@ -3,9 +3,6 @@
         Kinlei for the UI Library: MaterialLUA
     General Infomation:
         If you crash, it's because of the music api.
-
-    Features to add:
-        - Persistant Admin
 ]]
 
 
@@ -567,7 +564,9 @@ coroutine.wrap(function()
             else
                 warn("Trying to get a pad...");
                 fireclickdetector(RegenPad.ClickDetector, 0);
-                SelectedPad = GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin");
+                GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin");
+                wait(math.random()); -- // Hopefully to allow more than one person to use this
+                SelectedPad = GameFolder["Admin"]["Pads"]["Touch to get admin"];
                 warn("Got a pad.");
             end;
         end;
