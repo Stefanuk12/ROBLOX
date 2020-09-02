@@ -1005,11 +1005,11 @@ local Rejoin = SetupTextMenu(Misc, "Rejoin", {
     end;
 });
 
-local StartAudioVisualiser = SetupTextMenu(Misc, "Audio Visualiser", {
+local StartAudioVisualiser = SetupTextMenu(Misc, "Start Audio Visualiser", {
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/AudioVisualiser.lua"))();
         Material.Banner({
-            Text = "Audio Visualiser Started."
+            Text = "Audio Visualiser Started. Check the documentation for all of the commands here: bit.ly/kahvisual."
         });
     end;
 });
