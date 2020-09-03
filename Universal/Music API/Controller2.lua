@@ -68,13 +68,13 @@ function MusicAPI.CheckAllSounds()
     Cleaned = MusicAPI.RemoveDuplicates(MusicTable);
 
     -- // Check over all the sounds
-    for i = 1, #MusicTable do
-        local v = MusicTable[i];
+    for i = 1, #Cleaned do
+        local v = Cleaned[i];
         RunService.RenderStepped:Wait();
         
         coroutine.wrap(function()
             if (not MusicAPI.CheckSound(v.SoundId)) then
-                table.insert(Cleaned, v);
+                table.remove(Cleaned, i);
             end;
             
             Count = Count + 1;
