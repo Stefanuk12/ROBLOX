@@ -500,7 +500,7 @@ local GetAdmin = SetupTextMenu(Admin, "Get Admin", {
     Callback = function()
         if (not fireclickdetector) then
             Material.Banner({
-				Text = "Your exploit does not support this feature."
+				Text = "Your exploit does not support Get Admin."
 			});
             return;
         end;
@@ -525,7 +525,7 @@ local RegenerateAdmin = SetupTextMenu(Admin, "Regenerate Admin", {
     Callback = function()
         if (not fireclickdetector) then
             Material.Banner({
-				Text = "Your exploit does not support this feature."
+				Text = "Your exploit does not support Regenerate Admin."
 			});
             return;
         end;
@@ -601,7 +601,7 @@ local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
     Callback = function(Value)
         if (not fireclickdetector) then
             Material.Banner({
-				Text = "Your exploit does not support this feature."
+				Text = "Your exploit does not support Permanant Admin."
 			});
             return;
         end;
@@ -610,9 +610,9 @@ local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
         if (Value) then
             if (not RegenPad) then
                 Material.Banner({
-                    Text = "Please find the regen pad for this to work."
+                    Text = "Please find the regen pad for Permanant Admin to work."
                 });
-                warn("Please find the regen pad for this to work.");
+                warn("Please find the regen pad for Permanant Admin to work.");
                 repeat wait() until SelectedPad ~= nil;
                 Material.Banner({
                     Text = "Found the regen pad."
@@ -1022,7 +1022,7 @@ local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
 			});
         else
             Material.Banner({
-				Text = "Your exploit does not support this feature."
+				Text = "Your exploit does not support Save Settings."
 			});
         end;
     end;
