@@ -15,17 +15,19 @@ NotificationHandler["StorageLocation"] = game:GetService("CoreGui")
 if not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then warn("You don't have Persons299 admin!") return end
 
 -- // Network Ownership
-if sethiddenproperty and gethiddenproperty then
-    if gethiddenproperty(LocalPlayer, "SimulationRadius") ~= 1/0 then
+if setscriptable then
+    setscriptable(LocalPlayer, "SimulationRadius", true)
+    setscriptable(LocalPlayer, "MaximumSimulationRadius", true)
+    if LocalPlayer.SimulationRadius ~= 1/0 then
         game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-            if gethiddenproperty(LocalPlayer, "SimulationRadius") ~= 1/0 then
-                sethiddenproperty(LocalPlayer, "SimulationRadius", 1/0)
-                sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", 1/0)
+            if LocalPlayer.SimulationRadius ~= 1/0 then
+                LocalPlayer.SimulationRadius = 1/0
+                LocalPlayer.MaximumSimulationRadius = 1/0
             end
         end)
     end
 else
-    warn("You do not have sethiddenproperty or gethiddenproperty!")
+    warn("You do not have setscriptable!")
     return
 end
 
