@@ -141,9 +141,8 @@ function PlayerChatConfig(msg, v)
             local Target = splitString[2];
             if (Target == "me") then Target = v.Name; end;
             Players:Chat(":removetools " .. Target);
-            print('naugthty');
             if (Settings["BlacklistAlertUse"]) then
-                Players:Chat(":h Imagine trying to gear yourself/others a blacklisted gear (" .. BLGear .. "), ahem: " .. v.Name);
+                Players:Chat(":h Imagine trying to gear yourself/others a blacklisted gear, ahem: " .. v.Name);
             end;
         end;
     end;
