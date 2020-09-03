@@ -8,7 +8,7 @@ local RunService = game:GetService("RunService");
 -- // Vars
 local RenderStepped = RunService.RenderStepped;
 getgenv().MusicAPI = {}; local MusicAPI = getgenv().MusicAPI;
-MusicAPI.Verbose = false;
+MusicAPI.Verbose = false; -- // Will print what it's all doing
 MusicAPI.MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json";
 MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
 MusicAPI.RemovedAssets = {
@@ -24,7 +24,6 @@ function MusicAPI.CheckSound(SoundId)
 
     for i = 1, #MusicAPI.RemovedAssets do
         local v = MusicAPI.RemovedAssets[i];
-        RunService.RenderStepped:Wait();
         
         if (SoundSource:find(v)) then
             return false;
@@ -75,7 +74,6 @@ function MusicAPI.CheckAllSounds()
     for i = 1, #Cleaned do
         local v = Cleaned[i];
         local SoundId = v.SoundId;
-        RunService.RenderStepped:Wait();
         
         coroutine.wrap(function()
             if (MusicAPI.Verbose) then warn('Checking Audio: ' .. SoundId); end;
@@ -88,13 +86,12 @@ function MusicAPI.CheckAllSounds()
             end;
             
             Count = Count + 1;
-            wait(math.random())
         end)();
     end;
 
     -- // Return
-    if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     repeat wait(0.1) until Count == #Cleaned - RemovedCount;
+    if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
     return Cleaned;
 end;
