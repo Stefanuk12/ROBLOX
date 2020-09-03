@@ -140,7 +140,7 @@ function PlayerChatConfig(msg, v)
         if (splitString[3] == BLGear and not Whitelisted) then
             local Target = splitString[2];
             if (Target == "me") then Target = v.Name; end;
-            Players:Chat(":removetools " + Target);
+            Players:Chat(":removetools " .. Target);
             print('naugthty');
             if (Settings["BlacklistAlertUse"]) then
                 Players:Chat(":h Imagine trying to gear yourself/others a blacklisted gear (" .. BLGear .. "), ahem: " .. v.Name);
