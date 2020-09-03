@@ -8,12 +8,13 @@ local RunService = game:GetService("RunService");
 -- // Vars
 local RenderStepped = RunService.RenderStepped;
 getgenv().MusicAPI = {}; local MusicAPI = getgenv().MusicAPI;
+MusicAPI.Verbose = false;
 MusicAPI.MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json";
 MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
 MusicAPI.RemovedAssets = {
-    "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png", -- // Removed
-    "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059", -- // Removed
-    "This audio asset has been blocked due to copyright violations." -- // Copyright
+    "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
+    "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
+    "This audio asset has been blocked due to copyright violations."
 };
 
 -- // Return false if the Sound is not working
@@ -65,6 +66,7 @@ function MusicAPI.CheckAllSounds()
     local Cleaned;
     local Count = 0;
     local RemovedCount = 0;
+    local StartTime = tick();
 
     -- // Remove duplicates
     Cleaned = MusicAPI.RemoveDuplicates(MusicTable);
@@ -72,12 +74,17 @@ function MusicAPI.CheckAllSounds()
     -- // Check over all the sounds
     for i = 1, #Cleaned do
         local v = Cleaned[i];
+        local SoundId = v.SoundId;
         RunService.RenderStepped:Wait();
         
         coroutine.wrap(function()
-            if (not MusicAPI.CheckSound(v.SoundId)) then
+            if (MusicAPI.Verbose) then warn('Checking Audio: ' .. SoundId); end;
+            if (not MusicAPI.CheckSound(SoundId)) then
                 table.remove(Cleaned, i);
                 RemovedCount = RemovedCount + 1;
+                if (MusicAPI.Verbose) then error('Audio removed: ' .. SoundId); end;
+            else
+                if (MusicAPI.Verbose) then print('Audio passed: ' .. SoundId); end;
             end;
             
             Count = Count + 1;
@@ -86,7 +93,8 @@ function MusicAPI.CheckAllSounds()
     end;
 
     -- // Return
-    repeat wait() until Count == #Cleaned - RemovedCount;
+    if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
+    repeat wait(0.1) until Count == #Cleaned - RemovedCount;
     
     return Cleaned;
 end;
