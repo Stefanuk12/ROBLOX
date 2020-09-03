@@ -13,7 +13,7 @@ MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTab
 MusicAPI.RemovedAssets = {
     "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png", -- // Removed
     "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059", -- // Removed
-    "<span class=\"icon-warning\"></span>" -- // Copyright
+    "This audio asset has been blocked due to copyright violations." -- // Copyright
 };
 
 -- // Return false if the Sound is not working
