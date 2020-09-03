@@ -63,7 +63,8 @@ function MusicAPI.CheckAllSounds()
     local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
     local Cleaned;
     local Count = 0;
-    
+    local RemovedCount = 0;
+
     -- // Remove duplicates
     Cleaned = MusicAPI.RemoveDuplicates(MusicTable);
 
@@ -75,6 +76,7 @@ function MusicAPI.CheckAllSounds()
         coroutine.wrap(function()
             if (not MusicAPI.CheckSound(v.SoundId)) then
                 table.remove(Cleaned, i);
+                RemovedCount = RemovedCount + 1;
             end;
             
             Count = Count + 1;
@@ -83,7 +85,7 @@ function MusicAPI.CheckAllSounds()
     end;
 
     -- // Return
-    repeat wait() until Count == #MusicTable;
+    repeat wait() until Count == #Cleaned - RemovedCount;
     
     return Cleaned;
 end;
