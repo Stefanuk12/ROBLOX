@@ -1302,7 +1302,7 @@ local CrashServer = SetupTextMenu(Server, "Crash Server", {
         end;
 
         Material.Banner({
-			Text = "Say :size me .3 to crash the server."
+			Text = "Crashed Server."
 		});
     end;
 });
