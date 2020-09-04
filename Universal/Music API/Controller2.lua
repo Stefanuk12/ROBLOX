@@ -28,6 +28,8 @@ function MusicAPI.CheckSound(SoundId)
         if (SoundSource:find(v)) then
             return false;
         end;
+
+        wait();
     end;
 
     return true;
@@ -52,7 +54,8 @@ function MusicAPI.RemoveDuplicates(MTable)
         local v = MTable[i];
         
         if (not IsSoundInMusicTable(v.SoundId, Cleaned)) then
-            table.insert(Cleaned, v)
+            table.insert(Cleaned, v);
+            wait();
         end;
     end;
 
@@ -77,12 +80,15 @@ function MusicAPI.CheckAllSounds()
         
         coroutine.wrap(function()
             if (MusicAPI.Verbose) then warn('Checking Audio: ' .. SoundId); end;
+            wait();
             if (not MusicAPI.CheckSound(SoundId)) then
                 table.remove(Cleaned, i);
                 RemovedCount = RemovedCount + 1;
                 if (MusicAPI.Verbose) then error('Audio removed: ' .. SoundId); end;
+                wait();
             else
                 if (MusicAPI.Verbose) then print('Audio passed: ' .. SoundId); end;
+                wait();
             end;
             
             Count = Count + 1;
@@ -92,6 +98,7 @@ function MusicAPI.CheckAllSounds()
     -- // Return
     repeat wait(0.1) until Count == #Cleaned - RemovedCount;
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
+    wait();
     
     return Cleaned;
 end;
