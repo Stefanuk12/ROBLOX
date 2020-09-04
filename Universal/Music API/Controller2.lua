@@ -88,7 +88,7 @@ function MusicAPI.CheckAllSounds()
     end;
 
     -- // Return
-    repeat wait(2) until #Cleaned == MusicTable - RemovedCount;
+    repeat wait(2) until #Cleaned == #MusicTable - RemovedCount;
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
