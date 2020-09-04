@@ -68,6 +68,7 @@ function MusicAPI.CheckAllSounds()
     local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
     local Cleaned = {};
     local RemovedCount = 0;
+    local Count = 0;
     local StartTime = tick();
 
     -- // Remove duplicates
@@ -84,11 +85,13 @@ function MusicAPI.CheckAllSounds()
                 if (MusicAPI.Verbose) then warn('Audio Failed ' .. "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId); end;
                 RemovedCount = RemovedCount + 1;
             end;
+
+            Count = Count + 1;
         end)();
     end;
 
     -- // Return
-    repeat wait(2) until #Cleaned == #MusicTable - RemovedCount;
+    repeat wait(2) until #Cleaned == Count - RemovedCount;
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
