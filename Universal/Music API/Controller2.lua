@@ -8,7 +8,7 @@ local RunService = game:GetService("RunService");
 -- // Vars
 local RenderStepped = RunService.RenderStepped;
 getgenv().MusicAPI = {}; local MusicAPI = getgenv().MusicAPI;
-MusicAPI.Verbose = false; -- // Will print what it's all doing
+MusicAPI.Verbose = true; -- // Will print what it's all doing
 MusicAPI.MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json";
 MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
 MusicAPI.RemovedAssets = {
@@ -55,6 +55,7 @@ function MusicAPI.RemoveDuplicates(MTable)
         
         if (not IsSoundInMusicTable(v.SoundId, Cleaned)) then
             table.insert(Cleaned, v);
+            
             wait();
         end;
     end;
@@ -65,40 +66,32 @@ end;
 -- // Test all sounds
 function MusicAPI.CheckAllSounds()
     local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
-    local Cleaned;
+    local Cleaned = {};
     local Count = 0;
-    local RemovedCount = 0;
     local StartTime = tick();
 
     -- // Remove duplicates
-    Cleaned = MusicAPI.RemoveDuplicates(MusicTable);
+    MusicTable = MusicAPI.RemoveDuplicates(MusicTable);
 
     -- // Check over all the sounds
-    for i = 1, #Cleaned do
-        local v = Cleaned[i];
+    for i = 1, #MusicTable do
+        local v = MusicTable[i];
         local SoundId = v.SoundId;
-        
+        local Description = "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId;
         coroutine.wrap(function()
-            if (MusicAPI.Verbose) then warn('Checking Audio: ' .. SoundId); end;
-            wait();
-            if (not MusicAPI.CheckSound(SoundId)) then
-                table.remove(Cleaned, i);
-                RemovedCount = RemovedCount + 1;
-                if (MusicAPI.Verbose) then error('Audio removed: ' .. SoundId); end;
-                wait();
+            if (MusicAPI.CheckSound(SoundId)) then
+                Cleaned[#Cleaned + 1] = v;
+                Count = Count + 1;
             else
-                if (MusicAPI.Verbose) then print('Audio passed: ' .. SoundId); end;
-                wait();
+                if (MusicAPI.Verbose) then warn('Audio Failed ' .. Description); end;
             end;
-            
-            Count = Count + 1;
         end)();
     end;
 
     -- // Return
-    repeat wait(0.1) until Count == #Cleaned - RemovedCount;
+    repeat wait() until Count == #Cleaned;
+    
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
-    wait();
     
     return Cleaned;
 end;
