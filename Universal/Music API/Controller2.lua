@@ -80,7 +80,6 @@ function MusicAPI.CheckAllSounds()
         local v = MusicTable[i];
         local SoundId = v.SoundId;
         coroutine.wrap(function()
-            wait(math.random(0, 2));
             if (MusicAPI.CheckSound(SoundId)) then
                 Cleaned[#Cleaned + 1] = v;
                 CleanCount = CleanCount + 1;

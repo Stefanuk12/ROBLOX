@@ -33,7 +33,8 @@ local musicTable = MusicAPI.CheckAllSounds();
 local MusicTable = {};
 for i = 1, #musicTable do
     local v = musicTable[i];
-    table.insert(MusicTable, v["Name"]);
+    local String = v["Name"] .. " | " .. v["SoundId"];
+    MusicTable[#MusicTable + 1] = String;
 end;
 
 -- // GUI
@@ -1031,7 +1032,10 @@ local SaveSettings = SetupTextMenu(Misc, "Save Settings", {
 local SelectSound = SetupTextMenu(MusicCommands, "Select Sound", {
     Options = MusicTable,
     Callback = function(Value)
-        Settings["MusicCommandsSelectSound"] = musicTable[table.find(MusicTable, Value)].SoundId;
+        local Find = Value:find("| ");
+        local Value2 = Value:sub(Find);
+        local Value3 = Value2:sub(3);
+        Settings["MusicCommandsSelectSound"] = Value3;
     end;
 });
 
@@ -1060,10 +1064,10 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
 
         musicTable = MusicAPI.CheckAllSounds();
         MusicTable = {};
-
         for i = 1, #musicTable do
             local v = musicTable[i];
-            table.insert(MusicTable, v["Name"]);
+            local String = v["Name"] .. " | " .. v["SoundId"];
+            MusicTable[#MusicTable + 1] = String;
         end;
 
         SelectSound:SetOptions(MusicTable);
