@@ -77,19 +77,18 @@ function MusicAPI.CheckAllSounds()
     for i = 1, #MusicTable do
         local v = MusicTable[i];
         local SoundId = v.SoundId;
-        local Description = "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId;
         coroutine.wrap(function()
             if (MusicAPI.CheckSound(SoundId)) then
                 Cleaned[#Cleaned + 1] = v;
                 Count = Count + 1;
             else
-                if (MusicAPI.Verbose) then warn('Audio Failed ' .. Description); end;
+                if (MusicAPI.Verbose) then warn('Audio Failed ' .. "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId); end;
             end;
         end)();
     end;
 
     -- // Return
-    repeat wait() until Count == #Cleaned;
+    repeat wait(2) until Count == #Cleaned;
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
