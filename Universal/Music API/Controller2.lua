@@ -68,6 +68,7 @@ function MusicAPI.CheckAllSounds()
     local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
     local Cleaned = {};
     local RemovedCount = 0;
+    local CleanCount = 0;
     local Count = 0;
     local StartTime = tick();
 
@@ -79,8 +80,10 @@ function MusicAPI.CheckAllSounds()
         local v = MusicTable[i];
         local SoundId = v.SoundId;
         coroutine.wrap(function()
+            wait(math.random(0, 2));
             if (MusicAPI.CheckSound(SoundId)) then
                 Cleaned[#Cleaned + 1] = v;
+                CleanCount = CleanCount + 1;
             else
                 if (MusicAPI.Verbose) then warn('Audio Failed ' .. "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId); end;
                 RemovedCount = RemovedCount + 1;
@@ -91,7 +94,7 @@ function MusicAPI.CheckAllSounds()
     end;
 
     -- // Return
-    repeat wait(2) until #Cleaned == Count - RemovedCount;
+    repeat wait() until (#MusicTable == #Cleaned + RemovedCount);
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
@@ -154,5 +157,15 @@ function MusicAPI.SetClipboard()
 
     setclipboard(String);
 end;
+
+--[[
+local CAS = MusicAPI.CheckAllSounds();
+if (#CAS == 0) then print('Check All Sounds returned an empty table.'); end;
+print(#CAS);
+for i = 1, #CAS do
+    local v = CAS[i];
+    print(v);
+end;
+]]
 
 return MusicAPI;
