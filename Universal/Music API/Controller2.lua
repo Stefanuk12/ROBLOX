@@ -37,7 +37,7 @@ end;
 
 -- // Remove any duplicate Sounds
 local function IsSoundInMusicTable(SoundId, MTable)
-    for i = 1, #MTable do
+    for i = 1, #MTable do 
         local v = MTable[i];
         
         if (v.SoundId == SoundId) then
@@ -67,7 +67,7 @@ end;
 function MusicAPI.CheckAllSounds()
     local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
     local Cleaned = {};
-    local Count = 0;
+    local RemovedCount = 0;
     local StartTime = tick();
 
     -- // Remove duplicates
@@ -80,15 +80,15 @@ function MusicAPI.CheckAllSounds()
         coroutine.wrap(function()
             if (MusicAPI.CheckSound(SoundId)) then
                 Cleaned[#Cleaned + 1] = v;
-                Count = Count + 1;
             else
                 if (MusicAPI.Verbose) then warn('Audio Failed ' .. "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId); end;
+                RemovedCount = RemovedCount + 1;
             end;
         end)();
     end;
 
     -- // Return
-    repeat wait(2) until Count == #Cleaned;
+    repeat wait(2) until #Cleaned == MusicTable - RemovedCount;
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
