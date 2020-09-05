@@ -16,10 +16,12 @@ local Workspace = game:GetService("Workspace");
 local MarketplaceService = game:GetService("MarketplaceService");
 local TeleportService = game:GetService("TeleportService");
 local Lighting = game:GetService("Lighting");
+local UserInputService = game:GetService("UserInputService");
 
 -- // Vars
 local GameFolder = Workspace.Terrain["_Game"];
 local LocalPlayer = Players.LocalPlayer;
+local Mouse = LocalPlayer:GetMouse();
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller2.lua"))();
 local WorkspaceFolder = GameFolder["Workspace"];
 local ProtectedWhitelistedPlayers = {91318356, LocalPlayer.UserId};
@@ -36,6 +38,8 @@ for i = 1, #musicTable do
     local String = v["Name"] .. " | " .. v["SoundId"];
     MusicTable[#MusicTable + 1] = String;
 end;
+local function sortByName(a, b) return a < b; end;
+table.sort(MusicTable, sortByName);
 
 -- // GUI
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
@@ -86,6 +90,7 @@ local Settings = {
     ServerRespawnExplode = false,
     ServerPartSpam = false,
     ServerCSystemAlert = false,
+    ServerClickSpawnWater = false,
     MusicCommandsSelectSound = "Not selected",
     BlacklistSelectGearId = "Not selected",
     BlacklistSelectPhrase = "Not selected",
@@ -392,6 +397,24 @@ coroutine.wrap(function()
         end;
     end;
 end)();
+
+-- // Click Spawn Water
+UserInputService.InputBegan:Connect(function(Key, GPE)
+    if (not GPE and Key.KeyCode == Enum.KeyCode.LeftControl and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) then
+        Players:Chat(":gear me 236438668");
+
+        local Tool = LocalPlayer.Backpack:WaitForChild("SeaThemedCrossbow");
+        local Humanoid = LocalPlayer.Character:WaitForChild("Humanoid");
+        
+        Humanoid:EquipTool(Tool);
+
+        local Remote = LocalPlayer.Character:WaitForChild("SeaThemedCrossbow"):WaitForChild("Remote");
+        Remote:FireServer("LeftDown", Mouse.Hit.Position);
+
+        wait(2.5);
+        Players:Chat(":removetools me");
+    end;
+end);
 
 -- // Failsafing commadns
 function FailSafeCommand(Page, CommandName, ...)
@@ -1069,6 +1092,7 @@ local RefreshSounds = SetupTextMenu(MusicCommands, "Refresh Sounds", {
             local String = v["Name"] .. " | " .. v["SoundId"];
             MusicTable[#MusicTable + 1] = String;
         end;
+        table.sort(MusicTable, sortByName);
 
         SelectSound:SetOptions(MusicTable);
 
@@ -1401,6 +1425,13 @@ local RespawnExplode = SetupTextMenu(Server, "Respawn Explode", {
                 RemovePhrase(":explode " .. v.Name);
             end;
         end;
+    end;
+});
+
+local ClickSpawnWater = SetupTextMenu(Server, "Click Spawn Water", {
+    Enabled = Settings["ServerClickSpawnWater"],
+    Callback = function(Value)
+        Settings["ServerClickSpawnWater"] = Value;
     end;
 });
 
