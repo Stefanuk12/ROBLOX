@@ -16,9 +16,9 @@ if not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then 
 
 -- // Network Ownership
 if sethiddenproperty and gethiddenproperty then
-    if gethiddenproperty(LocalPlayer, SimulationRadius) ~= 9e9 then
+    if gethiddenproperty(LocalPlayer, "SimulationRadius") ~= 9e9 then
         game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-            if gethiddenproperty(LocalPlayer, SimulationRadius) ~= 9e9 then
+            if gethiddenproperty(LocalPlayer, "SimulationRadius") ~= 9e9 then
                 sethiddenproperty(LocalPlayer, "SimulationRadius", 9e9)
                 sethiddenproperty(LocalPlayer, "MaximumSimulationRadius", 9e9)
             end
