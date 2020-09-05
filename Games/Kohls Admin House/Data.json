@@ -283,6 +283,12 @@
             "Description": "Spams respawn and explode on everyone.",
             "Name": "Respawn Explode",
             "Type": "Toggle"
+        },
+        "Click Spawn Water": {
+            "Admin": true,
+            "Description": "CTRL + Left Mouse Button will spawn water.",
+            "Name": "Click Spawn Water",
+            "Type": "Toggle"
         }
     },
     "Sound Abuse": {
