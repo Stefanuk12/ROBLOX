@@ -348,6 +348,58 @@ function GetUnblacklistedPlayers()
     return AllPlayers;
 end;
 
+-- // Get all players that are whitelisted
+function GetWhitelistedPlayers(Search)
+    local AllPlayers = Players:GetPlayers();
+    local WhitelistedPlayers = {};
+    
+    if (Search == "All") then
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i];
+            if (v) then
+                local WL = IsWhitelisted(v.UserId)[3];
+                if (WL ~= "Not defined") then
+                    WhitelistedPlayers[#WhitelistedPlayers + 1] = v;
+                end;
+            end;
+        end;
+    elseif (Search == "Normal") then
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i];
+            if (v) then
+                local WL = IsWhitelisted(v.UserId)[1];
+                if (WL) then
+                    WhitelistedPlayers[#WhitelistedPlayers + 1] = v;
+                end;
+            end;
+        end;
+    elseif (Search == "Protected") then
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i];
+            if (v) then
+                local WL = IsWhitelisted(v.UserId)[2];
+                if (WL) then
+                    WhitelistedPlayers[#WhitelistedPlayers + 1] = v;
+                end;
+            end;
+        end;
+    end;
+
+    return WhitelistedPlayers;
+end;
+
+function AreTherePWLInTheServer()
+    local WL = GetWhitelistedPlayers("Protected");
+    for i = 1, #WL do
+        local v = WL[i];
+        if (v == LocalPlayer) then
+            return false;
+        end;
+    end;
+
+    return #WL > 0;
+end;
+
 -- // Spammers
 RunService.RenderStepped:Connect(function()
     -- // Phrase Spammer
@@ -1337,6 +1389,14 @@ local csystemAlert = SetupTextMenu(Server, "/c system Alert", {
 
 local CrashServer = SetupTextMenu(Server, "Crash Server", {
     Callback = function()
+        local WL = GetWhitelistedPlayers("Protected");
+        if (AreTherePWLInTheServer()) then
+            Material.Banner({
+                Text = "There is a protected whitelist user in this server, you may not crash it."
+            });
+            return;
+        end;
+
         Players:Chat(":gear me 94794847");
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
