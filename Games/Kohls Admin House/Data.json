@@ -160,6 +160,12 @@
         }
     },
     "Player": {
+        "Is Admin": {
+            "Admin": false,
+            "Description": "Says whether the selected player is admin or not",
+            "Name": "Is Admin",
+            "Type": "Button"
+        },
         "Get Age": {
             "Admin": false,
             "Description": "Gets the age of the selected player.",
