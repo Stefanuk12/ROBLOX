@@ -416,26 +416,41 @@ UserInputService.InputBegan:Connect(function(Key, GPE)
     end;
 end);
 
+-- // Admin checking
+function isAdmin()
+    local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
+    local isPermKohls = false;
+    local isPermPersons = false;
+    local isNormalAdmin = false;
+
+    if (MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 66254)) then 
+        isPermKohls = true; 
+    end;
+
+    if (MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748)) then 
+        isPermPersons = true; 
+    end;
+
+    for i = 1, #Pads do
+        local v = Pads[i];
+
+        if (v.Name == LocalPlayer.Name .. "'s admin") then 
+            isNormalAdmin = true; 
+        end;
+    end;
+
+    return (isNormalAdmin or isPermKohls or isPermPersons), isNormalAdmin, isPermKohls, isPermPersons;
+end;
+
 -- // Failsafing commadns
 function FailSafeCommand(Page, CommandName, ...)
     local Module = tostring(Page)
     local ComamndInfoTableModule = CommandInfo[Module];
     local ComamndInfoTable = ComamndInfoTableModule[CommandName];
     local SelectionArgs = {...};
+    local AdminGeneral, _ , _, _ = isAdmin();
 
-    -- // Admin checking
-    function isAdmin(Player)
-        local targetPlayer = Players:GetUserIdFromNameAsync(Player);
-        if (MarketplaceService:UserOwnsGamePassAsync(targetPlayer, 66254)) then return true; end;
-        local Pads = GameFolder["Admin"]["Pads"]:GetChildren();
-        for i = 1, #Pads do
-            local v = Pads[i];
-            if (v.Name == Player .. "'s admin") then return true; end;
-        end;
-        return false;
-    end;
-
-    if (ComamndInfoTable["Admin"] and not isAdmin(LocalPlayer.Name)) then
+    if (ComamndInfoTable["Admin"] and not AdminGeneral) then
         Material.Banner({
             Text = "You don't have admin, this command requries admin."
         });
@@ -619,69 +634,72 @@ coroutine.wrap(function()
         end);
     end;         
 end)();
-local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
-    Enabled = Settings["AdminPermanantAdmin"],
-    Callback = function(Value)
-        if (not fireclickdetector) then
-            Material.Banner({
-				Text = "Your exploit does not support Permanant Admin."
-			});
-            return;
+
+coroutine.wrap(function()
+    local PermanantAdmin = SetupTextMenu(Admin, "Permanant Admin", {
+        Enabled = Settings["AdminPermanantAdmin"],
+        Callback = function(Value)
+            if (not fireclickdetector) then
+                Material.Banner({
+                    Text = "Your exploit does not support Permanant Admin."
+                });
+                return;
+            end;
+            Settings["AdminPermanantAdmin"] = Value;
+
+            if (Value) then
+                if (not RegenPad) then
+                    Material.Banner({
+                        Text = "Please find the regen pad for Permanant Admin to work."
+                    });
+                    warn("Please find the regen pad for Permanant Admin to work.");
+                    repeat wait() until SelectedPad ~= nil;
+                    Material.Banner({
+                        Text = "Found the regen pad."
+                    });
+                    warn("Found the regen pad.");
+                end;
+
+                if (not SelectedPad) then
+                    Material.Banner({
+                        Text = "Waiting to get a pad..."
+                    });
+                    warn("Waiting to get a pad...");
+                    repeat wait() until SelectedPad ~= nil;
+                    Material.Banner({
+                        Text = "Got a pad."
+                    });
+                    warn("Got a pad.");
+                end;
+
+                if (SelectedPad.Name ~= LocalPlayer.Name .."'s admin") then
+                    fireclickdetector(RegenPad.ClickDetector, 0);
+
+                    -- // Constantly tp the Pad to you until you have admin
+                    repeat wait()
+                        SelectedPad.Head.Size = Vector3.new(1, 1, 1);
+                        SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
+                        SelectedPad.Head.CanCollide = false;
+                        SelectedPad.Head.Transparency = 1;
+                    until SelectedPad.Name == LocalPlayer.Name .."'s admin";
+
+                    -- // Reset the Pad's Size and CFrame
+                    SelectedPad.Head.Size = PadSize;
+                    SelectedPad.Head.CFrame = PadCFrame;
+                    SelectedPad.Head.CanCollide = true;
+                    SelectedPad.Head.Transparency = 0;
+                end;
+            else
+                if (SelectedPad) then
+                    SelectedPad.Head.Size = PadSize;
+                    SelectedPad.Head.CFrame = PadCFrame;
+                    SelectedPad.Head.CanCollide = true;
+                    SelectedPad.Head.Transparency = 0;
+                end;
+            end;
         end;
-        Settings["AdminPermanantAdmin"] = Value;
-
-        if (Value) then
-            if (not RegenPad) then
-                Material.Banner({
-                    Text = "Please find the regen pad for Permanant Admin to work."
-                });
-                warn("Please find the regen pad for Permanant Admin to work.");
-                repeat wait() until SelectedPad ~= nil;
-                Material.Banner({
-                    Text = "Found the regen pad."
-                });
-                warn("Found the regen pad.");
-            end;
-
-            if (not SelectedPad) then
-                Material.Banner({
-                    Text = "Waiting to get a pad..."
-                });
-                warn("Waiting to get a pad...");
-                repeat wait() until SelectedPad ~= nil;
-                Material.Banner({
-                    Text = "Got a pad."
-                });
-                warn("Got a pad.");
-            end;
-
-            if (SelectedPad.Name ~= LocalPlayer.Name .."'s admin") then
-                fireclickdetector(RegenPad.ClickDetector, 0);
-
-                -- // Constantly tp the Pad to you until you have admin
-                repeat wait()
-                    SelectedPad.Head.Size = Vector3.new(1, 1, 1);
-                    SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
-                    SelectedPad.Head.CanCollide = false;
-                    SelectedPad.Head.Transparency = 1;
-                until SelectedPad.Name == LocalPlayer.Name .."'s admin";
-
-                -- // Reset the Pad's Size and CFrame
-                SelectedPad.Head.Size = PadSize;
-                SelectedPad.Head.CFrame = PadCFrame;
-                SelectedPad.Head.CanCollide = true;
-                SelectedPad.Head.Transparency = 0;
-            end;
-        else
-            if (SelectedPad) then
-                SelectedPad.Head.Size = PadSize;
-                SelectedPad.Head.CFrame = PadCFrame;
-                SelectedPad.Head.CanCollide = true;
-                SelectedPad.Head.Transparency = 0;
-            end;
-        end;
-    end;
-});
+    });
+end)();
 
 -- // Blacklist
 local BlacklistSelectGearId = SetupTextMenu(Blacklist, "Select Gear ID", {
