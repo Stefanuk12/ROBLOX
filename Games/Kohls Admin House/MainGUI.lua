@@ -463,7 +463,7 @@ UserInputService.InputBegan:Connect(function(Key, GPE)
         local Remote = LocalPlayer.Character:WaitForChild("SeaThemedCrossbow"):WaitForChild("Remote");
         Remote:FireServer("LeftDown", Mouse.Hit.Position);
 
-        wait(2.5);
+        wait(1);
         Players:Chat(":removetools me");
     end;
 end);
