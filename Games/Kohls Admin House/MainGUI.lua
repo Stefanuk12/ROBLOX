@@ -339,7 +339,7 @@ function GetUnblacklistedPlayers()
         local v = AllPlayers[i];
         if (v) then
             local WL = IsWhitelisted(v.UserId)[3];
-            if (WL == "Not defined") then
+            if (WL ~= "Not defined") then
                 table.remove(AllPlayers, i);
             end;
         end;
