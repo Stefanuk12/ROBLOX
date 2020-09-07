@@ -129,7 +129,7 @@ function PlayerChatConfig(msg, v)
     local PlrTable = GetPlayerTable(v.UserId);
     local BLPhrases = PlrTable.BlacklistedPhrases;
     local WLCheck = IsWhitelisted(v.UserId);
-    local NotWhitelisted = (WLCheck[3] == "Not defined");
+    local Whitelisted = (WLCheck[3] ~= "Not defined");
 
     -- // Checking if the player has said any Blacklisted Phrases
     for i = 1, #BLPhrases do
@@ -153,7 +153,7 @@ function PlayerChatConfig(msg, v)
         end;
     end;
 
-    if (NotWhitelisted) then
+    if (not Whitelisted) then
         -- // /c system Alert
         if (Settings["ServerCSystemAlert"] and msg == "/c system") then
             Players:Chat(":h Imagine using /c system to hide your commands, ahem: " .. v.Name);
