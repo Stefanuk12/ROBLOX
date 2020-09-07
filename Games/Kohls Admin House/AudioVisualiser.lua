@@ -18,7 +18,7 @@ if not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then 
 if setsimulationradius then
     local Value = 9e9;
     game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-        setsimulationradius(Value);
+        setsimulationradius(Value, Value);
     end)
 else
     warn("You do not have setsimulationradius!")
