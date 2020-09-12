@@ -144,8 +144,11 @@ return function(Arguments)
     function KohlsAPI.SaveSettings()
         -- // Handling
         if (not writefile) then
-            error("Cannot save settings, you do not have writefile.");
-            return false;
+            local ErrorReason = "Cannot save settings, you do not have writefile.";
+            if (KohlsAPI.Errors) then
+                error(ErrorReason);
+            end;
+            return false, ErrorReason;
         end;
     
         -- // Script
@@ -419,12 +422,18 @@ return function(Arguments)
     function KohlsAPI.Admin.RegenerateAdmin()
         -- // Failsafing
         if (not fireclickdetector) then
-            error("fireclickdetector is required for Regen Admin");
-            return false;
+            local ErrorReason = "fireclickdetector is required for Regen Admin";
+            if (KohlsAPI.Errors) then
+                error(ErrorReason);
+            end;
+            return false, ErrorReason;
         end;
         if (not GameFolder["Admin"]:FindFirstChild(Regen)) then
-            error("Unable to find the Regen Pad!");
-            return false;
+            local ErrorReason = "Unable to find the Regen Pad!";
+            if (KohlsAPI.Errors) then
+                error(ErrorReason);
+            end;
+            return false, ErrorReason;
         end;
     
         -- // Regen the admin
