@@ -290,7 +290,7 @@ function KohlsAPI.PlayerManager.GetPlayers(Sort)
 
         for i = 1, #AllPlayers do
             local v = AllPlayers[i];
-            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted();
+            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
 
             if (not GeneralWhitelisted) then
                 PlayerTable[#PlayerTable + 1] = v;
@@ -304,7 +304,7 @@ function KohlsAPI.PlayerManager.GetPlayers(Sort)
 
         for i = 1, #AllPlayers do
             local v = AllPlayers[i];
-            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted();
+            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
 
             if (GeneralWhitelisted) then
                 PlayerTable[#PlayerTable + 1] = v;
@@ -318,7 +318,7 @@ function KohlsAPI.PlayerManager.GetPlayers(Sort)
 
         for i = 1, #AllPlayers do
             local v = AllPlayers[i];
-            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted();
+            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
 
             if (Whitelisted) then
                 PlayerTable[#PlayerTable + 1] = v;
@@ -332,7 +332,7 @@ function KohlsAPI.PlayerManager.GetPlayers(Sort)
 
         for i = 1, #AllPlayers do
             local v = AllPlayers[i];
-            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted();
+            local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
 
             if (isProtectedWhitelisted) then
                 PlayerTable[#PlayerTable + 1] = v;
@@ -345,10 +345,12 @@ end;
 
 -- // Player Manager: Check if there any protected whitelist players in the game (internal)
 function AreTherePWLInTheServer()
-    local ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted")
+    local ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted");
+    local IsOnlyLocalPlayer = false;
+    
     for i = 1, #ProtectedUsers do
         local v = ProtectedUsers[i];
-        if (v and v ~= tostring(LocalPlayer.UserId)) then
+        if (v.UserId ~= LocalPlayer.UserId) then
             return true;
         end;
     end;
@@ -983,6 +985,7 @@ end);
 
 -- // Server: Move Baseplate
 function KohlsAPI.Server.MoveBaseplate()
+    -- // Handling
     if (AreTherePWLInTheServer()) then
         local ErrorReason = "There are protected whitelisted people in the server.";
         if (KohlsAPI.Errors) then
@@ -990,7 +993,8 @@ function KohlsAPI.Server.MoveBaseplate()
         end;
         return false, ErrorReason;
     end;
-    
+
+    -- // Vars
     local Spawn = GameFolder["Workspace"].Spawn3;
     local Baseplate = GameFolder["Workspace"].Baseplate;
     local AntiPunish = false;
@@ -1000,6 +1004,16 @@ function KohlsAPI.Server.MoveBaseplate()
     X, Y, Z = testPosition.X, Y + 3, testPosition.Z;
     local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
 
+    -- // So you don't float in water
+    local CharacterDescendants = LocalPlayer.Character:GetDescendants();
+    for i = 1, #CharacterDescendants do
+        local v = CharacterDescendants[i];
+        if (v:IsA("BasePart")) then
+            v.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5);
+        end;
+    end;
+
+    -- // Script
     LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newCFrame;
     wait(1.5);
     Players:Chat(":stun me");
