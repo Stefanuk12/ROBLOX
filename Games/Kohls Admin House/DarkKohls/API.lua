@@ -78,11 +78,11 @@ return function(Arguments)
     end;
     
     if (writefile and readfile and isfile) then -- // Load Settings
-        if (not isfile(KohlsAPI.ScriptName .. ".json")) then
-            writefile(KohlsAPI.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
+        if (not isfile(KohlsAPI.Configurable.ScriptName .. ".json")) then
+            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
         end;
     
-        local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.ScriptName .. ".json"));
+        local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
     
         -- // Allow new settings to be added
         for i,v in pairs(KohlsAPI.Configurable) do
@@ -152,7 +152,7 @@ return function(Arguments)
         local Save = KohlsAPI.Configurable;
     
         -- // Export
-        writefile(KohlsAPI.ScriptName .. ".json", HttpService:JSONEncode(Save));
+        writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(Save));
         return true;
     end;
     
