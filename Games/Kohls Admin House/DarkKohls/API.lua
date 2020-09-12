@@ -31,22 +31,26 @@ return function(Arguments)
             Players = {};
         },
         Spammer = Arguments["Spammer"] or {},
-        Errors = Arguments["Errors"] or true,
-        ScriptName = Arguments["ScriptName"] or "KohlsAPI",
-        Settings = {
-            {Name = "AdminPermanantAdmin", Value = false},
-            {Name = "ProtectionsAntiBlind", Value = false},
-            {Name = "ProtectionsAntiJail", Value = false},
-            {Name = "ProtectionsAntiKill", Value = false},
-            {Name = "ProtectionsAntiPunish", Value = false},
-            {Name = "SoundAbuseEarRape", Value = false},
-            {Name = "ServerEpilepsy", Value = false},
-            {Name = "ServerRespawnExplode", Value = false},
-            {Name = "ServerPartSpam", Value = false},
-            {Name = "ServerCSystemAlert", Value = false},
-            {Name = "ServerClickSpawnWater", Value = false},
-            {Name = "BlacklistAlertUse", Value = false},
-        },
+        Configurable = {
+            Errors = Arguments["Errors"] or true,
+            ScriptName = Arguments["ScriptName"] or "KohlsAPI",
+            CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
+            BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
+            Settings = {
+                {Name = "AdminPermanantAdmin", Value = false},
+                {Name = "ProtectionsAntiBlind", Value = false},
+                {Name = "ProtectionsAntiJail", Value = false},
+                {Name = "ProtectionsAntiKill", Value = false},
+                {Name = "ProtectionsAntiPunish", Value = false},
+                {Name = "SoundAbuseEarRape", Value = false},
+                {Name = "ServerEpilepsy", Value = false},
+                {Name = "ServerRespawnExplode", Value = false},
+                {Name = "ServerPartSpam", Value = false},
+                {Name = "ServerCSystemAlert", Value = false},
+                {Name = "ServerClickSpawnWater", Value = false},
+                {Name = "BlacklistAlertUse", Value = false},
+            },
+        }
     };
     KohlsAPI.Admin = {};
     KohlsAPI.Blacklist = {};
@@ -73,26 +77,20 @@ return function(Arguments)
         KohlsAPI = nil;
     end;
     
-    -- // Settings
-    KohlsAPI.Customise = { -- // Base
-        CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
-        BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME"
-    };
-    
     if (writefile and readfile and isfile) then -- // Load Settings
         if (not isfile(KohlsAPI.ScriptName .. ".json")) then
             writefile(KohlsAPI.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
         end;
     
-        local CustomiseHolder = HttpService:JSONDecode(readfile(KohlsAPI.ScriptName .. ".json"));
+        local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.ScriptName .. ".json"));
     
         -- // Allow new settings to be added
-        for i,v in pairs(KohlsAPI.Customise) do
-            if (not CustomiseHolder[i]) then
-                CustomiseHolder[i] = v;
+        for i,v in pairs(KohlsAPI.Configurable) do
+            if (not Configuration[i]) then
+                Configuration[i] = v;
             end;
         end;
-    
+
         -- // Check if a setting exists (internal function)
         local function DoesSettingExist(SettingName, SettingTable)
             for i = 1, #SettingTable do
@@ -105,16 +103,16 @@ return function(Arguments)
             return false;
         end;
     
-        -- // Add new settings to the CustomiseHolder
-        for i = 1, #KohlsAPI.Settings do
-            local v = KohlsAPI.Settings[i];
-            if (not DoesSettingExist(v.Name, KohlsAPI.Settings)) then
-                KohlsAPI.Settings[#KohlsAPI.Settings + 1] = v;
+        -- // Add new settings to the Configuration
+        for i = 1, #KohlsAPI.Configurable.Settings do
+            local v = KohlsAPI.Configurable.Settings[i];
+            if (not DoesSettingExist(v.Name, Configuration)) then
+                Configuration[#Configuration + 1] = v;
             end;
         end;
     
         -- // End
-        KohlsAPI.Customise = CustomiseHolder;
+        KohlsAPI.Configurable = Configuration;
     end;
     
     -- // Settings: Get/Set Setting
@@ -129,8 +127,8 @@ return function(Arguments)
         end;
     
         -- // Script
-        for i = 1, #KohlsAPI.Settings do
-            local v = KohlsAPI.Settings[i];
+        for i = 1, #KohlsAPI.Configurable.Settings do
+            local v = KohlsAPI.Configurable.Settings[i];
             if (v.Name == Name) then
                 if (Value ~= nil) then
                     v.Value = Value;
@@ -151,7 +149,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        local Save = KohlsAPI.Customise;
+        local Save = KohlsAPI.Configurable;
     
         -- // Export
         writefile(KohlsAPI.ScriptName .. ".json", HttpService:JSONEncode(Save));
