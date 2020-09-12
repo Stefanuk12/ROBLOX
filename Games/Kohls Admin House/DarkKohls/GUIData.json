@@ -19,7 +19,7 @@
             "Persons299": false,
             "Description": "Simulating the effects of Perm, as soon as the admin pads are regened, you are automatically given admin back.",
             "Name": "Permanant Admin",
-            "Type": "Button"
+            "Type": "Toggle"
         }
     }
 }

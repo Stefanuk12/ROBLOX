@@ -20,7 +20,7 @@ local Players = game:GetService("Players");
 local HttpService = game:GetService("HttpService");
 
 -- // Vars
-local KohlsAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
     Errors = false,
     ScriptName = "DarkKohls"
 });
@@ -28,7 +28,7 @@ local KohlsAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com
 -- // GUI
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local Material = MaterialUI.Load(DarkKohls.MaterialLuaConfig);
-local GUIConfig = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.lua"));
+local GUIConfig = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
 local Inputs = {
 
 };
@@ -41,7 +41,7 @@ local function SetupTextMenu(Page, CommandName, Options)
     local Config = {
         Text = CommandConfig["Name"],
         Menu = {
-            Infomation = function()
+            Infomation = function(self)
                 local Description = CommandConfig["Description"];
                 if (CommandConfig["Admin"] or CommandConfig["Persons299"]) then
                     Description = Description .. (CommandConfig["Persons299"] and " Person's 299 Admin is required" or " Admin is required.")
@@ -98,7 +98,7 @@ local RegenerateAdmin = SetupTextMenu(Admin, "RegenerateAdmin", {
             Material.Banner({
                 Text = "Successfully regenerated the admin pads."
             });
-        end;;
+        end;
     end;
 });
 
