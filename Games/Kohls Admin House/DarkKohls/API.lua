@@ -7,9 +7,10 @@
         - Permanant Admin glitches out sometime sidk
 ]]
 
-return function(Arguments)
+function a(Arguments)
     -- // Initialise
     local InitialisedTime = tick();
+    Arguments = Arguments or {};
 
     -- // Services
     local Players = game:GetService("Players");
@@ -105,10 +106,10 @@ return function(Arguments)
         end;
     
         -- // Add new settings to the CustomiseHolder
-        for i = 1, #KohlsAPI.Customise do
-            local v = KohlsAPI.Customise[i];
-            if (not DoesSettingExist(v.Name, CustomiseHolder.Settings)) then
-                CustomiseHolder.Settings[#CustomiseHolder.Settings + 1] = v;
+        for i = 1, #KohlsAPI.Settings do
+            local v = KohlsAPI.Settings[i];
+            if (not DoesSettingExist(v.Name, KohlsAPI.Settings)) then
+                KohlsAPI.Settings[#KohlsAPI.Settings + 1] = v;
             end;
         end;
     
@@ -438,19 +439,21 @@ return function(Arguments)
     -- // Admin: Get Admin
     function KohlsAPI.Admin.GetAdmin(SpecifyPad)
         -- // Handling
-        if (SpecifyPad ~= nil and typeof(SpecifyPad) ~= 'Instance') then
-            local ErrorReason = "Argument #1 expected Instance got " .. typeof(SpecifyPad);
-            if (KohlsAPI.Errors) then
-                error(ErrorReason);
+        if (SpecifyPad ~= nil) then
+            if (typeof(SpecifyPad) ~= 'Instance') then
+                local ErrorReason = "Argument #1 expected Instance got " .. typeof(SpecifyPad);
+                if (KohlsAPI.Errors) then
+                    error(ErrorReason);
+                end;
+                return false, ErrorReason;
             end;
-            return false, ErrorReason;
-        end;
-        if (SpecifyPad.Parent ~= GameFolder["Admin"]["Pads"]) then
-            local ErrorReason = "Argument #1 is not a member of the Admin Pads";
-            if (KohlsAPI.Errors) then
-                error(ErrorReason);
+            if (SpecifyPad.Parent ~= GameFolder["Admin"]["Pads"]) then
+                local ErrorReason = "Argument #1 is not a member of the Admin Pads";
+                if (KohlsAPI.Errors) then
+                    error(ErrorReason);
+                end;
+                return false, ErrorReason;
             end;
-            return false, ErrorReason;
         end;
         if (not fireclickdetector) then
             local ErrorReason = "fireclickdetector is required for Get Admin";
