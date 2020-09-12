@@ -3,8 +3,22 @@
         "RegenerateAdmin": {
             "Admin": false,
             "Persons299": false,
-            "Description": "",
+            "Description": "Regenerate the admin pads.",
             "Name": "Regenerate Admin",
+            "Type": "Button"
+        },
+        "GetAdmin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Gets you admin.",
+            "Name": "Get Admin",
+            "Type": "Button"
+        },
+        "PermanantAdmin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Simulating the effects of Perm, as soon as the admin pads are regened, you are automatically given admin back.",
+            "Name": "Permanant Admin",
             "Type": "Button"
         }
     }
