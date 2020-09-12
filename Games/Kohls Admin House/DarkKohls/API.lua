@@ -428,7 +428,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-        if (not GameFolder["Admin"]:FindFirstChild(Regen)) then
+        if (not GameFolder["Admin"]:FindFirstChild("Regen")) then
             local ErrorReason = "Unable to find the Regen Pad!";
             if (KohlsAPI.Errors) then
                 error(ErrorReason);
