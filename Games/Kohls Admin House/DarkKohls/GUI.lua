@@ -8,10 +8,7 @@ getgenv().DarkKohls = {
         Style = 3,
         SizeX = 500,
         SizeY = 350,
-        Theme = "Light",
-        ColorOverrides = {
-            MainFrame = Color3.fromRGB(235,235,235)
-        }
+        Theme = "Dark",
     },
 };
 
@@ -123,7 +120,11 @@ local GetAdmin = SetupTextMenu(Admin, "GetAdmin", {
 local PermanantAdmin = SetupTextMenu(Admin, "PermanantAdmin", {
     Enabled = KohlsAPI.SettingGetSet("AdminPermanantAdmin"),
     Callback = function(Value)
-        KohlsAPI.SettingGetSet("AdminPermanantAdmin", Value)
+        KohlsAPI.SettingGetSet("AdminPermanantAdmin", Value);
+
+        if (Value) then
+            KohlsAPI.Admin.GetAdmin(KohlsAPI.SelectedPad);
+        end;
     end;
 });
 
