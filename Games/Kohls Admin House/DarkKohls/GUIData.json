@@ -21,5 +21,21 @@
             "Name": "Permanant Admin",
             "Type": "Toggle"
         }
+    },
+    "Blacklist": {
+        "BlacklistGear": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Blacklists a gear.",
+            "Name": "Blacklist Gear",
+            "Type": "Button"
+        },
+        "UnblacklistGear": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Unblacklists a gear.",
+            "Name": "Unblacklist Gear",
+            "Type": "Button"
+        }
     }
 }

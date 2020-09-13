@@ -75,6 +75,7 @@ return function(Arguments)
         end;
     
         KohlsAPI = nil;
+        return true;
     end;
     
     if (writefile and readfile and isfile) then -- // Load Settings
@@ -134,7 +135,7 @@ return function(Arguments)
                     v.Value = Value;
                     return true;
                 elseif (Value == nil) then
-                    return v.Value;
+                    return true, v.Value;
                 end;
             end;
         end;
@@ -200,7 +201,7 @@ return function(Arguments)
         end;
     
         -- // Return
-        return (Whitelisted or isProtectedWhitelisted), Whitelisted, isProtectedWhitelisted;
+        return true, (Whitelisted or isProtectedWhitelisted), Whitelisted, isProtectedWhitelisted;
     end;
     
     -- // Player Manager: Handler (internal)
@@ -230,7 +231,7 @@ return function(Arguments)
     
         -- // Script
         local PlayerData;
-        local GWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(Player);
+        local Success, GWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(Player);
     
         -- // Get Player Data
         for i = 1, #KohlsAPI.PlayerManager.Players do
@@ -293,62 +294,62 @@ return function(Arguments)
     
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
+                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
     
                 if (not GeneralWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
             
-            return PlayerTable;
+            return true, PlayerTable;
         elseif (Sort == "GeneralWhitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
     
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
+                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
     
                 if (GeneralWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
             
-            return PlayerTable;
+            return true, PlayerTable;
         elseif (Sort == "Whitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
     
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
+                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
     
                 if (Whitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
             
-            return PlayerTable;
+            return true, PlayerTable;
         elseif (Sort == "ProtectedWhitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
     
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
+                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
     
                 if (isProtectedWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
             
-            return PlayerTable;
+            return true, PlayerTable;
         end;
     end;
     
     -- // Player Manager: Check if there any protected whitelist players in the game (internal)
     function AreTherePWLInTheServer()
-        local ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted");
+        local Success, ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted");
         local IsOnlyLocalPlayer = false;
         
         for i = 1, #ProtectedUsers do
@@ -581,6 +582,8 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
+
+        return true;
     end;
     
     -- // Blacklist: Blacklist Phrase
@@ -636,7 +639,7 @@ return function(Arguments)
         local PlayerDataIndex;
         local isPhraseBlacklistedPlayer = false;
         local isPhraseBlacklisedGlobal = false;
-        local GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
+        local Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
     
         -- // Get Player Data
         for i = 1, #KohlsAPI.PlayerManager.Players do
@@ -719,6 +722,8 @@ return function(Arguments)
                 Punishment = Punishment
             };
         end;
+
+        return true;
     end;
     
     -- // Commands: Say Phrase
@@ -730,6 +735,8 @@ return function(Arguments)
     
         local Phrase = table.concat(Stuff, " ");
         Players:Chat(Phrase);
+        
+        return true;
     end;
     
     -- // Commands: Spam Phrase
@@ -792,6 +799,8 @@ return function(Arguments)
         else
             KohlsAPI.Spammer[#KohlsAPI.Spammer + 1] = Phrase;
         end;
+
+        return true;
     end;
     
     -- // Misc: Paint Area
@@ -846,11 +855,14 @@ return function(Arguments)
                 end)();
             end;
         end;
+
+        return true;
     end;
     
     -- // Misc: Rejoin
     function KohlsAPI.Misc.Rejoin()
         game:GetService("TeleportService"):Teleport(game.PlaceId);
+        return true;
     end;
     
     -- // Player: Get Age
@@ -872,7 +884,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        return Player.AccountAge;
+        return true, Player.AccountAge;
     end;
     
     -- // Player: Give Client BTools
@@ -899,6 +911,8 @@ return function(Arguments)
         Players:Chat(":gear " .. Player.Name .. " 16969792");
         Players:Chat(":gear " .. Player.Name .. " 73089190");
         Players:Chat(":gear " .. Player.Name .. " 21001552");
+
+        return true;
     end;
     
     -- // Protections: Anti Blind
@@ -1058,7 +1072,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        return KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10", Stop);
+        return true, KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10", Stop);
     end;
     
     -- // Server: Remove Phantom Baseplates
@@ -1086,7 +1100,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        local TargetPlayers = KohlsAPI.PlayerManager.GetPlayers("Unwhitelisted");
+        local Success, TargetPlayers = KohlsAPI.PlayerManager.GetPlayers("Unwhitelisted");
     
         for i = 1, #TargetPlayers do
             local v = TargetPlayers[i];
@@ -1113,8 +1127,6 @@ return function(Arguments)
     
             wait(1);
             Players:Chat(":removetools me");
-    
-            return true;
         end;
     end)};
     
@@ -1159,6 +1171,8 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
+
+        return true;
     end;
     
     -- // Sound Abuse: Stop All Sounds
@@ -1171,7 +1185,7 @@ return function(Arguments)
             end;
         end;
     
-        return false;
+        return true;
     end;
     
     -- // Sound Abuse: Stop Music
@@ -1187,6 +1201,8 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
+
+        return true;
     end;
     
     -- // Whitelist: Whitelist
@@ -1215,7 +1231,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        local GeneralWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
+        local Success, GeneralWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
     
         if (ProtectedWhitelisted) then
             local ErrorReason = Unwhitelist and "This player is protected." or "This player has already been whitelisted.";
