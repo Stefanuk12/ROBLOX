@@ -23,6 +23,13 @@
         }
     },
     "Blacklist": {
+        "BlacklistSelectGear": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a gear id to blacklist.",
+            "Name": "Select Gear",
+            "Type": "TextField"
+        },
         "BlacklistGear": {
             "Admin": true,
             "Persons299": false,
@@ -35,6 +42,258 @@
             "Persons299": false,
             "Description": "Unblacklists a gear.",
             "Name": "Unblacklist Gear",
+            "Type": "Button"
+        },
+        "BlacklistSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "BlacklistSelectPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a phrase to blacklist.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "BlacklistPhrase": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "When the inputted player says the inputted phrase, the selected blacklist phrase will be said.",
+            "Name": "Blacklist Phrase",
+            "Type": "Button"
+        },
+        "UnblacklistPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Unblacklists the inputted phrase linked to the selected player.",
+            "Name": "Unblacklist Phrase",
+            "Type": "Button"
+        }
+    },
+    "Commands": {
+        "SayPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Says the inputted phrase.",
+            "Name": "Say Phrase",
+            "Type": "Button"
+        },
+        "SpamPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Spams the inputted phrase.",
+            "Name": "Spam Phrase",
+            "Type": "Button"
+        },
+        "StopSpamPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stops spamming the inputted phrase.",
+            "Name": "Stop Spam Phrase",
+            "Type": "Button"
+        }
+    },
+    "Misc": {
+        "MiscSelectColour": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a colour to paint an area of the workspace with.",
+            "Name": "Select Colour",
+            "Type": "ColorPicker"
+        },
+        "BlacklistSelectArea": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Select an area to paint.",
+            "Name": "Select Area",
+            "Type": "Dropdown"
+        },
+        "PaintArea": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Paints an area of the workspace of an inputted colour.",
+            "Name": "Paint Area",
+            "Type": "Button"
+        },
+        "Rejoin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Rejoins the game.",
+            "Name": "Rejoin",
+            "Type": "Button"
+        }
+    },
+    "Player": {
+        "PlayerSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "GetAge": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Gets the account age of the inputted user.",
+            "Name": "Get Age",
+            "Type": "Button"
+        },
+        "GiveClientBtools": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Give the inputted player client btools.",
+            "Name": "Give Client Btools",
+            "Type": "Button"
+        }
+    },
+    "Protections": {
+        "AntiBlind": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Instantly unblind when you are blinded.",
+            "Name": "Anti Blind",
+            "Type": "Toggle"
+        },
+        "AntiJail": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly unjail when you are jailed.",
+            "Name": "Anti Jail",
+            "Type": "Toggle"
+        },
+        "AntiKill": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get reset when you are killed.",
+            "Name": "Anti Kill",
+            "Type": "Toggle"
+        },
+        "AntiPunish": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get reset when you are punished.",
+            "Name": "Anti Punish",
+            "Type": "Toggle"
+        }
+    },
+    "Server": {
+        "CrashServer": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Crashes the server.",
+            "Name": "Crash Server",
+            "Type": "Button"
+        },
+        "CreatePhantomBaseplate": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Creates a phantom baseplate.",
+            "Name": "Create Phantom Baseplate",
+            "Type": "Button"
+        },
+        "RemovePhantomBaseplates": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Removes all phantom baseplate.",
+            "Name": "Remove Phantom Baseplates",
+            "Type": "Button"
+        },
+        "Epilepsy": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Creates a epilepsy-like effect.",
+            "Name": "Epilepsy",
+            "Type": "Toggle"
+        },
+        "MoveBaseplate": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Gets you in the position to move the baseplate.",
+            "Name": "MoveBaseplate",
+            "Type": "Button"
+        },
+        "PartSpam": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Spams 10 by 10 by 10 parts.",
+            "Name": "PartSpam",
+            "Type": "Toggle"
+        },
+        "RespawnExplode": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Constantly respawns and explodes unwhitelisted users.",
+            "Name": "Respawn Explode",
+            "Type": "Toggle"
+        },
+        "ClickSpawnWater": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Spawns water that cannot be removed. Hold down left button then press left control.",
+            "Name": "Click Spawn Water",
+            "Type": "Toggle"
+        }
+    },
+    "SoundAbuse": {
+        "EarRape": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Constantly plays all of the sounds in the game every second.",
+            "Name": "Ear Rape",
+            "Type": "Toggle"
+        },
+        "PlayAllSounds": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Play all sounds.",
+            "Name": "Play All Sounds",
+            "Type": "Button"
+        },
+        "PlayMusic":{
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Play the music sound.",
+            "Name": "Play Music",
+            "Type": "Button"
+        },
+        "StopAllSounds": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stop all sounds.",
+            "Name": "Stop All Sounds",
+            "Type": "Button"
+        },
+        "StopMusic":{
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stops the music sound.",
+            "Name": "Stop Music",
+            "Type": "Button"
+        }
+    },
+    "Whitelist": {
+        "WhitelistSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "Whitelist": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Whitelists the inputted user, they are exempt from abusive commands.",
+            "Name": "Whitelist",
+            "Type": "Button"
+        },
+        "Unwhitelist": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Unwhitelists the inputted user.",
+            "Name": "Unwhitelist",
             "Type": "Button"
         }
     }
