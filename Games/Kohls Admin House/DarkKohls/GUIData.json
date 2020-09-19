@@ -44,6 +44,13 @@
             "Name": "Unblacklist Gear",
             "Type": "Button"
         },
+        "AlertBlacklistGearUse": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Alert everyone when a player attempts to give others or themself a blacklisted gear.",
+            "Name": "Alert Blacklist Gear Use",
+            "Type": "Toggle"
+        },
         "BlacklistSelectPlayer": {
             "Admin": false,
             "Persons299": false,
@@ -74,6 +81,13 @@
         }
     },
     "Commands": {
+        "CommandsSelectPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
         "SayPhrase": {
             "Admin": false,
             "Persons299": false,
@@ -104,7 +118,7 @@
             "Name": "Select Colour",
             "Type": "ColorPicker"
         },
-        "BlacklistSelectArea": {
+        "SelectArea": {
             "Admin": false,
             "Persons299": false,
             "Description": "Select an area to paint.",
@@ -123,6 +137,13 @@
             "Persons299": false,
             "Description": "Rejoins the game.",
             "Name": "Rejoin",
+            "Type": "Button"
+        },
+        "ShutdownGUI": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Shutdown the GUI.",
+            "Name": "Shutdown GUI",
             "Type": "Button"
         }
     },
@@ -180,6 +201,13 @@
         }
     },
     "Server": {
+        "AlertCSystemUse": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Alert the server when someone uses /c system.",
+            "Name": "Alert C System Use",
+            "Type": "Toggle"
+        },
         "CrashServer": {
             "Admin": true,
             "Persons299": false,

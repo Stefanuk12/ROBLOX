@@ -38,6 +38,7 @@ return function(Arguments)
             BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
             Settings = {
                 {Name = "AdminPermanantAdmin", Value = false},
+                {Name = "BlacklistAlertBlacklistGearUse", Value = false},
                 {Name = "ProtectionsAntiBlind", Value = false},
                 {Name = "ProtectionsAntiJail", Value = false},
                 {Name = "ProtectionsAntiKill", Value = false},
