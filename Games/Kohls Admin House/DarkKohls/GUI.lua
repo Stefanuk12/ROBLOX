@@ -89,7 +89,7 @@ local function SetupTextMenu(Page, CommandName, Options)
         }
     };
 
-    if (CommandConfig["Name"]:find("SelectPlayer")) then
+    if (CommandName:find("SelectPlayer")) then
         Config.Options = GetAllPlayerNames();
     end;
 
@@ -100,7 +100,7 @@ local function SetupTextMenu(Page, CommandName, Options)
     end;
 
     local Object = Page[CommandConfig["Type"]](Config);
-    if (CommandConfig["Name"]:find("SelectPlayer")) then
+    if (CommandName:find("SelectPlayer")) then
         DropdownPlayers[#DropdownPlayers + 1] = Object;
     end;
 
@@ -339,6 +339,10 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "BlacklistPhrase", {
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
                 Name = "BlacklistSelectPhrase",
+                ErrorReason = "Please specify a phrase."
+            },
+            {
+                Name = "BlacklistSelectPunishmentPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -717,6 +721,7 @@ local MoveBaseplate = SetupTextMenu(Server, "MoveBaseplate", {
 local PartSpam = SetupTextMenu(Server, "PartSpam", {
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerPartSpam", Value);
+        KohlsAPI.Server.PartSpam(Value);
     end;
 });
 
@@ -735,6 +740,7 @@ local RemovePhantomBaseplates = SetupTextMenu(Server, "RemovePhantomBaseplates",
 local RespawnExplode = SetupTextMenu(Server, "RespawnExplode", {
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerRespawnExplode", Value);
+        KohlsAPI.Server.RespawnExplode(Value);
     end;
 });
 

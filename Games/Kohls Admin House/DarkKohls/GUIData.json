@@ -254,7 +254,7 @@
             "Admin": false,
             "Persons299": true,
             "Description": "Spams 10 by 10 by 10 parts.",
-            "Name": "PartSpam",
+            "Name": "Part Spam",
             "Type": "Toggle"
         },
         "RespawnExplode": {
