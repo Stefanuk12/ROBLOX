@@ -19,7 +19,7 @@ local HttpService = game:GetService("HttpService");
 -- // Vars
 local DropdownPlayers = {};
 local PlayerConnections = {};
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))({
     Errors = false,
     ScriptName = "DarkKohls"
 });
