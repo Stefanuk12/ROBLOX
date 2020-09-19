@@ -7,7 +7,7 @@
         - Permanant Admin glitches out sometime sidk
 ]]
 
-return function(Arguments)
+function a(Arguments)
     -- // Initialise
     local InitialisedTime = tick();
     Arguments = Arguments or {};
@@ -81,7 +81,7 @@ return function(Arguments)
     
     if (writefile and readfile and isfile) then -- // Load Settings
         if (not isfile(KohlsAPI.Configurable.ScriptName .. ".json")) then
-            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
+            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Configurable));
         end;
     
         local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
@@ -136,7 +136,7 @@ return function(Arguments)
                     v.Value = Value;
                     return true;
                 elseif (Value == nil) then
-                    return true, v.Value;
+                    return v.Value;
                 end;
             end;
         end;
@@ -1287,3 +1287,5 @@ return function(Arguments)
     print("Loaded in " .. tick() - InitialisedTime .. " seconds");
     return KohlsAPI;
 end;
+
+a();
