@@ -20,7 +20,7 @@ local TeleportService = game:GetService("TeleportService");
 -- // Vars
 local DropdownPlayers = {};
 local PlayerConnections = {};
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))({
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
     Errors = false,
     ScriptName = "DarkKohls"
 });
@@ -46,7 +46,7 @@ local function GetAllPlayerNames()
     local AllPlayers = {};
 
     for i = 1, #PlayerTable do
-        local v = AllPlayers[i];
+        local v = PlayerTable[i];
         AllPlayers[#AllPlayers + 1] = v.Name;
     end;
 
@@ -55,13 +55,7 @@ end;
 
 -- // Update Player Dropdowns
 local function UpdatePlayerDropdowns()
-    for i = 1, #DropdownPlayers do
-        local v = DropdownPlayers[i];
-        if (v and v.SetOptions) then
-            v:SetOptions(GetAllPlayerNamesAsTable());
-        end;
-    end;
-    
+    v:SetOptions(GetAllPlayerNamesAsTable());
     return true;
 end;
 

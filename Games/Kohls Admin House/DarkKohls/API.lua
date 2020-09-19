@@ -7,7 +7,7 @@
         - Permanant Admin glitches out sometime sidk
 ]]
 
-function a(Arguments)
+return function(Arguments)
     -- // Initialise
     local InitialisedTime = tick();
     Arguments = Arguments or {};
@@ -1287,5 +1287,3 @@ function a(Arguments)
     print("Loaded in " .. tick() - InitialisedTime .. " seconds");
     return KohlsAPI;
 end;
-
-a();
