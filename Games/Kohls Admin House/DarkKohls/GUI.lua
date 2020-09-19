@@ -329,7 +329,7 @@ local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "BlacklistSelectPhrase", 
 
 -- // Blacklist: Blacklist Phrase
 local BlacklistPhrase = SetupTextMenu(Blacklist, "BlacklistPhrase", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -352,7 +352,7 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "BlacklistPhrase", {
 
 -- // Blacklist: Unblacklist Phrase
 local UnblacklistPhrase = SetupTextMenu(Blacklist, "UnblacklistPhrase", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -375,14 +375,14 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "UnblacklistPhrase", {
 
 -- // Commands: Select Phrase
 local CommandsSelectPhrase = SetupTextMenu(Commands, "CommandsSelectPhrase", {
-    Callback = function(Value);
+    Callback = function(Value)
         getSetInput("CommandsSelectPhrase", Value);
     end;
 });
 
 -- // Commands: Say Phrase
 local SayPhrase = SetupTextMenu(Commands, "SayPhrase", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -404,7 +404,7 @@ local SayPhrase = SetupTextMenu(Commands, "SayPhrase", {
 
 -- // Commands: Spam Phrase
 local SpamPhrase = SetupTextMenu(Commands, "SpamPhrase", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -437,7 +437,7 @@ local SpamPhrase = SetupTextMenu(Commands, "SpamPhrase", {
 
 -- // Commands: Stop Spam Phrase
 local StopSpamPhrase = SetupTextMenu(Commands, "StopSpamPhrase", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -486,7 +486,7 @@ local SelectArea = SetupTextMenu(Misc, "SelectArea", {
 
 -- // Misc: Paint Area
 local PaintArea = SetupTextMenu(Misc, "PaintArea", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -509,14 +509,14 @@ local PaintArea = SetupTextMenu(Misc, "PaintArea", {
 
 -- // Misc: Rejoin
 local Rejoin = SetupTextMenu(Misc, "Rejoin", {
-    Callback = function();
+    Callback = function()
         TeleportService:Teleport(game.PlaceId);
     end;
 });
 
 -- // Misc: Shutdown GUI
 local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.Shutdown();
         for i = 1, #PlayerConnections do
             local v = PlayerConnections[i];
@@ -530,14 +530,14 @@ local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
 
 -- // Player: Select Player
 local PlayerSelectPlayer = SetupTextMenu(Player, "PlayerSelectPlayer", {
-    Callback = function(Value);
+    Callback = function(Value)
         getSetInput("PlayerSelectPlayer", Players[Value]);
     end;
 });
 
 -- // Player: Get Age
 local GetAge = SetupTextMenu(Player, "GetAge", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -562,7 +562,7 @@ local GetAge = SetupTextMenu(Player, "GetAge", {
 
 -- // Player: Give Client BTools
 local GiveClientBtools = SetupTextMenu(Player, "GiveClientBtools", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -589,42 +589,42 @@ local GiveClientBtools = SetupTextMenu(Player, "GiveClientBtools", {
 
 -- // Protections: Anti Blind
 local AntiBlind = SetupTextMenu(Protections, "AntiBlind", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiBlind", Value);
     end;
 });
 
 -- // Protections: Anti Jail
 local AntiJail = SetupTextMenu(Protections, "AntiJail", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiJail", Value);
     end;
 });
 
 -- // Protections: Anti Kill
 local AntiKill = SetupTextMenu(Protections, "AntiKill", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiKill", Value);
     end;
 });
 
 -- // Protections: Anti Punish
 local AntiPunish = SetupTextMenu(Protections, "AntiPunish", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiPunish", Value);
     end;
 });
 
 -- // Server: Alert C System Use
 local AlertCSystemUse = SetupTextMenu(Server, "AlertCSystemUse", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerCSystemAlert", Value);
     end;
 });
 
 -- // Server: Crash Server
 local CrashServer = SetupTextMenu(Server, "CrashServer", {
-    Callback = function();
+    Callback = function()
         local CommandSuccess, ErrorReason = KohlsAPI.Server.CrashServer();
 
         if (not CommandSuccess) then
@@ -642,7 +642,7 @@ local CrashServer = SetupTextMenu(Server, "CrashServer", {
 
 -- // Server: Create Phantom Baseplate
 local CreatePhantomBaseplate = SetupTextMenu(Server, "CreatePhantomBaseplate", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.Server.CreatePhantomBaseplate();
 
         Material.Banner({
@@ -653,14 +653,14 @@ local CreatePhantomBaseplate = SetupTextMenu(Server, "CreatePhantomBaseplate", {
 
 -- // Server: Epilepsy
 local Epilepsy = SetupTextMenu(Server, "Epilepsy", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerEpilepsy", Value);
     end;
 });
 
 -- // Server: Move Baseplate
 local MoveBaseplate = SetupTextMenu(Server, "MoveBaseplate", {
-    Callback = function();
+    Callback = function()
         local CommandSuccess, ErrorReason = KohlsAPI.Server.MoveBaseplate();
 
         if (not CommandSuccess) then
@@ -678,14 +678,14 @@ local MoveBaseplate = SetupTextMenu(Server, "MoveBaseplate", {
 
 -- // Server: Part Spam
 local PartSpam = SetupTextMenu(Server, "PartSpam", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerPartSpam", Value);
     end;
 });
 
 -- // Server: Remove Phantom Baseplates
 local RemovePhantomBaseplates = SetupTextMenu(Server, "RemovePhantomBaseplates", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.Server.RemovePhantomBaseplates();
 
         Material.Banner({
@@ -696,63 +696,63 @@ local RemovePhantomBaseplates = SetupTextMenu(Server, "RemovePhantomBaseplates",
 
 -- // Server: Respawn Explode
 local RespawnExplode = SetupTextMenu(Server, "RespawnExplode", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerRespawnExplode", Value);
     end;
 });
 
 -- // Server: Click Spawn Water
 local ClickSpawnWater = SetupTextMenu(Server, "ClickSpawnWater", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerClickSpawnWater", Value);
     end;
 });
 
 -- // Sound Abuse: Ear Rape
 local EarRape = SetupTextMenu(SoundAbuse, "EarRape", {
-    Callback = function(Value);
+    Callback = function(Value)
         KohlsAPI.SettingGetSet("SoundAbuseEarRape", Value);
     end;
 });
 
 -- // Sound Abuse: Play All Sounds
 local PlayAllSounds = SetupTextMenu(SoundAbuse, "PlayAllSounds", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.SoundAbuse.PlayAllSounds();
     end;
 });
 
 -- // Sound Abuse: Play Music
 local PlayMusic = SetupTextMenu(SoundAbuse, "PlayMusic", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.SoundAbuse.PlayMusic();
     end;
 });
 
 -- // Sound Abuse: Stop All Sounds
 local StopAllSounds = SetupTextMenu(SoundAbuse, "StopAllSounds", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.SoundAbuse.StopAllSounds();
     end;
 });
 
 -- // Sound Abuse: Stop Music
 local StopMusic = SetupTextMenu(SoundAbuse, "StopMusic", {
-    Callback = function();
+    Callback = function()
         KohlsAPI.SoundAbuse.StopMusic();
     end;
 });
 
 -- // Whitelist: Select Player
 local WhitelistSelectPlayer = SetupTextMenu(Player, "WhitelistSelectPlayer", {
-    Callback = function(Value);
+    Callback = function(Value)
         getSetInput("WhitelistSelectPlayer", Players[Value]);
     end;
 });
 
 -- // Whitelist: Whitelist Player
 local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
@@ -784,7 +784,7 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist", {
 
 -- // Whitelist: Unwhitelist Player
 local Unwhitelist = SetupTextMenu(Whitelist, "Unwhitelist", {
-    Callback = function();
+    Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
