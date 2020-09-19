@@ -157,7 +157,7 @@ local Misc = createPage("Misc");
 local Player = createPage("Player");
 local Protections = createPage("Protections");
 local Server = createPage("Server");
-local SoundAbuse = createPage("SoundAbuse");
+local SoundAbuse = createPage("Sound Abuse");
 local Whitelist = createPage("Whitelist");
 
 -- // Admin: Regenerate Admin

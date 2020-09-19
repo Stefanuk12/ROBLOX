@@ -80,11 +80,11 @@ return function(Arguments)
     end;
     
     if (writefile and readfile and isfile) then -- // Load Settings
-        if (not isfile(KohlsAPI.Configurable.ScriptName .. ".json")) then
-            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
+        if (not isfile(Arguments.ScriptName .. ".json")) then
+            writefile(Arguments.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Customise));
         end;
     
-        local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
+        local Configuration = HttpService:JSONDecode(readfile(Arguments.ScriptName .. ".json"));
     
         -- // Allow new settings to be added
         for i,v in pairs(KohlsAPI.Configurable) do
@@ -122,7 +122,7 @@ return function(Arguments)
         -- // Handling
         if (typeof(Name) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Name);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -147,7 +147,7 @@ return function(Arguments)
         -- // Handling
         if (not writefile) then
             local ErrorReason = "Cannot save settings, you do not have writefile.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -157,7 +157,7 @@ return function(Arguments)
         local Save = KohlsAPI.Configurable;
     
         -- // Export
-        writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(Save));
+        writefile(Arguments.ScriptName .. ".json", HttpService:JSONEncode(Save));
         return true;
     end;
     
@@ -167,14 +167,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Player.Parent ~= Players) then
             local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -210,21 +210,21 @@ return function(Arguments)
         -- // Handling
         if (typeof(Message) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Message);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Player.Parent ~= Players) then
             local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -425,14 +425,14 @@ return function(Arguments)
         -- // Failsafing
         if (not fireclickdetector) then
             local ErrorReason = "fireclickdetector is required for Regen Admin";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (not GameFolder["Admin"]:FindFirstChild("Regen")) then
             local ErrorReason = "Unable to find the Regen Pad!";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -451,14 +451,14 @@ return function(Arguments)
         if (SpecifyPad ~= nil) then
             if (typeof(SpecifyPad) ~= 'Instance') then
                 local ErrorReason = "Argument #1 expected Instance got " .. typeof(SpecifyPad);
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
             end;
             if (SpecifyPad.Parent ~= GameFolder["Admin"]["Pads"]) then
                 local ErrorReason = "Argument #1 is not a member of the Admin Pads";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -466,14 +466,14 @@ return function(Arguments)
         end;
         if (not fireclickdetector) then
             local ErrorReason = "fireclickdetector is required for Get Admin";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (not GameFolder["Admin"].Regen) then
             local ErrorReason = "Unable to find the Regen Pad!";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -540,14 +540,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(GearId) ~= 'number') then
             local ErrorReason = "Argument #1 expected number got " .. typeof(GearId);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Unblacklist ~= nil and typeof(Unblacklist) ~= 'boolean') then
             local ErrorReason = "Argument #1 expected boolean got " .. typeof(Unblacklist);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -578,7 +578,7 @@ return function(Arguments)
             table.remove(KohlsAPI.BlacklistedGears, GearInTable);
         else
             local ErrorReason = "Gear is not blacklisted.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -592,35 +592,35 @@ return function(Arguments)
         -- // Handling
         if (typeof(Phrase) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Phrase);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Punishment ~= nil and typeof(Punishment) == 'string') then
             local ErrorReason = "Argument #2 expected string got " .. typeof(Phrase);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Player ~= nil and typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #3 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (typeof(Player) == 'Instance' and Player.Parent ~= Players) then
             local ErrorReason = "Argument #3 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Unblacklist ~= nil and typeof(Unblacklist) ~= 'boolean') then
             local ErrorReason = "Argument #4 expected boolean got " .. typeof(Unblacklist);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -628,7 +628,7 @@ return function(Arguments)
         if (Unblacklist == nil) then
             if (Punishment == nil) then
                 local ErrorReason = "Argument #2 expected string got nil";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -674,21 +674,21 @@ return function(Arguments)
         if (Unblacklist) then -- // Unblacklisting
             if (not isPhraseBlacklisedGlobal and not isPhraseBlacklistedPlayer) then
                 local ErrorReason = "Phrase is not blacklisted";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
             end;
             if ((isPhraseBlacklisedGlobal and Player) or (isPhraseBlacklisedGlobal and Global)) then
                 local ErrorReason = "Phrase is already blacklisted globally";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
             end;
             if (isPhraseBlacklistedPlayer and Player) then
                 local ErrorReason = "Phrase is already blacklisted for the player";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -696,14 +696,14 @@ return function(Arguments)
         else -- // Blacklisting
             if (isPhraseBlacklistedPlayer) then
                 local ErrorReason = "Phrase is already blacklisted for the player";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
             end;
             if (isPhraseBlacklisedGlobal) then
                 local ErrorReason = "Phrase is already blacklisted globally";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -752,14 +752,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(Phrase) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Phrase);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Stop ~= nil and typeof(Stop) ~= 'boolean') then
             local ErrorReason = "Argument #2 expected boolean got " .. typeof(Phrase);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -775,14 +775,14 @@ return function(Arguments)
     
         if (Stop and not isInSpammer) then
             local ErrorReason = "Phrase is not in the spammer";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (not Stop and isInSpammer) then
             local ErrorReason = "Phrase is already in the spammer";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -809,14 +809,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(Area) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Area);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (typeof(Colour) ~= 'Color3') then
             local ErrorReason = "Argument #2 expected Color3 got " .. typeof(Colour);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -871,14 +871,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Player.Parent ~= Players) then
             local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -893,14 +893,14 @@ return function(Arguments)
         -- // Handling
         if (typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason; 
         end;
         if (Player.Parent ~= Players) then
             local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;   
@@ -965,7 +965,7 @@ return function(Arguments)
     function KohlsAPI.Server.CrashServer()
         if (AreTherePWLInTheServer()) then
             local ErrorReason = "There are protected whitelisted people in the server.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1014,7 +1014,7 @@ return function(Arguments)
         -- // Handling
         if (AreTherePWLInTheServer()) then
             local ErrorReason = "There are protected whitelisted people in the server.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1066,7 +1066,7 @@ return function(Arguments)
         -- // Handling
         if (Stop ~= nil and typeof(Stop) ~= 'boolean') then
             local ErrorReason = "Argument #1 expected boolean got " .. typeof(Stop);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1094,7 +1094,7 @@ return function(Arguments)
         -- // Handling
         if (Stop ~= nil and typeof(Stop) ~= 'boolean') then
             local ErrorReason = "Argument #1 expected boolean got " .. typeof(Stop);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1167,7 +1167,7 @@ return function(Arguments)
             return true;
         else
             local ErrorReason = "There is no music sound.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1197,7 +1197,7 @@ return function(Arguments)
             return true;
         else
             local ErrorReason = "There is no music sound.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1211,21 +1211,21 @@ return function(Arguments)
         -- // Handling
         if (typeof(Player) ~= 'Instance') then
             local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Player.Parent ~= Players) then
             local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
         end;
         if (Unwhitelist ~= nil and typeof(Unwhitelist) ~= 'boolean') then
             local ErrorReason = "Argument #2 expected boolean got " .. typeof(Unwhitelist);
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1236,7 +1236,7 @@ return function(Arguments)
     
         if (ProtectedWhitelisted) then
             local ErrorReason = Unwhitelist and "This player is protected." or "This player has already been whitelisted.";
-            if (KohlsAPI.Errors) then
+            if (Arguments.Errors) then
                 error(ErrorReason);
             end;
             return false, ErrorReason;
@@ -1253,7 +1253,7 @@ return function(Arguments)
                 end;
             else
                 local ErrorReason = "This player has already been whitelisted.";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -1261,7 +1261,7 @@ return function(Arguments)
         else
             if (Unwhitelist) then
                 local ErrorReason = "This player has not been whitelisted.";
-                if (KohlsAPI.Errors) then
+                if (Arguments.Errors) then
                     error(ErrorReason);
                 end;
                 return false, ErrorReason;
@@ -1277,7 +1277,7 @@ return function(Arguments)
         end;
     
         local ErrorReason = "Something went wrong.";
-        if (KohlsAPI.Errors) then
+        if (Arguments.Errors) then
             error(ErrorReason);
         end;
         return false, ErrorReason;
