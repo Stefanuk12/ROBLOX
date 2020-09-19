@@ -15,6 +15,7 @@ getgenv().DarkKohls = {
 -- // Services
 local Players = game:GetService("Players");
 local HttpService = game:GetService("HttpService");
+local TeleportService = game:GetService("TeleportService");
 
 -- // Vars
 local DropdownPlayers = {};
@@ -33,6 +34,7 @@ local Inputs = {
     {Name = "BlacklistSelectGear", Value = nil},
     {Name = "BlacklistSelectPlayer", Value = nil},
     {Name = "BlacklistSelectPhrase", Value = nil},
+    {Name = "BlacklistSelectPunishmentPhrase", Value = nil},
     {Name = "CommandsSelectPhrase", Value = nil},
     {Name = "MiscSelectColour", Value = nil},
     {Name = "SelectArea", Value = nil}
@@ -106,16 +108,16 @@ local function SetupTextMenu(Page, CommandName, Options)
 end;
 
 -- // Get Input (internal)
-local function getSetInput(InputName, InputValue)
+local function getSetInput(Name, InputValue)
     for i = 1, #Inputs do
         local v = Inputs[i];
 
-        if (v.Name == InputName) then
+        if (v.Name == Name) then
             if (InputValue) then
                 v.Value = InputValue;
             end;
 
-            return true, v.Value;
+            return v.Value;
         end;
     end;
 
@@ -126,14 +128,10 @@ end;
 local function FailsafeCommand(Requirements)
     for i = 1, #Requirements do
         local v = Requirements[i];
-        local Success, Value = getSetInput(v.Name);
+        local Value = getSetInput(v.Name);
 
-        if (not Success) then
-            return false, "Input is not a valid input.";
-        else
-            if (Value == nil) then
-                return false, v.ErrorReason;
-            end;
+        if (not Value) then
+            return false, v.ErrorReason;
         end;
     end;
 
@@ -225,7 +223,7 @@ local BlacklistGear = SetupTextMenu(Blacklist, "BlacklistGear", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "BlacklistSelectGear",
+                Name = "BlacklistSelectGear",
                 ErrorReason = "Please specify a gear to blacklist."
             }
         });
@@ -268,7 +266,7 @@ local UnblacklistGear = SetupTextMenu(Blacklist, "UnblacklistGear", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "BlacklistSelectGear",
+                Name = "BlacklistSelectGear",
                 ErrorReason = "Please specify a gear to blacklist."
             }
         });
@@ -327,17 +325,20 @@ local BlacklistSelectPhrase = SetupTextMenu(Blacklist, "BlacklistSelectPhrase", 
     end;
 });
 
+-- // Blacklist: Select Phrase
+local BlacklistSelectPunishmentPhrase = SetupTextMenu(Blacklist, "BlacklistSelectPunishmentPhrase", {
+    Callback = function(Value)
+        getSetInput("BlacklistSelectPunishmentPhrase", Value);
+    end;
+});
+
 -- // Blacklist: Blacklist Phrase
 local BlacklistPhrase = SetupTextMenu(Blacklist, "BlacklistPhrase", {
     Callback = function()
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "BlacklistSelectPlayer",
-                ErrorReason = "Please specify a player."
-            },
-            {
-                InputName = "BlacklistSelectPhrase",
+                Name = "BlacklistSelectPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -346,6 +347,19 @@ local BlacklistPhrase = SetupTextMenu(Blacklist, "BlacklistPhrase", {
                 Text = FailsafeSuccessErrorReason;
             });
             return false, FailsafeSuccessErrorReason;
+        end;
+
+        -- // Script
+        local CommandReturn, ErrorReason = KohlsAPI.Blacklist.BlacklistUnblacklistPhrase(getSetInput("BlacklistSelectPhrase"), getSetInput("BlacklistSelectPunishmentPhrase"), getSetInput("BlacklistSelectPlayer"));
+        if (not CommandReturn) then
+            Material.Banner({
+                Text = ErrorReason;
+            });
+            return false, ErrorReason;
+        else
+            Material.Banner({
+                Text = "Blacklisted phrase.";
+            });
         end;
     end;
 });
@@ -356,11 +370,7 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "UnblacklistPhrase", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "BlacklistSelectPlayer",
-                ErrorReason = "Please specify a player."
-            },
-            {
-                InputName = "BlacklistSelectPhrase",
+                Name = "BlacklistSelectPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -369,6 +379,19 @@ local UnblacklistPhrase = SetupTextMenu(Blacklist, "UnblacklistPhrase", {
                 Text = FailsafeSuccessErrorReason;
             });
             return false, FailsafeSuccessErrorReason;
+        end;
+
+        -- // Script
+        local CommandReturn, ErrorReason = KohlsAPI.Blacklist.BlacklistUnblacklistPhrase(getSetInput("BlacklistSelectPhrase"), getSetInput("BlacklistSelectPunishmentPhrase"), getSetInput("BlacklistSelectPlayer"), true);
+        if (not CommandReturn) then
+            Material.Banner({
+                Text = ErrorReason;
+            });
+            return false, ErrorReason;
+        else
+            Material.Banner({
+                Text = "Unblacklisted phrase.";
+            });
         end;
     end;
 });
@@ -386,7 +409,7 @@ local SayPhrase = SetupTextMenu(Commands, "SayPhrase", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "CommandsSelectPhrase",
+                Name = "CommandsSelectPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -408,7 +431,7 @@ local SpamPhrase = SetupTextMenu(Commands, "SpamPhrase", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "CommandsSelectPhrase",
+                Name = "CommandsSelectPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -420,13 +443,13 @@ local SpamPhrase = SetupTextMenu(Commands, "SpamPhrase", {
         end;
 
         -- // Script
-        local CommandReturn, ErrorMessage = KohlsAPI.Commands.StopStartSpamPhrase(getSetInput("CommandsSelectPhrase"));
+        local CommandReturn, ErrorReason = KohlsAPI.Commands.StopStartSpamPhrase(getSetInput("CommandsSelectPhrase"));
 
         if (not CommandReturn) then
             Material.Banner({
-                Text = ErrorMessage;
+                Text = ErrorReason;
             });
-            return false, ErrorMessage;
+            return false, ErrorReason;
         else
             Material.Banner({
                 Text = "Spamming phrase.";
@@ -441,7 +464,7 @@ local StopSpamPhrase = SetupTextMenu(Commands, "StopSpamPhrase", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "CommandsSelectPhrase",
+                Name = "CommandsSelectPhrase",
                 ErrorReason = "Please specify a phrase."
             }
         });
@@ -453,13 +476,13 @@ local StopSpamPhrase = SetupTextMenu(Commands, "StopSpamPhrase", {
         end;
 
         -- // Script
-        local CommandReturn, ErrorMessage = KohlsAPI.Commands.StopStartSpamPhrase(getSetInput("CommandsSelectPhrase"), true);
+        local CommandReturn, ErrorReason = KohlsAPI.Commands.StopStartSpamPhrase(getSetInput("CommandsSelectPhrase"), true);
 
         if (not CommandReturn) then
             Material.Banner({
-                Text = ErrorMessage;
+                Text = ErrorReason;
             });
-            return false, ErrorMessage;
+            return false, ErrorReason;
         else
             Material.Banner({
                 Text = "Stopped spamming phrase.";
@@ -490,11 +513,11 @@ local PaintArea = SetupTextMenu(Misc, "PaintArea", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "MiscSelectColour",
+                Name = "MiscSelectColour",
                 ErrorReason = "Please specify a colour."
             },
             {
-                InputName = "SelectArea",
+                Name = "SelectArea",
                 ErrorReason = "Please specify an area."
             }
         });
@@ -503,6 +526,20 @@ local PaintArea = SetupTextMenu(Misc, "PaintArea", {
                 Text = FailsafeSuccessErrorReason;
             });
             return false, FailsafeSuccessErrorReason;
+        end;
+
+        -- // Script
+        local CommandReturn, ErrorReason = KohlsAPI.Misc.PaintArea(getSetInput("SelectArea"), getSetInput("MiscSelectColour"));
+
+        if (not CommandReturn) then
+            Material.Banner({
+                Text = ErrorReason;
+            });
+            return false, ErrorReason;
+        else
+            Material.Banner({
+                Text = "Painted.";
+            });
         end;
     end;
 });
@@ -541,7 +578,7 @@ local GetAge = SetupTextMenu(Player, "GetAge", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "PlayerSelectPlayer",
+                Name = "PlayerSelectPlayer",
                 ErrorReason = "Please specify a player."
             }
         });
@@ -566,7 +603,7 @@ local GiveClientBtools = SetupTextMenu(Player, "GiveClientBtools", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "PlayerSelectPlayer",
+                Name = "PlayerSelectPlayer",
                 ErrorReason = "Please specify a player."
             }
         });
@@ -744,7 +781,7 @@ local StopMusic = SetupTextMenu(SoundAbuse, "StopMusic", {
 });
 
 -- // Whitelist: Select Player
-local WhitelistSelectPlayer = SetupTextMenu(Player, "WhitelistSelectPlayer", {
+local WhitelistSelectPlayer = SetupTextMenu(Whitelist, "WhitelistSelectPlayer", {
     Callback = function(Value)
         getSetInput("WhitelistSelectPlayer", Players[Value]);
     end;
@@ -756,7 +793,7 @@ local WhitelistPlayer = SetupTextMenu(Whitelist, "Whitelist", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "WhitelistSelectPlayer",
+                Name = "WhitelistSelectPlayer",
                 ErrorReason = "Please specify a player."
             }
         });
@@ -788,7 +825,7 @@ local Unwhitelist = SetupTextMenu(Whitelist, "Unwhitelist", {
         -- // Failsafe command
         local FailsafeSuccess, FailsafeSuccessErrorReason = FailsafeCommand({
             {
-                InputName = "WhitelistSelectPlayer",
+                Name = "WhitelistSelectPlayer",
                 ErrorReason = "Please specify a player."
             }
         });

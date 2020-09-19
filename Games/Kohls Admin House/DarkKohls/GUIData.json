@@ -62,7 +62,14 @@
             "Admin": false,
             "Persons299": false,
             "Description": "Input a phrase to blacklist.",
-            "Name": "Select Phrase",
+            "Name": "Input Phrase",
+            "Type": "TextField"
+        },
+        "BlacklistSelectPunishmentPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a punishemnt phrase.",
+            "Name": "Input Punishment Phrase",
             "Type": "TextField"
         },
         "BlacklistPhrase": {
