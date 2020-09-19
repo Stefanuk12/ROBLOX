@@ -714,8 +714,11 @@ local MoveBaseplate = SetupTextMenu(Server, "MoveBaseplate", {
 -- // Server: Part Spam
 local PartSpam = SetupTextMenu(Server, "PartSpam", {
     Callback = function(Value)
-        KohlsAPI.SettingGetSet("ServerPartSpam", Value);
-        KohlsAPI.Server.PartSpam(Value);
+        if (Value) then
+            KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10");
+        else
+            KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10", true);
+        end;
     end;
 });
 
