@@ -247,7 +247,7 @@
             "Admin": true,
             "Persons299": false,
             "Description": "Gets you in the position to move the baseplate.",
-            "Name": "MoveBaseplate",
+            "Name": "Move Baseplate",
             "Type": "Button"
         },
         "PartSpam": {
