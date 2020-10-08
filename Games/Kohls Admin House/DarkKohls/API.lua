@@ -251,7 +251,7 @@ return function(Arguments)
                 local v = KohlsAPI.BlacklistedGears[i];
     
                 if (v == BlacklistedGear) then
-                    if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse")) then
+                    if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
                         Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
                     end;
                     Players:Chat(":removetools" .. splitMessage[2]);
@@ -279,7 +279,7 @@ return function(Arguments)
         end;
     
         -- // Server: /c system Alert
-        if (KohlsAPI.SettingGetSet("ServerCSystemAlert") and msg == "/c system") then
+        if (KohlsAPI.SettingGetSet("ServerCSystemAlert") and msg == "/c system" and not GWhitelisted) then
             Players:Chat(KohlsAPI.Configurable.CSystemAlertNote:gsub("PLAYERNAME", v.Name));
         end;
     
