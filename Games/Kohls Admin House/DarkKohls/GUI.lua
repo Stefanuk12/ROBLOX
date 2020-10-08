@@ -36,8 +36,10 @@ local Inputs = {
     {Name = "BlacklistSelectPhrase", Value = nil},
     {Name = "BlacklistSelectPunishmentPhrase", Value = nil},
     {Name = "CommandsSelectPhrase", Value = nil},
-    {Name = "MiscSelectColour", Value = nil},
-    {Name = "SelectArea", Value = nil}
+    {Name = "MiscSelectColour", Value = Color3.fromRGB(255, 150, 150)},
+    {Name = "SelectArea", Value = nil},
+    {Name = "PlayerSelectPlayer", Value = nil},
+    {Name = "WhitelistSelectPlayer", Value = nil}
 };
 
 -- // Get All Player Names
@@ -560,6 +562,7 @@ local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
             end;
         end;
         game:GetService("CoreGui")["Dark Kohls"]:Destroy();
+        getgenv().DarkKohls = nil;
     end;
 });
 
@@ -717,7 +720,7 @@ local PartSpam = SetupTextMenu(Server, "PartSpam", {
         if (Value) then
             KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10");
         else
-            KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10", true);
+            pcall(KohlsAPI.Commands.StopStartSpamPhrase, ":part/10/10/10", true);
         end;
     end;
 });

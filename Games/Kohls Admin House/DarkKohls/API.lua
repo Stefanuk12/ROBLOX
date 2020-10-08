@@ -22,6 +22,7 @@ return function(Arguments)
     
     -- // Vars
     local GameFolder = Workspace.Terrain["_Game"];
+    local CoroutineKillSwitch = false;
     getgenv().KohlsAPI = {
         SelectedPad = GameFolder["Admin"]["Pads"]:GetChildren()[math.random(1, 9)],
         Connections = {},
@@ -45,11 +46,8 @@ return function(Arguments)
                 {Name = "ProtectionsAntiPunish", Value = false},
                 {Name = "SoundAbuseEarRape", Value = false},
                 {Name = "ServerEpilepsy", Value = false},
-                {Name = "ServerRespawnExplode", Value = false},
-                {Name = "ServerPartSpam", Value = false},
                 {Name = "ServerCSystemAlert", Value = false},
                 {Name = "ServerClickSpawnWater", Value = false},
-                {Name = "BlacklistAlertUse", Value = false},
             },
         }
     };
@@ -251,7 +249,9 @@ return function(Arguments)
                 local v = KohlsAPI.BlacklistedGears[i];
     
                 if (v == BlacklistedGear) then
-                    Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
+                    if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse")) then
+                        Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
+                    end;
                     Players:Chat(":removetools" .. splitMessage[2]);
                 end;
             end
@@ -998,6 +998,7 @@ return function(Arguments)
     -- // Server: Epilepsy
     coroutine.wrap(function()
         while wait() do
+            if (CoroutineKillSwitch) then break; end;
             if (KohlsAPI.SettingGetSet("ServerEpilepsy")) then
                 Players:Chat(":colorshifttop 10000 0 0"); wait(0.1);
                 Players:Chat(":colorshiftbottom 10000 0 0"); wait(0.1);
@@ -1007,7 +1008,7 @@ return function(Arguments)
                 Players:Chat(":colorshiftbottom 0 0 10000"); wait(0.1);
             end;
         end;
-    end);
+    end)();
     
     -- // Server: Move Baseplate
     function KohlsAPI.Server.MoveBaseplate()
@@ -1102,7 +1103,8 @@ return function(Arguments)
     
         -- // Script
         local Success, TargetPlayers = KohlsAPI.PlayerManager.GetPlayers("Unwhitelisted");
-    
+        if (not Success) then return false; end;
+
         for i = 1, #TargetPlayers do
             local v = TargetPlayers[i];
     
@@ -1134,6 +1136,7 @@ return function(Arguments)
     -- // Sound Abuse: Ear Rape
     coroutine.wrap(function()
         while wait(0.5) do
+            if (CoroutineKillSwitch) then break; end;
             if (KohlsAPI.SettingGetSet("SoundAbuseEarRape")) then
                 local WorkspaceDescendants = Workspace:GetDescendants();
                 for i = 1, #WorkspaceDescendants do
