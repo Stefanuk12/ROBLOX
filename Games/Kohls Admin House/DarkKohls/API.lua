@@ -612,7 +612,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-        if (Punishment ~= nil and typeof(Punishment) == 'string') then
+        if (Punishment ~= nil and typeof(Punishment) ~= 'string') then
             local ErrorReason = "Argument #2 expected string got " .. typeof(Phrase);
             if (KohlsAPI.Configurable.Errors) then
                 error(ErrorReason);
