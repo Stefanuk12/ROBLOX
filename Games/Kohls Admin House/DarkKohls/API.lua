@@ -63,6 +63,7 @@ return function(Arguments)
     
     local LocalPlayer = Players.LocalPlayer;
     local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
+    local Mouse = LocalPlayer:GetMouse();
     
     -- // Shutdown
     function KohlsAPI.Shutdown()
