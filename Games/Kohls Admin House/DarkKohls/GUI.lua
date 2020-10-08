@@ -245,7 +245,7 @@ local BlacklistGear = SetupTextMenu(Blacklist, "BlacklistGear", {
             Material.Banner({
                 Text = ErrorReason;
             });
-            return false, FailsafeSuccessErrorReason;
+            return false, ErrorReason;
         else
             Material.Banner({
                 Text = "Successfully blacklisted gear.";
@@ -271,28 +271,19 @@ local UnblacklistGear = SetupTextMenu(Blacklist, "UnblacklistGear", {
             return false, FailsafeSuccessErrorReason;
         end;
 
-        -- // Get the input and failsafing
-        local SelectedGearSuccess, SelectedGear = getSetInput("BlacklistSelectGear");
-        if (not SelectedGearSuccess) then
-            local ErrorReason = "This gear is already blacklisted.";
+        -- // Get the input
+        local SelectedGear = getSetInput("BlacklistSelectGear");
 
-            Material.Banner({
-                Text = ErrorReason
-            });
-
-            return false, ErrorReason;
-        end;
-
-        -- // Unblacklist the gear and failsafing
+        -- // Blacklist the gear and failsafing
         local BlacklistGearSuccess, ErrorReason = KohlsAPI.Blacklist.BlacklistUnblacklistGear(SelectedGear, true);
         if (not BlacklistGearSuccess) then
             Material.Banner({
                 Text = ErrorReason;
             });
-            return false, FailsafeSuccessErrorReason;
+            return false, ErrorReason;
         else
             Material.Banner({
-                Text = "Successfully Unblacklisted gear.";
+                Text = "Successfully unblacklisted gear.";
             });
         end;
     end;

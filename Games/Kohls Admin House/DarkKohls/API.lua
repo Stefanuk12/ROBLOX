@@ -9,6 +9,7 @@
 
 return function(Arguments)
     -- // Initialise
+    table.foreach(Arguments, print);
     local InitialisedTime = tick();
     Arguments = Arguments or {};
 
