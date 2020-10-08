@@ -57,7 +57,11 @@ end;
 
 -- // Update Player Dropdowns
 local function UpdatePlayerDropdowns()
-    v:SetOptions(GetAllPlayerNamesAsTable());
+    for i = 1, #DropdownPlayers do
+        local v = DropdownPlayers[i];
+
+        v:SetOptions(GetAllPlayerNamesAsTable());
+    end;
     return true;
 end;
 
@@ -717,11 +721,8 @@ local MoveBaseplate = SetupTextMenu(Server, "MoveBaseplate", {
 -- // Server: Part Spam
 local PartSpam = SetupTextMenu(Server, "PartSpam", {
     Callback = function(Value)
-        if (Value) then
-            KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10");
-        else
-            pcall(KohlsAPI.Commands.StopStartSpamPhrase, ":part/10/10/10", true);
-        end;
+        Value = not Value;
+        pcall(KohlsAPI.Commands.StopStartSpamPhrase, ":part/10/10/10", Value);
     end;
 });
 
@@ -739,8 +740,8 @@ local RemovePhantomBaseplates = SetupTextMenu(Server, "RemovePhantomBaseplates",
 -- // Server: Respawn Explode
 local RespawnExplode = SetupTextMenu(Server, "RespawnExplode", {
     Callback = function(Value)
-        KohlsAPI.SettingGetSet("ServerRespawnExplode", Value);
-        KohlsAPI.Server.RespawnExplode(Value);
+        Value = not Value;
+        pcall(KohlsAPI.Server.RespawnExplode, Value);
     end;
 });
 

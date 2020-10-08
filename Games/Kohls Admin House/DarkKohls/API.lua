@@ -48,6 +48,7 @@ return function(Arguments)
                 {Name = "ServerEpilepsy", Value = false},
                 {Name = "ServerCSystemAlert", Value = false},
                 {Name = "ServerClickSpawnWater", Value = false},
+                {Name = "ServerRespawnExplode", Value = false},
             },
         }
     };
@@ -408,6 +409,13 @@ return function(Arguments)
         Player.Chatted:Connect(function(Message)
             PlayerManagerHandler(Message, Player);
         end);
+
+        -- // Respawn Explode
+        local _, GWhitelisted, _, _ = isWhitelisted(Player);
+        if (KohlsAPI.SettingGetSet("ServerRespawnExplode") and not GWhitelisted) then
+            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. v.Name);
+            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. v.Name);
+        end;
     end)};
     
     -- // Player Manager: Remove leaving players from table
@@ -418,7 +426,13 @@ return function(Arguments)
             if (PlayerData and PlayerData.UserId == Player.UserId) then
                 table.remove(KohlsAPI.PlayerManager.Players, i);
             end;
-        end
+        end;
+
+        -- // Respawn Explode
+        if (KohlsAPI.SettingGetSet("ServerRespawnExplode")) then
+            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. v.Name, true);
+            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. v.Name, true);
+        end;
     end)};
     
     -- // Admin: Regenerate Admin
@@ -1105,6 +1119,8 @@ return function(Arguments)
         -- // Script
         local Success, TargetPlayers = KohlsAPI.PlayerManager.GetPlayers("Unwhitelisted");
         if (not Success) then return false; end;
+
+        KohlsAPI.SettingGetSet("ServerRespawnExplode", not Stop);
 
         for i = 1, #TargetPlayers do
             local v = TargetPlayers[i];
