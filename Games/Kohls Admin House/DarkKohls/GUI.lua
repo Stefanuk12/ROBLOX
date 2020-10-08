@@ -59,8 +59,10 @@ end;
 local function UpdatePlayerDropdowns()
     for i = 1, #DropdownPlayers do
         local v = DropdownPlayers[i];
-
-        v:SetOptions(GetAllPlayerNamesAsTable());
+        print(v, v.SetOptions)
+        if (v and v.SetOptions) then
+            v:SetOptions(GetAllPlayerNamesAsTable());
+        end;   
     end;
     return true;
 end;
@@ -214,7 +216,7 @@ local BlacklistSelectGear = SetupTextMenu(Blacklist, "BlacklistSelectGear", {
             return false;
         end;
 
-        getSetInput("BlacklistSelectGear", Value);
+        print(getSetInput("BlacklistSelectGear", tonumber(Value)));
     end;
 });
 
@@ -231,19 +233,11 @@ local BlacklistGear = SetupTextMenu(Blacklist, "BlacklistGear", {
             Material.Banner({
                 Text = FailsafeSuccessErrorReason;
             });
+            return false, FailsafeSuccessErrorReason;
         end;
 
-        -- // Get the input and failsafing
-        local SelectedGearSuccess, SelectedGear = getSetInput("BlacklistSelectGear");
-        if (not SelectedGearSuccess) then
-            local ErrorReason = "This gear is not blacklisted.";
-
-            Material.Banner({
-                Text = ErrorReason
-            });
-
-            return false, ErrorReason;
-        end;
+        -- // Get the input
+        local SelectedGear = getSetInput("BlacklistSelectGear");
 
         -- // Blacklist the gear and failsafing
         local BlacklistGearSuccess, ErrorReason = KohlsAPI.Blacklist.BlacklistUnblacklistGear(SelectedGear);
@@ -273,7 +267,8 @@ local UnblacklistGear = SetupTextMenu(Blacklist, "UnblacklistGear", {
         if (not FailsafeSuccess) then
             Material.Banner({
                 Text = FailsafeSuccessErrorReason;
-            })
+            });
+            return false, FailsafeSuccessErrorReason;
         end;
 
         -- // Get the input and failsafing

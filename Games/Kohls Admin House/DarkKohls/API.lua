@@ -567,36 +567,34 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
-        -- // Script
-        GearId = tostring(GearId)
+
         local GearInTable = false;
-    
         for i = 1, #KohlsAPI.BlacklistedGears do
             local v = KohlsAPI.BlacklistedGears[i];
-            -- // Handling
             if (v == GearId) then
+                GearInTable = true;
                 if (not Unblacklist) then
                     local ErrorResaon = "Gear is already blacklisted.";
                     return false, ErrorResaon;
                 else
-                    GearInTable = i;
+                    table.remove(KohlsAPI.BlacklistedGears, i);
+                    return true;
                 end;
             end;
         end;
     
-        -- // Script
-        if (not Unblacklist) then
-            KohlsAPI.BlacklistedGears[#KohlsAPI.BlacklistedGears + 1] = GearId;
-        end;
-        if (typeof(GearInTable) == 'number') then
-            table.remove(KohlsAPI.BlacklistedGears, GearInTable);
-        else
-            local ErrorReason = "Gear is not blacklisted.";
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
+        if (not GearInTable) then
+            if (not Unblacklist) then
+                -- // Script
+                KohlsAPI.BlacklistedGears[#KohlsAPI.BlacklistedGears + 1] = GearId;
+            else
+                -- // Handling
+                local ErrorReason = "Gear is not blacklisted.";
+                if (KohlsAPI.Configurable.Errors) then
+                    error(ErrorReason);
+                end;
+                return false, ErrorReason;
             end;
-            return false, ErrorReason;
         end;
 
         return true;
