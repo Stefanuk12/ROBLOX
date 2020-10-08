@@ -9,9 +9,8 @@
 
 return function(Arguments)
     -- // Initialise
-    table.foreach(Arguments, print);
     local InitialisedTime = tick();
-    Arguments = Arguments or {};
+    if (not Arguments) then Arguments = {}; end;
 
     -- // Services
     local Players = game:GetService("Players");
