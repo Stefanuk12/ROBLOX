@@ -266,7 +266,7 @@ return function(Arguments)
             local v = PlayerBlacklistedPhrases[i];
     
             if (Message:find(v.Phrase)) then
-                Players:Chat(v.Punishent);
+                Players:Chat(v.Punishment);
             end;
         end;
     
@@ -274,7 +274,7 @@ return function(Arguments)
             local v = KohlsAPI.GlobalBlacklistedPhrases[i];
     
             if (Message:find(v.Phrase)) then
-                Players:Chat(v.Punishent);
+                Players:Chat(v.Punishment);
             end;
         end;
     
