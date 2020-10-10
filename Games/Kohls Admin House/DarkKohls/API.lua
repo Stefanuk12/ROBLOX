@@ -661,9 +661,7 @@ return function(Arguments)
             for i = 1, #KohlsAPI.PlayerManager.Players do
                 local v = KohlsAPI.PlayerManager.Players[i];
         
-                print('a')
                 if (v.UserId == Player.UserId) then
-                    print('b')
                     PlayerData = v;
                     PlayerDataIndex = i;
 
@@ -686,22 +684,8 @@ return function(Arguments)
     
         -- // Handling
         if (Unblacklist) then -- // Unblacklisting
-            if (not isPhraseBlacklisedGlobal and not isPhraseBlacklistedPlayer) then
+            if ((not Player and not isPhraseBlacklisedGlobal) or (Player and not isPhraseBlacklistedPlayer)) then
                 local ErrorReason = "Phrase is not blacklisted";
-                if (KohlsAPI.Configurable.Errors) then
-                    error(ErrorReason);
-                end;
-                return false, ErrorReason;
-            end;
-            if ((isPhraseBlacklisedGlobal and Player) or (isPhraseBlacklisedGlobal and Global)) then
-                local ErrorReason = "Phrase is already blacklisted globally";
-                if (KohlsAPI.Configurable.Errors) then
-                    error(ErrorReason);
-                end;
-                return false, ErrorReason;
-            end;
-            if (isPhraseBlacklistedPlayer and Player) then
-                local ErrorReason = "Phrase is already blacklisted for the player";
                 if (KohlsAPI.Configurable.Errors) then
                     error(ErrorReason);
                 end;
