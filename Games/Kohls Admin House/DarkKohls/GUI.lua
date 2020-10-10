@@ -532,7 +532,7 @@ local PaintArea = SetupTextMenu(Misc, "PaintArea", {
 });
 
 -- // Misc: Save Settings
-local SaveSettings = SetupTextMenu(Misc, "Rejoin", {
+local SaveSettings = SetupTextMenu(Misc, "SaveSettings", {
     Callback = function()
         local Success, ErrorReason = KohlsAPI.SaveSettings();
 
