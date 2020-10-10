@@ -661,7 +661,9 @@ return function(Arguments)
             for i = 1, #KohlsAPI.PlayerManager.Players do
                 local v = KohlsAPI.PlayerManager.Players[i];
         
+                print('a')
                 if (v.UserId == Player.UserId) then
+                    print('b')
                     PlayerData = v;
                     PlayerDataIndex = i;
 
