@@ -3,13 +3,11 @@
         This is just a BETA version and I'll update it further.
 
     Bugs:
-        - Possible performance issues
-        - Permanant Admin glitches out sometime sidk
+        - probably some i havent discovered
 ]]
 
 return function(Arguments)
     -- // Initialise
-    local InitialisedTime = tick();
     if (not Arguments) then Arguments = {}; end;
 
     -- // Services
@@ -1294,6 +1292,5 @@ return function(Arguments)
     end;
     
     -- // End
-    print("Loaded in " .. tick() - InitialisedTime .. " seconds");
     return KohlsAPI;
 end;
