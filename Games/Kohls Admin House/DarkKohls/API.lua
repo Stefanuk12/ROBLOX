@@ -271,7 +271,7 @@ return function(Arguments)
         end;
     
         for i = 1, #KohlsAPI.GlobalBlacklistedPhrases do -- // Global
-            local v = PlayerBlacklistedPhrases[i];
+            local v = KohlsAPI.GlobalBlacklistedPhrases[i];
     
             if (Message:find(v.Phrase)) then
                 Players:Chat(v.Punishent);
