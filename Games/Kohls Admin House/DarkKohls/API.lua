@@ -26,15 +26,15 @@ return function(Arguments)
     getgenv().KohlsAPI = {
         SelectedPad = GameFolder["Admin"]["Pads"]:GetChildren()[math.random(1, 9)],
         Connections = {},
-        BlacklistedGears = Arguments["BlacklistedGears"] == nil and {} or Arguments["BlacklistedGears"],
-        GlobalBlacklistedPhrases = Arguments["GlobalBlacklistedPhrases"] == nil and {} or Arguments["GlobalBlacklistedPhrases"],
+        BlacklistedGears = {},
+        GlobalBlacklistedPhrases = {},
         PlayerManager = {
             Players = {};
         },
         Spammer = {},
         Configurable = {
-            Errors = Arguments["Errors"] == nil and true or Arguments["Errors"] ,
-            ScriptName = Arguments["ScriptName"] == nil and "KohlsAPI" or Arguments["ScriptName"],
+            Errors = Arguments["Errors"],
+            ScriptName = Arguments["ScriptName"],
             CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
             BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
             Settings = {
