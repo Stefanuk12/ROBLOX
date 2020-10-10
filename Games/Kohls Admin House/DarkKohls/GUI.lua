@@ -59,10 +59,7 @@ end;
 local function UpdatePlayerDropdowns()
     for i = 1, #DropdownPlayers do
         local v = DropdownPlayers[i];
-        print(v, v.SetOptions)
-        if (v and v.SetOptions) then
-            v:SetOptions(GetAllPlayerNamesAsTable());
-        end;   
+        v:SetOptions(GetAllPlayerNames());
     end;
     return true;
 end;

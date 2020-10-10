@@ -26,15 +26,15 @@ return function(Arguments)
     getgenv().KohlsAPI = {
         SelectedPad = GameFolder["Admin"]["Pads"]:GetChildren()[math.random(1, 9)],
         Connections = {},
-        BlacklistedGears = Arguments["BlacklistedGears"] or {},
-        GlobalBlacklistedPhrases = Arguments["GlobalBlacklistedPhrases"] or {},
+        BlacklistedGears = Arguments["BlacklistedGears"] ~= nil and Arguments["BlacklistedGears"] or {},
+        GlobalBlacklistedPhrases = Arguments["GlobalBlacklistedPhrases"] ~= nil and Arguments["GlobalBlacklistedPhrases"] or {},
         PlayerManager = {
             Players = {};
         },
-        Spammer = Arguments["Spammer"] or {},
+        Spammer = {},
         Configurable = {
-            Errors = Arguments["Errors"] or true,
-            ScriptName = Arguments["ScriptName"] or "KohlsAPI",
+            Errors = Arguments["Errors"] ~= nil and Arguments["Errors"] or true,
+            ScriptName = Arguments["ScriptName"] ~= nil and Arguments["ScriptName"] or "KohlsAPI",
             CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
             BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
             Settings = {
@@ -724,9 +724,9 @@ return function(Arguments)
         end;
     
         -- // Script
-        if (Player) then
-            local Count = #KohlsAPI.PlayerManager.Players[i]["BlacklistedPhrases"];
-            KohlsAPI.PlayerManager.Players[i]["BlacklistedPhrases"][Count + 1] = {
+        if (Player ~= nil) then
+            local Count = #KohlsAPI.PlayerManager.Players[PlayerDataIndex]["BlacklistedPhrases"];
+            KohlsAPI.PlayerManager.Players[PlayerDataIndex]["BlacklistedPhrases"][Count + 1] = {
                 Phrase = Phrase,
                 Punishment = Punishment
             };
