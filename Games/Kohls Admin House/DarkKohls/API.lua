@@ -706,6 +706,13 @@ return function(Arguments)
                 return false, ErrorReason;
             end;
         else -- // Blacklisting
+            if (ProtectedWhitelisted) then
+                local ErrorReason = "Player is protected.";
+                if (KohlsAPI.Configurable.Errors) then
+                    error(ErrorReason);
+                end;
+                return false, ErrorReason;
+            end;
             if (isPhraseBlacklistedPlayer) then
                 local ErrorReason = "Phrase is already blacklisted for the player";
                 if (KohlsAPI.Configurable.Errors) then
