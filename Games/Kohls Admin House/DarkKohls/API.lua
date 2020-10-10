@@ -664,19 +664,15 @@ return function(Arguments)
                 if (v.UserId == Player.UserId) then
                     PlayerData = v;
                     PlayerDataIndex = i;
+
+                    -- // Check if the phrase is blacklisted for the user
+                    if (v.Phrase == Phrase) then
+                        isPhraseBlacklistedPlayer = true;
+                    end;
                 end;
             end;
         end;
-    
-        -- // Check if the phrase is blacklisted for the user
-        for i = 1, #PlayerData.BlacklistedPhrases do
-            local v = PlayerData.BlacklistedPhrases[i];
-    
-            if (v.Phrase == Phrase) then
-                isPhraseBlacklistedPlayer = true;
-            end;
-        end;
-    
+      
         -- // Check if the phrase is blacklisted globally
         for i = 1, #KohlsAPI.GlobalBlacklistedPhrases do
             local v = KohlsAPI.GlobalBlacklistedPhrases[i];
