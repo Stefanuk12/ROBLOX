@@ -541,6 +541,10 @@ local SaveSettings = SetupTextMenu(Misc, "SaveSettings", {
                 Text = ErrorReason;
             });
             return false, ErrorReason;
+        else
+            Material.Banner({
+                Text = "Saved settings!";
+            });
         end;
     end;
 });
