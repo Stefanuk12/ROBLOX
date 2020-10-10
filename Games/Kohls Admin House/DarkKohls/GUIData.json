@@ -139,6 +139,13 @@
             "Name": "Paint Area",
             "Type": "Button"
         },
+        "SaveSettings": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Saves the GUI Settings.",
+            "Name": "Save Settings",
+            "Type": "Button"
+        },
         "Rejoin": {
             "Admin": false,
             "Persons299": false,

@@ -531,6 +531,20 @@ local PaintArea = SetupTextMenu(Misc, "PaintArea", {
     end;
 });
 
+-- // Misc: Save Settings
+local SaveSettings = SetupTextMenu(Misc, "Rejoin", {
+    Callback = function()
+        local Success, ErrorReason = KohlsAPI.SaveSettings();
+
+        if (not Success) then
+            Material.Banner({
+                Text = ErrorReason;
+            });
+            return false, ErrorReason;
+        end;
+    end;
+});
+
 -- // Misc: Rejoin
 local Rejoin = SetupTextMenu(Misc, "Rejoin", {
     Callback = function()

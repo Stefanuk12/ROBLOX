@@ -4,10 +4,11 @@
 
     Bugs:
         - probably some i havent discovered
+        - Permanant Admin bugs
 ]]
 
 return function(Arguments)
-    -- // Initialise
+    -- // Initialisef
     if (not Arguments) then Arguments = {}; end;
 
     -- // Services
