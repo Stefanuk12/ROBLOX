@@ -632,6 +632,7 @@ local GiveClientBtools = SetupTextMenu(Player, "GiveClientBtools", {
 
 -- // Protections: Anti Blind
 local AntiBlind = SetupTextMenu(Protections, "AntiBlind", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiBlind"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiBlind", Value);
     end;
@@ -639,6 +640,7 @@ local AntiBlind = SetupTextMenu(Protections, "AntiBlind", {
 
 -- // Protections: Anti Jail
 local AntiJail = SetupTextMenu(Protections, "AntiJail", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiJail"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiJail", Value);
     end;
@@ -646,6 +648,7 @@ local AntiJail = SetupTextMenu(Protections, "AntiJail", {
 
 -- // Protections: Anti Kill
 local AntiKill = SetupTextMenu(Protections, "AntiKill", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiKill"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiKill", Value);
     end;
@@ -653,6 +656,7 @@ local AntiKill = SetupTextMenu(Protections, "AntiKill", {
 
 -- // Protections: Anti Punish
 local AntiPunish = SetupTextMenu(Protections, "AntiPunish", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiPunish"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiPunish", Value);
     end;
@@ -660,6 +664,7 @@ local AntiPunish = SetupTextMenu(Protections, "AntiPunish", {
 
 -- // Server: Alert C System Use
 local AlertCSystemUse = SetupTextMenu(Server, "AlertCSystemUse", {
+    Enabled = KohlsAPI.SettingGetSet("ServerCSystemAlert"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ServerCSystemAlert", Value);
     end;
