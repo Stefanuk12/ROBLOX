@@ -1021,7 +1021,7 @@ return function(Arguments)
         -- // Vars
         local Spawn = GameFolder["Workspace"].Spawn3;
         local Baseplate = GameFolder["Workspace"].Baseplate;
-        local AntiPunish = false;
+        local AntiPunishDisabled = false;
         local testCFrame = Baseplate.CFrame;
         local testPosition = Spawn.Position;
         local X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = testCFrame:GetComponents();
@@ -1041,18 +1041,18 @@ return function(Arguments)
         LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newCFrame;
         wait(1.5);
         Players:Chat(":stun me");
-        wait(1);
-    
+
         if (KohlsAPI.SettingGetSet("ProtectionsAntiPunish")) then
             KohlsAPI.SettingGetSet("ProtectionsAntiPunish", false);
-            AntiPunish = true;
+            AntiPunishDisabled = true;
         end;
+
+        wait(1);
         Players:Chat(":punish me");
-    
         wait(1);
     
         Players:Chat(":unpunish me");
-        if (AntiPunish) then
+        if (AntiPunishDisabled) then
             KohlsAPI.SettingGetSet("ProtectionsAntiPunish", true);
         end;
     
