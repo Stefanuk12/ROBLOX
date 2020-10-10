@@ -724,8 +724,8 @@ return function(Arguments)
     
         -- // Script
         if (Player ~= nil) then
-            local Count = #KohlsAPI.PlayerManager.Players[PlayerDataIndex]["BlacklistedPhrases"];
-            KohlsAPI.PlayerManager.Players[PlayerDataIndex]["BlacklistedPhrases"][Count + 1] = {
+            print(PlayerData);
+            PlayerData["BlacklistedPhrases"][#PlayerData["BlacklistedPhrases"] + 1] = {
                 Phrase = Phrase,
                 Punishment = Punishment
             };
