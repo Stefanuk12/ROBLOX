@@ -653,7 +653,8 @@ return function(Arguments)
         local PlayerDataIndex;
         local isPhraseBlacklistedPlayer = false;
         local isPhraseBlacklisedGlobal = false;
-        local Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
+        local Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = false, nil, nil, nil;
+        if (Player) then Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player); end;
     
         -- // Get Player Data
         if (Player) then
