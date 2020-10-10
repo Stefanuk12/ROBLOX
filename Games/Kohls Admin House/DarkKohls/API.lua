@@ -80,17 +80,10 @@ return function(Arguments)
     
     if (writefile and readfile and isfile) then -- // Load Settings
         if (not isfile(KohlsAPI.Configurable.ScriptName .. ".json")) then
-            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Configurable));
+            writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Configurable.Settings));
         end;
     
-        local Configuration = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
-    
-        -- // Allow new settings to be added
-        for i,v in pairs(KohlsAPI.Configurable) do
-            if (not Configuration[i]) then
-                Configuration[i] = v;
-            end;
-        end;
+        local Settings = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
 
         -- // Check if a setting exists (internal function)
         local function DoesSettingExist(SettingName, SettingTable)
@@ -107,13 +100,13 @@ return function(Arguments)
         -- // Add new settings to the Configuration
         for i = 1, #KohlsAPI.Configurable.Settings do
             local v = KohlsAPI.Configurable.Settings[i];
-            if (not DoesSettingExist(v.Name, Configuration)) then
-                Configuration[#Configuration + 1] = v;
+            if (not DoesSettingExist(v.Name, Settings)) then
+                Settings[#Settings + 1] = v;
             end;
         end;
     
         -- // End
-        KohlsAPI.Configurable = Configuration;
+        KohlsAPI.Configurable.Settings = Settings;
     end;
     
     -- // Settings: Get/Set Setting
@@ -153,7 +146,7 @@ return function(Arguments)
         end;
     
         -- // Script
-        local Save = KohlsAPI.Configurable;
+        local Save = KohlsAPI.Configurable.Settings;
     
         -- // Export
         writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(Save));
