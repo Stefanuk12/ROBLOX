@@ -26,15 +26,15 @@ return function(Arguments)
     getgenv().KohlsAPI = {
         SelectedPad = GameFolder["Admin"]["Pads"]:GetChildren()[math.random(1, 9)],
         Connections = {},
-        BlacklistedGears = Arguments["BlacklistedGears"] ~= nil and Arguments["BlacklistedGears"] or {},
-        GlobalBlacklistedPhrases = Arguments["GlobalBlacklistedPhrases"] ~= nil and Arguments["GlobalBlacklistedPhrases"] or {},
+        BlacklistedGears = Arguments["BlacklistedGears"] == nil and {} or Arguments["BlacklistedGears"],
+        GlobalBlacklistedPhrases = Arguments["GlobalBlacklistedPhrases"] == nil and {} or Arguments["GlobalBlacklistedPhrases"],
         PlayerManager = {
             Players = {};
         },
         Spammer = {},
         Configurable = {
-            Errors = Arguments["Errors"] ~= nil and Arguments["Errors"] or true,
-            ScriptName = Arguments["ScriptName"] ~= nil and Arguments["ScriptName"] or "KohlsAPI",
+            Errors = Arguments["Errors"] == nil and true or Arguments["Errors"] ,
+            ScriptName = Arguments["ScriptName"] == nil and "KohlsAPI" or Arguments["ScriptName"],
             CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
             BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
             Settings = {
@@ -656,12 +656,14 @@ return function(Arguments)
         local Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
     
         -- // Get Player Data
-        for i = 1, #KohlsAPI.PlayerManager.Players do
-            local v = KohlsAPI.PlayerManager.Players[i];
-    
-            if (v.UserId == Player.UserId) then
-                PlayerData = v;
-                PlayerDataIndex = i;
+        if (Player) then
+            for i = 1, #KohlsAPI.PlayerManager.Players do
+                local v = KohlsAPI.PlayerManager.Players[i];
+        
+                if (v.UserId == Player.UserId) then
+                    PlayerData = v;
+                    PlayerDataIndex = i;
+                end;
             end;
         end;
     
