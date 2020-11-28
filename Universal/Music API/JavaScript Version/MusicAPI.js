@@ -10,26 +10,34 @@ soundCheckFilter = function(webSource){
     ];
 
     // Loop
+    var returnValue = false;
     removedAssets.forEach(asset => {
-        if (webSource.body.includes(asset)){
+        if (webSource.body.includes(asset)){eeeeeeee
             // Return
-            return true;
+            returnValue = true;
         };
     });
 
     // Return
-    return true;
+    return returnValue;
 };
 
 // Check if a certain sound got deleted
-module.exports.isSoundDeleted = async function(SoundId, filter = soundCheckFilter){
+module.exports.isSoundDeleted = async function(SoundId, Verbose = false, filter = soundCheckFilter){
     try {
         // Get webpage source
         const webSource = await got.get(`https://roblox.com/library/${SoundId}`);
+
         // Filter it to see if it is a deleted sound
         const result = filter(webSource);
+
+        // Verbose print
+        if (result && Verbose){
+            console.log(`${SoundId} deleted.`)
+        };
+
         // Return if it is a deleted sounds
-        return !result;
+        return result;
     } catch(error) {
         // Return
         return true;
@@ -67,7 +75,7 @@ module.exports.removeDuplicateSounds = async function(Table){
 };
 
 // Removes removed sounds from Music Table
-module.exports.updateMusicTable = async function(MusicTable){
+module.exports.updateMusicTable = async function(MusicTable, Verbose = false){
     // Vars
     updatedMusicTable = [];
 
@@ -76,7 +84,7 @@ module.exports.updateMusicTable = async function(MusicTable){
 
     // Remove Deleted sounds
     for await (var item of MusicTable){
-        const result = await module.exports.isSoundDeleted(item.SoundId);
+        const result = await module.exports.isSoundDeleted(item.SoundId, Verbose);
         if (!result){
             updatedMusicTable.push(item);
         };
@@ -89,7 +97,7 @@ module.exports.updateMusicTable = async function(MusicTable){
 // Add sounds to table
 module.exports.addSoundsToMusicTable = async function(Sounds, MusicTable){
     for await (var item of Sounds){
-        const result = module.exports.isSoundDeleted(item.SoundId);
+        const result = await module.exports.isSoundDeleted(item.SoundId);
         if (!result){
             item["UUID"] = MusicTable.length + 1;
             MusicTable.push(item);
