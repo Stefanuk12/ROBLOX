@@ -1,0 +1,18 @@
+{
+    "Lua.diagnostics.globals": [
+        "rconsoleprint",
+        "getgenv",
+        "getconnections",
+        "rconsoleerr",
+        "is_synapse_function",
+        "hookfunction",
+        "Drawing",
+        "setreadonly",
+        "newcclosure",
+        "getrawmetatable",
+        "getgc"
+    ],
+    "Lua.diagnostics.ignore": [
+        "HttpGetAsync"
+    ]
+}
