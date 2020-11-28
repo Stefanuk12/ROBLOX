@@ -1,3 +1,7 @@
+-- // To stop from being executed multiple times
+if (getgenv().MusicCommands) then return end
+getgenv().MusicCommands = true;
+
 -- // Dependencies
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))()
 MusicAPI.CheckAllSounds()
