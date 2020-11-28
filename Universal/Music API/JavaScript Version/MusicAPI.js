@@ -76,12 +76,10 @@ module.exports.updateMusicTable = async function(MusicTable){
 
     // Remove Deleted sounds
     for await (var item of MusicTable){
-        (async (item) => {
-            const result = await module.exports.isSoundDeleted(item.SoundId);
-            if (!result){
-                updatedMusicTable.push(item);
-            };
-        })();
+        const result = await module.exports.isSoundDeleted(item.SoundId);
+        if (!result){
+            updatedMusicTable.push(item);
+        };
     };
 
     // Return updated
