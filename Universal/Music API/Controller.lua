@@ -1,150 +1,170 @@
---[[
-    Documentation:
-        Variables:
-            <table> ValiantMusicAPI - The main holder table with all of the functions and most variables.
-            <string> ValiantMusicAPI.GitHubTable - The table that holds all of the IDs and Names of the audios that will be filtered through.
-            <table> ValiantMusicAPI.removedAssets - Things that indicate that the audio has been deleted
-            <table> ValiantMusicAPI.musicTable - holds all of the filtered audios
+-- // This is updated and please switch to this as it's optimised
 
-        Functions:
-            <bool> ValiantMusicAPI.checkBadSound(<string> SoundId, <string> SoundName, <bool> UseMarketplace, <bool> Verbose) - Returns true/false depending on whether the audio has been removed or not
-            <table> ValiantMusicAPI.removeDuplicates(<table> targetTable) - Removes any duplicate SoundIds from the table
-            <table> ValiantMusicAPI.testAllSounds(<bool> Verbose, <number> waitTime, <bool> UseMarketplace) - Tests all of the sounds in the ValiantMusicAPI.GitHubTable table then updates the ValiantMusicAPI.musicTable table
-            <void> ValiantMusicAPI.printMusic(<void>) - Prints all of the Sound Names + their indexes
-            <string/number idk> ValiantMusicAPI.getSound(<number> Index) - Returns the SoundId of the Sound present at the Index of the ValiantMusicAPI.musicTable table
-            <string> ValiantMusicAPI.getSoundName(<number> Index) - Returns the Sound Name of the Sound present at the Index of the ValiantMusicAPI.musicTable table
-            <void> ValiantMusicAPI.saveMusicTableJSON(<bool> Verbose) - Saves the filtered Music Table as .json to your workspace folder
-            <void> ValiantMusicAPI.exportMusicToClipboard(<bool> Verbose) - Saves the filtered Music Table to your clipboard in a formatted version
-]]
-
--- // Initialise
-if getgenv().ValiantMusicAPI then return getgenv().ValiantMusicAPI end
+-- // Services
+local MarketplaceService = game:GetService("MarketplaceService");
+local HttpService = game:GetService("HttpService");
+local RunService = game:GetService("RunService");
 
 -- // Vars
-getgenv().ValiantMusicAPI = {} 
-ValiantMusicAPI.GitHubTable = 'https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json'
-ValiantMusicAPI.musicTable = {}
-ValiantMusicAPI.removedAssets = {
+local RenderStepped = RunService.RenderStepped;
+getgenv().MusicAPI = {}; local MusicAPI = getgenv().MusicAPI;
+MusicAPI.Verbose = true; -- // Will print what it's all doing
+MusicAPI.MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json";
+MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
+MusicAPI.RemovedAssets = {
     "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
     "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
-}
-local MarketplaceService = game:GetService("MarketplaceService")
+    "This audio asset has been blocked due to copyright violations."
+};
 
--- // Check if a Sound has been removed
-function ValiantMusicAPI.checkBadSound(SoundId, SoundName, UseMarketplace, Verbose)
-    -- // Fail-safing
-    if not SoundId then return false end
-    if not SoundName then SoundName = "No Sound Name Provided" end
-    if not UseMarketplace then UseMarketplace = false end
-    if not Verbose then Verbose = false end
+-- // Return false if the Sound is not working
+function MusicAPI.CheckSound(SoundId)
+    local SoundURL = "https://www.roblox.com/library/" .. SoundId;
+    local SoundSource = game:HttpGetAsync(SoundURL);
 
-    -- // Checking 
-    local TargetURL = game:HttpGetAsync('https://www.roblox.com/library/'..SoundId) -- // Gets the source
-    if not UseMarketplace and TargetURL then
-        for _,v in pairs(ValiantMusicAPI.removedAssets) do
-            if string.find(TargetURL, v) then
-                if Verbose then print(SoundName.." ("..SoundId..")".." removed!") end
-                return true -- // The Sound has been removed, return true
-            end
-        end
-    end
+    for i = 1, #MusicAPI.RemovedAssets do
+        local v = MusicAPI.RemovedAssets[i];
+        
+        if (SoundSource:find(v)) then
+            return false;
+        end;
 
-    -- // Checking w/ Marketplace
-    if UseMarketplace then
-        local ProductInfo = MarketplaceService:GetProductInfo(SoundId, Enum.InfoType.Asset)
-        return (GPI.Description == '(Removed for copyright)' or GPI.Description == '[ Content Deleted ]')
-    end
+        wait();
+    end;
 
-    return false -- // The sound stil exists, return false
-end
+    return true;
+end;
 
--- // Remove any duplicate SoundIds
-function ValiantMusicAPI.removeDuplicates(targetTable)
-    local CheckTable = {}
-    local function isInTable(targetTable, SoundId)
-        for _,v in pairs(targetTable) do
-            if v and v.SoundId == SoundId then
-               return true
-            end
-        end
-        return false
-    end
-    for i,v in pairs(targetTable) do
-        if not isInTable(CheckTable, v.SoundId) then
-            table.insert(CheckTable, v)
-        end
-    end
-
-    return CheckTable
-end
-
--- // Test All Of the Sounds
-function ValiantMusicAPI.testAllSounds(Verbose, waitTime, UseMarketplace)
-    if not waitTime then waitTime = 15 end 
-    ValiantMusicAPI.musicTable = game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(ValiantMusicAPI.GitHubTable))
-    warn("Starting Music Checks, please wait "..waitTime.." seconds!")
-
-    -- // Remove Duplicates
-    ValiantMusicAPI.musicTable = ValiantMusicAPI.removeDuplicates(ValiantMusicAPI.musicTable)
-
-    -- // Check over all of the sounds
-    for i,v in pairs(ValiantMusicAPI.musicTable) do
-        coroutine.wrap(function() -- // Coroutine to speed everything up
-            if ValiantMusicAPI.checkBadSound(v.SoundId, v.Name, UseMarketplace, Verbose) then
-                table.remove(ValiantMusicAPI.musicTable, i)
-            end
-        end)()
-    end
-    wait(waitTime)
+-- // Remove any duplicate Sounds
+local function IsSoundInMusicTable(SoundId, MTable)
+    for i = 1, #MTable do 
+        local v = MTable[i];
+        
+        if (v.SoundId == SoundId) then
+            return true;
+        end;
+    end;
     
-    -- // Finishing up
-    warn("Music Checks Finished!")
-    return ValiantMusicAPI.musicTable
-end
+    return false;
+end;
+function MusicAPI.RemoveDuplicates(MTable)
+    local Cleaned = {};
+    
+    for i = 1, #MTable do
+        local v = MTable[i];
+        
+        if (not IsSoundInMusicTable(v.SoundId, Cleaned)) then
+            table.insert(Cleaned, v);
+            
+            wait();
+        end;
+    end;
 
-function ValiantMusicAPI.printMusic()
-    for i,v in pairs(ValiantMusicAPI.musicTable) do
-        print(i, "|", v.Name)
-    end
-end
+    return Cleaned;
+end;
 
-function ValiantMusicAPI.getSound(Index)
-    return ValiantMusicAPI.musicTable[Index].SoundId
-end
+-- // Test all sounds
+function MusicAPI.CheckAllSounds()
+    local MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
+    local Cleaned = {};
+    local RemovedCount = 0;
+    local CleanCount = 0;
+    local Count = 0;
+    local StartTime = tick();
 
-function ValiantMusicAPI.getSoundName(Index)
-    return ValiantMusicAPI.musicTable[Index].Name
-end
+    -- // Remove duplicates
+    MusicTable = MusicAPI.RemoveDuplicates(MusicTable);
 
-function ValiantMusicAPI.saveMusicTableJSON(Verbose)
-    local tbl = {}
-    for i = 1, #ValiantMusicAPI.musicTable do 
-        if ValiantMusicAPI.musicTable[i] then
-            ValiantMusicAPI.musicTable[i].UUID = i
-            table.insert(tbl, ValiantMusicAPI.musicTable[i]) 
-        end
-    end
+    -- // Check over all the sounds
+    for i = 1, #MusicTable do
+        local v = MusicTable[i];
+        local SoundId = v.SoundId;
+        coroutine.wrap(function()
+            if (MusicAPI.CheckSound(SoundId)) then
+                Cleaned[#Cleaned + 1] = v;
+                CleanCount = CleanCount + 1;
+            else
+                if (MusicAPI.Verbose) then warn('Audio Failed ' .. "#" .. i .. "/" .. #MusicTable .. ": " .. SoundId); end;
+                RemovedCount = RemovedCount + 1;
+            end;
 
-    local contents = game:GetService("HttpService"):JSONEncode(tbl)
-    local success = false
-    if writefile then
-        writefile("MusicTable.json", contents)
-        if Verbose then print('Successfully saved MusicTable.json to workspace!') end
-    end
-end
+            Count = Count + 1;
+        end)();
+    end;
 
-function ValiantMusicAPI.exportMusicToClipboard(Verbose)
-    local Holder = "Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios):".."\n"
-    for i,v in pairs(ValiantMusicAPI.musicTable) do
-        Holder = Holder..i.." ["..v.SoundId.."] | "..v.Name.."\n"
-    end
-    Holder = Holder.."Stefanuk12's Music API Audios (Current Count: "..#ValiantMusicAPI.musicTable.." audios)".."\n"
-    setclipboard(Holder)
-    if Verbose then print("Exported Music Table to Clipboard!") end
+    -- // Return
+    repeat wait() until (#MusicTable == #Cleaned + RemovedCount);
+    
+    if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
+    
+    return Cleaned;
+end;
 
-    return Holder
-end
+function MusicAPI.Benchmark(FunctionToBench, Iterations, ...)
+    local StartTime = tick();
+    
+    for i = 1, Iterations do
+        FunctionToBench(...);
+    end;
+    
+    return tick() - StartTime;
+end;
 
-ValiantMusicAPI.testAllSounds(true)
+--[[
+    Benchmark Script:
 
-return getgenv().ValiantMusicAPI
+    local BenchmarkTime = MusicAPI.Benchmark(MusicAPI.CheckAllSounds, 1);
+    print(BenchmarkTime);
+]]
+
+-- // Set UUIDs
+function MusicAPI.SetUUIDs()
+    local MusicT = MusicAPI.MusicTable;
+    
+    for i = 1, #MusicT do
+        local v = MusicT[i];
+        v["UUID"] = i;
+    end;
+
+    return MusicT;
+end;
+
+-- // Save Music Table as JSON
+function MusicAPI.SaveAsJSON()
+    if (not writefile) then return false; end;
+    
+    local MusicTable = MusicAPI.SetUUIDs();
+    local Content = HttpService:JSONEncode(MusicTable);
+    
+    writefile("MusicTable.json", Content);
+end;
+
+-- // Save to clipboard
+function MusicAPI.SetClipboard()
+    if (not setclipboard) then return false; end;
+
+    local MusicTable = MusicAPI.MusicTable;
+    local Credits = "Music API - Created By Stefanuk12 - Audio Count: " .. #MusicTable .. "\n";
+    local String = Credits;
+
+    for i = 1, #MusicTable do
+        local v = MusicTable[i];
+        String = String .. i .. " | " .. v.Name .. " (" .. v.SoundId .. ")\n";
+    end;
+
+    String = String .. Credits;
+
+    setclipboard(String);
+end;
+
+--[[
+local CAS = MusicAPI.CheckAllSounds();
+if (#CAS == 0) then print('Check All Sounds returned an empty table.'); end;
+print(#CAS);
+for i = 1, #CAS do
+    local v = CAS[i];
+    print(v);
+end;
+]]
+
+return MusicAPI;
