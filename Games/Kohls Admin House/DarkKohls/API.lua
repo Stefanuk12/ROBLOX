@@ -73,8 +73,8 @@ return function(Arguments)
                 v.Connection:Disconnect();
             end;
         end;
-    
-        KohlsAPI = nil;
+
+        getgenv().KohlsAPI = nil;
         return true;
     end;
     
@@ -271,12 +271,12 @@ return function(Arguments)
         end;
     
         -- // Server: /c system Alert
-        if (KohlsAPI.SettingGetSet("ServerCSystemAlert") and msg == "/c system" and not GWhitelisted) then
-            Players:Chat(KohlsAPI.Configurable.CSystemAlertNote:gsub("PLAYERNAME", v.Name));
+        if (KohlsAPI.SettingGetSet("ServerCSystemAlert") and Message == "/c system" and not GWhitelisted) then
+            Players:Chat(KohlsAPI.Configurable.CSystemAlertNote:gsub("PLAYERNAME", Player.Name));
         end;
     
         -- // Identifier ;)
-        if (isProtectedWhitelisted and Player ~= LocalPlayer and msg:lower() == "hi gamers") then
+        if (isProtectedWhitelisted and Player ~= LocalPlayer and Message:lower() == "hi gamers") then
             Players:Chat(":h Hi gamer!");
         end;
     end;
@@ -405,8 +405,8 @@ return function(Arguments)
         -- // Respawn Explode
         local _, GWhitelisted, _, _ = isWhitelisted(Player);
         if (KohlsAPI.SettingGetSet("ServerRespawnExplode") and not GWhitelisted) then
-            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. v.Name);
-            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. v.Name);
+            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. Player.Name);
+            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. Player.Name);
         end;
     end)};
     
@@ -422,8 +422,8 @@ return function(Arguments)
 
         -- // Respawn Explode
         if (KohlsAPI.SettingGetSet("ServerRespawnExplode")) then
-            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. v.Name, true);
-            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. v.Name, true);
+            KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. Player.Name, true);
+            KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. Player.Name, true);
         end;
     end)};
     
