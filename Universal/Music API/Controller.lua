@@ -140,7 +140,7 @@ function MusicAPI.SaveAsJSON()
 end;
 
 -- // Save to clipboard
-function MusicAPI.SetClipboard()
+function MusicAPI.GetAll()
     if (not setclipboard) then return false; end;
 
     local MusicTable = MusicAPI.MusicTable;
@@ -154,7 +154,11 @@ function MusicAPI.SetClipboard()
 
     String = String .. Credits;
 
-    setclipboard(String);
+    return String;
+end;
+
+function MusicAPI.SetClipboard()
+    setclipboard(MusicAPI.GetAll());
 end;
 
 --[[

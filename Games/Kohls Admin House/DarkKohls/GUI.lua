@@ -557,7 +557,7 @@ local Rejoin = SetupTextMenu(Misc, "Rejoin", {
 });
 
 -- // Misc: Start Audio Visualiser
-local AudioVisualiser = SetupTextMenu(Misc, "StartAudioVisualiser", {
+local StartAudioVisualiser = SetupTextMenu(Misc, "StartAudioVisualiser", {
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/AudioVisualiser/AudioVisualiser.lua"))();
     end;
