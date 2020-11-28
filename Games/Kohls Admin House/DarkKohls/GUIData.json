@@ -160,6 +160,13 @@
             "Name": "Start Audio Visualiser",
             "Type": "Button"
         },
+        "StartMusicCommands": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Starts the Music Commands, .help for more information.",
+            "Name": "Start Music Commands",
+            "Type": "Button"
+        },
         "ShutdownGUI": {
             "Admin": false,
             "Persons299": false,

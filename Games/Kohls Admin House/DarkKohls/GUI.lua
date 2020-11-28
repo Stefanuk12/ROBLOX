@@ -563,6 +563,13 @@ local StartAudioVisualiser = SetupTextMenu(Misc, "StartAudioVisualiser", {
     end;
 });
 
+-- // Misc: Start Music Commands
+local StartMusicCommands = SetupTextMenu(Misc, "StartAudioVisualiser", {
+    Callback = function()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/MusicCommands/Main.lua"))();
+    end;
+});
+
 -- // Misc: Shutdown GUI
 local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
     Callback = function()

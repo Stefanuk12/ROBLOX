@@ -53,4 +53,14 @@ addCommand("refresh", function(message)
     MusicAPI.CheckAllSounds()
 end)
 
+addCommand("help", function(message)
+    print([[
+        Music Commands - Help Menu - Prefix: .
+        help - prints out the help menu
+        play [index] - plays the song at the index
+        music - prints out the music database
+
+        Example: .play 1
+    ]])
+end)
 print('Loaded Music Commands')
