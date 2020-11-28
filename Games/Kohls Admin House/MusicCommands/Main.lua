@@ -23,8 +23,8 @@ LocalPlayer.Chatted:Connect(function(message)
     for i = 1, #Commands do
         local v = Commands[i];
         
-        if (message:sub(#Prefix + 1, #v.Name) == v.Name) then
-            v.Function(message:sub(#v.Name + #Prefix))
+        if (message:sub(#Prefix + 1):split(" ")[1] == v.Name) then
+            v.Function(message:sub(#v.Name + #Prefix + 2))
         end
     end
 end)
@@ -32,15 +32,17 @@ end)
 -- // Commands
 addCommand("play", function(message)
     local songNumber = tonumber(message)
-    local SoundObject = MusicAPI.musicTable[songNumber]
+    local SoundObject = MusicAPI.MusicTable[songNumber]
     if (songNumber and SoundObject) then
         Players:Chat(":music " .. SoundObject.SoundId)
         print('Now Playing: ' .. SoundObject.Name)
+    else
+        warn('Sound does not exist in database!')
     end
 end)
 
 addCommand("music", function(message)
-    print(MusicAPI.GetAll())
+    print("\n" .. MusicAPI.GetAll())
 end)
 
 addCommand("refresh", function(message)
