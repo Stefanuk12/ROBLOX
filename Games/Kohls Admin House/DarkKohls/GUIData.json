@@ -153,6 +153,13 @@
             "Name": "Rejoin",
             "Type": "Button"
         },
+        "StartAudioVisualiser": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Starts the audio visualiser",
+            "Name": "Start Audio Visualiser",
+            "Type": "Button"
+        },
         "ShutdownGUI": {
             "Admin": false,
             "Persons299": false,
