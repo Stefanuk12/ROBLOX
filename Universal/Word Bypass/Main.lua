@@ -24,7 +24,7 @@ mt.__namecall = newcclosure(function(...)
 
     if (method == "FireServer" and args[1] == SayMessageRequest and getgenv().BypassText) then
         args[2] = filterString(args[2])
-        return backupnamecall(args)
+        return backupnamecall(unpack(args))
     end
     return backupnamecall(...)
 end)
