@@ -56,11 +56,14 @@ end)
 addCommand("help", function(message)
     print([[
         Music Commands - Help Menu - Prefix: .
+
         help - prints out the help menu
         play [index] - plays the song at the index
         music - prints out the music database
 
         Example: .play 1
+
+        Music Commands - Help Menu - Prefix: .
     ]])
 end)
 print('Loaded Music Commands')
