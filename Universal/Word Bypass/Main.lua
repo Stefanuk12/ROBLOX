@@ -6,20 +6,33 @@ local function filterString(text)
     -- // Remove Punctutation
     text = string.gsub(text, "[%p]+", "")
     
-    -- // Count
-    local iterationCount = 0
-    
     -- // Filtering
-    for i = 1, #text do
-        if (i % 2 == 0) then
-            i = i + iterationCount
-            local a = string.sub(text, 0, i)
-            local b = string.sub(text, i + 1, -1)
-            text = a .. seperater .. b
-            iterationCount = iterationCount + #seperater
+    local function filterWord(word)
+        local iterationCount = 0
+        
+        for i = 1, #word do
+            if (i % 2 == 0) then
+                i = i + iterationCount
+                local a = string.sub(word, 0, i)
+                local b = string.sub(word, i + 1, -1)
+                
+                word = a .. seperater .. b
+                iterationCount = iterationCount + #seperater
+            end
         end
+        
+        return word
     end
 
+    -- // Filtering each word
+    text = string.split(text, " ")
+    for i = 1, #text do
+        text[i] = filterWord(text[i])
+    end
+
+    -- // Putting it all back together
+    text = table.concat(text, " ")
+    
     -- // Finishing Bypassing
     return text
 end
