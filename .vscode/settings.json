@@ -12,7 +12,9 @@
         "getrawmetatable",
         "getgc",
         "KohlsAPI",
-        "DarkKohls"
+        "DarkKohls",
+        "fireclickdetector",
+        "writefile"
     ],
     "Lua.diagnostics.ignore": [
         "HttpGetAsync",

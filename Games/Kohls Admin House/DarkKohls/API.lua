@@ -18,7 +18,7 @@ return function(Arguments)
     local HttpService = game:GetService("HttpService");
     local UserInputService = game:GetService("UserInputService");
     local RunService = game:GetService("RunService");
-    
+
     -- // Vars
     local GameFolder = Workspace.Terrain["_Game"];
     local CoroutineKillSwitch = false;
@@ -62,11 +62,10 @@ return function(Arguments)
     KohlsAPI.Server = {};
     KohlsAPI.SoundAbuse = {};
     KohlsAPI.Whitelist = {};
-    
+
     local LocalPlayer = Players.LocalPlayer;
-    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
     local Mouse = LocalPlayer:GetMouse();
-    
+
     -- // Shutdown
     function KohlsAPI.Shutdown()
         for i = 1, #KohlsAPI.Connections do
@@ -79,12 +78,12 @@ return function(Arguments)
         getgenv().KohlsAPI = nil;
         return true;
     end;
-    
+
     if (writefile and readfile and isfile) then -- // Load Settings
         if (not isfile(KohlsAPI.Configurable.ScriptName .. ".json")) then
             writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(KohlsAPI.Configurable.Settings));
         end;
-    
+
         local Settings = HttpService:JSONDecode(readfile(KohlsAPI.Configurable.ScriptName .. ".json"));
 
         -- // Check if a setting exists (internal function)
@@ -95,10 +94,10 @@ return function(Arguments)
                     return true;
                 end
             end;
-    
+
             return false;
         end;
-    
+
         -- // Add new settings to the Configuration
         for i = 1, #KohlsAPI.Configurable.Settings do
             local v = KohlsAPI.Configurable.Settings[i];
@@ -106,11 +105,11 @@ return function(Arguments)
                 Settings[#Settings + 1] = v;
             end;
         end;
-    
+
         -- // End
         KohlsAPI.Configurable.Settings = Settings;
     end;
-    
+
     -- // Settings: Get/Set Setting
     function KohlsAPI.SettingGetSet(Name, Value)
         -- // Handling
@@ -121,7 +120,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         for i = 1, #KohlsAPI.Configurable.Settings do
             local v = KohlsAPI.Configurable.Settings[i];
@@ -135,7 +134,7 @@ return function(Arguments)
             end;
         end;
     end;
-    
+
     -- // Settings: Save Settings
     function KohlsAPI.SaveSettings()
         -- // Handling
@@ -146,15 +145,15 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         local Save = KohlsAPI.Configurable.Settings;
-    
+
         -- // Export
         writefile(KohlsAPI.Configurable.ScriptName .. ".json", HttpService:JSONEncode(Save));
         return true;
     end;
-    
+
     -- // Player Manager: Whitelist
     local ProtectedWhitelistedUsers = {LocalPlayer.UserId, 91318356};
     function isWhitelisted(Player)
@@ -173,11 +172,11 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         local Whitelisted = false;
         local isProtectedWhitelisted = false;
-    
+
         -- // Check if Whitelisted
         for i = 1, #KohlsAPI.PlayerManager.Players do
             local v = KohlsAPI.PlayerManager.Players[i];
@@ -185,20 +184,20 @@ return function(Arguments)
                 Whitelisted = true
             end;
         end;
-    
+
         -- // Check if Protected Whitelisted
         for i = 1, #ProtectedWhitelistedUsers do
             local v = ProtectedWhitelistedUsers[i];
-    
+
             if (v == Player.UserId) then
                 isProtectedWhitelisted = true;
             end;
         end;
-    
+
         -- // Return
         return true, (Whitelisted or isProtectedWhitelisted), Whitelisted, isProtectedWhitelisted;
     end;
-    
+
     -- // Player Manager: Handler (internal)
     local function PlayerManagerHandler(Message, Player)
         -- // Handling
@@ -223,11 +222,11 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         local PlayerData;
         local _, GWhitelisted, _, isProtectedWhitelisted = isWhitelisted(Player);
-    
+
         -- // Get Player Data
         for i = 1, #KohlsAPI.PlayerManager.Players do
             local v = KohlsAPI.PlayerManager.Players[i];
@@ -235,15 +234,15 @@ return function(Arguments)
                 PlayerData = v;
             end;
         end;
-    
+
         -- // Handle Blacklisted Gears
         local splitMessage = Message:split(" ");
         if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
-            
+
             for i = 1, #KohlsAPI.BlacklistedGears do
                 local v = KohlsAPI.BlacklistedGears[i];
-    
+
                 if (v == BlacklistedGear) then
                     if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
                         Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
@@ -252,119 +251,118 @@ return function(Arguments)
                 end;
             end
         end;
-    
+
         -- // Handle Blacklisted Phrases
         local PlayerBlacklistedPhrases = PlayerData.BlacklistedPhrases;
-    
+
         for i = 1, #PlayerBlacklistedPhrases do -- // Player
             local v = PlayerBlacklistedPhrases[i];
-    
+
             if (Message:find(v.Phrase)) then
                 Players:Chat(v.Punishment);
             end;
         end;
-    
+
         for i = 1, #KohlsAPI.GlobalBlacklistedPhrases do -- // Global
             local v = KohlsAPI.GlobalBlacklistedPhrases[i];
-    
+
             if (Message:find(v.Phrase)) then
                 Players:Chat(v.Punishment);
             end;
         end;
-    
+
         -- // Server: /c system Alert
         if (KohlsAPI.SettingGetSet("ServerCSystemAlert") and Message == "/c system" and not GWhitelisted) then
             Players:Chat(KohlsAPI.Configurable.CSystemAlertNote:gsub("PLAYERNAME", Player.Name));
         end;
-    
+
         -- // Identifier ;)
         if (isProtectedWhitelisted and Player ~= LocalPlayer and Message:lower() == "hi gamers") then
             Players:Chat(":h Hi gamer!");
         end;
     end;
-    
+
     -- // Player Manager: Get Players
     function KohlsAPI.PlayerManager.GetPlayers(Sort) 
         if (Sort == "Unwhitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
-    
+
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
-    
+                local _, GeneralWhitelisted, _, _ = isWhitelisted(v);
+
                 if (not GeneralWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
-            
+
             return true, PlayerTable;
         elseif (Sort == "GeneralWhitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
-    
+
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
-    
+                local _, GeneralWhitelisted, _, _ = isWhitelisted(v);
+
                 if (GeneralWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
-            
+
             return true, PlayerTable;
         elseif (Sort == "Whitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
-    
+
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
-    
+                local _, _, Whitelisted, _ = isWhitelisted(v);
+
                 if (Whitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
-            
+
             return true, PlayerTable;
         elseif (Sort == "ProtectedWhitelisted") then
             local PlayerTable = {};
             local AllPlayers = Players:GetPlayers();
-    
+
             for i = 1, #AllPlayers do
                 local v = AllPlayers[i];
-                local Success, GeneralWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(v);
-    
+                local _, _, _, isProtectedWhitelisted = isWhitelisted(v);
+
                 if (isProtectedWhitelisted) then
                     PlayerTable[#PlayerTable + 1] = v;
                 end;
             end;
-            
+
             return true, PlayerTable;
         end;
     end;
-    
+
     -- // Player Manager: Check if there any protected whitelist players in the game (internal)
     function AreTherePWLInTheServer()
-        local Success, ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted");
-        local IsOnlyLocalPlayer = false;
-        
+        local _, ProtectedUsers = KohlsAPI.PlayerManager.GetPlayers("ProtectedWhitelisted");
+ 
         for i = 1, #ProtectedUsers do
             local v = ProtectedUsers[i];
             if (v.UserId ~= LocalPlayer.UserId) then
                 return true;
             end;
         end;
-    
+
         return false;
     end;
-    
+
     -- // Player Manager: Adding existing players to table
     local AllPlayers = Players:GetPlayers();
-    
+
     for i = 1, #AllPlayers do
         local Player = AllPlayers[i];
-    
+
         if (Player ~= LocalPlayer) then
             KohlsAPI.PlayerManager.Players[#KohlsAPI.PlayerManager.Players + 1] = {
                 Instance = Player,
@@ -373,7 +371,7 @@ return function(Arguments)
                 Whitelisted = false,
                 BlacklistedPhrases = {}
             };
-    
+
             -- // Activating the Chat Handler
             KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = Player.UserId .. "Chatted", Connection = Player.Chatted:Connect(function(Message)
                 PlayerManagerHandler(Message, Player);
@@ -388,7 +386,7 @@ return function(Arguments)
             };
         end;
     end;
-    
+
     -- // Player Manager: Adding new players to table
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "PlayerManagerNew", Connection = Players.PlayerAdded:Connect(function(Player)
         KohlsAPI.PlayerManager.Players[#KohlsAPI.PlayerManager.Players + 1] = {
@@ -398,7 +396,7 @@ return function(Arguments)
             Whitelisted = false,
             BlacklistedPhrases = {}
         };
-    
+
         -- // Activating the Chat Handler
         Player.Chatted:Connect(function(Message)
             PlayerManagerHandler(Message, Player);
@@ -416,7 +414,7 @@ return function(Arguments)
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "PlayerManagerRemove", Connection = Players.PlayerRemoving:Connect(function(Player)
         for i = 1, #KohlsAPI.PlayerManager.Players do
             local PlayerData = KohlsAPI.PlayerManager.Players;
-    
+
             if (PlayerData and PlayerData.UserId == Player.UserId) then
                 table.remove(KohlsAPI.PlayerManager.Players, i);
             end;
@@ -428,7 +426,7 @@ return function(Arguments)
             KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. Player.Name, true);
         end;
     end)};
-    
+
     -- // Admin: Regenerate Admin
     function KohlsAPI.Admin.RegenerateAdmin()
         -- // Failsafing
@@ -446,14 +444,14 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Regen the admin
         fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
-    
+
         -- // Final Return
         return true;
     end;
-    
+
     -- // Admin: Get Admin
     function KohlsAPI.Admin.GetAdmin(SpecifyPad)
         -- // Handling
@@ -487,38 +485,38 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Regen the admin
         local Holder = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
         if (not Holder and not SpecifyPad) then
             fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
         end;
         Holder = nil;
-    
+
         -- // Vars
         local DesiredPadName = LocalPlayer.Name .. "'s admin";
         local SelectedPad = SpecifyPad or GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin");
         local SavedPadCFrame = SelectedPad.Head.CFrame;
-    
+
         if (SelectedPad.Name ~= DesiredPadName) then
             -- // Setting Pad Properties
             SelectedPad.Head.Transparency = 1;
             SelectedPad.Head.Size = Vector3.new(0, 0, 0);
             SelectedPad.Head.CanCollide = false;
-        
+
             -- // Constantly teleporting the pad to the Player until the player has admin
             while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do 
                 wait();
                 SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
             end;
-    
+
             -- // Reset Pad Properties
             SelectedPad.Head.CFrame = SavedPadCFrame;
             SelectedPad.Head.Transparency = 0;
             SelectedPad.Head.Size = Vector3.new(3, 0.4, 3);
             SelectedPad.Head.CanCollide = true;
         end;
-        
+
         -- // Final Return
         return true, SelectedPad;
     end;
@@ -529,12 +527,12 @@ return function(Arguments)
             -- // Vars
             local RegenPad = GameFolder["Admin"]:WaitForChild("Regen");
             local DesiredPadName = LocalPlayer.Name .. "'s admin";
-    
+
             -- // Get a pad if it's enabled
             if (KohlsAPI.SettingGetSet("AdminPermanantAdmin") and KohlsAPI.SelectedPad.Name ~= DesiredPadName) then
                 KohlsAPI.Admin.GetAdmin(KohlsAPI.SelectedPad);
             end;
-    
+
             -- // Connection
             KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "Permanant Admin", Connection = KohlsAPI.SelectedPad:GetPropertyChangedSignal("Name"):Connect(function(Value)
                 if (KohlsAPI.SettingGetSet("AdminPermanantAdmin") and Value ~= DesiredPadName) then
@@ -543,7 +541,7 @@ return function(Arguments)
             end)};
         end;
     end)();
-    
+
     -- // Blacklist: Blacklist Gear
     function KohlsAPI.Blacklist.BlacklistUnblacklistGear(GearId, Unblacklist)
         -- // Handling
@@ -576,7 +574,7 @@ return function(Arguments)
                 end;
             end;
         end;
-    
+
         if (not GearInTable) then
             if (not Unblacklist) then
                 -- // Script
@@ -593,7 +591,7 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Blacklist: Blacklist Phrase
     function KohlsAPI.Blacklist.BlacklistUnblacklistPhrase(Phrase, Punishment, Player, Unblacklist)
         -- // Handling
@@ -641,7 +639,7 @@ return function(Arguments)
                 return false, ErrorReason;
             end;
         end;
-    
+
         -- // Script
         local PlayerData;
         local PlayerDataIndex;
@@ -649,12 +647,12 @@ return function(Arguments)
         local isPhraseBlacklisedGlobal = false;
         local Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = false, nil, nil, nil;
         if (Player) then Success, GWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player); end;
-    
+
         -- // Get Player Data
         if (Player) then
             for i = 1, #KohlsAPI.PlayerManager.Players do
                 local v = KohlsAPI.PlayerManager.Players[i];
-        
+
                 if (v.UserId == Player.UserId) then
                     PlayerData = v;
                     PlayerDataIndex = i;
@@ -666,16 +664,16 @@ return function(Arguments)
                 end;
             end;
         end;
-      
+
         -- // Check if the phrase is blacklisted globally
         for i = 1, #KohlsAPI.GlobalBlacklistedPhrases do
             local v = KohlsAPI.GlobalBlacklistedPhrases[i];
-    
+
             if (v.Phrase == Phrase) then
                 isPhraseBlacklisedGlobal = true;
             end;
         end;
-    
+
         -- // Handling
         if (Unblacklist) then -- // Unblacklisting
             if ((not Player and not isPhraseBlacklisedGlobal) or (Player and not isPhraseBlacklistedPlayer)) then
@@ -708,7 +706,7 @@ return function(Arguments)
                 return false, ErrorReason;
             end;
         end;
-    
+
         -- // Script
         if (Player ~= nil) then
             print(PlayerData);
@@ -725,20 +723,20 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Commands: Say Phrase
     function KohlsAPI.Commands.SayPhrase(...)
         local Stuff = {...};
         for i = 1, #Stuff do
             Stuff[i] = tostring(Stuff[i]);
         end;
-    
+
         local Phrase = table.concat(Stuff, " ");
         Players:Chat(Phrase);
-        
+
         return true;
     end;
-    
+
     -- // Commands: Spam Phrase
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "Spammer", Connection = RunService.RenderStepped:Connect(function()
         for i = 1, #KohlsAPI.Spammer do
@@ -746,7 +744,7 @@ return function(Arguments)
             Players:Chat(v);
         end;
     end)};
-    
+
     function KohlsAPI.Commands.StopStartSpamPhrase(Phrase, Stop)
         -- // Handling
         if (typeof(Phrase) ~= 'string') then
@@ -763,7 +761,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         local isInSpammer = false;
         for i = 1, #KohlsAPI.Spammer do
             local v = KohlsAPI.Spammer[i];
@@ -771,7 +769,7 @@ return function(Arguments)
                 isInSpammer = true;
             end;
         end;
-    
+
         if (Stop and not isInSpammer) then
             local ErrorReason = "Phrase is not in the spammer";
             if (KohlsAPI.Configurable.Errors) then
@@ -786,7 +784,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         if (Stop) then
             for i = 1, #KohlsAPI.Spammer do
@@ -795,14 +793,14 @@ return function(Arguments)
                     table.remove(KohlsAPI.Spammer, i);
                 end;
             end;
-            
+
         else
             KohlsAPI.Spammer[#KohlsAPI.Spammer + 1] = Phrase;
         end;
 
         return true;
     end;
-    
+
     -- // Misc: Paint Area
     function KohlsAPI.Misc.PaintArea(Area, Colour)
         -- // Handling
@@ -820,7 +818,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Check if you already have a Paint Bucket
         if (not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket"))) then
             Players:Chat(":gear me 18474459");
@@ -828,10 +826,10 @@ return function(Arguments)
         LocalPlayer.Backpack:WaitForChild("PaintBucket");
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket);
         LocalPlayer.Character:WaitForChild("PaintBucket");
-    
+
         -- // Painting
         local Remote = LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
-        
+
         if (Area:lower() == "all") then
             -- // Paint everything
             local AllDescendants = GameFolder["Workspace"]:GetDescendants();
@@ -858,13 +856,13 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Misc: Rejoin
     function KohlsAPI.Misc.Rejoin()
         game:GetService("TeleportService"):Teleport(game.PlaceId);
         return true;
     end;
-    
+
     -- // Player: Get Age
     function KohlsAPI.Player.GetAge(Player)
         -- // Handling
@@ -882,11 +880,11 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         return true, Player.AccountAge;
     end;
-    
+
     -- // Player: Give Client BTools
     function KohlsAPI.Player.GiveClientBtools(Player)
         -- // Handling
@@ -902,9 +900,9 @@ return function(Arguments)
             if (KohlsAPI.Configurable.Errors) then
                 error(ErrorReason);
             end;
-            return false, ErrorReason;   
+            return false, ErrorReason;
         end;
-    
+
         -- // Script
         Players:Chat(":gear " .. Player.Name .. " 16200204");
         Players:Chat(":gear " .. Player.Name .. " 16200402");
@@ -914,7 +912,7 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Protections: Anti Blind
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiBlind", Connection = LocalPlayer.PlayerGui.ChildAdded:Connect(function(child)
         if (KohlsAPI.SettingGetSet("ProtectionsAntiBlind") and child.Name == "EFFECTGUIBLIND") then
@@ -922,14 +920,14 @@ return function(Arguments)
             child:Destroy();
         end
     end)};
-    
+
     -- // Protections: Anti Jail
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiJail", Connection = GameFolder["Folder"].ChildAdded:Connect(function(child)
         if (KohlsAPI.SettingGetSet("ProtectionsAntiJail") and child.Name == LocalPlayer.Name.."'s jail") then
             Players:Chat(":removejails");
         end;
     end)};
-    
+
     -- // Protections: Anti Kill
     function AntiKillConnection()
         -- // Remove the old connection if there is one
@@ -942,7 +940,7 @@ return function(Arguments)
                 table.remove(KohlsAPI.Connections, i);
             end;   
         end;
-    
+
         local Connection = LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
             if (KohlsAPI.SettingGetSet("ProtectionsAntiKill")) then
                 Players:Chat(":reset me");
@@ -952,7 +950,7 @@ return function(Arguments)
     end;
     AntiKillConnection();
     LocalPlayer.CharacterAdded:Connect(AntiKillConnection);
-    
+
     -- // Protections: Anti Punish
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiPunish", Connection = Lighting.ChildAdded:Connect(function(child)
         if (KohlsAPI.SettingGetSet("ProtectionsAntiPunish") and child.Name == LocalPlayer.Name) then
@@ -982,7 +980,7 @@ return function(Arguments)
     end;
     AntiFreezeConnection();
     LocalPlayer.CharacterAdded:Connect(AntiFreezeConnection);
-    
+
     -- // Protections: Anti Message Spam
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiMessageSpam", Connection = GameFolder.Folder.ChildAdded:Connect(function(child)
         if (KohlsAPI.SettingGetSet("ProtectionsAntiMessageSpam") and child:IsA("Message")) then
@@ -1030,7 +1028,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         Players:Chat(":gear me 94794847");
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
         LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
@@ -1039,10 +1037,10 @@ return function(Arguments)
             Players:Chat(":size me .3");
             wait();
         end;
-    
+
         return true;
     end;
-    
+
     -- // Server: Create Phantom Baseplate
     function KohlsAPI.Server.CreatePhantomBaseplate()
         local Baseplate = Instance.new("Part", GameFolder["Workspace"]);
@@ -1051,10 +1049,10 @@ return function(Arguments)
         Baseplate.Size = Vector3.new(1000, 1.2, 1000);
         Baseplate.TopSurface = "Studs";
         Baseplate.Anchored = true;
-    
+
         return true;
     end;
-    
+
     -- // Server: Epilepsy
     coroutine.wrap(function()
         while wait() do
@@ -1069,7 +1067,7 @@ return function(Arguments)
             end;
         end;
     end)();
-    
+
     -- // Server: Move Baseplate
     function KohlsAPI.Server.MoveBaseplate()
         -- // Handling
@@ -1080,7 +1078,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Vars
         local Spawn = GameFolder["Workspace"].Spawn3;
         local Baseplate = GameFolder["Workspace"].Baseplate;
@@ -1090,7 +1088,7 @@ return function(Arguments)
         local X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = testCFrame:GetComponents();
         X, Y, Z = testPosition.X, Y + 3, testPosition.Z;
         local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
-    
+
         -- // So you don't float in water
         local CharacterDescendants = LocalPlayer.Character:GetDescendants();
         for i = 1, #CharacterDescendants do
@@ -1099,7 +1097,7 @@ return function(Arguments)
                 v.CustomPhysicalProperties = PhysicalProperties.new(1, 0.3, 0.5);
             end;
         end;
-    
+
         -- // Script
         LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newCFrame;
         wait(1.5);
@@ -1113,15 +1111,15 @@ return function(Arguments)
         wait(1);
         Players:Chat(":punish me");
         wait(1);
-    
+
         Players:Chat(":unpunish me");
         if (AntiPunishDisabled) then
             KohlsAPI.SettingGetSet("ProtectionsAntiPunish", true);
         end;
-    
+
         return true;
     end;
-    
+
     -- // Server: Part Spam
     function KohlsAPI.Server.PartSpam(Stop)
         -- // Handling
@@ -1132,11 +1130,11 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         return true, KohlsAPI.Commands.StopStartSpamPhrase(":part/10/10/10", Stop);
     end;
-    
+
     -- // Server: Remove Phantom Baseplates
     function KohlsAPI.Server.RemovePhantomBaseplates()
         local PhantomBaseplates = GameFolder["Workspace"]:GetChildren();
@@ -1146,10 +1144,10 @@ return function(Arguments)
                 v:Destroy();
             end;
         end;
-    
+
         return true;
     end;
-    
+
     -- // Server: Respawn Explode
     function KohlsAPI.Server.RespawnExplode(Stop)
         -- // Handling
@@ -1160,7 +1158,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         local Success, TargetPlayers = KohlsAPI.PlayerManager.GetPlayers("Unwhitelisted");
         if (not Success) then return false; end;
@@ -1169,32 +1167,32 @@ return function(Arguments)
 
         for i = 1, #TargetPlayers do
             local v = TargetPlayers[i];
-    
+
             KohlsAPI.Commands.StopStartSpamPhrase(":respawn " .. v.Name, Stop);
             KohlsAPI.Commands.StopStartSpamPhrase(":explode " .. v.Name, Stop);
         end;
-    
+
         return true;
     end;
-    
+
     -- // Server: Click Spawn Water
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "ClickSpawnWater", Connection = UserInputService.InputBegan:Connect(function(Key, GPE)
         if (KohlsAPI.SettingGetSet("ServerClickSpawnWater") and not GPE and Key.KeyCode == Enum.KeyCode.LeftControl and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) then
             Players:Chat(":gear me 236438668");
-    
+
             local Tool = LocalPlayer.Backpack:WaitForChild("SeaThemedCrossbow");
             local Humanoid = LocalPlayer.Character:WaitForChild("Humanoid");
-            
+
             Humanoid:EquipTool(Tool);
-    
+
             local Remote = LocalPlayer.Character:WaitForChild("SeaThemedCrossbow"):WaitForChild("Remote");
             Remote:FireServer("LeftDown", Mouse.Hit.Position);
-    
+
             wait(1);
             Players:Chat(":removetools me");
         end;
     end)};
-    
+
     -- // Sound Abuse: Ear Rape
     coroutine.wrap(function()
         while wait(0.5) do
@@ -1210,7 +1208,7 @@ return function(Arguments)
             end;
         end;
     end)();
-    
+
     -- // Sound Abuse: Play All Sounds
     function KohlsAPI.SoundAbuse.PlayAllSounds()
         local WorkspaceDescendants = Workspace:GetDescendants();
@@ -1220,10 +1218,10 @@ return function(Arguments)
                 v:Play();
             end;
         end;
-    
+
         return true;
     end;
-    
+
     -- // Sound Abuse: Play Music
     function KohlsAPI.SoundAbuse.PlayMusic()
         local Sound = GameFolder.Folder:FindFirstChildWhichIsA("Sound");
@@ -1240,7 +1238,7 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Sound Abuse: Stop All Sounds
     function KohlsAPI.SoundAbuse.StopAllSounds()
         local WorkspaceDescendants = Workspace:GetDescendants();
@@ -1250,10 +1248,10 @@ return function(Arguments)
                 v:Stop();
             end;
         end;
-    
+
         return true;
     end;
-    
+
     -- // Sound Abuse: Stop Music
     function KohlsAPI.SoundAbuse.StopMusic()
         local Sound = GameFolder.Folder:FindFirstChildWhichIsA("Sound");
@@ -1270,7 +1268,7 @@ return function(Arguments)
 
         return true;
     end;
-    
+
     -- // Whitelist: Whitelist
     function KohlsAPI.Whitelist.WhitelistUnwhitelist(Player, Unwhitelist)
         -- // Handling
@@ -1295,10 +1293,10 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         -- // Script
         local Success, GeneralWhitelisted, Whitelisted, ProtectedWhitelisted = isWhitelisted(Player);
-    
+
         if (ProtectedWhitelisted) then
             local ErrorReason = Unwhitelist and "This player is protected." or "This player has already been whitelisted.";
             if (KohlsAPI.Configurable.Errors) then
@@ -1306,7 +1304,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-    
+
         if (GeneralWhitelisted) then
             if (Unwhitelist) then
                 for i = 1, #KohlsAPI.PlayerManager.Players do
@@ -1340,14 +1338,14 @@ return function(Arguments)
                 end;
             end;
         end;
-    
+
         local ErrorReason = "Something went wrong.";
         if (KohlsAPI.Configurable.Errors) then
             error(ErrorReason);
         end;
         return false, ErrorReason;
     end;
-    
+
     -- // End
     return KohlsAPI;
 end;
