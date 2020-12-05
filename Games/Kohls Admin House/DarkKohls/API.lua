@@ -237,8 +237,7 @@ return function(Arguments)
         end;
     
         -- // Handle Blacklisted Gears
-        local splitMessage = Message.split(" ");
-        print(splitMessage[1])
+        local splitMessage = Message:split(" ");
         if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
             
@@ -257,7 +256,7 @@ return function(Arguments)
         -- // Handle Blacklisted Phrases
         local PlayerBlacklistedPhrases = PlayerData.BlacklistedPhrases;
     
-        for i = 1, #PlayerBlacklistedPhrases do -- // Player 
+        for i = 1, #PlayerBlacklistedPhrases do -- // Player
             local v = PlayerBlacklistedPhrases[i];
     
             if (Message:find(v.Phrase)) then
