@@ -4,6 +4,8 @@
 
 - [Games](./Scripts/Games/main.md)
     - [Kohls Admin House](./Scripts/Games/KohlsAdminHouse/main.md)
+        - [DarkKohls API](./Scripts/Games/KohlsAdminHouse/DarkKohlsAPI/DarkKohlsAPI.md)
+            - [Admin](./Scripts/Games/KohlsAdminHouse/DarkKohlsAPI/Admin.md)
         - [oofkohls v2](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/oofkohlsv2.md)
             - [Admin](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/Admin.md)
             - [Server OOF](./Scripts/Games/KohlsAdminHouse/oofkohlsv2/ServerOOF.md)
