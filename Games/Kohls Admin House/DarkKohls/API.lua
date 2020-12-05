@@ -35,7 +35,7 @@ return function(Arguments)
             Errors = Arguments["Errors"],
             ScriptName = Arguments["ScriptName"],
             CSystemAlertNote = ":h Imagine using /c system to hide your commands, ahem: PLAYERNAME",
-            BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",    
+            BlacklistedGearNote = ":h Didn't you know this gear isn't allowed? Ahem: PLAYERNAME",
             Settings = {
                 {Name = "AdminPermanantAdmin", Value = false},
                 {Name = "BlacklistAlertBlacklistGearUse", Value = false},
@@ -224,7 +224,8 @@ return function(Arguments)
 
                 if (v == BlacklistedGear) then
                     if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
-                        Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
+                        local ChatResponse, _ = KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name);
+                        Players:Chat(ChatResponse);
                     end;
                     Players:Chat(":removetools" .. splitMessage[2]);
                 end;
