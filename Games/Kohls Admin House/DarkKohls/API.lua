@@ -200,7 +200,6 @@ return function(Arguments)
 
     -- // Player Manager: Handler (internal)
     local function PlayerManagerHandler(Message, Player)
-        print('Test')
         -- // Handling
         if (typeof(Message) ~= 'string') then
             local ErrorReason = "Argument #1 expected string got " .. typeof(Message);
@@ -237,7 +236,6 @@ return function(Arguments)
         end;
 
         -- // Handle Blacklisted Gears
-        print('a')
         local splitMessage = Message:split(" ");
         if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
@@ -375,6 +373,7 @@ return function(Arguments)
             };
 
             -- // Activating the Chat Handler
+            print(Player)
             KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = Player.UserId .. "Chatted", Connection = Player.Chatted:Connect(function(Message)
                 PlayerManagerHandler(Message, Player);
             end)};
