@@ -1,3 +1,7 @@
+--[[
+    uh theres a bug where the gui doesnt fully load sometimes idk why
+]]
+
 repeat wait() until game:IsLoaded();
 
 -- // Initialise
