@@ -226,7 +226,7 @@ return function(Arguments)
     
         -- // Script
         local PlayerData;
-        local Success, GWhitelisted, Whitelisted, isProtectedWhitelisted = isWhitelisted(Player);
+        local _, GWhitelisted, _, isProtectedWhitelisted = isWhitelisted(Player);
     
         -- // Get Player Data
         for i = 1, #KohlsAPI.PlayerManager.Players do
@@ -238,14 +238,13 @@ return function(Arguments)
     
         -- // Handle Blacklisted Gears
         local splitMessage = Message.split(" ");
-        if (splitMessage[1]:find("gear") and splitMessage[3] and not GWhitelisted) then
+        if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
             
             for i = 1, #KohlsAPI.BlacklistedGears do
                 local v = KohlsAPI.BlacklistedGears[i];
     
                 if (v == BlacklistedGear) then
-                    print('a')
                     if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
                         Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
                     end;
