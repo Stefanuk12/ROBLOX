@@ -350,7 +350,6 @@ return function(Arguments)
             };
 
             -- // Activating the Chat Handler
-            print(Player)
             KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = Player.UserId .. "Chatted", Connection = Player.Chatted:Connect(function(Message)
                 PlayerManagerHandler(Message, Player);
             end)};
@@ -686,7 +685,6 @@ return function(Arguments)
 
         -- // Script
         if (Player ~= nil) then
-            print(PlayerData);
             PlayerData["BlacklistedPhrases"][#PlayerData["BlacklistedPhrases"] + 1] = {
                 Phrase = Phrase,
                 Punishment = Punishment
