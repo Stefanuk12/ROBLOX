@@ -25,7 +25,7 @@ return function(Arguments)
     getgenv().KohlsAPI = {
         SelectedPad = GameFolder["Admin"]["Pads"]:GetChildren()[math.random(1, 9)],
         Connections = {},
-        BlacklistedGears = {94794847}, -- // Anti Crash
+        BlacklistedGears = {"94794847"}, -- // Anti Crash
         GlobalBlacklistedPhrases = {},
         PlayerManager = {
             Players = {};
