@@ -503,7 +503,6 @@ return function(Arguments)
     coroutine.wrap(function() -- // Coroutine to not hold the rest of the script up
         if (fireclickdetector) then
             -- // Vars
-            local RegenPad = GameFolder["Admin"]:WaitForChild("Regen");
             local DesiredPadName = LocalPlayer.Name .. "'s admin";
 
             -- // Get a pad if it's enabled
