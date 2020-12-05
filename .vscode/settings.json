@@ -10,9 +10,12 @@
         "setreadonly",
         "newcclosure",
         "getrawmetatable",
-        "getgc"
+        "getgc",
+        "KohlsAPI",
+        "DarkKohls"
     ],
     "Lua.diagnostics.ignore": [
-        "HttpGetAsync"
+        "HttpGetAsync",
+        "HttpGet"
     ]
 }

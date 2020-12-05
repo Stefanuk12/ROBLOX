@@ -206,6 +206,13 @@
             "Name": "Anti Blind",
             "Type": "Toggle"
         },
+        "AntiFreeze": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly resets when you are frozen.",
+            "Name": "Anti Freeze",
+            "Type": "Toggle"
+        },
         "AntiJail": {
             "Admin": true,
             "Persons299": false,

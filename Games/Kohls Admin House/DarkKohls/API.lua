@@ -40,6 +40,7 @@ return function(Arguments)
                 {Name = "AdminPermanantAdmin", Value = false},
                 {Name = "BlacklistAlertBlacklistGearUse", Value = false},
                 {Name = "ProtectionsAntiBlind", Value = false},
+                {Name = "ProtectionsAntiFreeze", Value = false},
                 {Name = "ProtectionsAntiJail", Value = false},
                 {Name = "ProtectionsAntiKill", Value = false},
                 {Name = "ProtectionsAntiPunish", Value = false},
@@ -957,6 +958,29 @@ return function(Arguments)
             Players:Chat(":reset me");
         end;
     end)};
+
+    -- // Protections: Anti Freeze
+    function AntiFreezeConnection()
+        -- // Remove the old connection if there is one
+        for i = 1, #KohlsAPI.Connections do
+            local v = KohlsAPI.Connections[i];
+            if (v and v.Name == "AntiFreeze") then
+                if (v.Connection) then
+                    v.Connection:Disconnect();
+                end;
+                table.remove(KohlsAPI.Connections, i);
+            end;   
+        end;
+
+        local Connection = LocalPlayer.Character.ChildAdded:Connect(function(child)
+            if (child:IsA("Part") and child.Name == "ice" and KohlsAPI.SettingGetSet("ProtectionsAntiFreeze")) then
+                Players:Chat(":reset me");
+            end;
+        end);
+        KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiFreeze", Connection = Connection};
+    end;
+    AntiFreezeConnection();
+    LocalPlayer.CharacterAdded:Connect(AntiFreezeConnection);
     
     -- // Server: Crash Server
     function KohlsAPI.Server.CrashServer()

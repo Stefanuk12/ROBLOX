@@ -564,7 +564,7 @@ local StartAudioVisualiser = SetupTextMenu(Misc, "StartAudioVisualiser", {
 });
 
 -- // Misc: Start Music Commands
-local StartMusicCommands = SetupTextMenu(Misc, "StartAudioVisualiser", {
+local StartMusicCommands = SetupTextMenu(Misc, "StartMusicCommands", {
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/MusicCommands/Main.lua"))();
     end;
@@ -649,6 +649,15 @@ local AntiBlind = SetupTextMenu(Protections, "AntiBlind", {
     Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiBlind"),
     Callback = function(Value)
         KohlsAPI.SettingGetSet("ProtectionsAntiBlind", Value);
+    end;
+});
+
+
+-- // Protections: Anti Freeze
+local AntiFreeze = SetupTextMenu(Protections, "AntiFreeze", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiFreeze"),
+    Callback = function(Value)
+        KohlsAPI.SettingGetSet("ProtectionsAntiFreeze", Value);
     end;
 });
 
