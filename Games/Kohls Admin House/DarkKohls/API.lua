@@ -199,30 +199,7 @@ return function(Arguments)
     end;
 
     -- // Player Manager: Handler (internal)
-    local function PlayerManagerHandler(Message, Player)
-        -- // Handling
-        if (typeof(Message) ~= 'string') then
-            local ErrorReason = "Argument #1 expected string got " .. typeof(Message);
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
-            end;
-            return false, ErrorReason;
-        end;
-        if (typeof(Player) ~= 'Instance') then
-            local ErrorReason = "Argument #1 expected Instance got " .. typeof(Player);
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
-            end;
-            return false, ErrorReason;
-        end;
-        if (Player.Parent ~= Players) then
-            local ErrorReason = "Argument #1 is not a member of Players";
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
-            end;
-            return false, ErrorReason;
-        end;
-
+    function PlayerManagerHandler(Message, Player)
         -- // Script
         local PlayerData;
         local _, GWhitelisted, _, isProtectedWhitelisted = isWhitelisted(Player);
@@ -236,8 +213,9 @@ return function(Arguments)
         end;
 
         -- // Handle Blacklisted Gears
+        print('a');
         local splitMessage = Message:split(" ");
-        print('test')
+        print('test');
         if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
 
