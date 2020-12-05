@@ -236,8 +236,8 @@ return function(Arguments)
         end;
 
         -- // Handle Blacklisted Gears
+        print(Message:split(" "))
         local splitMessage = Message:split(" ");
-        print(splitMessage, splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted)
         if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
             local BlacklistedGear = splitMessage[3];
 
