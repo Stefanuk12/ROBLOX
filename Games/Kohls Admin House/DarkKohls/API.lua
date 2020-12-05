@@ -8,7 +8,7 @@
 ]]
 
 return function(Arguments)
-    -- // Initialisef
+    -- // Initialise
     if (not Arguments) then Arguments = {}; end;
 
     -- // Services
@@ -239,7 +239,7 @@ return function(Arguments)
         -- // Handle Blacklisted Gears
         local splitMessage = Message.split(" ");
         if (splitMessage[1]:find("gear") and splitMessage[3] and not GWhitelisted) then
-            local BlacklistedGear = splitMessage[2];
+            local BlacklistedGear = splitMessage[3];
             
             for i = 1, #KohlsAPI.BlacklistedGears do
                 local v = KohlsAPI.BlacklistedGears[i];
