@@ -44,6 +44,7 @@ return function(Arguments)
                 {Name = "ProtectionsAntiJail", Value = false},
                 {Name = "ProtectionsAntiKill", Value = false},
                 {Name = "ProtectionsAntiPunish", Value = false},
+                {Name = "ProtectionsAntiMessageSpam", Value = false},
                 {Name = "SoundAbuseEarRape", Value = false},
                 {Name = "ServerEpilepsy", Value = false},
                 {Name = "ServerCSystemAlert", Value = false},
@@ -982,6 +983,44 @@ return function(Arguments)
     AntiFreezeConnection();
     LocalPlayer.CharacterAdded:Connect(AntiFreezeConnection);
     
+    -- // Protections: Anti Message Spam
+    KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiMessageSpam", Connection = GameFolder.Folder.ChildAdded:Connect(function(child)
+        if (KohlsAPI.SettingGetSet("ProtectionsAntiMessageSpam") and child:IsA("Message")) then
+            local messageCount = 0;
+            do
+                local Children = GameFolder.Folder:GetChildren();
+                for i = 1, #Children do
+                    local v = Children[i];
+                    if (v:IsA("Message")) then
+                        messageCount = messageCount + 1;
+                    end;
+                end;
+            end;
+
+            if (messageCount > 4) then
+                Players:Chat(":clr");
+            end;
+        end;
+    end)};
+    KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiMessageSpamB", Connection = LocalPlayer.PlayerGui.ChildAdded:Connect(function(child)
+        if (KohlsAPI.SettingGetSet("ProtectionsAntiMessageSpam") and child.Name == "MessageGUI") then
+            local messageCount = 0;
+            do
+                local Children = LocalPlayer.PlayerGui:GetChildren();
+                for i = 1, #Children do
+                    local v = Children[i];
+                    if (v.Name == "MessageGUI") then
+                        messageCount = messageCount + 1;
+                    end;
+                end;
+            end;
+
+            if (messageCount > 4) then
+                Players:Chat(":clr");
+            end;
+        end;
+    end)};
+
     -- // Server: Crash Server
     function KohlsAPI.Server.CrashServer()
         if (AreTherePWLInTheServer()) then

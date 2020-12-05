@@ -685,6 +685,14 @@ local AntiPunish = SetupTextMenu(Protections, "AntiPunish", {
     end;
 });
 
+-- // Protections: Anti Message Spam
+local AntiMessageSpam = SetupTextMenu(Protections, "AntiMessageSpam", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiMessageSpam"),
+    Callback = function(Value)
+        KohlsAPI.SettingGetSet("ProtectionsAntiMessageSpam", Value);
+    end;
+});
+
 -- // Server: Alert C System Use
 local AlertCSystemUse = SetupTextMenu(Server, "AlertCSystemUse", {
     Enabled = KohlsAPI.SettingGetSet("ServerCSystemAlert"),

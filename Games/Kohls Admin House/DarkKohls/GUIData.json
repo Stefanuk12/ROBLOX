@@ -233,6 +233,13 @@
             "Description": "Instantly get reset when you are punished.",
             "Name": "Anti Punish",
             "Type": "Toggle"
+        },
+        "AntiMessageSpam": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get clear when more than four messages are on screen.",
+            "Name": "Anti Message Spam",
+            "Type": "Toggle"
         }
     },
     "Server": {
