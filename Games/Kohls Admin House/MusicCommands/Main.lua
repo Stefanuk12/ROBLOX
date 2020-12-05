@@ -50,7 +50,7 @@ addCommand("music", function(message)
 end)
 
 addCommand("refresh", function(message)
-    MusicAPI.CheckAllSounds()
+    MusicAPI.MusicTable = MusicAPI.CheckAllSounds()
 end)
 
 addCommand("help", function(message)
@@ -60,6 +60,7 @@ addCommand("help", function(message)
         help - prints out the help menu
         play [index] - plays the song at the index
         music - prints out the music database
+        refresh - refreshes all of the sounds
 
         Example: .play 1
 
