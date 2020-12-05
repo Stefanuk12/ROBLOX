@@ -245,6 +245,7 @@ return function(Arguments)
                 local v = KohlsAPI.BlacklistedGears[i];
     
                 if (v == BlacklistedGear) then
+                    print('a')
                     if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
                         Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", v.Name));
                     end;
