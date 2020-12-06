@@ -574,6 +574,15 @@ local StartMusicCommands = SetupTextMenu(Misc, "StartMusicCommands", {
     end;
 });
 
+-- // Misc: Chat Bypass
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))();
+getgenv().BypassText = false;
+local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
+    Callback = function(Value)
+        getgenv().BypassText = Value;
+    end;
+});
+
 -- // Misc: Shutdown GUI
 local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
     Callback = function()

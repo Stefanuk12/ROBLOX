@@ -155,7 +155,7 @@
         },
         "StartAudioVisualiser": {
             "Admin": false,
-            "Persons299": false,
+            "Persons299": true,
             "Description": "Starts the audio visualiser",
             "Name": "Start Audio Visualiser",
             "Type": "Button"
@@ -166,6 +166,13 @@
             "Description": "Starts the Music Commands, .help for more information.",
             "Name": "Start Music Commands",
             "Type": "Button"
+        },
+        "ChatBypass": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Allows you to say naughty words in chat",
+            "Name": "Chat Bypass",
+            "Type": "Toggle"
         },
         "ShutdownGUI": {
             "Admin": false,
