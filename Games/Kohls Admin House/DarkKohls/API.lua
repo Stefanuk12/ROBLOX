@@ -971,7 +971,7 @@ return function(Arguments)
             end;
         end;
 
-        local Connection = Character.Torso.ChildAdded:Connect(function(child)
+        local Connection = Character:WaitForChild("Torso").ChildAdded:Connect(function(child)
             if (child.Name == "BFRC" and KohlsAPI.SettingGetSet("ProtectionsAntiFling")) then
                 local savedCFrame = Character.HumanoidRootPart.CFrame;
                 wait(0.1);
