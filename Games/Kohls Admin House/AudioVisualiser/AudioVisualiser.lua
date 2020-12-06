@@ -167,7 +167,7 @@ end
 -- // Loop Orbit including all players
 coroutine.wrap(function()
     while wait() do
-        local allPlayers = #Players:GetPlayers()
+        local allPlayers = Players:GetPlayers()
         for i = 1, #allPlayers do
             local v = allPlayers[i]
             if Orbit.LoopOrbit then
