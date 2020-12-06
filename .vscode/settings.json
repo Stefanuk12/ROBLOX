@@ -14,7 +14,8 @@
         "KohlsAPI",
         "DarkKohls",
         "fireclickdetector",
-        "writefile"
+        "writefile",
+        "setsimulationradius"
     ],
     "Lua.diagnostics.ignore": [
         "HttpGetAsync",

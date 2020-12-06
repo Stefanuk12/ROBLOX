@@ -1,31 +1,32 @@
-if getgenv().Orbit then return getgenv().Orbit end
+-- // Initalise
+if (getgenv().Orbit) then return getgenv().Orbit end
 
--- // Vars
+-- // Services
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
+
+-- // Vars
 local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local primaryPart = Character:FindFirstChild("HumanoidRootPart")
-local GameFolder = game:GetService("Workspace").Terrain["_Game"]
+local GameFolder = Workspace.Terrain["_Game"]
 local Folder = GameFolder.Folder
+
+local rotX = 0
+local rotZ = math.pi / 2
+local L = 1
+
+-- // Notifications
 local NotificationHandler = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Notifications/Script.lua"))()
 NotificationHandler["StorageLocation"] = game:GetService("CoreGui")
-if not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748) then warn("You don't have Persons299 admin!") return end
 
--- // Network Ownership
-if setsimulationradius then
-    local Value = 9e9;
-    game:GetService("RunService"):BindToRenderStep("NetworkRep", 0, function()
-        setsimulationradius(Value, Value);
-    end)
-else
-    warn("You do not have setsimulationradius!")
-    return
+-- // Check for Persons299 Admin
+if (not MarketplaceService:UserOwnsGamePassAsync(LocalPlayer.UserId, 35748)) then
+    warn("You don't have Persons299 admin!")
+    return false
 end
 
--- // Orbit
+-- // Orbit Table
 getgenv().Orbit = {
     Enabled = true,
     Speed = 15,
@@ -39,134 +40,146 @@ getgenv().Orbit = {
     LoopOrbitTime = 1,
     TargetParts = 100,
 }
-Orbit = getgenv().Orbit
 
-local rotX = 0
-local rotZ = math.pi / 2
-local L = 1
+-- // Round Function
+function mathRound(number, sf)
+    sf = math.pow(10, sf or 0)
+    number = number * sf
 
--- // Funcs
-function roundDecimals(num, places)
-    places = math.pow(10, places or 0)
-    num = num * places
-    if num >= 0 then 
-        num = math.floor(num + 0.5) 
-    else 
-        num = math.ceil(num - 0.5) 
+    -- // Rounding
+    if (number >= 0) then
+        number = math.floor(number + 0.5)
+    else
+        number = math.ceil(number - 0.5)
     end
-    return num / places  
+
+    -- // Return
+    return number / sf
 end
 
-function Orbit.commenceParts(numOfParts)
-	for i = 1, numOfParts do
+-- // Create Parts
+Orbit.CreateParts = function(numOfParts)
+    for i = 1, numOfParts do
         -- // Create Part
         Players:Chat(":part/1/1/1")
     end
 end
 
-function Orbit.getPos()
-    local targetPlayer = Orbit.targetPlayer
-    if targetPlayer and targetPlayer.Character and targetPlayer.Character.PrimaryPart then
-        return targetPlayer.Character.PrimaryPart.Position
-    end
-end
+-- // Getting Target Parts
+Orbit.GetParts = function()
+    local FolderChildren = Folder:GetChildren()
+    local AllParts = {}
 
-function Orbit.updateTable()
-    Orbit.Parts = {}
-    for _, child in pairs(Folder:GetChildren()) do
-        if child:IsA("Part") and child.Size == Vector3.new(1, 1, 1) then
-            child.CanCollide = false
-            table.insert(Orbit.Parts, child)
+    -- // Find all parts and add to table
+    for i = 1, #FolderChildren do
+        local child = FolderChildren[i]
+
+        if (child:IsA("Part") and child.Size == Vector3.new(1, 1, 1) and not child.Anchored) then
+            AllParts[#AllParts + 1] = child
         end
     end
+
+    -- // Return
+    return AllParts
 end
 
-function Orbit.partCount()
-    local count = 0
-    for _,v in pairs(Folder:GetChildren()) do
-        if v:IsA("Part") and v.Size == Vector3.new(1, 1, 1) and not v.Anchored then
-            count = count + 1
-        end
-    end
-    return count
-end
-
-Folder.ChildAdded:Connect(function(child)
-    Orbit.updateTable()
-end)
-
+-- // Always meet target parts
 Folder.ChildRemoved:Connect(function(child)
-    if child:IsA("Part") and child.Size == Vector3.new(1, 1, 1) and Orbit.Enabled and (Orbit.partCount() <= Orbit.TargetParts)  then
-        Orbit.commenceParts(1)
+    local AllParts = Orbit.GetParts()
+    local NeededParts = Orbit.TargetParts - #AllParts
+
+    -- // Adding Parts
+    if (NeededParts > 0) then
+        Orbit.CreateParts(NeededParts)
     end
 end)
 
--- // Makes 100 parts
-Orbit.commenceParts(Orbit.TargetParts)
-
--- // Makes it spiny spiny spin
-RunService.RenderStepped:Connect(function()
-    if Folder and Orbit.Enabled then
+-- // Make the parts spin
+RunService:BindToRenderStep("OrbitSpin", 0, function()
+    if (Folder and Orbit.Enabled) then
         rotX = rotX + Orbit.Speed / 100
         rotZ = rotZ + Orbit.Speed / 100
         L = (L >= 360 and 1 or L + Orbit.Speed)
-        local Audio = Folder:FindFirstChild("Sound") -- PLEASE SPECIFY WHICH SOUND
+        local Audio = Folder:FindFirstChild("Sound")
         local Y = 0
 
-        -- // This makes it orbit around you
-        for i,v in pairs(Orbit.Parts) do
-            if v:IsA("BasePart") and not v.Anchored then
-                -- // Audio Visualiser
-                if Orbit.Mode and Audio then
-                    Y = math.clamp(roundDecimals((Audio.PlaybackLoudness / 200) / 1.5, 3), 0, 5)
-                end
+        -- // Making the parts orbit
+        local AllParts = Orbit.GetParts()
+        for i = 1, #AllParts do
+            local part = AllParts[i]
 
-                local targetPrimaryPart = nil
-                if Orbit.targetPlayer and Orbit.targetPlayer.Character and Orbit.targetPlayer.Character.PrimaryPart then
-                    targetPrimaryPart = Orbit.targetPlayer.Character.PrimaryPart.Position
-                end
-
-                if targetPrimaryPart then
-                    local newPos = targetPrimaryPart + Vector3.new(0, Y, 0)
-                    local EndCFrame = CFrame.new(newPos) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
-                    local EndCFrame2 = CFrame.new(targetPrimaryPart) * CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #Orbit.Parts) * i + Orbit.Speed), 0) * CFrame.new(Orbit.offSet, 0, 0)
-                    v.CFrame = EndCFrame
-                end
+            -- // Audio Visualiser
+            if (Orbit.Mode and Audio) then
+                local roundedAudioLoudness = mathRound((Audio.PlaybackLoudness / 200) / 1.5, 3)
+                Y = math.clamp(roundedAudioLoudness, 0, 5)
             end
+
+            -- // Spinning
+            local targetOrbit = Orbit.targetPlayer.Character:WaitForChild("HumanoidRootPart")
+
+            local newPos = CFrame.new(targetOrbit.Position + Vector3.new(0, Y, 0))
+            local B = CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #AllParts) * i + Orbit.Speed), 0)
+            local endCFrame = newPos * B * CFrame.new(Orbit.offSet, 0, 0)
+
+            part.CFrame = endCFrame
         end
     end
 end)
 
--- // CMD So you can give it to other peeps
-function getPlayer(String)
+-- // Command Framework
+local function getPlayer(String)
     local Found = {}
     local Target = string.lower(String)
-    if Target == "all" then
-        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+
+    if (Target == "all" )then
+        local AllPlayers = Players:GetPlayers()
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i]
+
             table.insert(Found, v)
         end
-    elseif Target == "others" then
-        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-            if v ~= game:GetService("Players").LocalPlayer then
+    elseif (Target == "others") then
+        local AllPlayers = Players:GetPlayers()
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i]
+
+            if (v ~= Players.LocalPlayer) then
                 table.insert(Found, v)
             end
         end
-    elseif Target == "me" then
-        table.insert(Found, game:GetService("Players").LocalPlayer)
+    elseif (Target == "me") then
+        table.insert(Found, Players.LocalPlayer)
     else
-        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-            if v.Name:lower():sub(1, #String) == String:lower() then
+        local AllPlayers = Players:GetPlayers()
+        for i = 1, #AllPlayers do
+            local v = AllPlayers[i]
+
+            if (v.Name:lower():sub(1, #String) == String:lower()) then
                 table.insert(Found, v)
             end
         end
     end
+
+    -- // Return
     return Found
 end
 
-function addCMD(CommandName, ModuleName, Example, Description, Function)
-    if not CommandName or not ModuleName or not Example or not Description or not Function then
-        return
+-- // Loop Orbit including all players
+coroutine.wrap(function()
+    while wait() do
+        local allPlayers = #Players:GetPlayers()
+        for i = 1, #allPlayers do
+            local v = allPlayers[i]
+            if Orbit.LoopOrbit then
+                Orbit.targetPlayer = v
+            end
+            wait(Orbit.LoopOrbitTime)
+        end
     end
+end)()
+
+-- // Command Handler
+local function addCMD(CommandName, ModuleName, Example, Description, Function)
     local CMDs = Orbit.CMDs
     local Prefix = Orbit.Prefix
     CMDs[CommandName] = {
@@ -177,21 +190,29 @@ function addCMD(CommandName, ModuleName, Example, Description, Function)
     }
 end
 
+-- // Chat Listener
 LocalPlayer.Chatted:Connect(function(message)
-    for i,v in pairs(Orbit.CMDs) do
-        local Command = Orbit.Prefix..i
-        if not message then message = "" end
-        if v.Function and string.sub(message, 1, #Command) == Command then
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
+        local Command = Orbit.Prefix .. i
+        
+        if (string.sub(message, 1, #Command) == Command) then
             v.Function(message)
         end
     end
 end)
 
-addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to someone.", function(message)
-    local splitString = string.split(message, " ")
-    if splitString[2] then
+-- // Orbiter
+addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to a player.", function(message)
+    local splitString = message:split(" ")
+
+    if (splitString[2]) then
         Orbit.LoopOrbit = false
-        for _,v in pairs(getPlayer(splitString[2])) do
+        local Target = getPlayer(splitString[2])
+
+        for i = 1, #Target do
+            local v = Target[i]
+
             Orbit.targetPlayer = v
             NotificationHandler.newNotification("SUCCESS", "Gave Orbiter to: "..v.Name, "Success")
             break
@@ -199,48 +220,48 @@ addCMD("orbit", "Orbiter", "orbit EpicGamer69", "Give the orbiter to someone.", 
     end
 end)
 
-addCMD("refreshorbit", "Orbiter", "refreshorbiter", "Refreshes the parts.", function(message)
-    Players:Chat("clr")
+addCMD("refreshorbit", "Orbiter", "refreshorbit", "Refreshes the parts.", function(message)
+    Players:Chat(":clr")
     wait(0.5)
-    local count = Orbit.partCount()
-    Orbit.commenceParts(Orbit.TargetParts - count)
+    local PartCount = Orbit.GetParts()
+    Orbit.CreateParts(Orbit.TargetParts - PartCount)
     NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
 end)
 
 addCMD("timelooporbit", "Orbiter Settings", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
-    local splitString = string.split(message, " ")
-    if splitString[2] and tonumber(splitString[2]) then
+    local splitString = message:split(" ")
+    if (splitString[2] and tonumber(splitString[2])) then
         Orbit.LoopOrbitTime = tonumber(splitString[2])
         NotificationHandler.newNotification("SUCCESS", "Loop Orbiter Time: "..splitString[2].." seconds.", "Success")
     end
 end)
 
 addCMD("offset", "Orbiter Settings", "offset 20", "Set the offset of the Orbiter, how far away it is from the targetPlayer.", function(message)
-    local splitString = string.split(message, " ")
-    if splitString[2] and tonumber(splitString[2]) then
+    local splitString = message:split(" ")
+    if (splitString[2] and tonumber(splitString[2])) then
         Orbit.offSet = tonumber(splitString[2])
         NotificationHandler.newNotification("SUCCESS", "Orbiter Offset: "..splitString[2]..".", "Success")
     end
 end)
 
 addCMD("speed", "Orbiter Settings", "speed 20", "Set the speed of the Orbiter, how fast it spins.", function(message)
-    local splitString = string.split(message, " ")
-    if splitString[2] and tonumber(splitString[2]) then
+    local splitString = message:split(" ")
+    if (splitString[2] and tonumber(splitString[2])) then
         Orbit.Speed = tonumber(splitString[2])
         NotificationHandler.newNotification("SUCCESS", "Orbiter Speed: "..splitString[2]..".", "Success")
     end
 end)
 
 addCMD("partamount", "Orbiter Settings", "partamount 50", "Set the amount of parts for the Orbiter.", function(message)
-    local splitString = string.split(message, " ")
-    if splitString[2] and tonumber(splitString[2]) then
+    local splitString = message:split(" ")
+    if (splitString[2] and tonumber(splitString[2])) then
         Orbit.TargetParts = tonumber(splitString[2])
         Orbit.CMDs["refreshorbit"].Function()
         NotificationHandler.newNotification("SUCCESS", "Orbiter Parts: "..splitString[2].." Parts.", "Success")
     end
 end)
 
--- // Toggles
+-- // Orbiter Settings
 addCMD("torbiter", "Orbiter Settings", "torbiter", "Toggles the Orbiter.", function(message)
     Orbit.Enabled = not Orbit.Enabled
     NotificationHandler.newNotification("SUCCESS", "Orbiter: "..(Orbit.Enabled and "Enabled" or "Disabled")..".", "Success")
@@ -258,7 +279,8 @@ end)
 
 -- // Misc
 addCMD("orbitcmds", "Misc", "orbitcmds", "Prints the Orbiter Commands.", function(message)
-    for i,v in pairs(Orbit.CMDs) do
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
         print("> "..i.." - Description: "..v.Description.." - Example: "..v.Example)
     end
     NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Printed in Console!", "Success")
@@ -266,27 +288,31 @@ end)
 
 addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter commands to your clipboard", function(message)
     local CommandCount = 0
-    for i,v in pairs(Orbit.CMDs) do
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
         CommandCount = CommandCount + 1
     end
     local Holder = "Audio Visualiser Command List | Total Commands: "..CommandCount.." | Prefix - "..Orbit.Prefix.."\n"
 
     Holder = Holder.."--~~-- Orbiter Module --~~--\n"
-    for i,v in pairs(Orbit.CMDs) do
-        if v.ModuleName == "Orbiter" then
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
+        if (v.ModuleName == "Orbiter") then
             Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
 
     Holder = Holder.."--~~-- Orbiter Settings Module --~~--\n"
-    for i,v in pairs(Orbit.CMDs) do
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
         if v.ModuleName == "Orbiter Settings" then
             Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
     end
 
     Holder = Holder.."--~~-- Misc Module --~~--\n"
-    for i,v in pairs(Orbit.CMDs) do
+    for i = 1, #Orbit.CMDs do
+        local v = Orbit.CMDs[i]
         if v.ModuleName == "Misc" then
             Holder = Holder.."> "..i.." - Description: "..v.Description.." - Example: "..v.Example.."\n"
         end
@@ -296,14 +322,3 @@ addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter co
     NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Copied To Clipboard!", "Success")
 end)
 
--- // Coroutine
-coroutine.wrap(function()
-    while wait() do
-        for _,v in pairs(Players:GetPlayers()) do
-            if Orbit.LoopOrbit then
-                Orbit.targetPlayer = v           
-            end
-            wait(Orbit.LoopOrbitTime)
-        end
-    end
-end)()
