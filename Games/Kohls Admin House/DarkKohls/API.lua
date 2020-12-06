@@ -842,12 +842,18 @@ return function(Arguments)
     -- // Misc: Disable Obby Kill
     function KohlsAPI.Misc.DisableObbyKill()
         local Children = GameFolder["Workspace"].Obby:GetChildren();
+        local returnValue = true;
         for i = 1, #Children do
             local part = Children[i];
             if (part:FindFirstChildWhichIsA("TouchTransmitter")) then
                 part:FindFirstChildWhichIsA("TouchTransmitter"):Destroy();
+            else
+                returnValue = false;
             end;
         end;
+
+        -- // Return
+        return returnValue;
     end;
     
     -- // Player: Get Age

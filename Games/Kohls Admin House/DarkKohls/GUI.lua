@@ -565,7 +565,15 @@ local Rejoin = SetupTextMenu(Misc, "Rejoin", {
 -- // Misc: Rejoin
 local DisableObbyKill = SetupTextMenu(Misc, "DisableObbyKill", {
     Callback = function()
-        KohlsAPI.Misc.DisableObbyKill();
+        if (KohlsAPI.Misc.DisableObbyKill()) then
+            Material.Banner({
+                Text = "Done!";
+            });
+        else
+            Material.Banner({
+                Text = "This has already been done.";
+            });
+        end;
     end;
 });
 
