@@ -84,9 +84,8 @@ Orbit.GetParts = function()
 end
 
 -- // Always meet target parts
-Folder.ChildRemoved:Connect(function(child)
-    local AllParts = Orbit.Parts
-    local NeededParts = Orbit.TargetParts - #AllParts
+Folder.ChildRemoved:Connect(function()
+    local NeededParts = Orbit.TargetParts - #Orbit.Parts
 
     -- // Adding Parts
     if (NeededParts > 0) then
@@ -97,7 +96,7 @@ end)
 -- // Make the parts spin
 RunService:BindToRenderStep("OrbitSpin", 0, function()
     Orbit.Parts = Orbit.GetParts()
-    
+
     if (Folder and Orbit.Enabled) then
         rotX = rotX + Orbit.Speed / 100
         rotZ = rotZ + Orbit.Speed / 100
