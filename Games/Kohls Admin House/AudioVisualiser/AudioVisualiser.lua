@@ -95,7 +95,7 @@ end
 Folder.ChildRemoved:Connect(RepairOrbit)
 
 -- // Make the parts spin
-RunService:BindToRenderStep("OrbitSpin", 0, function()
+RunService.RenderStepped:Connect(function()
     Orbit.Parts = Orbit.GetParts()
 
     if (Folder and Orbit.Enabled) then
@@ -109,8 +109,9 @@ RunService:BindToRenderStep("OrbitSpin", 0, function()
         local AllParts = Orbit.Parts
         for i = 1, #AllParts do
             local part = AllParts[i]
-
+            
             -- // Audio Visualiser
+            
             if (Orbit.Mode and Audio) then
                 local roundedAudioLoudness = mathRound((Audio.PlaybackLoudness / 200) / 1.5, 3)
                 Y = math.clamp(roundedAudioLoudness, 0, 5)
@@ -118,12 +119,11 @@ RunService:BindToRenderStep("OrbitSpin", 0, function()
 
             -- // Spinning
             if (not Orbit.targetPlayer.Character or not Orbit.targetPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-            local targetOrbit = Orbit.targetPlayer.Character:WaitForChild("HumanoidRootPart")
-
+            local targetOrbit = Orbit.targetPlayer.Character.HumanoidRootPart
             local newPos = CFrame.new(targetOrbit.Position + Vector3.new(0, Y, 0))
             local B = CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #AllParts) * i + Orbit.Speed), 0)
             local endCFrame = newPos * B * CFrame.new(Orbit.offSet, 0, 0)
-
+            
             part.CFrame = endCFrame
         end
     end
