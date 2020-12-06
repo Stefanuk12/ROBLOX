@@ -674,6 +674,14 @@ local AntiFreeze = SetupTextMenu(Protections, "AntiFreeze", {
     end;
 });
 
+-- // Protections: Anti Fling
+local AntiFling = SetupTextMenu(Protections, "AntiFling", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiFling"),
+    Callback = function(Value)
+        KohlsAPI.SettingGetSet("ProtectionsAntiFling", Value);
+    end;
+});
+
 -- // Protections: Anti Jail
 local AntiJail = SetupTextMenu(Protections, "AntiJail", {
     Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiJail"),

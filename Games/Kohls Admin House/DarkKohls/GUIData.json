@@ -220,6 +220,13 @@
             "Name": "Anti Freeze",
             "Type": "Toggle"
         },
+        "AntiFling": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Sets your velocity as zero when you are getting flinged.",
+            "Name": "Anti Fling",
+            "Type": "Toggle"
+        },
         "AntiJail": {
             "Admin": true,
             "Persons299": false,

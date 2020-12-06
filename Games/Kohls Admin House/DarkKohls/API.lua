@@ -41,6 +41,7 @@ return function(Arguments)
                 {Name = "BlacklistAlertBlacklistGearUse", Value = false},
                 {Name = "ProtectionsAntiBlind", Value = false},
                 {Name = "ProtectionsAntiFreeze", Value = false},
+                {Name = "ProtectionsAntiFling", Value = false},
                 {Name = "ProtectionsAntiJail", Value = false},
                 {Name = "ProtectionsAntiKill", Value = false},
                 {Name = "ProtectionsAntiPunish", Value = false},
@@ -943,7 +944,7 @@ return function(Arguments)
                     v.Connection:Disconnect();
                 end;
                 table.remove(KohlsAPI.Connections, i);
-            end;   
+            end;
         end;
 
         local Connection = LocalPlayer.Character.ChildAdded:Connect(function(child)
@@ -955,6 +956,33 @@ return function(Arguments)
     end;
     AntiFreezeConnection();
     LocalPlayer.CharacterAdded:Connect(AntiFreezeConnection);
+
+    -- // Protections: Anti Fling
+    function AntiFlingConnection()
+        -- // Remove the old connection if there is one
+        for i = 1, #KohlsAPI.Connections do
+            local v = KohlsAPI.Connections[i];
+            if (v and v.Name == "AntiFling") then
+                if (v.Connection) then
+                    v.Connection:Disconnect();
+                end;
+                table.remove(KohlsAPI.Connections, i);
+            end;
+        end;
+
+        local Connection = LocalPlayer.Character.Torso.ChildAdded:Connect(function(child)
+            if (child.Name == "BFRC" and KohlsAPI.SettingGetSet("ProtectionsAntiFling")) then
+                local savedCFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
+                wait(0.1);
+                LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0);
+                LocalPlayer.Character.HumanoidRootPart.CFrame = savedCFrame;
+                LocalPlayer.Character.Humanoid.Sit = false;
+            end;
+        end);
+        KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiFling", Connection = Connection};
+    end;
+    AntiFlingConnection();
+    LocalPlayer.CharacterAdded:Connect(AntiFlingConnection);
 
     -- // Protections: Anti Message Spam
     KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiMessageSpam", Connection = GameFolder.Folder.ChildAdded:Connect(function(child)
