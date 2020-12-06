@@ -196,16 +196,18 @@ local GetAdmin = SetupTextMenu(Admin, "GetAdmin", {
 });
 
 -- // Admin: Permanant Admin
-local PermanantAdmin = SetupTextMenu(Admin, "PermanantAdmin", {
-    Enabled = KohlsAPI.SettingGetSet("AdminPermanantAdmin"),
-    Callback = function(Value)
-        KohlsAPI.SettingGetSet("AdminPermanantAdmin", Value);
+coroutine.wrap(function()
+    local PermanantAdmin = SetupTextMenu(Admin, "PermanantAdmin", {
+        Enabled = KohlsAPI.SettingGetSet("AdminPermanantAdmin"),
+        Callback = function(Value)
+            KohlsAPI.SettingGetSet("AdminPermanantAdmin", Value);
 
-        if (Value) then
-            KohlsAPI.Admin.GetAdmin(KohlsAPI.SelectedPad);
+            if (Value) then
+                KohlsAPI.Admin.GetAdmin(KohlsAPI.SelectedPad);
+            end;
         end;
-    end;
-});
+    });
+end)();
 
 -- // Blacklist: Blacklist Gear
 local BlacklistSelectGear = SetupTextMenu(Blacklist, "BlacklistSelectGear", {
@@ -557,6 +559,13 @@ local SaveSettings = SetupTextMenu(Misc, "SaveSettings", {
 local Rejoin = SetupTextMenu(Misc, "Rejoin", {
     Callback = function()
         TeleportService:Teleport(game.PlaceId);
+    end;
+});
+
+-- // Misc: Rejoin
+local DisableObbyKill = SetupTextMenu(Misc, "DisableObbyKill", {
+    Callback = function()
+        KohlsAPI.Misc.DisableObbyKill();
     end;
 });
 
