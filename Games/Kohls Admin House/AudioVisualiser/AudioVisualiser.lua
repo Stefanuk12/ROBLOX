@@ -33,7 +33,6 @@ getgenv().Orbit = {
     offSet = 10,
     Mode = true,
     targetPlayer = LocalPlayer,
-    Parts = {},
     CMDs = {},
     Prefix = ":",
     LoopOrbit = false,
@@ -322,3 +321,5 @@ addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter co
     NotificationHandler.newNotification("SUCCESS", "Orbiter Commands Copied To Clipboard!", "Success")
 end)
 
+-- // End
+Orbit.CreateParts(Orbit.TargetParts)
