@@ -84,14 +84,15 @@ Orbit.GetParts = function()
 end
 
 -- // Always meet target parts
-Folder.ChildRemoved:Connect(function()
+local function RepairOrbit()
     local NeededParts = Orbit.TargetParts - #Orbit.Parts
 
     -- // Adding Parts
     if (NeededParts > 0) then
         Orbit.CreateParts(NeededParts)
     end
-end)
+end
+Folder.ChildRemoved:Connect(RepairOrbit)
 
 -- // Make the parts spin
 RunService:BindToRenderStep("OrbitSpin", 0, function()
@@ -116,6 +117,7 @@ RunService:BindToRenderStep("OrbitSpin", 0, function()
             end
 
             -- // Spinning
+            if (not Orbit.targetPlayer or not Orbit.targetPlayer.Character or not Orbit.targetPlayer.Character.HumanoidRootPart) then return end
             local targetOrbit = Orbit.targetPlayer.Character:WaitForChild("HumanoidRootPart")
 
             local newPos = CFrame.new(targetOrbit.Position + Vector3.new(0, Y, 0))
@@ -181,9 +183,9 @@ end)()
 
 -- // Command Handler
 local function addCMD(CommandName, ModuleName, Example, Description, Function)
-    local CMDs = Orbit.CMDs
     local Prefix = Orbit.Prefix
-    CMDs[CommandName] = {
+    Orbit.CMDs[#Orbit.CMDs + 1] = {
+        CommandName = CommandName,
         ModuleName = ModuleName,
         Example = Prefix..Example,
         Description = Description,
@@ -193,11 +195,13 @@ end
 
 -- // Chat Listener
 LocalPlayer.Chatted:Connect(function(message)
+    local Prefix = Orbit.Prefix
+    if (not message:sub(1, #Prefix) == Prefix) then return end
+        
     for i = 1, #Orbit.CMDs do
         local v = Orbit.CMDs[i]
-        local Command = Orbit.Prefix .. i
-        
-        if (string.sub(message, 1, #Command) == Command) then
+        local Command = v.CommandName
+        if (message:sub(#Prefix + 1, #Command + #Prefix) == Command) then
             v.Function(message)
         end
     end
@@ -324,4 +328,4 @@ addCMD("copyorbitcmds", "Misc", "copyorbitercmds", "Copies all of the orbiter co
 end)
 
 -- // End
-Orbit.CreateParts(Orbit.TargetParts)
+RepairOrbit()
