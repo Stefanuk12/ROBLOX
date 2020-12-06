@@ -117,7 +117,7 @@ RunService:BindToRenderStep("OrbitSpin", 0, function()
             end
 
             -- // Spinning
-            if (not Orbit.targetPlayer or not Orbit.targetPlayer.Character or not Orbit.targetPlayer.Character.HumanoidRootPart) then return end
+            if (not Orbit.targetPlayer.Character or not Orbit.targetPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
             local targetOrbit = Orbit.targetPlayer.Character:WaitForChild("HumanoidRootPart")
 
             local newPos = CFrame.new(targetOrbit.Position + Vector3.new(0, Y, 0))
