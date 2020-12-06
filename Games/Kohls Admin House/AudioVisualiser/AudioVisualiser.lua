@@ -34,6 +34,7 @@ getgenv().Orbit = {
     Mode = true,
     targetPlayer = LocalPlayer,
     CMDs = {},
+    Parts = {},
     Prefix = ":",
     LoopOrbit = false,
     LoopOrbitTime = 1,
@@ -84,7 +85,7 @@ end
 
 -- // Always meet target parts
 Folder.ChildRemoved:Connect(function(child)
-    local AllParts = Orbit.GetParts()
+    local AllParts = Orbit.Parts
     local NeededParts = Orbit.TargetParts - #AllParts
 
     -- // Adding Parts
@@ -95,6 +96,8 @@ end)
 
 -- // Make the parts spin
 RunService:BindToRenderStep("OrbitSpin", 0, function()
+    Orbit.Parts = Orbit.GetParts()
+    
     if (Folder and Orbit.Enabled) then
         rotX = rotX + Orbit.Speed / 100
         rotZ = rotZ + Orbit.Speed / 100
@@ -103,7 +106,7 @@ RunService:BindToRenderStep("OrbitSpin", 0, function()
         local Y = 0
 
         -- // Making the parts orbit
-        local AllParts = Orbit.GetParts()
+        local AllParts = Orbit.Parts
         for i = 1, #AllParts do
             local part = AllParts[i]
 
@@ -222,7 +225,7 @@ end)
 addCMD("refreshorbit", "Orbiter", "refreshorbit", "Refreshes the parts.", function(message)
     Players:Chat(":clr")
     wait(0.5)
-    local PartCount = Orbit.GetParts()
+    local PartCount = Orbit.Parts
     Orbit.CreateParts(Orbit.TargetParts - PartCount)
     NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
 end)
