@@ -65,7 +65,6 @@ return function(Arguments)
     KohlsAPI.Whitelist = {};
 
     local LocalPlayer = Players.LocalPlayer;
-    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
     local Mouse = LocalPlayer:GetMouse();
 
     -- // Shutdown
@@ -486,7 +485,7 @@ return function(Arguments)
             -- // Constantly teleporting the pad to the Player until the player has admin
             while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do 
                 wait();
-                SelectedPad.Head.CFrame = Character:WaitForChild("HumanoidRootPart").CFrame;
+                SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
             end;
 
             -- // Reset Pad Properties
@@ -797,15 +796,15 @@ return function(Arguments)
         end;
 
         -- // Check if you already have a Paint Bucket
-        if (not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or Character:FindFirstChild("PaintBucket"))) then
+        if (not (LocalPlayer.Backpack:FindFirstChild("PaintBucket") or LocalPlayer.Character:FindFirstChild("PaintBucket"))) then
             Players:Chat(":gear me 18474459");
         end;
         LocalPlayer.Backpack:WaitForChild("PaintBucket");
-        Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket);
-        Character:WaitForChild("PaintBucket");
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.PaintBucket);
+        LocalPlayer.Character:WaitForChild("PaintBucket");
 
         -- // Painting
-        local Remote = Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
+        local Remote = LocalPlayer.Character:WaitForChild("PaintBucket"):WaitForChild("Remotes"):WaitForChild("ServerControls");
 
         if (Area:lower() == "all") then
             -- // Paint everything
@@ -918,7 +917,7 @@ return function(Arguments)
             end;   
         end;
 
-        local Connection = Character:WaitForChild("Humanoid").Died:Connect(function()
+        local Connection = LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
             if (KohlsAPI.SettingGetSet("ProtectionsAntiKill")) then
                 Players:Chat(":reset me");
             end;
@@ -948,7 +947,7 @@ return function(Arguments)
             end;
         end;
 
-        local Connection = Character.ChildAdded:Connect(function(child)
+        local Connection = LocalPlayer.Character.ChildAdded:Connect(function(child)
             if (child:IsA("Part") and child.Name == "ice" and KohlsAPI.SettingGetSet("ProtectionsAntiFreeze")) then
                 Players:Chat(":reset me");
             end;
@@ -971,13 +970,13 @@ return function(Arguments)
             end;
         end;
 
-        local Connection = Character:WaitForChild("Torso").ChildAdded:Connect(function(child)
+        local Connection = LocalPlayer.Character:WaitForChild("Torso").ChildAdded:Connect(function(child)
             if (child.Name == "BFRC" and KohlsAPI.SettingGetSet("ProtectionsAntiFling")) then
-                local savedCFrame = Character.HumanoidRootPart.CFrame;
+                local savedCFrame = LocalPlayer.Character.HumanoidRootPart.CFrame;
                 wait(0.1);
-                Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0);
-                Character.HumanoidRootPart.CFrame = savedCFrame;
-                Character.Humanoid.Sit = false;
+                LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0);
+                LocalPlayer.Character.HumanoidRootPart.CFrame = savedCFrame;
+                LocalPlayer.Character.Humanoid.Sit = false;
             end;
         end);
         KohlsAPI.Connections[#KohlsAPI.Connections + 1] = {Name = "AntiFling", Connection = Connection};
@@ -1035,8 +1034,8 @@ return function(Arguments)
 
         Players:Chat(":gear me 94794847");
         LocalPlayer.Backpack:WaitForChild("VampireVanquisher");
-        Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
-        Character:WaitForChild("VampireVanquisher");
+        LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack.VampireVanquisher);
+        LocalPlayer.Character:WaitForChild("VampireVanquisher");
         for i = 1, 10 do
             Players:Chat(":size me .3");
             wait();
@@ -1094,7 +1093,7 @@ return function(Arguments)
         local newCFrame = CFrame.new(X, Y, Z, R00, R01, R02, R10, R11, R12, R20, R21, R22);
 
         -- // So you don't float in water
-        local CharacterDescendants = Character:GetDescendants();
+        local CharacterDescendants = LocalPlayer.Character:GetDescendants();
         for i = 1, #CharacterDescendants do
             local v = CharacterDescendants[i];
             if (v:IsA("BasePart")) then
@@ -1103,7 +1102,7 @@ return function(Arguments)
         end;
 
         -- // Script
-        Character:WaitForChild("HumanoidRootPart").CFrame = newCFrame;
+        LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newCFrame;
         wait(1.5);
         Players:Chat(":stun me");
 
@@ -1185,11 +1184,11 @@ return function(Arguments)
             Players:Chat(":gear me 236438668");
 
             local Tool = LocalPlayer.Backpack:WaitForChild("SeaThemedCrossbow");
-            local Humanoid = Character:WaitForChild("Humanoid");
+            local Humanoid = LocalPlayer.Character:WaitForChild("Humanoid");
 
             Humanoid:EquipTool(Tool);
 
-            local Remote = Character:WaitForChild("SeaThemedCrossbow"):WaitForChild("Remote");
+            local Remote = LocalPlayer.Character:WaitForChild("SeaThemedCrossbow"):WaitForChild("Remote");
             Remote:FireServer("LeftDown", Mouse.Hit.Position);
 
             wait(1);
