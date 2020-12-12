@@ -146,6 +146,7 @@ end)
 
 -- // Always meet target parts
 local function RepairOrbit()
+	wait(0.5)
 	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
 
 	-- // Adding Parts
