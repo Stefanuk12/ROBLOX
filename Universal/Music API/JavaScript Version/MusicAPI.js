@@ -6,7 +6,8 @@ soundCheckFilter = function(webSource){
     // Assets that indicate a sound got deleted
     const removedAssets = [
         "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
-        "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059"
+        "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
+        "https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04"
     ];
 
     // Loop
