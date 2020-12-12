@@ -145,10 +145,11 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- // Always meet target parts
-local function RepairOrbit()
-	wait(0.5)
-	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
+local function RepairOrbit(part)
+	getgenv().Orbit.CreateParts(1)
+	wait(1)
 
+	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
 	-- // Adding Parts
 	if (NeededParts > 0) then
 		getgenv().Orbit.CreateParts(NeededParts)
