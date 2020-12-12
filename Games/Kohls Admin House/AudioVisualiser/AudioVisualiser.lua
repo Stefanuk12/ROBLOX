@@ -109,19 +109,11 @@ getgenv().Orbit.GetParts = function()
 	return AllParts
 end
 
--- // Always meet target parts
-local function RepairOrbit()
-	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.GetParts()
-
-	-- // Adding Parts
-	if (NeededParts > 0) then
-		getgenv().Orbit.CreateParts(NeededParts)
-	end
-end
-PartLocation.ChildRemoved:Connect(RepairOrbit)
-
 -- // Make the parts spin
 RunService.RenderStepped:Connect(function()
+	-- // Parts table
+	getgenv().Orbit.Parts = getgenv().Orbit.GetParts()
+
 	if (SoundParent and getgenv().Orbit.Enabled) then
 		rotX = rotX + getgenv().Orbit.Speed / 100
 		rotZ = rotZ + getgenv().Orbit.Speed / 100
@@ -130,7 +122,7 @@ RunService.RenderStepped:Connect(function()
 		local Y = 0
 
 		-- // Making the parts orbit
-		local AllParts = getgenv().Orbit.GetParts()
+		local AllParts = getgenv().Orbit.Parts
 		for i = 1, #AllParts do
 			local part = AllParts[i]
 
@@ -151,6 +143,17 @@ RunService.RenderStepped:Connect(function()
 		end
 	end
 end)
+
+-- // Always meet target parts
+local function RepairOrbit()
+	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
+
+	-- // Adding Parts
+	if (NeededParts > 0) then
+		getgenv().Orbit.CreateParts(NeededParts)
+	end
+end
+PartLocation.ChildRemoved:Connect(RepairOrbit)
 
 -- // Command Framework
 local function getPlayer(String)
@@ -251,7 +254,7 @@ end)
 addCMD("refreshorbit", "Orbiter", "refreshorbit", "Refreshes the parts.", function(message)
 	Players:Chat(":clr")
 	wait(0.5)
-	local PartCount = #getgenv().Orbit.GetParts()
+	local PartCount = #getgenv().Orbit.Parts
 	getgenv().Orbit.CreateParts(getgenv().Orbit.TargetParts - PartCount)
 	NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
 end)
