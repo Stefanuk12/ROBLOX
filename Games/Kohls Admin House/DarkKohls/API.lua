@@ -522,13 +522,7 @@ return function(Arguments)
     -- // Blacklist: Blacklist Gear
     function KohlsAPI.Blacklist.BlacklistUnblacklistGear(GearId, Unblacklist)
         -- // Handling
-        if (typeof(GearId) ~= 'number') then
-            local ErrorReason = "Argument #1 expected number got " .. typeof(GearId);
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
-            end;
-            return false, ErrorReason;
-        end;
+        GearId = tostring(GearId)
         if (Unblacklist ~= nil and typeof(Unblacklist) ~= 'boolean') then
             local ErrorReason = "Argument #1 expected boolean got " .. typeof(Unblacklist);
             if (KohlsAPI.Configurable.Errors) then
