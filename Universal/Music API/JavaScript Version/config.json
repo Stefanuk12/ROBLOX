@@ -1,4 +1,4 @@
 {
-    "MusicTableLocation": "../../",
+    "MusicTableLocation": "../",
     "MusicTableName": "MusicTable.json"
 }
