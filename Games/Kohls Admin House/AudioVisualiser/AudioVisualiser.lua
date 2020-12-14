@@ -154,7 +154,7 @@ PartLocation.ChildRemoved:Connect(RepairOrbit)
 coroutine.wrap(function()
 	while wait(1) do
 		local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
-		
+
 		-- // Adding Parts
 		if (NeededParts > 0) then
 			getgenv().Orbit.CreateParts(NeededParts)
@@ -268,10 +268,12 @@ end)
 
 addCMD("lockorbit", "Orbiter", "lockorbit", "Locks the orbit in current place", function(message)
 	getgenv().Orbit.LockPlaceCFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame
+	NotificationHandler.newNotification("SUCCESS", "Turned on lock orbit to current location.", "Success")
 end)
 
 addCMD("offlockorbit", "Orbiter", "offlockorbit", "Unlocks the orbiter", function(message)
 	getgenv().Orbit.LockPlaceCFrame = nil
+	NotificationHandler.newNotification("SUCCESS", "Turned off lock orbit.", "Success")
 end)
 
 addCMD("timelooporbit", "Orbiter Settings", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
