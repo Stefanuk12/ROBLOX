@@ -148,15 +148,19 @@ end)
 -- // Always meet target parts
 local function RepairOrbit(part)
 	getgenv().Orbit.CreateParts(1)
-	wait(1)
-
-	local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
-	-- // Adding Parts
-	if (NeededParts > 0) then
-		getgenv().Orbit.CreateParts(NeededParts)
-	end
 end
 PartLocation.ChildRemoved:Connect(RepairOrbit)
+
+coroutine.wrap(function()
+	while wait(1) do
+		local NeededParts = getgenv().Orbit.TargetParts - #getgenv().Orbit.Parts
+		
+		-- // Adding Parts
+		if (NeededParts > 0) then
+			getgenv().Orbit.CreateParts(NeededParts)
+		end
+	end
+end)()
 
 -- // Command Framework
 local function getPlayer(String)
