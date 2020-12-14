@@ -59,6 +59,7 @@ getgenv().Orbit = {
 	LoopOrbit = false,
 	LoopOrbitTime = 1,
 	TargetParts = 100,
+	LockPlaceCFrame = nil
 }
 
 -- // Round Function
@@ -134,7 +135,7 @@ RunService.RenderStepped:Connect(function()
 
 			-- // Spinning
 			if (not getgenv().Orbit.targetPlayer.Character or not getgenv().Orbit.targetPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-			local targetOrbit = getgenv().Orbit.targetPlayer.Character.HumanoidRootPart
+			local targetOrbit = getgenv().Orbit.LockPlaceCFrame or getgenv().Orbit.targetPlayer.Character.HumanoidRootPart
 			local newPos = CFrame.new(targetOrbit.Position + Vector3.new(0, Y, 0))
 			local B = CFrame.fromEulerAnglesXYZ(0, math.rad(L + (360 / #AllParts) * i + getgenv().Orbit.Speed), 0)
 			local endCFrame = newPos * B * CFrame.new(getgenv().Orbit.offSet, 0, 0)
@@ -259,6 +260,14 @@ addCMD("refreshorbit", "Orbiter", "refreshorbit", "Refreshes the parts.", functi
 	local PartCount = #getgenv().Orbit.Parts
 	getgenv().Orbit.CreateParts(getgenv().Orbit.TargetParts - PartCount)
 	NotificationHandler.newNotification("SUCCESS", "Refreshed Orbiter", "Success")
+end)
+
+addCMD("lockorbit", "Orbiter", "lockorbit", "Locks the orbit in current place", function(message)
+	getgenv().Orbit.LockPlaceCFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame
+end)
+
+addCMD("offlockorbit", "Orbiter", "offlockorbit", "Unlocks the orbiter", function(message)
+	getgenv().Orbit.LockPlaceCFrame = nil
 end)
 
 addCMD("timelooporbit", "Orbiter Settings", "timelooporbit", "Set the time of the turns of the Orbiter.", function(message)
