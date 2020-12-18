@@ -45,6 +45,21 @@ module.exports.isSoundDeleted = async function(SoundId, Verbose = false, filter 
     };
 };
 
+// Fix UUIDs
+module.exports.fixMusicTableUUIDs = async function(Table){
+    // Vars
+    var uuidCount = 1;
+
+    // Loop
+    for await (var item of Table){
+        item.UUID = uuidCount;
+        uuidCount++;
+    };
+
+    // Return
+    return Table;
+};
+
 // Check if a sound is in a table
 module.exports.isSoundInTable = async function(SoundId, Table){
     // Loop
@@ -92,7 +107,7 @@ module.exports.updateMusicTable = async function(MusicTable, Verbose = false){
     };
 
     // Return updated
-    return updatedMusicTable;
+    return await fixMusicTableUUIDs(updatedMusicTable);
 };
 
 // Add sounds to table
@@ -107,5 +122,5 @@ module.exports.addSoundsToMusicTable = async function(Sounds, MusicTable){
 
     MusicTable = await module.exports.removeDuplicateSounds(MusicTable);
 
-    return MusicTable;
+    return await fixMusicTableUUIDs(MusicTable);
 };
