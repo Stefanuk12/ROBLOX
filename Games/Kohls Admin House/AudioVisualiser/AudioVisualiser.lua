@@ -49,7 +49,7 @@ end
 -- // Orbit Table
 getgenv().Orbit = {
 	Enabled = true,
-	Speed = 15,
+	Speed = 0.5,
 	offSet = 10,
 	Mode = true,
 	targetPlayer = LocalPlayer,
