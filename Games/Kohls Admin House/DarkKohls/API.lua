@@ -415,7 +415,7 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-        if (not GameFolder["Admin"]:FindFirstChild("Regen")) then
+        if (false and not GameFolder["Admin"]:FindFirstChild("Regen")) then
             local ErrorReason = "Unable to find the Regen Pad!";
             if (KohlsAPI.Configurable.Errors) then
                 error(ErrorReason);
@@ -456,18 +456,15 @@ return function(Arguments)
             end;
             return false, ErrorReason;
         end;
-        if (false and not GameFolder["Admin"]:FindFirstChild("Regen")) then
-            local ErrorReason = "Unable to find the Regen Pad!";
-            if (KohlsAPI.Configurable.Errors) then
-                error(ErrorReason);
-            end;
-            return false, ErrorReason;
-        end;
 
         -- // Regen the admin
         local Holder = GameFolder["Admin"]["Pads"]:FindFirstChild("Touch to get admin");
         if (not Holder and not SpecifyPad) then
-            fireclickdetector(GameFolder["Admin"].Regen.ClickDetector, 0);
+            local _, ErrorReason = KohlsAPI.Admin.RegenerateAdmin();
+            if (KohlsAPI.Configurable.Errors) then
+                error(ErrorReason);
+            end;
+            return false, ErrorReason;
         end;
         Holder = nil;
 
