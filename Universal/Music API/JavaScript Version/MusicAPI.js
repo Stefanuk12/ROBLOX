@@ -107,7 +107,7 @@ module.exports.updateMusicTable = async function(MusicTable, Verbose = false){
     };
 
     // Return updated
-    return await fixMusicTableUUIDs(updatedMusicTable);
+    return await module.exports.fixMusicTableUUIDs(updatedMusicTable);
 };
 
 // Add sounds to table
@@ -122,5 +122,5 @@ module.exports.addSoundsToMusicTable = async function(Sounds, MusicTable){
 
     MusicTable = await module.exports.removeDuplicateSounds(MusicTable);
 
-    return await fixMusicTableUUIDs(MusicTable);
+    return await module.exports.fixMusicTableUUIDs(MusicTable);
 };
