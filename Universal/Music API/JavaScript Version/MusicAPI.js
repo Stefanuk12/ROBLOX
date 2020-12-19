@@ -51,13 +51,20 @@ module.exports.fixMusicTableUUIDs = async function(Table){
     var uuidCount = 1;
 
     // Loop
-    for await (var item of Table){
-        item.UUID = uuidCount;
-        uuidCount++;
+    for (let i = 0; i <= Table.length; i++){
+        if (Table[i] !== undefined){
+            Table[i].UUID = uuidCount;
+            uuidCount++;
+        }; 
     };
 
     // Return
     return Table;
+};
+
+// Alphabetical Sort
+module.exports.alphabeticalSort = async function(Table){
+    return Table.sort((a, b) => a.Name.localeCompare(b.Name));
 };
 
 // Check if a sound is in a table
