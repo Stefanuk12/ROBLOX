@@ -98,7 +98,7 @@ function MusicAPI.CheckAllSounds()
     
     if (MusicAPI.Verbose) then print('Check All Sounds done in ' .. tick() - StartTime .. " seconds."); end;
     
-    return Cleaned;
+    return MusicAPI.SetUUIDs(Cleaned);
 end;
 
 function MusicAPI.Benchmark(FunctionToBench, Iterations, ...)
@@ -119,8 +119,8 @@ end;
 ]]
 
 -- // Set UUIDs
-function MusicAPI.SetUUIDs()
-    local MusicT = MusicAPI.MusicTable;
+function MusicAPI.SetUUIDs(Table)
+    local MusicT = Table or MusicAPI.MusicTable;
     
     for i = 1, #MusicT do
         local v = MusicT[i];
