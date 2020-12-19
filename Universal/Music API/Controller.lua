@@ -7,16 +7,20 @@ local RunService = game:GetService("RunService");
 
 -- // Vars
 local RenderStepped = RunService.RenderStepped;
-getgenv().MusicAPI = {}; local MusicAPI = getgenv().MusicAPI;
-MusicAPI.Verbose = true; -- // Will print what it's all doing
-MusicAPI.MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json";
-MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
-MusicAPI.RemovedAssets = {
-    "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
-    "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
-    "https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04",
-    "This audio asset has been blocked due to copyright violations."
+
+-- // MusicAPI Table
+getgenv().MusicAPI = {
+    Verbose = true, -- // Will print what it's all doing
+    MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json",
+    RemovedAssets = {
+        "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
+        "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
+        "https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04",
+        "This audio asset has been blocked due to copyright violations."
+    }
 };
+local MusicAPI = getgenv().MusicAPI;
+MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGetAsync(MusicAPI.MusicTableLink));
 
 -- // Return false if the Sound is not working
 function MusicAPI.CheckSound(SoundId)
