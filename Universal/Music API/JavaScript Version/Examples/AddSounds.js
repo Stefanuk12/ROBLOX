@@ -5,7 +5,19 @@ const config = require("../config.json");
 
 // Vars
 const soundsToAdd = [
-    {Name: "EDP445", SoundId: "5983671108"},
+    {Name: "Juice WRLD – Fall In Love", SoundId: "6094673438"},
+    {Name: "XXXTENTACION - Looking for a Star", SoundId: "6067177973"},
+    {Name: "RØNIN - ALL GIRLS ARE THE SAME", SoundId: "5947589334"},
+    {Name: "Shabazz PBG – Shells", SoundId: "5021706790"},
+    {Name: "Shoreline Mafia - Backdoor", SoundId: "6067298303"},
+    {Name: "50 Cent - In Da Club", SoundId: "6098146219"},
+    {Name: "Juice WRLD - Lucid Dreams", SoundId: "5625287809"},
+    {Name: "lil ricefield - TRAPANESE", SoundId: "6079946028"},
+    {Name: "Lil Uzi Vert - Bankroll", SoundId: "6045287727"},
+    {Name: "NPK - Two Man On A Ped Lyrics", SoundId: "4934129153"},
+    {Name: "NPK - Put In A Spliff Lyrics", SoundId: "4961071295"},
+    {Name: "LR (Sin Squad) - Opp Block", SoundId: "4814788069"},
+    {Name: "Kempachii - Met Her on the Internet", SoundId: "6058627999"}
 ];
 
 // 
