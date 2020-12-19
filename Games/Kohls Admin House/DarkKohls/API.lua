@@ -234,7 +234,7 @@ return function(Arguments)
             end;
 
             -- // Anti Skydive
-            if (splitMessage[1]:lower():find("skydive") and splitMessage[2]) then
+            if (splitMessage[1]:lower():find("skydive") and splitMessage[2] and KohlsAPI.SettingGetSet("ProtectionsAntiSkydive")) then
                 -- // Message that is said to counter the skydive
                 local counterText = ""
 
@@ -249,7 +249,7 @@ return function(Arguments)
                 end;
                 
                 -- // Counter
-                wait(0.1)
+                wait(0.5)
                 Players:Chat(":unskydive " .. counterText);
             end;
         end;
