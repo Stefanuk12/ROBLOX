@@ -46,6 +46,7 @@ return function(Arguments)
                 {Name = "ProtectionsAntiKill", Value = false},
                 {Name = "ProtectionsAntiPunish", Value = false},
                 {Name = "ProtectionsAntiMessageSpam", Value = false},
+                {Name = "ProtectionsAntiSkydive", Value = false},
                 {Name = "SoundAbuseEarRape", Value = false},
                 {Name = "ServerEpilepsy", Value = false},
                 {Name = "ServerCSystemAlert", Value = false},
@@ -215,21 +216,44 @@ return function(Arguments)
 
         -- // Handle Blacklisted Gears
         local splitMessage = Message:split(" ");
-        if (splitMessage[1]:lower():find("gear") and splitMessage[3] and not GWhitelisted) then
-            local BlacklistedGear = splitMessage[3];
-
-            for i = 1, #KohlsAPI.BlacklistedGears do
-                local v = KohlsAPI.BlacklistedGears[i];
-
-                if (v == BlacklistedGear) then
-                    Players:Chat(":removetools " .. (splitMessage[2] == "me" and Player.Name or splitMessage[2]) );
-                    if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
-                        Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", Player.Name));
+        if (not GWhitelisted) then
+            -- // Gear Blacklist
+            if (splitMessage[1]:lower():find("gear") and splitMessage[3]) then
+                local BlacklistedGear = splitMessage[3];
+    
+                for i = 1, #KohlsAPI.BlacklistedGears do
+                    local v = KohlsAPI.BlacklistedGears[i];
+    
+                    if (v == BlacklistedGear) then
+                        Players:Chat(":removetools " .. (splitMessage[2]:lower() == "me" and Player.Name or splitMessage[2]) );
+                        if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
+                            Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", Player.Name));
+                        end;
                     end;
-                end;
-            end
-        end;
+                end
+            end;
 
+            -- // Anti Skydive
+            if (splitMessage[1]:lower():find("skydive") and splitMessage[2]) then
+                -- // Message that is said to counter the skydive
+                local counterText = ""
+
+                -- // Get the message to say to counter the skydive
+                for i = 2, #splitMessage do
+                    -- // Me
+                    if (splitMessage[i]:lower() == "me") then
+                        splitMessage[i] = Player.Name;
+                    end;
+
+                    counterText = counterText .. splitMessage[i] .. " ";
+                end;
+                
+                -- // Counter
+                wait(0.1)
+                Players:Chat(":unskydive " .. counterText);
+            end;
+        end;
+        
         -- // Handle Blacklisted Phrases
         local PlayerBlacklistedPhrases = PlayerData.BlacklistedPhrases;
 

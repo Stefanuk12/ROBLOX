@@ -731,6 +731,15 @@ local AntiMessageSpam = SetupTextMenu(Protections, "AntiMessageSpam", {
     end;
 });
 
+-- // Protections: Anti Skydive
+local AntiSkydive = SetupTextMenu(Protections, "AntiSkydive", {
+    Enabled = KohlsAPI.SettingGetSet("ProtectionsAntiSkydive"),
+    Callback = function(Value)
+        KohlsAPI.SettingGetSet("ProtectionsAntiSkydive", Value);
+    end;
+});
+
+
 -- // Server: Alert C System Use
 local AlertCSystemUse = SetupTextMenu(Server, "AlertCSystemUse", {
     Enabled = KohlsAPI.SettingGetSet("ServerCSystemAlert"),

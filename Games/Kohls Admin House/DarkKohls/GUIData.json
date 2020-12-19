@@ -261,6 +261,13 @@
             "Description": "Instantly get clear when more than four messages are on screen.",
             "Name": "Anti Message Spam",
             "Type": "Toggle"
+        },
+        "AntiSkydive": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get unskydive when people are skydived - used to counter baseplate moving, etc.",
+            "Name": "Anti Skydive",
+            "Type": "Toggle"
         }
     },
     "Server": {
