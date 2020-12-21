@@ -10,8 +10,7 @@ fs.readFile(`${config.MusicTableLocation}/${config.MusicTableName}`, "utf8", asy
     };
 
     var MusicTable = JSON.parse(data);
-    var newMusicTable = await MusicAPI.updateMusicTable(MusicTable, true);
-    newMusicTable = await MusicAPI.removeDuplicateSounds(MusicTable);
+    var newMusicTable = await MusicAPI.removeDuplicateSounds(MusicTable);
 
     fs.writeFile(`${config.MusicTableLocation}/${config.MusicTableName}`, JSON.stringify(newMusicTable), "utf8", function(err, data){
         if (err){

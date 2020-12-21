@@ -69,16 +69,18 @@ module.exports.alphabeticalSort = async function(Table){
 
 // Check if a sound is in a table
 module.exports.isSoundInTable = async function(SoundId, Table){
+    var returnVal = false;
+
     // Loop
     Table.forEach(item => {
         if (item.SoundId == SoundId){
             // Return
-            return true;
+            returnVal = true;
         };
     });
 
     // Return
-    return false;
+    return returnVal;
 };
 
 // Remove any duplicate sounds
