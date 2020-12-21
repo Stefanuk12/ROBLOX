@@ -64,7 +64,12 @@ module.exports.fixMusicTableUUIDs = async function(Table){
 
 // Alphabetical Sort
 module.exports.alphabeticalSort = async function(Table){
-    return Table.sort((a, b) => a.Name.localeCompare(b.Name));
+    return Table.sort((a, b) => {
+        if (a.Name < b.Name) return -1;
+        if (a.Name > b.Name) return 1;
+
+        return 0;
+    });
 };
 
 // Check if a sound is in a table
