@@ -101,7 +101,7 @@ local function SetupTextMenu(Page, CommandName, Options)
             Config[i] = v;
         end;
     end;
-
+    
     local Object = Page[CommandConfig["Type"]](Config);
     if (CommandName:find("SelectPlayer")) then
         DropdownPlayers[#DropdownPlayers + 1] = Object;
