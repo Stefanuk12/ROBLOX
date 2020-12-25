@@ -602,7 +602,18 @@ local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
 
 -- // Misc: Export GUI Data
 local ExportGUIData = SetupTextMenu(Misc, "ExportGUIData", {
-    Callback = function(Value)
+    Callback = function()
+        -- // Failsafing
+        if (not setclipboard) then
+            local FailsafeSuccessErrorReason = "You do not have setclipbaord function.";
+            Material.Banner({
+                Text = FailsafeSuccessErrorReason;
+            });
+
+            return false, FailsafeSuccessErrorReason;
+        end;
+
+        -- // Script
         local exportedGUIData = KohlsAPI.Misc.ExportGUIData();
         setclipboard(exportedGUIData);
 
