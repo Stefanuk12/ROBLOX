@@ -506,7 +506,9 @@ return function(Arguments)
         local SelectedPad = SpecifyPad or GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin");
         local SavedPadCFrame = SelectedPad.Head.CFrame;
 
-        if (SelectedPad.Name ~= DesiredPadName) then
+        if (SelectedPad.Name ~= DesiredPadName and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then
+            local HumanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart");
+
             if (not firetouchinterest) then
                 -- // Setting Pad Properties
                 SelectedPad.Head.Transparency = 1;
@@ -516,7 +518,7 @@ return function(Arguments)
                 -- // Constantly teleporting the pad to the Player until the player has admin
                 while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do
                     wait();
-                    SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
+                    SelectedPad.Head.CFrame = HumanoidRootPart.CFrame;
                 end;
 
                 -- // Reset Pad Properties
@@ -527,8 +529,8 @@ return function(Arguments)
             else
                 while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do
                     wait();
-                    firetouchinterest(LocalPlayer.Character:WaitForChild("HumanoidRootPart"), SelectedPad.Head, 0);
-                    firetouchinterest(LocalPlayer.Character:WaitForChild("HumanoidRootPart"), SelectedPad.Head, 1);
+                    firetouchinterest(HumanoidRootPart, SelectedPad.Head, 0);
+                    firetouchinterest(HumanoidRootPart, SelectedPad.Head, 1);
                 end;
             end;
         end;
