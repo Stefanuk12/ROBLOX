@@ -1094,6 +1094,12 @@ return function(Arguments)
             wait();
         end;
 
+        wait(1);
+        if (LocalPlayer.Character:FindFirstChild("VampireVanquisher")) then
+            LocalPlayer.Character["VampireVanquisher"].Parent = Workspace;
+        end
+        
+
         return true;
     end;
 
