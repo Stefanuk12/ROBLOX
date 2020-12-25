@@ -219,12 +219,12 @@ return function(Arguments)
         if (not GWhitelisted) then
             -- // Gear Blacklist
             if (splitMessage[1]:lower():find("gear") and splitMessage[3]) then
-                local BlacklistedGear = splitMessage[3];
+                local gearId = splitMessage[3];
     
                 for i = 1, #KohlsAPI.BlacklistedGears do
-                    local v = KohlsAPI.BlacklistedGears[i];
+                    local BlacklistedGear = KohlsAPI.BlacklistedGears[i];
     
-                    if (v == BlacklistedGear) then
+                    if (gearId:find(BlacklistedGear)) then
                         Players:Chat(":removetools " .. (splitMessage[2]:lower() == "me" and Player.Name or splitMessage[2]) );
                         if (KohlsAPI.SettingGetSet("BlacklistAlertBlacklistGearUse") and not GWhitelisted) then
                             Players:Chat(KohlsAPI.Configurable.BlacklistedGearNote:gsub("PLAYERNAME", Player.Name));
