@@ -74,15 +74,15 @@ function ValiantAimHacks.isPartVisible(Part, PartDescendant)
 end
 
 -- // Check teams
-function ValiantAimHacks.checkTeam(targetPlayer)
+function ValiantAimHacks.checkTeam(targetPlayerA, targetPlayerB)
     -- // If player is not on your team
-    if (targetPlayer.Team ~= LocalPlayer.Team) then
+    if (targetPlayerA.Team ~= targetPlayerB.Team) then
 
         -- // Check if team is blacklisted
         for i = 1, #ValiantAimHacks.BlacklistedTeams do
             local v = ValiantAimHacks.BlacklistedTeams
 
-            if (targetPlayer.Team ~= v.Team and targetPlayer.TeamColor ~= v.TeamColor) then
+            if (targetPlayerA.Team ~= v.Team and targetPlayerA.TeamColor ~= v.TeamColor) then
                 return true
             end
         end
@@ -168,7 +168,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
 
         if (not ValiantAimHacks.checkWhitelisted(plr) and ValiantAimHacks.checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid") and plr.Character.FindFirstChildWhichIsA(plr.Character, "Humanoid").Health > 0) then
             -- // Team Check
-            if (ValiantAimHacks["TeamCheck"] and not ValiantAimHacks.checkTeam(LocalPlayer, plr)) then break end
+            if (ValiantAimHacks["TeamCheck"] and not ValiantAimHacks.checkTeam(plr, LocalPlayer)) then break end
 
             -- // Vars
             local PartPos, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, plr.Character.PrimaryPart.Position)
