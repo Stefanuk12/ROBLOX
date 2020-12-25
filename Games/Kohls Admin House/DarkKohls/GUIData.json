@@ -177,9 +177,17 @@
         "ChatBypass": {
             "Admin": false,
             "Persons299": false,
+            
             "Description": "Allows you to say naughty words in chat",
             "Name": "Chat Bypass",
             "Type": "Toggle"
+        },
+        "ExportGUIData": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Exports the GUI Data to a string",
+            "Name": "Export GUI Data",
+            "Type": "Buttpn"
         },
         "ShutdownGUI": {
             "Admin": false,

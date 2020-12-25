@@ -792,6 +792,27 @@ return function(Arguments)
         return true;
     end;
 
+    -- // Misc: Export GUI Data
+    function KohlsAPI.Misc.ExportGUIData()
+        -- // Vars
+        local GUIConfig = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
+        local Current = "";
+
+        -- // Exporting
+        for name, module in pairs(GUIConfig) do
+            Current = Current .. Current.format("-- %s Module --\n", name);
+            
+            for _, command in pairs(module) do
+                Current = Current .. Current.format("%s - %s (%s)\n", command.Name, command.Description, command.Type);
+            end;
+            
+            Current = Current .. "\n";
+        end;
+
+        -- // Final
+        return Current;
+    end;
+
     -- // Misc: Paint Area
     function KohlsAPI.Misc.PaintArea(Area, Colour)
         -- // Handling

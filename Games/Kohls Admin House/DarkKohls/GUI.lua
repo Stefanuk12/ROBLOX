@@ -600,6 +600,18 @@ local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
     end;
 });
 
+-- // Misc: Export GUI Data
+local ExportGUIData = SetupTextMenu(Misc, "ExportGUIData", {
+    Callback = function(Value)
+        local exportedGUIData = KohlsAPI.Misc.ExportGUIData();
+        setclipboard(exportedGUIData);
+
+        Material.Banner({
+            Text = "GUI Data copied to clipboard."
+        });
+    end;
+});
+
 -- // Misc: Shutdown GUI
 local ShutdownGUI = SetupTextMenu(Misc, "ShutdownGUI", {
     Callback = function()
