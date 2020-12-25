@@ -592,6 +592,7 @@ local StartMusicCommands = SetupTextMenu(Misc, "StartMusicCommands", {
 });
 
 -- // Misc: Chat Bypass
+--[[
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))();
 getgenv().BypassText = false;
 local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
@@ -599,6 +600,7 @@ local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
         getgenv().BypassText = Value;
     end;
 });
+]]
 
 -- // Misc: Export GUI Data
 local ExportGUIData = SetupTextMenu(Misc, "ExportGUIData", {
