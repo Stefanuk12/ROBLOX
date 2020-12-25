@@ -455,8 +455,17 @@ return function(Arguments)
     end;
 
     -- // Admin: Get Admin
+    local KohlsAPIAdminGetAdminRunning = false;
     function KohlsAPI.Admin.GetAdmin(SpecifyPad)
         -- // Handling
+        if (KohlsAPIAdminGetAdminRunning) then
+            local ErrorReason = "KohlsAPI.Admin.GetAdmin is already running!";
+            if (KohlsAPI.Configurable.Errors) then
+                error(ErrorReason);
+            end;
+            return false, ErrorReason;
+        end;
+        KohlsAPIAdminGetAdminRunning = true;
         if (SpecifyPad ~= nil) then
             if (typeof(SpecifyPad) ~= 'Instance') then
                 local ErrorReason = "Argument #1 expected Instance got " .. typeof(SpecifyPad);
@@ -498,25 +507,34 @@ return function(Arguments)
         local SavedPadCFrame = SelectedPad.Head.CFrame;
 
         if (SelectedPad.Name ~= DesiredPadName) then
-            -- // Setting Pad Properties
-            SelectedPad.Head.Transparency = 1;
-            SelectedPad.Head.Size = Vector3.new(0, 0, 0);
-            SelectedPad.Head.CanCollide = false;
+            if (not firetouchinterest) then
+                -- // Setting Pad Properties
+                SelectedPad.Head.Transparency = 1;
+                SelectedPad.Head.Size = Vector3.new(0, 0, 0);
+                SelectedPad.Head.CanCollide = false;
 
-            -- // Constantly teleporting the pad to the Player until the player has admin
-            while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do 
-                wait();
-                SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
+                -- // Constantly teleporting the pad to the Player until the player has admin
+                while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do
+                    wait();
+                    SelectedPad.Head.CFrame = LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame;
+                end;
+
+                -- // Reset Pad Properties
+                SelectedPad.Head.CFrame = SavedPadCFrame;
+                SelectedPad.Head.Transparency = 0;
+                SelectedPad.Head.Size = Vector3.new(3, 0.4, 3);
+                SelectedPad.Head.CanCollide = true;
+            else
+                while SelectedPad.Name ~= LocalPlayer.Name .. "'s admin" do
+                    wait();
+                    firetouchinterest(LocalPlayer.Character:WaitForChild("HumanoidRootPart"), SelectedPad.Head, 0);
+                    firetouchinterest(LocalPlayer.Character:WaitForChild("HumanoidRootPart"), SelectedPad.Head, 1);
+                end;
             end;
-
-            -- // Reset Pad Properties
-            SelectedPad.Head.CFrame = SavedPadCFrame;
-            SelectedPad.Head.Transparency = 0;
-            SelectedPad.Head.Size = Vector3.new(3, 0.4, 3);
-            SelectedPad.Head.CanCollide = true;
         end;
 
         -- // Final Return
+        KohlsAPIAdminGetAdminRunning = false;
         return true, SelectedPad;
     end;
     
