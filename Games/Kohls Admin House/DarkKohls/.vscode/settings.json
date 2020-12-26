@@ -9,7 +9,6 @@
         "DarkKohls"
     ],
     "Lua.diagnostics.ignore": [
-        "HttpGetAsync",
         "HttpGet"
     ]
 }
