@@ -24,7 +24,7 @@ local TeleportService = game:GetService("TeleportService");
 -- // Vars
 local DropdownPlayers = {};
 local PlayerConnections = {};
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
     Errors = false,
     ScriptName = "DarkKohls"
 });
@@ -32,7 +32,7 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLO
 -- // GUI
 local MaterialUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))();
 local Material = MaterialUI.Load(DarkKohls.MaterialLuaConfig);
-local GUIConfig = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
+local GUIConfig = HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
 local Inputs = {
     {Name = "BlacklistSelectGear", Value = nil},
     {Name = "BlacklistSelectGear", Value = nil},
@@ -580,20 +580,20 @@ local DisableObbyKill = SetupTextMenu(Misc, "DisableObbyKill", {
 -- // Misc: Start Audio Visualiser
 local StartAudioVisualiser = SetupTextMenu(Misc, "StartAudioVisualiser", {
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/AudioVisualiser/AudioVisualiser.lua"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/AudioVisualiser/AudioVisualiser.lua"))();
     end;
 });
 
 -- // Misc: Start Music Commands
 local StartMusicCommands = SetupTextMenu(Misc, "StartMusicCommands", {
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/MusicCommands/Main.lua"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/MusicCommands/Main.lua"))();
     end;
 });
 
 -- // Misc: Chat Bypass
 --[[
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))();
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Word%20Bypass/Main.lua"))();
 getgenv().BypassText = false;
 local ChatBypass = SetupTextMenu(Misc, "ChatBypass", {
     Callback = function(Value)

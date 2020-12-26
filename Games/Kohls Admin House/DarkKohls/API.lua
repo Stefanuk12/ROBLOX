@@ -894,7 +894,7 @@ return function(Arguments)
     -- // Misc: Export GUI Data
     function KohlsAPI.Misc.ExportGUIData()
         -- // Vars
-        local GUIConfig = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
+        local GUIConfig = HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/GUIData.json"));
         local Current = "";
 
         -- // Exporting
