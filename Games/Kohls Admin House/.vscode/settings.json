@@ -1,8 +1,12 @@
 {
     "Lua.diagnostics.globals": [
-        "firetouchinterest",
+        "KohlsAPI",
+        "getgenv",
+        "writefile",
+        "readfile",
+        "isfile",
         "fireclickdetector",
-        "setclipboard"
+        "DarkKohls"
     ],
     "Lua.diagnostics.ignore": [
         "HttpGet"

@@ -24,7 +24,7 @@ local TeleportService = game:GetService("TeleportService");
 -- // Vars
 local DropdownPlayers = {};
 local PlayerConnections = {};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/dev/Games/Kohls%20Admin%20House/DarkKohls/API.lua"))()({
     Errors = false,
     ScriptName = "DarkKohls"
 });
