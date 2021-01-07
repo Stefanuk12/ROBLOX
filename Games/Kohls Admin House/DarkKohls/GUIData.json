@@ -1,0 +1,547 @@
+{
+    "Admin": {
+        "MainFunctions": {
+            "Text": "Main Functions",
+            "Type": "Label"
+        },
+        "RegenerateAdmin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Regenerate the admin pads.",
+            "Name": "Regenerate Admin",
+            "Type": "Button"
+        },
+        "GetAdmin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Gets you admin.",
+            "Name": "Get Admin",
+            "Type": "Button"
+        },
+        "PermanantAdmin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Simulating the effects of Perm, as soon as the admin pads are regened, you are automatically given admin back.",
+            "Name": "Permanant Admin",
+            "Type": "Toggle"
+        }
+    },
+    "Blacklist": {
+        "BlacklistOptionsGearLabel": {
+            "Text": "Blacklist Gear Options",
+            "Type": "Label"
+        },
+        "BlacklistSelectGear": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a gear id to blacklist.",
+            "Name": "Select Gear",
+            "Type": "TextField"
+        },
+        "MainFunctionsGearLabel": {
+            "Text": "Main Gear Functions",
+            "Type": "Label"
+        },
+        "BlacklistGear": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Blacklists a gear.",
+            "Name": "Blacklist Gear",
+            "Type": "Button"
+        },
+        "UnblacklistGear": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Unblacklists a gear.",
+            "Name": "Unblacklist Gear",
+            "Type": "Button"
+        },
+        "AlertsLabel": {
+            "Text": "Alerts",
+            "Type": "Label"
+        },
+        "AlertBlacklistGearUse": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Alert everyone when a player attempts to give others or themself a blacklisted gear.",
+            "Name": "Alert Blacklist Gear Use",
+            "Type": "Toggle"
+        },
+        "BlacklistOptionsPhraseLabel": {
+            "Text": "Blacklist Phrase Options",
+            "Type": "Label"
+        },
+        "BlacklistSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "BlacklistSelectPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a phrase to blacklist.",
+            "Name": "Input Phrase",
+            "Type": "TextField"
+        },
+        "BlacklistSelectPunishmentPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a punishemnt phrase.",
+            "Name": "Input Punishment Phrase",
+            "Type": "TextField"
+        },
+        "MainFunctionsPhraseLabel": {
+            "Text": "Main Phrase Functions",
+            "Type": "Label"
+        },
+        "BlacklistPhrase": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "When the inputted player says the inputted phrase, the selected blacklist phrase will be said.",
+            "Name": "Blacklist Phrase",
+            "Type": "Button"
+        },
+        "UnblacklistPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Unblacklists the inputted phrase linked to the selected player.",
+            "Name": "Unblacklist Phrase",
+            "Type": "Button"
+        }
+    },
+    "Commands": {
+        "CommandsSelectPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "MainFunctionsLabel": {
+            "Text": "Main Functions",
+            "Type": "Label"
+        },
+        "SayPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Says the inputted phrase.",
+            "Name": "Say Phrase",
+            "Type": "Button"
+        },
+        "SpamPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Spams the inputted phrase.",
+            "Name": "Spam Phrase",
+            "Type": "Button"
+        },
+        "StopSpamPhrase": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stops spamming the inputted phrase.",
+            "Name": "Stop Spam Phrase",
+            "Type": "Button"
+        }
+    },
+    "Misc": {
+        "PaintingLabel": {
+            "Text": "Painting",
+            "Type": "Label"
+        },
+        "MiscSelectColour": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Input a colour to paint an area of the workspace with.",
+            "Name": "Select Colour",
+            "Type": "ColorPicker"
+        },
+        "SelectArea": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Select an area to paint.",
+            "Name": "Select Area",
+            "Type": "Dropdown"
+        },
+        "PaintArea": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Paints an area of the workspace of an inputted colour.",
+            "Name": "Paint Area",
+            "Type": "Button"
+        },
+        "HelpfulLabel": {
+            "Text": "Helpful",
+            "Type": "Label"
+        },
+        "DisableObbyKill": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "You cannot die from the obby blocks, irreversable.",
+            "Name": "Disable Obby Kill",
+            "Type": "Button"
+        },
+        "FunLabel": {
+            "Text": "Fun",
+            "Type": "Label"
+        },
+        "StartAudioVisualiser": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Starts the audio visualiser",
+            "Name": "Start Audio Visualiser",
+            "Type": "Button"
+        },
+        "StartMusicCommands": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Starts the Music Commands, .help for more information.",
+            "Name": "Start Music Commands",
+            "Type": "Button"
+        },
+        "ChatBypass": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Allows you to say naughty words in chat",
+            "Name": "Chat Bypass",
+            "Type": "Toggle"
+        },
+        "GUILabel": {
+            "Text": "GUI",
+            "Type": "Label"
+        },
+        "SaveSettings": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Saves the GUI Settings.",
+            "Name": "Save Settings",
+            "Type": "Button"
+        },
+        "ExportGUIData": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Exports the GUI Data to a string",
+            "Name": "Export GUI Data",
+            "Type": "Button"
+        },
+        "ShutdownGUI": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Shutdown the GUI.",
+            "Name": "Shutdown GUI",
+            "Type": "Button"
+        },
+        "OtherLabel": {
+            "Text": "Other",
+            "Type": "Label"
+        },
+        "Rejoin": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Rejoins the game.",
+            "Name": "Rejoin",
+            "Type": "Button"
+        }
+    },
+    "Player": {
+        "PlayerSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "PlayerFunctionsLabel": {
+            "Text": "Player Functions",
+            "Type": "Label"
+        },
+        "GetAge": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Gets the account age of the inputted user.",
+            "Name": "Get Age",
+            "Type": "Button"
+        },
+        "GiveClientBtools": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Give the inputted player client btools.",
+            "Name": "Give Client Btools",
+            "Type": "Button"
+        }
+    },
+    "Protections": {
+        "MainFunctionsLabel": {
+            "Text": "Main Functions",
+            "Type": "Label"
+        },
+        "AntiBlind": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Instantly unblind when you are blinded.",
+            "Name": "Anti Blind",
+            "Type": "Toggle"
+        },
+        "AntiFreeze": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly resets when you are frozen.",
+            "Name": "Anti Freeze",
+            "Type": "Toggle"
+        },
+        "AntiFling": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Sets your velocity as zero when you are getting flinged.",
+            "Name": "Anti Fling",
+            "Type": "Toggle"
+        },
+        "AntiJail": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly unjail when you are jailed.",
+            "Name": "Anti Jail",
+            "Type": "Toggle"
+        },
+        "AntiKill": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get reset when you are killed.",
+            "Name": "Anti Kill",
+            "Type": "Toggle"
+        },
+        "AntiPunish": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get reset when you are punished.",
+            "Name": "Anti Punish",
+            "Type": "Toggle"
+        },
+        "AntiMessageSpam": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get clear when more than four messages are on screen.",
+            "Name": "Anti Message Spam",
+            "Type": "Toggle"
+        },
+        "AntiSkydive": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly get unskydive when people are skydived - used to counter baseplate moving, etc.",
+            "Name": "Anti Skydive",
+            "Type": "Toggle"
+        },
+        "AntiSit": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Instantly reset people who sit themselves.",
+            "Name": "Anti Sit",
+            "Type": "Toggle"
+        },
+        "AntiLogs": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Spams logs when ever someone says logs",
+            "Name": "Anti Logs",
+            "Type": "Toggle"
+        }
+    },
+    "Server": {
+        "AlertsLabel": {
+            "Text": "Alerts",
+            "Type": "Label"
+        },
+        "AlertCSystemUse": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Alert the server when someone uses /c system.",
+            "Name": "Alert C System Use",
+            "Type": "Toggle"
+        },
+        "HelpfulLabel": {
+            "Text": "Helpful",
+            "Type": "Label"
+        },
+        "CreatePhantomBaseplate": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Creates a phantom baseplate.",
+            "Name": "Create Phantom Baseplate",
+            "Type": "Button"
+        },
+        "RemovePhantomBaseplates": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Removes all phantom baseplate.",
+            "Name": "Remove Phantom Baseplates",
+            "Type": "Button"
+        },
+        "AbusiveLabel": {
+            "Text": "Abusive",
+            "Type": "Label"
+        },
+        "RespawnExplode": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Constantly respawns and explodes unwhitelisted users.",
+            "Name": "Respawn Explode",
+            "Type": "Toggle"
+        },
+        "Epilepsy": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Creates a epilepsy-like effect.",
+            "Name": "Epilepsy",
+            "Type": "Toggle"
+        },
+        "PartSpam": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Spams 10 by 10 by 10 parts.",
+            "Name": "Part Spam",
+            "Type": "Toggle"
+        },
+        "ClickSpawnWater": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Spawns water that cannot be removed. Hold down left button then press left control.",
+            "Name": "Click Spawn Water",
+            "Type": "Toggle"
+        },
+        "MoveBaseplate": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Gets you in the position to move the baseplate.",
+            "Name": "Move Baseplate",
+            "Type": "Button"
+        },
+        "CrashServer": {
+            "Admin": true,
+            "Persons299": false,
+            "Description": "Crashes the server.",
+            "Name": "Crash Server",
+            "Type": "Button"
+        }
+    },
+    "Sound Abuse": {
+        "MainFunctionsLabel": {
+            "Text": "Main Functions",
+            "Type": "Label"
+        },
+        "EarRape": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Constantly plays all of the sounds in the game every second.",
+            "Name": "Ear Rape",
+            "Type": "Toggle"
+        },
+        "PlayAllSounds": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Play all sounds.",
+            "Name": "Play All Sounds",
+            "Type": "Button"
+        },
+        "PlayMusic":{
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Play the music sound.",
+            "Name": "Play Music",
+            "Type": "Button"
+        },
+        "StopAllSounds": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stop all sounds.",
+            "Name": "Stop All Sounds",
+            "Type": "Button"
+        },
+        "StopMusic":{
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Stops the music sound.",
+            "Name": "Stop Music",
+            "Type": "Button"
+        }
+    },
+    "Trolling": {
+        "TextTrolling": {
+            "Text": "Text Trolling",
+            "Type": "Label"
+        },
+        "TrollingText": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "This text will be outputted with the options below.",
+            "Name": "Text",
+            "Type": "TextField"
+        },
+        "TrollingX": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "How far along the screen the text will be outputted: 0 - 300 are good options.",
+            "Name": "X",
+            "Type": "TextField"
+        },
+        "TrollingY": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "How far up the screen the text will be outputted: 0 - 90 are good options.",
+            "Name": "Y",
+            "Type": "TextField"
+        },
+        "TrollingDuration": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "How long the text will stay up.",
+            "Name": "Duration",
+            "Type": "TextField"
+        },
+        "TrollingFillScreen": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Whether the text will fill the screen or not.",
+            "Name": "Fill Screen",
+            "Type": "Toggle"
+        },
+        "MainFunctionsLabel": {
+            "Text": "Main Functions",
+            "Type": "Label"
+        },
+        "TrollingStart": {
+            "Admin": false,
+            "Persons299": true,
+            "Description": "Output text with options above",
+            "Name": "Start",
+            "Type": "Button"
+        }
+    },
+    "Whitelist": {
+        "WhitelistSelectPlayer": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Dropdown that shows all of the players in the game.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "PlayerFunctionsLabel": {
+            "Text": "Player Functions",
+            "Type": "Label"
+        },
+        "Whitelist": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Whitelists the inputted user, they are exempt from abusive commands.",
+            "Name": "Whitelist",
+            "Type": "Button"
+        },
+        "Unwhitelist": {
+            "Admin": false,
+            "Persons299": false,
+            "Description": "Unwhitelists the inputted user.",
+            "Name": "Unwhitelist",
+            "Type": "Button"
+        }
+    }
+}

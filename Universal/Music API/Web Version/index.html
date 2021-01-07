@@ -1,0 +1,96 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+    th{cursor: pointer; color:#fff;}
+</style>
+
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<input id="search-input" class="form-control" type="text">
+		</div>
+	</div>	
+</div>
+
+<table class="table table-striped">
+    <tr class="bg-info">
+		<th class="bg-info" data-colname="UUID" data-order="desc">UUID &#9650</th>
+		<th data-colname="Name" data-order="Name">Name &#9650</th>
+        <th data-colname="SoundId" data-order="SoundId">SoundId &#9650</th>
+    </tr>
+    <tbody id="musicTable">
+        
+    </tbody>
+</table>
+
+<script>
+	// Grab Music Table
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var myArray = JSON.parse(this.responseText)
+			buildTable(myArray)
+
+			// Allow Sorting
+			$('th').on('click', function(){
+				var column = $(this).data('colname')
+				var order = $(this).data('order')
+				var text = $(this).html()
+				text = text.substring(0, text.length - 1);
+
+				if (order == 'desc'){
+					myArray = myArray.sort((a, b) => a[column] > b[column] ? 1 : -1)
+					$(this).data("order","asc");
+					text += '&#9660'
+				} else{
+					myArray = myArray.sort((a, b) => a[column] < b[column] ? 1 : -1)
+					$(this).data("order","desc");
+					text += '&#9650'
+				}
+
+				$(this).html(text)
+				buildTable(myArray)
+			})
+
+			// Search Bar
+			$('#search-input').on('keyup', function(){
+				var value = $(this).val()
+				var data = searchTable(value, myArray)
+				buildTable(data)
+			})
+
+			
+			// Display Data
+			function buildTable(data){
+				var table = document.getElementById('musicTable')
+				table.innerHTML = ''
+
+				for (var i = 0; i < data.length; i++){
+					var row = `<tr>
+						<td>${[data[i]["UUID"]]}</td>
+						<td>${data[i].Name}</td>
+						<td>${data[i].SoundId}</td>
+					</tr>`
+					table.innerHTML += row
+				}
+			}
+
+			// Search Table
+			function searchTable(value, data){
+				var filteredData = []
+				for (var i = 0; i < data.length; i++){
+					value = value.toLowerCase()
+					var name = data[i].Name.toLowerCase()
+					if (name.includes(value)){
+						filteredData.push(data[i])
+					}
+				}
+
+				return filteredData
+			}
+		}
+	};
+	xhttp.open("GET", "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json", true);
+	xhttp.send();
+</script>
