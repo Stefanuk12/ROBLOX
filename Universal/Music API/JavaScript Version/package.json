@@ -1,0 +1,19 @@
+{
+  "name": "roblox-music-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "MusicAPI.js",
+  "dependencies": {
+    "got": "^11.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stefanuk12/ROBLOX/tree/master/Universal/Music%20API/JavaScript%20Version"
+  },
+  "author": "Stefanuk12",
+  "license": "GPL-3.0"
+}

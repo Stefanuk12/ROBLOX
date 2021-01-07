@@ -1,0 +1,346 @@
+{
+    "Admin": {
+        "Get Admin": {
+            "Admin": false,
+            "Description": "Gets admin. You may be teleported to an available admin pad.",
+            "Name": "Get Admin",
+            "Type": "Button"
+        },
+        "Permanant Admin": {
+            "Admin": false,
+            "Description": "Automatically gets admin if it is regenerated.",
+            "Name": "Permanant Admin",
+            "Type": "Toggle"
+        },
+        "Regenerate Admin": {
+            "Admin": false,
+            "Description": "Regenerates the Admin. Requires fireclickdetector().",
+            "Name": "Regenerate Admin",
+            "Type": "Button"
+        }
+    },
+    "Blacklist": {
+        "Alert Use": {
+            "Admin": true,
+            "Description": "If an unwhitelisted user tries to get a blacklisted gear, it will be announced to everyone.",
+            "Name": "Alert Use",
+            "Type": "Toggle"
+        },
+        "Blacklist Gear": {
+            "Admin": true,
+            "Description": "Whenever an unwhitelisted player is given this gear, it is immediately removed from them.",
+            "Name": "Blacklist Gear",
+            "Type": "Button"
+        },
+        "Blacklist Phrase": {
+            "Admin": true,
+            "Description": "Whenever the selected player says the blacklisted phrase, a selected punishment phrase is said to counter it.",
+            "Name": "Blacklist Phrase",
+            "Type": "Button"
+        },
+        "Select Gear ID": {
+            "Admin": false,
+            "Description": "Please specify a gear ID.",
+            "Name": "Select Gear ID",
+            "Type": "TextField"
+        },
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "Select Punishment Phrase": {
+            "Admin": false,
+            "Description": "Please input a punishment phrase that will be said when the selected phrase is said by the player.",
+            "Name": "Select Punishment Phrase",
+            "Type": "TextField"
+        },
+        "Unblacklist Gear": {
+            "Admin": false,
+            "Description": "Unblacklists a gear, allows unwhitelisted gears to recieve this gear.",
+            "Name": "Unblacklist Gear",
+            "Type": "Button"
+        },
+        "Unblacklist Phrase": {
+            "Admin": false,
+            "Description": "Unwhitelists a phrase from the selected player, allowing them to say it without any repercussions.",
+            "Name": "Unblacklist Phrase",
+            "Type": "Button"
+        }
+    },
+    "Commands": {
+        "Say Phrase": {
+            "Admin": false,
+            "Description": "Says the phrase using Players:Chat(). Detectable.",
+            "Name": "Say Phrase",
+            "Type": "Button"
+        },
+        "Select Phrase": {
+            "Admin": false,
+            "Description": "Please input a phrase.",
+            "Name": "Select Phrase",
+            "Type": "TextField"
+        },
+        "Spam Phrase": {
+            "Admin": true,
+            "Description": "Spams the specified phrase",
+            "Name": "Spam Phrase",
+            "Type": "Button"
+        },
+        "Stop Spam Phrase": {
+            "Admin": false,
+            "Description": "Stops spamming the specified phrase",
+            "Name": "Stop Spam Phrase",
+            "Type": "Button"
+        }
+    },
+    "Misc": {
+        "Start Audio Visualiser": {
+            "Admin": false,
+            "Description": "Starts the Audio Visualiser, please visit bit.ly/kahvisual for the command documentation",
+            "Name": "Start Audio Visualiser",
+            "Type": "Button"
+        },
+        "Paint Area": {
+            "Admin": true,
+            "Description": "Paints the selected area with the selected colour.",
+            "Name": "Paint Area",
+            "Type": "Button"
+        },
+        "Rejoin": {
+            "Admin": false,
+            "Description": "Rejoins the game. May not work at times.",
+            "Name": "Rejoin",
+            "Type": "Button"
+        },
+        "Save Settings": {
+            "Admin": false,
+            "Description": "Saves all of your settings.",
+            "Name": "Save Settings",
+            "Type": "Button"
+        },
+        "Select Paint Area": {
+            "Admin": false,
+            "Description": "Please select an area to paint.",
+            "Name": "Select Paint Area",
+            "Type": "Dropdown"
+        },
+        "Select Paint Colour": {
+            "Admin": false,
+            "Description": "Please select a colour.",
+            "Name": "Select Paint Colour",
+            "Type": "ColorPicker"
+        }
+    },
+    "Music Commands": {
+        "Play Sound": {
+            "Admin": true,
+            "Description": "Plays the selected sound.",
+            "Name": "Play Sound",
+            "Type": "Button"
+        },
+        "Refresh Sounds": {
+            "Admin": false,
+            "Description": "Refreshes the sounds, grabs any new ones if they are any.",
+            "Name": "Refresh Sounds",
+            "Type": "Button"
+        },
+        "Select Sound": {
+            "Admin": false,
+            "Description": "Selects a sound to play.",
+            "Name": "Select Sound",
+            "Type": "Dropdown"
+        }
+    },
+    "Player": {
+        "Get Age": {
+            "Admin": false,
+            "Description": "Gets the age of the selected player.",
+            "Name": "Get Age",
+            "Type": "Button"
+        },
+        "Give Client BTools": {
+            "Admin": true,
+            "Description": "The selected player will be given client-sided btools",
+            "Name": "Give Client BTools",
+            "Type": "Button"
+        },
+        "Give Gear": {
+            "Admin": true,
+            "Description": "Gives the selected gear to the selected player.",
+            "Name": "Give Gear",
+            "Type": "Button"
+        },
+        "Give Teapot Turret": {
+            "Admin": true,
+            "Description": "Gives the Teapot Turret to the selected player.",
+            "Name": "Give Teapot Turret",
+            "Type": "Button"
+        },
+        "Lag Player": {
+            "Admin": true,
+            "Description": "Lags the selected player with PMs that contain lots of text.",
+            "Name": "Lag Player",
+            "Type": "Button"
+        },
+        "Select Gear": {
+            "Admin": false,
+            "Description": "Please select a gear.",
+            "Name": "Select Gear",
+            "Type": "Dropdown"
+        },
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "Stop Lag Player": {
+            "Admin": false,
+            "Description": "Stops lagging the selected player.",
+            "Name": "Stop Lag Player",
+            "Type": "Button"
+        }
+    },
+    "Protections": {
+        "Anti Blind": {
+            "Admin": false,
+            "Description": "As soon as you are blinded, the blind effect is removed.",
+            "Name": "Anti Blind",
+            "Type": "Toggle"
+        },
+        "Anti Jail": {
+            "Admin": true,
+            "Description": "As soon as you are jailed, all jails are removed.",
+            "Name": "Anti Jail",
+            "Type": "Toggle"
+        },
+        "Anti Kill": {
+            "Admin": true,
+            "Description": "As soon as you are killed, you are reset.",
+            "Name": "Anti Kill",
+            "Type": "Toggle"
+        },
+        "Anti Punish": {
+            "Admin": true,
+            "Description": "As soon as you are punished, you are reset.",
+            "Name": "Anti Punish",
+            "Type": "Toggle"
+        }
+    },
+    "Server": {
+        "/c system Alert": {
+            "Admin": true,
+            "Description": "Sends a message to everyone if someone is detected using /c system.",
+            "Name": "/c system Alert",
+            "Type": "Toggle"
+        },
+        "Crash Server": {
+            "Admin": true,
+            "Description": "Crashes the server by equiping a gear then shrinking self.",
+            "Name": "Crash Server",
+            "Type": "Button"
+        },
+        "Create Phantom Baseplate": {
+            "Admin": false,
+            "Description": "Creates a phantom baseplate, clientsided.",
+            "Name": "Create Phantom Baseplate",
+            "Type": "Button"
+        },
+        "Epilepsy": {
+            "Admin": true,
+            "Description": "Creates an epilepsy effect, colourshifting.",
+            "Name": "Epilepsy",
+            "Type": "Toggle"
+        },
+        "Move Baseplate": {
+            "Admin": true,
+            "Description": "Just punish yourself wait a sec then unpunish then you can move the baseplate.",
+            "Name": "Move Baseplate",
+            "Type": "Button"
+        },
+        "Part Spam": {
+            "Admin": true,
+            "Description": "Spams 10 by 10 by 10 parts.",
+            "Name": "Part Spam",
+            "Type": "Toggle"
+        },
+        "Remove Phantom Baseplates": {
+            "Admin": false,
+            "Description": "Removes all phantom baseplates created.",
+            "Name": "Remove Phantom Baseplates",
+            "Type": "Button"
+        },
+        "Respawn Explode": {
+            "Admin": true,
+            "Description": "Spams respawn and explode on everyone.",
+            "Name": "Respawn Explode",
+            "Type": "Toggle"
+        },
+        "Click Spawn Water": {
+            "Admin": true,
+            "Description": "CTRL + Left Mouse Button will spawn water.",
+            "Name": "Click Spawn Water",
+            "Type": "Toggle"
+        }
+    },
+    "Sound Abuse": {
+        "Ear Rape": {
+            "Admin": false,
+            "Description": "Every 0.1 second every sound in the game is played. Undetectable in logs.",
+            "Name": "Ear Rape",
+            "Type": "Toggle"
+        },
+        "Play All Sounds": {
+            "Admin": false,
+            "Description": "Calls :Play() on every sound in the game. Undetectable in logs.",
+            "Name": "Play All Sounds",
+            "Type": "Button"
+        },
+        "Play Music": {
+            "Admin": false,
+            "Description": "Calls :Play() on the Music Sound. Undetectable in logs.",
+            "Name": "Play Music",
+            "Type": "Button"
+        },
+        "Stop All Sounds": {
+            "Admin": false,
+            "Description": "Calls :Stop() on every sound in the game. Undetectable in logs.",
+            "Name": "Stop All Sounds",
+            "Type": "Button"
+        },
+        "Stop Music": {
+            "Admin": false,
+            "Description": "Calls :Stop() on the Music Sound. Undetectable in logs.",
+            "Name": "Stop Music",
+            "Type": "Button"
+        }
+    },
+    "Whitelist": {
+        "Select Player": {
+            "Admin": false,
+            "Description": "Please select a player.",
+            "Name": "Select Player",
+            "Type": "Dropdown"
+        },
+        "Unwhitelist Player": {
+            "Admin": false,
+            "Description": "Unwhitelists a player, they are no longer excempt from abusive commands.",
+            "Name": "Unwhitelist Player",
+            "Type": "Button"
+        },
+        "Whitelist Player": {
+            "Admin": false,
+            "Description": "Whitelists a player, they are excempt from abusive commands.",
+            "Name": "Whitelist Player",
+            "Type": "Button"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "Lua.diagnostics.globals": [
+        "KohlsAPI",
+        "getgenv",
+        "writefile",
+        "readfile",
+        "isfile",
+        "fireclickdetector",
+        "DarkKohls"
+    ],
+    "Lua.diagnostics.ignore": [
+        "HttpGet"
+    ]
+}
