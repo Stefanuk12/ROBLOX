@@ -23,7 +23,7 @@ if (isStudio) then
 	PartLocation = Workspace.Parts
 	
 	NotificationHandler = require(script.NotificationHandler)
-	NotificationHandler["StorageLocation"] = LocalPlayer.PlayerGui
+	NotificationHandler.StorageLocation = LocalPlayer.PlayerGui
 else
 	-- // So you do not execute this more than once
 	if (getgenv().Orbit) then return getgenv().Orbit end
@@ -226,6 +226,16 @@ local function addCMD(CommandName, ModuleName, Example, Description, Function)
 	}
 end
 
+local function getCommand(CommandName)
+	for i = 1, #getgenv().Orbit.CMDs do
+		local v = getgenv().Orbit.CMDs[i]
+
+		if (v.CommandName == CommandName) then
+			return v
+		end
+	end
+end
+
 -- // Chat Listener
 LocalPlayer.Chatted:Connect(function(message)
 	local Prefix = getgenv().Orbit.Prefix
@@ -304,7 +314,7 @@ addCMD("partamount", "Orbiter Settings", "partamount 50", "Set the amount of par
 	local splitString = message:split(" ")
 	if (splitString[2] and tonumber(splitString[2])) then
 		getgenv().Orbit.TargetParts = tonumber(splitString[2])
-		getgenv().Orbit.CMDs["refreshorbit"].Function()
+		getCommand("refreshorbit").Function()
 		NotificationHandler.newNotification("SUCCESS", "Orbiter Parts: "..splitString[2].." Parts.", "Success")
 	end
 end)
