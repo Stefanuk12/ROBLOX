@@ -18,6 +18,7 @@ local L = 1
 if (isStudio) then
 	getgenv = getfenv
 	function setclipboard() end
+	function setsimulationradius() end
 	
 	SoundParent = Workspace
 	PartLocation = Workspace.Parts
@@ -112,6 +113,8 @@ end
 
 -- // Make the parts spin
 RunService.RenderStepped:Connect(function()
+	setsimulationradius(9e9, 9e9)
+
 	-- // Parts table
 	getgenv().Orbit.Parts = getgenv().Orbit.GetParts()
 
