@@ -287,8 +287,8 @@ return function(Arguments)
 
             -- // Anti logs
             if (splitMessage[1]:lower():find("logs") and KohlsAPI.SettingGetSet("ProtectionsAntiLogs")) then
+                Players:Chat(":reset " .. Player.Name)
                 for i = 1, 50 do
-                    Players:Chat(":reset " .. Player.Name)
                     Players:Chat(KohlsAPI.Configurable.AntiLogsNote:gsub("PLAYERNAME", Player.Name))
                 end
             end
