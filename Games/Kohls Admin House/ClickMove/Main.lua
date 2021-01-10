@@ -1,7 +1,7 @@
 --[[
     Controls:
 
-    Hold Z + Click = Select Part
+    Hold Z + Left Click = Select Part
     X = Weld to part
     C = Remove selection
 ]]
