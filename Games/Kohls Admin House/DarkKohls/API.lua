@@ -543,7 +543,8 @@ return function(Arguments)
 
         -- // Vars
         local DesiredPadName = LocalPlayer.Name .. "'s admin"
-        local SelectedPad = SpecifyPad or GameFolder["Admin"]["Pads"]:WaitForChild("Touch to get admin")
+        local allPads = GameFolder["Admin"]["Pads"]:GetChildren()
+        local SelectedPad = SpecifyPad or allPads[math.random(1, #allPads)]
         local SavedPadCFrame = SelectedPad.Head.CFrame
 
         if (SelectedPad.Name ~= DesiredPadName and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then
