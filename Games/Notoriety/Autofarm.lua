@@ -132,7 +132,8 @@ if (Workspace:FindFirstChild("BigLoot")) then
 end
 
 -- // Dropping bags off
-dropOffBags()
 wait(0.5)
+dropOffBags()
+wait(0.2)
 
 Character.HumanoidRootPart.CFrame = saved
