@@ -153,7 +153,7 @@ local getItem = function(Item, tpBack)
         coroutine.wrap(function()
             while (doTeleport) do
                 wait()
-                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 3, 0)
+                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 5, 0)
             end
         end)()
 
