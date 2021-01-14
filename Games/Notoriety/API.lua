@@ -35,20 +35,20 @@ end
 NotorietyAPI.getRemoteKey()
 
 -- // Teleport Bypass
-NotorietyAPI.antiBypass = function(Character)
-    if (Character:FindFirstChild("Health")) then
-        Character.Health:Destroy()
-    end
-    if (Character:FindFirstChild("Detection")) then
-        Character.Detection:Destroy()
-    end
+NotorietyAPI.antiBypass = function(Character, removeConnection)
+    local Connection
+    RunService.Heartbeat:Connect(function()
+        if (not Character and removeConnection) then
+            Connection:Disconnect()
+        end
 
-    print("TP Bypass: Removed Health and Detection")
+        local characterChildren = LocalPlayer.Character:GetChildren()
+        for i = 1, #characterChildren do
+            local child = characterChildren[i]
 
-    Character.ChildAdded:Connect(function(child)
-        if (child.Name == "Health" or child.Name == "Detection") then
-            Character:WaitForChild(child.Name):Destroy()
-            print("TP Bypass: Removed " .. child.Name)
+            if (child and child.Name == "Health" or child.Name == "Detection") then
+                child:Destroy()
+            end
         end
     end)
 end
