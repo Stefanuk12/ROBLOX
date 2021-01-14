@@ -161,16 +161,18 @@ local getItem = function(Item, tpBack)
         local doTeleport = true
 
         -- // Teleporting
+        Character.Humanoid.HipHeight = -5
         coroutine.wrap(function()
             while (doTeleport) do
                 wait()
-                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 4, 0)
+                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame
             end
         end)()
 
         -- // Interacting
         Interact(_Item)
         doTeleport = false
+        Character.Humanoid.HipHeight = 0
     end
 
     -- // Handling
@@ -219,14 +221,14 @@ local saved = Character.HumanoidRootPart.CFrame
 killSecurity(false, true)
 
 -- // Get All Lootables
-repeat
+for i = 1, 3 do
     local allLootables = Workspace.Lootables:GetChildren()
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
         getItem(lootable)
     end
-until #Workspace.Lootables:GetChildren() < 3
+end
 
 -- // Get All Big Loot
 if (Workspace:FindFirstChild("BigLoot")) then
