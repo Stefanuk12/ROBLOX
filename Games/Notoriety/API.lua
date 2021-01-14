@@ -1,25 +1,23 @@
+-- // Initialise
+if (getgenv().NotorietyAPI) then return getgenv().NotorietyAPI end
+getgenv().NotorietyAPI = {
+    RemoteKey = ""
+}
+
 -- // Services
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
 local RSPackage = ReplicatedStorage.RS_Package
 local Remotes = RSPackage.Remotes
 local RemotesB = RSPackage.Assets.Remotes
+
 local InteractList = require(RSPackage.ReplicatedScripts.InteractList)()
-local RemoteKey
-
--- // Make sure we are in game
-if (not Workspace:FindFirstChild("Lootables")) then
-    return
-end
-
--- // Wait until loaded in
-repeat wait() until (Character and Character.Parent == Workspace.Criminals)
 
 -- // Get Remote Key
 do
@@ -27,17 +25,14 @@ do
     for i = 1, #gGC do
         local v = gGC[i]
         if (debug.getinfo(v).name == "shoot") then
-            RemoteKey = debug.getupvalue(v, 21)
+            NotorietyAPI.RemoteKey = debug.getupvalue(v, 21)
             break
         end
     end
 end
 
--- // TP Bypass + Godmode
-local tpGod = function(Character)
-    -- // Put Mask on
-    RemotesB.MaskOn:FireServer()
-
+-- // Teleport Bypass
+NotorietyAPI.antiBypass = function(Character)
     if (Character:FindFirstChild("Health")) then
         Character.Health:Destroy()
     end
@@ -51,23 +46,21 @@ local tpGod = function(Character)
         end
     end)
 end
-tpGod(LocalPlayer.Character)
-LocalPlayer.CharacterAdded:Connect(tpGod)
 
 -- // Interact
-local Interact = function(Item, waitTime, customName)
+NotorietyAPI.Interact = function(Item, waitTime, customName)
     Remotes.StartInteraction:FireServer(Item)
     wait(waitTime or InteractList[customName or Item.Name].timer)
     Remotes.CompleteInteraction:FireServer(Item)
 end
 
 -- // Hit Function
-local HitObject = function(Part)
-    RemotesB.HitObject:FireServer(RemoteKey, Part, false, nil, nil, Part.CFrame.lookVector * 56)
+NotorietyAPI.HitObject = function(Part)
+    RemotesB.HitObject:FireServer(NotorietyAPI.RemoteKey, Part, false, nil, nil, Part.CFrame.lookVector * 56)
 end
 
 -- // Answer Pager
-local answerPager = function(tpBack, breakAtX)
+NotorietyAPI.answerPager = function(tpBack, breakAtX)
     local allBodies = Workspace.Bodies:GetChildren()
     local saved = Character.HumanoidRootPart.CFrame
 
@@ -76,7 +69,7 @@ local answerPager = function(tpBack, breakAtX)
 
         if (body.Name == "Pager") then
             Character.HumanoidRootPart.CFrame = body.HumanoidRootPart.CFrame
-            Interact(body, nil, "Pager")
+            NotorietyAPI.Interact(body, nil, "Pager")
         end
 
         if (breakAtX and i >= breakAtX) then
@@ -89,8 +82,7 @@ local answerPager = function(tpBack, breakAtX)
     end
 end
 
--- // Kill Security
-local killSecurity = function(tpBack, answerPage)
+NotorietyAPI.killSecurity = function(tpBack, answerPage)
     -- // Vars
     local targetGuard
     local saved = Character.HumanoidRootPart.CFrame
@@ -116,7 +108,7 @@ local killSecurity = function(tpBack, answerPage)
             if ((child.Name == "Guard" or child.Name == "Pager") and answerPage) then
                 wait(0.1)
                 Character.HumanoidRootPart.CFrame = child.HumanoidRootPart.CFrame
-                Interact(child, nil, "Pager")
+                NotorietyAPI.Interact(child, nil, "Pager")
                 answerPage = false
                 Connection:Disconnect()
             end
@@ -136,7 +128,7 @@ local killSecurity = function(tpBack, answerPage)
             if (camera:FindFirstChild("CamPart")) then
                 Character.HumanoidRootPart.CFrame = camera.CamPart.CFrame
                 wait(0.25)
-                HitObject(camera.CamPart)
+                NotorietyAPI.HitObject(camera.CamPart)
             end
         end
     end
@@ -148,7 +140,7 @@ local killSecurity = function(tpBack, answerPage)
 end
 
 -- // Get Item
-local getItem = function(Item, tpBack)
+NotorietyAPI.getItem = function(Item, tpBack)
     -- // Vars
     local saved = Character.HumanoidRootPart.CFrame
 
@@ -161,7 +153,6 @@ local getItem = function(Item, tpBack)
         local doTeleport = true
 
         -- // Teleporting
-        Character.Humanoid.HipHeight = -5
         coroutine.wrap(function()
             while (doTeleport) do
                 wait()
@@ -170,9 +161,8 @@ local getItem = function(Item, tpBack)
         end)()
 
         -- // Interacting
-        Interact(_Item)
+        NotorietyAPI.Interact(_Item)
         doTeleport = false
-        Character.Humanoid.HipHeight = 0
     end
 
     -- // Handling
@@ -198,14 +188,13 @@ local getItem = function(Item, tpBack)
 end
 
 -- // Drop off bags in van
-local dropOffBags = function(tpBack)
+NotorietyAPI.dropOffBags = function(tpBack)
     -- // Vars
     local saved = Character.HumanoidRootPart.CFrame
     if (not Workspace:FindFirstChild("BagSecuredArea")) then return end
     local EscapeVan = Workspace.BagSecuredArea.EscapeVan
 
     -- // Teleporting to van and dropping
-    print(EscapeVan.PrimaryPart.CFrame)
     LocalPlayer.Character.HumanoidRootPart.CFrame = EscapeVan[EscapeVan.PrimaryPart.Name].CFrame + Vector3.new(0, 1, 0)
     wait(0.5)
     Remotes.ThrowBag:FireServer(Vector3.new())
@@ -216,13 +205,9 @@ local dropOffBags = function(tpBack)
     end
 end
 
--- // Kill Security / Remove cameras
-local saved = Character.HumanoidRootPart.CFrame
-killSecurity(false, true)
-
--- // Get All Lootables
-for i = 1, 3 do
-    local allLootables = Workspace.Lootables:GetChildren()
+-- // Get Lootables
+NotorietyAPI.getLootables = function()
+    local allLootables = Workspace.Lootables:GetChildren() or {}
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
@@ -230,9 +215,9 @@ for i = 1, 3 do
     end
 end
 
--- // Get All Big Loot
-if (Workspace:FindFirstChild("BigLoot")) then
-    local allBigLoot = Workspace.BigLoot:GetChildren()
+-- // Get Big Loot
+NotorietyAPI.getBigLoot = function()
+    local allBigLoot = Workspace.BigLoot:GetChildren() or {}
     for i = 1, #allBigLoot do
         local bigLoot = allBigLoot[i]
 
@@ -241,16 +226,10 @@ if (Workspace:FindFirstChild("BigLoot")) then
 end
 
 -- // Break All Glass
-local breakAllGlass = function()
-    local allGlass = Workspace.Glass:GetChildren()
+NotorietyAPI.breakAllGlass = function()
+    local allGlass = Workspace.Glass:GetChildren() or {}
     for i = 1, #allGlass do
         local glass = allGlass[i]
         HitObject(glass)
     end
 end
-
--- // Dropping bags off
-wait(0.5)
-dropOffBags()
-wait(1)
-Character.HumanoidRootPart.CFrame = saved
