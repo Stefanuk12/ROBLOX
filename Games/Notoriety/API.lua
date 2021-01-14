@@ -8,6 +8,7 @@ getgenv().NotorietyAPI = {
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
