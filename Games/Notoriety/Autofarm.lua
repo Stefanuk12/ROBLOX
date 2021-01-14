@@ -17,6 +17,9 @@ if (not Workspace:FindFirstChild("Lootables")) then
     return
 end
 
+-- // Wait until loaded in
+repeat wait() until (Character and Character.Parent == Workspace.Criminals)
+
 -- // Get Remote Key
 do
     local gGC = getgc()
@@ -192,7 +195,7 @@ local dropOffBags = function(tpBack)
 
     -- // Teleporting to van and dropping
     print(EscapeVan.PrimaryPart.CFrame)
-    LocalPlayer.Character.HumanoidRootPart.CFrame = EscapeVan[EscapeVan.PrimaryPart.Name].CFrame
+    LocalPlayer.Character.HumanoidRootPart.CFrame = EscapeVan[EscapeVan.PrimaryPart.Name].CFrame + Vector3.new(0, 1, 0)
     wait(0.5)
     Remotes.ThrowBag:FireServer(Vector3.new())
 
