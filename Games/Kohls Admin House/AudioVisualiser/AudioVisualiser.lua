@@ -18,7 +18,7 @@ local L = 1
 if (isStudio) then
 	getgenv = getfenv
 	function setclipboard() end
-	function setsimulationradius() end
+	function setsimulationradius(a, b) end
 	
 	SoundParent = Workspace
 	PartLocation = Workspace.Parts
