@@ -2,6 +2,7 @@
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
@@ -58,6 +59,11 @@ local Interact = function(Item, waitTime, customName)
     Remotes.StartInteraction:FireServer(Item)
     wait(waitTime or InteractList[customName or Item.Name].timer)
     Remotes.CompleteInteraction:FireServer(Item)
+end
+
+-- // Hit Function
+local HitObject = function(Part)
+    RemotesB.HitObject:FireServer(RemoteKey, Part, false, nil, nil, Part.CFrame.lookVector * 56)
 end
 
 -- // Answer Pager
@@ -127,9 +133,11 @@ local killSecurity = function(tpBack, answerPage)
         local allCameras = Workspace.Cameras:GetChildren()
         for i = 1, #allCameras do
             local camera = allCameras[i]
-            Character.HumanoidRootPart.CFrame = camera.CamPart.CFrame
-            wait(0.25)
-            RemotesB.HitObject:FireServer(RemoteKey, camera.CamPart, true)
+            if (camera:FindFirstChild("CamPart")) then
+                Character.HumanoidRootPart.CFrame = camera.CamPart.CFrame
+                wait(0.25)
+                HitObject(camera.CamPart)
+            end
         end
     end
 
@@ -156,7 +164,7 @@ local getItem = function(Item, tpBack)
         coroutine.wrap(function()
             while (doTeleport) do
                 wait()
-                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 5, 0)
+                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 4, 0)
             end
         end)()
 
@@ -191,6 +199,7 @@ end
 local dropOffBags = function(tpBack)
     -- // Vars
     local saved = Character.HumanoidRootPart.CFrame
+    if (not Workspace:FindFirstChild("BagSecuredArea")) then return end
     local EscapeVan = Workspace.BagSecuredArea.EscapeVan
 
     -- // Teleporting to van and dropping
@@ -206,17 +215,18 @@ local dropOffBags = function(tpBack)
 end
 
 -- // Kill Security / Remove cameras
+local saved = Character.HumanoidRootPart.CFrame
 killSecurity(false, true)
 
 -- // Get All Lootables
-for i = 1, 3 do
+repeat
     local allLootables = Workspace.Lootables:GetChildren()
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
         getItem(lootable)
     end
-end
+until #Workspace.Lootables:GetChildren() < 3
 
 -- // Get All Big Loot
 if (Workspace:FindFirstChild("BigLoot")) then
@@ -228,6 +238,17 @@ if (Workspace:FindFirstChild("BigLoot")) then
     end
 end
 
+-- // Break All Glass
+local breakAllGlass = function()
+    local allGlass = Workspace.Glass:GetChildren()
+    for i = 1, #allGlass do
+        local glass = allGlass[i]
+        HitObject(glass)
+    end
+end
+
 -- // Dropping bags off
 wait(0.5)
 dropOffBags()
+wait(1)
+Character.HumanoidRootPart.CFrame = saved
