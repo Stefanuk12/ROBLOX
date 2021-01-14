@@ -24,7 +24,6 @@ end
 
 -- // TP Bypass
 NotorietyAPI.antiBypass(LocalPlayer.Character)
-LocalPlayer.CharacterAdded:Connect(antiBypass)
 
 -- // Player Tab
 local Player = Library:CreateTab("Player", "Player Functions", true)
