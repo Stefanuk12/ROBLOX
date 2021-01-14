@@ -1,33 +1,50 @@
 -- // Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Notoriety/UILibrary.lua", true))()
-local NotorietyAPI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Notoriety/API.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Notoriety/API.lua"))()
+repeat wait() until NotorietyAPI
 
 -- // Services
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
 
--- // Player Tab
-local Player = Library:CreateTab("Player", "Player Controls", true)
+-- // Remote Key Check
+local checkRemoteKey = function()
+    local remoteKey = NotorietyAPI.RemoteKey
+    if (remoteKey == nil or remoteKey == "") then
+        remoteKey = NotorietyAPI.getRemoteKey()
 
-Player:CreateButton("Teleport Bypass", function()
-    NotorietyAPI.antiBypass(LocalPlayer.Character)
+        if (remoteKey == nil or remoteKey == "") then
+            error("Unable to get remote key, make sure you are loaded into the game!")
+        end
+    end
+end
+
+-- // TP Bypass
+NotorietyAPI.antiBypass(LocalPlayer.Character)
+LocalPlayer.CharacterAdded:Connect(function(Character)
+    NotorietyAPI.antiBypass(Character)
 end)
 
-local AutoTeleportBypass = Player:CreateToggle("Automatic Teleport Bypass On Death")
-LocalPlayer.CharacterAdded:Connect(function(Character)
-    if (AutoTeleportBypass:Get()) then
-        NotorietyAPI.antiBypass(Character)
-    end
+-- // Player Tab
+local Player = Library:CreateTab("Player", "Player Functions")
+
+Player:CreateButton("Low Detection", function()
+    NotorietyAPI.LowDetection(LocalPlayer.Character)
 end)
 
 -- // Tools Tab
 local Tools = Library:CreateTab("Tools", "Some functions that can help you", true)
 
-local ToolsTeleportBack = Library:CreateToggle("Teleport Back")
+local ToolsTeleportBack = Tools:CreateToggle("Teleport Back")
 
+Tools:CreateButton("Equip Mask", function()
+    ReplicatedStorage.RS_Package.Assets.Remotes.MaskOn:FireServer()
+end)
 Tools:CreateButton("Kill Security", function()
+    checkRemoteKey()
     NotorietyAPI.killSecurity(ToolsTeleportBack:Get(), true)
 end)
 Tools:CreateButton("Get Lootables", function()
@@ -45,6 +62,7 @@ Tools:CreateButton("Get Big Loot", function()
     end
 end)
 Tools:CreateButton("Break All Glass", function()
+    checkRemoteKey()
     NotorietyAPI.breakAllGlass()
 end)
 Tools:CreateButton("Secure Bags", function()
@@ -54,30 +72,50 @@ end)
 -- // Auto Farm Tab
 local AutoFarm = Library:CreateTab("Auto Farm", "Manage and start the auto farm", true)
 
-local AutoFarmKillSecurity = Library:CreateToggle("Kill Security / Disable Cameras")
-local AutoFarmGetLootables = Library:CreateToggle("Get Lootables")
-local AutoFarmGetBigLoot = Library:CreateToggle("Get Big Loot")
-local AutoFarmBreakGlassAfter = Library:CreateToggle("Break Glass")
-local AutoFarmDropBags = Library:CreateToggle("Secure Bags")
+local AutoFarmKillSecurity = AutoFarm:CreateToggle("Disable Cameras")
+local AutoFarmGetLootables = AutoFarm:CreateToggle("Get Lootables")
+local AutoFarmGetBigLoot = AutoFarm:CreateToggle("Get Big Loot")
+local AutoFarmBreakGlassAfter = AutoFarm:CreateToggle("Break Glass")
+local AutoFarmDropBags = AutoFarm:CreateToggle("Secure Bags")
 
 AutoFarm:CreateButton("Start", function()
-    if (AutoFarmKillSecurity:Get()) then
-        NotorietyAPI.killSecurity(false, true)
-    end
-    if (AutoFarmGetLootables:Get()) then
-        NotorietyAPI.getLootables()
-    end
-    if (AutoFarmGetBigLoot:Get()) then
-        NotorietyAPI.getBigLoot()
-    end
-    if (AutoFarmBreakGlassAfter:Get()) then
-        NotorietyAPI.breakAllGlass()
-    end
-    if (AutoFarmDropBags:Get()) then
-        NotorietyAPI.dropOffBags()
-    end
-end)
+    local done = false
+    local start = function(Character)
+        if (Character == LocalPlayer.Character) then
+            ReplicatedStorage.RS_Package.Assets.Remotes.MaskOn:FireServer()
+            
+            repeat wait() until Character:FindFirstChild("Mask ON")
+            checkRemoteKey()
 
--- // Misc Tab
-local Misc = Library:CreateTab("Misc", "Misc. things", true)
-local RemoteKeyLabel = Library:CreateTextBox("Remote Key: " .. NotorietyAPI.RemoteKey)
+            if (AutoFarmKillSecurity:Get()) then
+                NotorietyAPI.killSecurity(false, true)
+            end
+            if (AutoFarmGetLootables:Get()) then
+                NotorietyAPI.getLootables()
+            end
+            if (AutoFarmGetBigLoot:Get()) then
+                NotorietyAPI.getBigLoot()
+            end
+            if (AutoFarmBreakGlassAfter:Get()) then
+                NotorietyAPI.breakAllGlass()
+            end
+            if (AutoFarmDropBags:Get()) then
+                NotorietyAPI.dropOffBags()
+            end
+
+            return true
+        end
+
+        return false
+    end
+
+    local Connection
+    Connection = Workspace.Criminals.ChildAdded:Connect(function(Character)
+        wait(0.1)
+        if (start(Character) or done) then
+            Connection:Disconnect()
+        end
+    end)
+
+    done = start(LocalPlayer.Character)
+end)
