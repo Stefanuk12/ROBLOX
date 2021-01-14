@@ -206,7 +206,6 @@ end
 killSecurity(false, true)
 
 -- // Get All Lootables
-local saved = Character.HumanoidRootPart.CFrame
 for i = 1, 3 do
     local allLootables = Workspace.Lootables:GetChildren()
     for k = 1, #allLootables do
@@ -229,6 +228,3 @@ end
 -- // Dropping bags off
 wait(0.5)
 dropOffBags()
-wait(0.2)
-
-Character.HumanoidRootPart.CFrame = saved
