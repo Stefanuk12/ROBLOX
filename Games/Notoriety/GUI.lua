@@ -29,7 +29,7 @@ LocalPlayer.CharacterAdded:Connect(function(Character)
 end)
 
 -- // Player Tab
-local Player = Library:CreateTab("Player", "Player Functions")
+local Player = Library:CreateTab("Player", "Player Functions", true)
 
 Player:CreateButton("Low Detection", function()
     NotorietyAPI.LowDetection(LocalPlayer.Character)
@@ -79,12 +79,12 @@ local AutoFarmBreakGlassAfter = AutoFarm:CreateToggle("Break Glass")
 local AutoFarmDropBags = AutoFarm:CreateToggle("Secure Bags")
 
 AutoFarm:CreateButton("Start", function()
-    local done = false
     local start = function(Character)
         if (Character == LocalPlayer.Character) then
             ReplicatedStorage.RS_Package.Assets.Remotes.MaskOn:FireServer()
             
             repeat wait() until Character:FindFirstChild("Mask ON")
+            NotorietyAPI.LowDetection(Character)
             checkRemoteKey()
 
             if (AutoFarmKillSecurity:Get()) then
@@ -99,6 +99,7 @@ AutoFarm:CreateButton("Start", function()
             if (AutoFarmBreakGlassAfter:Get()) then
                 NotorietyAPI.breakAllGlass()
             end
+            wait(0.5)
             if (AutoFarmDropBags:Get()) then
                 NotorietyAPI.dropOffBags()
             end
@@ -109,13 +110,15 @@ AutoFarm:CreateButton("Start", function()
         return false
     end
 
-    local Connection
-    Connection = Workspace.Criminals.ChildAdded:Connect(function(Character)
-        wait(0.1)
-        if (start(Character) or done) then
-            Connection:Disconnect()
-        end
-    end)
+    if (LocalPlayer.Character and LocalPlayer.Character.Parent ~= Workspace.Criminals) then
+        local Connection
+        Connection = Workspace.Criminals.ChildAdded:Connect(function(Character)
+            wait(0.1)
+            if (start(Character) or done) then
+                Connection:Disconnect()
+            end
+        end)
+    end
 
-    done = start(LocalPlayer.Character)
+    start(LocalPlayer.Character)
 end)
