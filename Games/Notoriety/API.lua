@@ -20,7 +20,7 @@ local RemotesB = RSPackage.Assets.Remotes
 local InteractList = require(RSPackage.ReplicatedScripts.InteractList)()
 
 -- // Get Remote Key
-do
+NotorietyAPI.getRemoteKey = function()
     local gGC = getgc()
     for i = 1, #gGC do
         local v = gGC[i]
@@ -29,7 +29,10 @@ do
             break
         end
     end
+
+    return NotorietyAPI.RemoteKey
 end
+NotorietyAPI.getRemoteKey()
 
 -- // Teleport Bypass
 NotorietyAPI.antiBypass = function(Character)
