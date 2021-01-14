@@ -214,7 +214,7 @@ NotorietyAPI.getLootables = function()
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
-        getItem(lootable)
+        NotorietyAPI.getItem(lootable)
     end
 end
 
@@ -224,7 +224,7 @@ NotorietyAPI.getBigLoot = function()
     for i = 1, #allBigLoot do
         local bigLoot = allBigLoot[i]
 
-        getItem(bigLoot)
+        NotorietyAPI.getItem(bigLoot)
     end
 end
 
@@ -233,6 +233,6 @@ NotorietyAPI.breakAllGlass = function()
     local allGlass = Workspace.Glass:GetChildren() or {}
     for i = 1, #allGlass do
         local glass = allGlass[i]
-        HitObject(glass)
+        NotorietyAPI.HitObject(glass)
     end
 end
