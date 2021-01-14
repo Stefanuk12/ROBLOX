@@ -43,9 +43,12 @@ NotorietyAPI.antiBypass = function(Character)
         Character.Detection:Destroy()
     end
 
+    print("TP Bypass: Removed Health and Detection")
+
     Character.ChildAdded:Connect(function(child)
         if (child.Name == "Health" or child.Name == "Detection") then
             Character:WaitForChild(child.Name):Destroy()
+            print("TP Bypass: Removed " .. child.Name)
         end
     end)
 end
