@@ -10,10 +10,23 @@ local RSPackage = ReplicatedStorage.RS_Package
 local Remotes = RSPackage.Remotes
 local RemotesB = RSPackage.Assets.Remotes
 local InteractList = require(RSPackage.ReplicatedScripts.InteractList)()
+local RemoteKey
 
 -- // Make sure we are in game
 if (not Workspace:FindFirstChild("Lootables")) then
     return
+end
+
+-- // Get Remote Key
+do
+    local gGC = getgc()
+    for i = 1, #gGC do
+        local v = gGC[i]
+        if (debug.getinfo(v).name == "shoot") then
+            RemoteKey = debug.getupvalue(v, 21)
+            break
+        end
+    end
 end
 
 -- // TP Bypass + Godmode
@@ -38,10 +51,89 @@ tpGod(LocalPlayer.Character)
 LocalPlayer.CharacterAdded:Connect(tpGod)
 
 -- // Interact
-local Interact = function(Item, waitTime)
+local Interact = function(Item, waitTime, customName)
     Remotes.StartInteraction:FireServer(Item)
-    wait(waitTime or InteractList[Item.Name].timer)
+    wait(waitTime or InteractList[customName or Item.Name].timer)
     Remotes.CompleteInteraction:FireServer(Item)
+end
+
+-- // Answer Pager
+local answerPager = function(tpBack, breakAtX)
+    local allBodies = Workspace.Bodies:GetChildren()
+    local saved = Character.HumanoidRootPart.CFrame
+
+    for i = 1, #allBodies do
+        local body = allBodies[i]
+
+        if (body.Name == "Pager") then
+            Character.HumanoidRootPart.CFrame = body.HumanoidRootPart.CFrame
+            Interact(body, nil, "Pager")
+        end
+
+        if (breakAtX and i >= breakAtX) then
+            break
+        end
+    end
+
+    if (tpBack) then
+        Character.HumanoidRootPart.CFrame = saved
+    end
+end
+
+-- // Kill Security
+local killSecurity = function(tpBack, answerPage)
+    -- // Vars
+    local targetGuard
+    local saved = Character.HumanoidRootPart.CFrame
+
+    -- // Get Target Guard
+    do
+        local allGuards = Workspace.Police:GetChildren()
+        for i = 1, #allGuards do
+            local guard = allGuards[i]
+
+            if (guard:FindFirstChild("Security")) then
+                targetGuard = guard
+                wait(0.1)
+            end
+        end
+    end
+
+    -- // Check if a guard exists
+    if (targetGuard and targetGuard.Humanoid.Health > 0) then
+        -- // Answer Pager
+        local Connection
+        Connection = Workspace.Bodies.ChildAdded:Connect(function(child)
+            if ((child.Name == "Guard" or child.Name == "Pager") and answerPage) then
+                wait(0.1)
+                Character.HumanoidRootPart.CFrame = child.HumanoidRootPart.CFrame
+                Interact(child, nil, "Pager")
+                answerPage = false
+                Connection:Disconnect()
+            end
+        end)
+
+        -- // Melee the guard until he is dead
+        Character.HumanoidRootPart.CFrame = targetGuard.HumanoidRootPart.CFrame
+        repeat wait()
+            RemotesB.MeleeDamage:FireServer(targetGuard, 999, 100)
+        until (not targetGuard or (targetGuard and targetGuard.Humanoid.Health < 1))
+        repeat wait() until (not answerPage)
+    else
+        -- // Disable camera
+        local allCameras = Workspace.Cameras:GetChildren()
+        for i = 1, #allCameras do
+            local camera = allCameras[i]
+            Character.HumanoidRootPart.CFrame = camera.CamPart.CFrame
+            wait(0.25)
+            RemotesB.HitObject:FireServer(RemoteKey, camera.CamPart, true)
+        end
+    end
+
+    -- // Teleport back
+    if (tpBack) then
+        Character.HumanoidRootPart.CFrame = saved
+    end
 end
 
 -- // Get Item
@@ -61,7 +153,7 @@ local getItem = function(Item, tpBack)
         coroutine.wrap(function()
             while (doTeleport) do
                 wait()
-                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame
+                Character.HumanoidRootPart.CFrame = _Item.PrimaryPart.CFrame - Vector3.new(0, 3, 0)
             end
         end)()
 
@@ -110,12 +202,15 @@ local dropOffBags = function(tpBack)
     end
 end
 
+-- // Kill Security / Remove cameras
+killSecurity(false, true)
+
 -- // Get All Lootables
 local saved = Character.HumanoidRootPart.CFrame
 for i = 1, 3 do
     local allLootables = Workspace.Lootables:GetChildren()
-    for i = 1, #allLootables do
-        local lootable = allLootables[i]
+    for k = 1, #allLootables do
+        local lootable = allLootables[k]
 
         getItem(lootable)
     end
