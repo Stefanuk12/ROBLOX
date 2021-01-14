@@ -204,7 +204,6 @@ end
 NotorietyAPI.dropOffBags = function(tpBack)
     -- // Vars
     local saved = Character.HumanoidRootPart.CFrame
-    if (not Workspace:FindFirstChild("BagSecuredArea")) then return end
     local EscapeVan = Workspace.BagSecuredArea.EscapeVan
 
     -- // Teleporting to van and dropping
