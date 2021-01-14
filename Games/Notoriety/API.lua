@@ -62,6 +62,16 @@ NotorietyAPI.HitObject = function(Part)
     RemotesB.HitObject:FireServer(NotorietyAPI.RemoteKey, Part, false, nil, nil, Part.CFrame.lookVector * 56)
 end
 
+-- // Low Detection (simulates as if you have no mask)
+NotorietyAPI.LowDetection = function(Character)
+    local Mask = Character:FindFirstChild("Mask ON")
+    if (Mask) then
+        local MaskClone = Mask:Clone()
+        MaskClone.Parent = Character
+        Mask:Destroy()
+    end
+end
+
 -- // Answer Pager
 NotorietyAPI.answerPager = function(tpBack, breakAtX)
     local allBodies = Workspace.Bodies:GetChildren()
@@ -210,7 +220,9 @@ end
 
 -- // Get Lootables
 NotorietyAPI.getLootables = function()
-    local allLootables = Workspace.Lootables:GetChildren() or {}
+    if (not Workspace:FindFirstChild("Lootables")) then return end
+
+    local allLootables = Workspace.Lootables:GetChildren()
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
@@ -220,7 +232,9 @@ end
 
 -- // Get Big Loot
 NotorietyAPI.getBigLoot = function()
-    local allBigLoot = Workspace.BigLoot:GetChildren() or {}
+    if (not Workspace:FindFirstChild("BigLoot")) then return end
+
+    local allBigLoot = Workspace.BigLoot:GetChildren()
     for i = 1, #allBigLoot do
         local bigLoot = allBigLoot[i]
 
@@ -230,7 +244,9 @@ end
 
 -- // Break All Glass
 NotorietyAPI.breakAllGlass = function()
-    local allGlass = Workspace.Glass:GetChildren() or {}
+    if (not Workspace:FindFirstChild("Glass")) then return end
+
+    local allGlass = Workspace.Glass:GetChildren()
     for i = 1, #allGlass do
         local glass = allGlass[i]
         NotorietyAPI.HitObject(glass)
