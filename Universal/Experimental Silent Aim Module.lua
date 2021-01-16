@@ -182,7 +182,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         local Player = AllPlayers[i]
         local Character = ValiantAimHacks.getCharacter(Player)
 
-        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and character and Character.PrimaryPart and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").Health > 0) then
+        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").Health > 0) then
             -- // Team Check
             if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then break end
 
@@ -202,8 +202,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     end
 
     -- // End
-    ValiantAimHacks["Selected"] = (Chance and ClosestPlayer or LocalPlayer)
-    return (Chance and ClosestPlayer or LocalPlayer)
+    ValiantAimHacks.Selected = (Chance and ClosestPlayer or LocalPlayer)
 end
 
 -- // Heartbeat Function
