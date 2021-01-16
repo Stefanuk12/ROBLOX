@@ -1,5 +1,3 @@
-if getgenv().ValiantAimHacks then return getgenv().ValiantAimHacks end
-
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -11,6 +9,7 @@ local Heartbeat = RunService.Heartbeat
 local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
+local PhantomTable
 
 -- // Silent Aim Vars
 getgenv().ValiantAimHacks = {
@@ -30,6 +29,24 @@ getgenv().ValiantAimHacks = {
     BlacklistedPlayers = {LocalPlayer},
     WhitelistedPUIDs = {91318356},
 }
+
+-- // Metatable Vars
+local mt = getrawmetatable(game)
+local backupindex = mt.__index
+setreadonly(mt, false)
+
+-- // Get Phantom Forces' player table thing
+do
+    local gGC = getgc(true)
+    for i = 1, #gGC do
+        local v = gGC[i]
+        
+        if (typeof(v) == "table" and rawget(v, "getbodyparts")) then
+            PhantomTable = v
+            break
+        end
+    end
+end
 
 -- // Show FOV
 local circle = Drawing.new("Circle")
@@ -154,15 +171,10 @@ end
 
 -- // Get Character
 function ValiantAimHacks.getCharacter(Player)
-    return Player.Character
-end
-
--- // Get Health
-function ValiantAimHacks.getHealth(Player)
-    local Character = ValiantAimHacks.getCharacter(Player)
-    local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
-
-    return (Humanoid and Humanoid.Health or 0)
+    local BodyParts = PhantomTable.getbodyparts(Player)
+    if (BodyParts and typeof(BodyParts) == "table" and rawget(BodyParts, "rootpart")) then
+        return BodyParts.rootpart.Parent
+    end
 end
 
 -- // Check if silent aim can used
@@ -180,7 +192,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     -- // Chance
     if (not Chance) then
         ValiantAimHacks.Selected = (Chance and LocalPlayer or LocalPlayer)
-        
+
         return (Chance and LocalPlayer or LocalPlayer)
     end
 
@@ -190,7 +202,8 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         local Player = AllPlayers[i]
         local Character = ValiantAimHacks.getCharacter(Player)
 
-        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and ValiantAimHacks.getHealth(Player) > 0) then
+        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").Health > 0) then
+            print(1)
             -- // Team Check
             if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then break end
 
@@ -219,49 +232,18 @@ Heartbeat:Connect(function()
     ValiantAimHacks.getClosestPlayerToCursor()
 end)
 
-return ValiantAimHacks
-
---[[
-Examples:
-
---// Namecall Version // --
-local mt = getrawmetatable(game)
-local backupindex = mt.__index
-local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
-ValiantAimHacks["TeamCheck"] = false
-setreadonly(mt, false)
-
-mt.__namecall = newcclosure(function(...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" then
-        if tostring(args[1]) == "RemoteNameHere" then
-            -- change args
-            return backupnamecall(unpack(args))
-        end
-    end
-    return backupnamecall(...)
-end)
-setreadonly(mt, true)
-
--- // Index Version // --
-local mt = getrawmetatable(game)
-local backupindex = mt.__index
-local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
-ValiantAimHacks["TeamCheck"] = false
-setreadonly(mt, false)
-
+-- // Override aiming system
 mt.__index = newcclosure(function(t, k)
-    if t:IsA("Mouse") and (k == "Hit" or k == "Target") then
-        if ValiantAimHacks.checkSilentAim() then
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
+        if (ValiantAimHacks.checkSilentAim()) then
             local CPlayer = ValiantAimHacks.Selected
-            if CPlayer.Character:FindFirstChild("Head") then
+            if (CPlayer.Character:FindFirstChild("Head")) then
                 return (k == "Hit" and CPlayer.Character.Head.CFrame or CPlayer.Character.Head)
             end
         end
     end
     return backupindex(t, k)
 end)
-setreadonly(mt, true)
 
-]]
+-- // Reset metatable
+setreadonly(mt, true)
