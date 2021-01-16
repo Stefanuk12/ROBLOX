@@ -152,6 +152,11 @@ function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMu
     return nil
 end
 
+-- // Get Character
+function ValiantAimHacks.getCharacter(Player)
+    return Player.Character
+end
+
 -- // Check if silent aim can used
 function ValiantAimHacks.checkSilentAim()
     return (ValiantAimHacks.SilentAimEnabled == true and ValiantAimHacks.Selected ~= LocalPlayer)
@@ -174,21 +179,22 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     -- // Loop through all players
     local AllPlayers = Players:GetPlayers()
     for i = 1, #AllPlayers do
-        local plr = AllPlayers[i]
+        local Player = AllPlayers[i]
+        local Character = ValiantAimHacks.getCharacter(Player)
 
-        if (not ValiantAimHacks.checkWhitelisted(plr) and ValiantAimHacks.checkPlayer(plr) and plr.Character and plr.Character.PrimaryPart and plr.Character:FindFirstChildWhichIsA("Humanoid") and plr.Character:FindFirstChildWhichIsA("Humanoid").Health > 0) then
+        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and character and Character.PrimaryPart and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").Health > 0) then
             -- // Team Check
-            if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(plr, LocalPlayer)) then break end
+            if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then break end
 
             -- // Vars
-            local PartPos, _ = CurrentCamera:WorldToViewportPoint(plr.Character.PrimaryPart.Position)
+            local PartPos, _ = CurrentCamera:WorldToViewportPoint(Character.PrimaryPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
 
             -- // Check if is in FOV
             if (Magnitude < (ValiantAimHacks.FOV * 6 - 8)) and (Magnitude < ShortestDistance) then
                 -- // Check if Visible
-                if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(plr.Character.PrimaryPart, plr.Character)) or (not ValiantAimHacks.VisibleCheck) then
-                    ClosestPlayer = plr
+                if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(Character.PrimaryPart, Character)) or (not ValiantAimHacks.VisibleCheck) then
+                    ClosestPlayer = Player
                     ShortestDistance = Magnitude
                 end
             end
