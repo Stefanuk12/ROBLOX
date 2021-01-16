@@ -80,8 +80,8 @@ function MusicAPI.CheckAllSounds()
     -- // Loop through all sounds and remove bad sounds
     for i = 1, #MusicTable do
         coroutine.wrap(function()
-            wait(math.random(0, 5))
-            if (not MusicAPI.CheckSound(MusicTable[i].SoundId)) then
+            wait(math.random(0, 8))
+            if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
                 table.remove(MusicTable, i)
             end
     
@@ -150,4 +150,4 @@ function MusicAPI.SetClipboard()
     setclipboard(MusicAPI.GetAll())
 end
 
-return MusicAPI
+MusicAPI.CheckAllSounds()
