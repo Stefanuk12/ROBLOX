@@ -22,8 +22,6 @@ old = hookfunction(require(Client.Get_Camera_Aim), function(CurrentCamera, Part,
         local newRay = Ray.new(ScreenToRay.Origin, ScreenToRay.Direction * 5000)
         local part, pos = workspace:FindPartOnRayWithIgnoreList(newRay, {Vegetation, Part, CurrentCamera, MapBoundaries})
 
-        print("sex", selectedCharacter)
-
         return part, pos, newRay
     else
         return old(CurrentCamera, Part, Crosshair)
