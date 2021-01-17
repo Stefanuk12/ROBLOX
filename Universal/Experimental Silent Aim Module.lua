@@ -157,12 +157,13 @@ function ValiantAimHacks.getCharacter(Player)
     return Player.Character
 end
 
--- // Get Health
-function ValiantAimHacks.getHealth(Player)
+-- // Check Health
+function ValiantAimHacks.checkHealth(Player)
     local Character = ValiantAimHacks.getCharacter(Player)
     local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
 
-    return (Humanoid and Humanoid.Health or 0)
+    local Health = (Humanoid and Humanoid.Health or 0)
+    return Health > 0
 end
 
 -- // Check if silent aim can used
@@ -180,7 +181,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     -- // Chance
     if (not Chance) then
         ValiantAimHacks.Selected = (Chance and LocalPlayer or LocalPlayer)
-        
+
         return (Chance and LocalPlayer or LocalPlayer)
     end
 
@@ -190,7 +191,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         local Player = AllPlayers[i]
         local Character = ValiantAimHacks.getCharacter(Player)
 
-        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and ValiantAimHacks.getHealth(Player) > 0) then
+        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and ValiantAimHacks.checkHealth(Player)) then
             -- // Team Check
             if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then break end
 
