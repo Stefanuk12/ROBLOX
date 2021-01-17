@@ -21,6 +21,7 @@ getgenv().ValiantAimHacks = {
     FOV = 60,
     HitChance = 100,
     Selected = LocalPlayer,
+    TargetPart = "Head",
     BlacklistedTeams = {
         {
             Team = LocalPlayer.Team,
@@ -191,18 +192,20 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         local Player = AllPlayers[i]
         local Character = ValiantAimHacks.getCharacter(Player)
 
-        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character.PrimaryPart and ValiantAimHacks.checkHealth(Player)) then
+        if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character and Character:FindFirstChild(ValiantAimHacks.TargetPart) and ValiantAimHacks.checkHealth(Player)) then
             -- // Team Check
             if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then break end
 
             -- // Vars
-            local PartPos, _ = CurrentCamera:WorldToViewportPoint(Character.PrimaryPart.Position)
+            local TargetPart = Character[ValiantAimHacks.TargetPart]
+            local PartPos, _ = CurrentCamera:WorldToViewportPoint(TargetPart.Position)
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+            
 
             -- // Check if is in FOV
             if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                 -- // Check if Visible
-                if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(Character.PrimaryPart, Character)) or (not ValiantAimHacks.VisibleCheck) then
+                if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(TargetPart, Character)) or (not ValiantAimHacks.VisibleCheck) then
                     ClosestPlayer = Player
                     ShortestDistance = Magnitude
                 end
