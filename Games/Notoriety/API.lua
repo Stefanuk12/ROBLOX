@@ -227,9 +227,9 @@ NotorietyAPI.lootBagAmount = function()
     local lootBag = missionEquipment:FindFirstChild("Loot Bag")
 
     if (lootBag) then
-        local amount = tonumber(lootBag.txtamt.Text)
+        local amount = lootBag.txtamt.Text
 
-        return (amount and amount or 0)
+        return (amount == "" and 1 or tonumber(amount))
     else
         return 0
     end
