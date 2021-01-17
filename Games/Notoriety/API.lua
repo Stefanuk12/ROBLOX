@@ -236,25 +236,33 @@ NotorietyAPI.lootBagAmount = function()
 end
 
 -- // Get Lootables
-NotorietyAPI.getLootables = function()
+NotorietyAPI.getLootables = function(bagAmount)
     if (not Workspace:FindFirstChild("Lootables")) then return end
 
     local allLootables = Workspace.Lootables:GetChildren()
     for k = 1, #allLootables do
         local lootable = allLootables[k]
 
+        -- // Stop at when you have x amount of bags
+        if (bagAmount and NotorietyAPI.lootBagAmount() >= bagAmount) then return end
+
+        -- // Get Item
         NotorietyAPI.getItem(lootable)
     end
 end
 
 -- // Get Big Loot
-NotorietyAPI.getBigLoot = function()
+NotorietyAPI.getBigLoot = function(bagAmount)
     if (not Workspace:FindFirstChild("BigLoot")) then return end
 
     local allBigLoot = Workspace.BigLoot:GetChildren()
     for i = 1, #allBigLoot do
         local bigLoot = allBigLoot[i]
+        
+        -- // Stop at when you have x amount of bags
+        if (bagAmount and NotorietyAPI.lootBagAmount() >= bagAmount) then return end
 
+        -- // Get Item
         NotorietyAPI.getItem(bigLoot)
     end
 end

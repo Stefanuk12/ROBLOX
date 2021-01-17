@@ -23,7 +23,8 @@ local LootingSettings = {
     GetLootables = true,
     GetBigLoot = true,
     BreakAllGlass = false,
-    DropOffBags = true
+    DropOffBags = true,
+    AmountOfBags = 999
 }
 
 -- // TP Bypass
@@ -51,12 +52,12 @@ Workspace.Criminals.ChildAdded:Connect(function(Character)
 
         -- // Get Lootables
         if (LootingSettings.GetLootables) then
-            NotorietyAPI.getLootables()
+            NotorietyAPI.getLootables(LootingSettings.AmountOfBags)
         end
 
         -- // Get Big Loot
         if (LootingSettings.GetBigLoot) then
-            NotorietyAPI.getBigLoot()
+            NotorietyAPI.getBigLoot(LootingSettings.AmountOfBags)
         end
 
         -- // Break All Glass
