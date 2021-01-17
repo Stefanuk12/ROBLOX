@@ -70,7 +70,7 @@ Workspace.Criminals.ChildAdded:Connect(function(Character)
             NotorietyAPI.dropOffBags()
 
             -- // Go back to menu
-            wait(1)
+            wait(3)
             Remotes.GoToMenu:FireServer()
         end
     end
