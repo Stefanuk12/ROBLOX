@@ -221,6 +221,20 @@ NotorietyAPI.dropOffBags = function(tpBack)
     end
 end
 
+-- // Get Loot Bag Amount
+NotorietyAPI.lootBagAmout = function()
+    local missionEquipment = LocalPlayer.PlayerGui.SG_Package.MainGui.PlayerStats.LocalPlayerStats.info_items.MissionEquipment
+    local lootBag = missionEquipment:FindFirstChild("Loot Bag")
+
+    if (lootBag) then
+        local amount = tonumber(lootBag.txtamt.Text)
+
+        return (amount and amount or 0)
+    else
+        return 0
+    end
+end
+
 -- // Get Lootables
 NotorietyAPI.getLootables = function()
     if (not Workspace:FindFirstChild("Lootables")) then return end
