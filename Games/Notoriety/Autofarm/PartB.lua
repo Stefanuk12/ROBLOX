@@ -19,7 +19,7 @@ local Remotes2 = RSPackage.Assets.Remotes
 -- // Auto Farm Settings
 local SelectedClass = "1"
 local LootingSettings = {
-    KillSecurity = true,
+    KillSecurity = false,
     GetLootables = true,
     GetBigLoot = true,
     BreakAllGlass = false,
@@ -48,7 +48,7 @@ Workspace.Criminals.ChildAdded:Connect(function(Character)
         if (LootingSettings.KillSecurity) then
             NotorietyAPI.killSecurity(false, true)
         end
-        
+
         -- // Get Lootables
         if (LootingSettings.GetLootables) then
             NotorietyAPI.getLootables()
@@ -70,7 +70,7 @@ Workspace.Criminals.ChildAdded:Connect(function(Character)
             NotorietyAPI.dropOffBags()
 
             -- // Go back to menu
-            wait(3)
+            wait(5)
             Remotes.GoToMenu:FireServer()
         end
     end
@@ -78,3 +78,10 @@ end)
 
 -- // Getting ready
 Remotes.PlayerReady:FireServer("Class " .. SelectedClass)
+
+-- // Wait on teleport to repeat the process
+LocalPlayer.OnTeleport:Connect(function(State)
+    if (State == Enum.TeleportState.Started) then
+        syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Notoriety/Autofarm/PartA.lua"))
+    end
+end)
