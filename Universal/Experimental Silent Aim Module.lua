@@ -205,10 +205,11 @@ function ValiantAimHacks.getClosestPlayerToCursor()
             -- // Check if is in FOV
             if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                 -- // Check if Visible
-                if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(TargetPart, Character)) or (not ValiantAimHacks.VisibleCheck) then
-                    ClosestPlayer = Player
-                    ShortestDistance = Magnitude
-                end
+                if (ValiantAimHacks.VisibleCheck and not ValiantAimHacks.isPartVisible(TargetPart, Character)) then return end
+
+                -- //
+                ClosestPlayer = Player
+                ShortestDistance = Magnitude
             end
         end
     end
