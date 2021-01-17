@@ -41,7 +41,7 @@ function ValiantAimHacks.updateCircle()
         circle.Thickness = 2
         circle.Color = Color3.fromRGB(231, 84, 128)
         circle.NumSides = 12
-        circle.Radius = (ValiantAimHacks.FOV * 6) / 2
+        circle.Radius = (ValiantAimHacks.FOV * 3)
         circle.Filled = false
         circle.Position = Vector2.new(Mouse.X, Mouse.Y + GuiService:GetGuiInset().Y)
 
@@ -200,7 +200,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
             local Magnitude = (Vector2.new(PartPos.X, PartPos.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
 
             -- // Check if is in FOV
-            if (Magnitude < (ValiantAimHacks.FOV * 6 - 8)) and (Magnitude < ShortestDistance) then
+            if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                 -- // Check if Visible
                 if (ValiantAimHacks.VisibleCheck and ValiantAimHacks.isPartVisible(Character.PrimaryPart, Character)) or (not ValiantAimHacks.VisibleCheck) then
                     ClosestPlayer = Player
