@@ -222,7 +222,7 @@ NotorietyAPI.dropOffBags = function(tpBack)
 end
 
 -- // Get Loot Bag Amount
-NotorietyAPI.lootBagAmout = function()
+NotorietyAPI.lootBagAmount = function()
     local missionEquipment = LocalPlayer.PlayerGui.SG_Package.MainGui.PlayerStats.LocalPlayerStats.info_items.MissionEquipment
     local lootBag = missionEquipment:FindFirstChild("Loot Bag")
 
