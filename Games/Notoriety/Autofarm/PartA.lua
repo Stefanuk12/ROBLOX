@@ -12,7 +12,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
 local Heist = "Shadow Raid"
-local Difficulty = "Anarchy"
+local Difficulty = "Nightmare"
 
 -- // Create Lobby
 local Lobby = ReplicatedStorage:WaitForChild("MakeLobby"):InvokeServer(Heist, Difficulty, 3, "PRIVATE", "ANY", false, false)
