@@ -23,6 +23,6 @@ ReplicatedStorage.StartGame:FireServer(Lobby)
 -- // Wait on teleport
 LocalPlayer.OnTeleport:Connect(function(State)
     if (State == Enum.TeleportState.Started) then
-        syn.queue_on_teleport("")
+        syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Notoriety/Autofarm/PartB.lua"))
     end
 end)
