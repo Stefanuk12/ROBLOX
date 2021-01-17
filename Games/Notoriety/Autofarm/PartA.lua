@@ -15,10 +15,10 @@ local Heist = "Shadow Raid"
 local Difficulty = "Anarchy"
 
 -- // Create Lobby
-local Lobby = ReplicatedStorage.MakeLobby:InvokeServer(Heist, Difficulty, 3, "PRIVATE", "ANY", false, false)
+local Lobby = ReplicatedStorage:WaitForChild("MakeLobby"):InvokeServer(Heist, Difficulty, 3, "PRIVATE", "ANY", false, false)
 
 -- // Start the game
-ReplicatedStorage.StartGame:FireServer(Lobby)
+ReplicatedStorage:WaitForChild("StartGame"):FireServer(Lobby)
 
 -- // Wait on teleport
 LocalPlayer.OnTeleport:Connect(function(State)
