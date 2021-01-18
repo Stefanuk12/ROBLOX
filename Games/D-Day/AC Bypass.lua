@@ -1,3 +1,5 @@
+-- // Notice: This does not cover every aspect of the AC but the main part. You may die when flying or other stuff.
+
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
