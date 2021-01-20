@@ -150,4 +150,4 @@ function MusicAPI.SetClipboard()
     setclipboard(MusicAPI.GetAll())
 end
 
-MusicAPI.CheckAllSounds()
+return MusicAPI
