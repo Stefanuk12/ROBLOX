@@ -17,7 +17,7 @@ do
     local gGC = getgc(true)
     for i = 1, #gGC do
         local v = gGC[i]
-        
+
         if (typeof(v) == "table") then
             if (rawget(v, "getbodyparts")) then
                 PhantomTable = v
@@ -46,22 +46,29 @@ function ValiantAimHacks.getHealth(Player)
     return PhantomTable2:getplayerhealth(Player)
 end
 
--- // Override aiming system
+-- // Hook
 mt.__namecall = newcclosure(function(...)
     -- // Vars
-    local args = {...}
     local method = getnamecallmethod()
+    local args = {...}
 
-    -- //
-    if (method == "FindPartOnRayWithWhitelist" and ValiantAimHacks.checkSilentAim()) then
-        local Direction, _, _ = ValiantAimHacks.findDirectionNormalMaterial(args[2].Origin, ValiantAimHacks.getCharacter(ValiantAimHacks.Selected).HumanoidRootPart.Position)
-        args[2].Direction = Direction
-        print("sex")
+    -- // Check
+    if (not checkcaller() and method == "FindPartOnRayWithIgnoreList" and ValiantAimHacks.checkSilentAim()) then
+        -- // Vars
+        local Selected = ValiantAimHacks.Selected
+        local SelectedCharacter = ValiantAimHacks.getCharacter(Selected)
+        local Head = SelectedCharacter.Head
+
+        -- // Ray
+        local Direction = (Head.Position - args[2].Origin).Unit
+        args[2] = Ray.new(args[2].Origin, Direction)
+        print(1)
+        -- // Return changed args
         return backupnamecall(unpack(args))
     end
 
     -- // Return
-    return backupnamecall(...)
+    return backupnamecall(...) 
 end)
 
 -- // Reset metatable
