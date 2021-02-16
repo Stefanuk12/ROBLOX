@@ -140,7 +140,7 @@ function ESP.Creation:Header(data)
         Outline = false,
         OutlineColor = Color3.fromRGB(255, 150, 150),
         Font = Drawing.Fonts.UI,
-        Offset = CFrame.new(1, 5, 1)
+        Offset = CFrame.new(0, 1, 0)
     }
     for i,v in pairs(idealData) do
         if (not data[i]) then
@@ -197,7 +197,7 @@ function ESP.Creation:Tracer(data)
 
     -- // Object
     local Object = ESP.Utilites:Drawing("Line", data)
-    
+
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
     local Midpoint = Blank + (BoxCFrame[4].Position + BoxCFrame[3].Position) / 2
@@ -252,10 +252,13 @@ function ESP.Update:Header(data)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
-    local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
+    local Midpoint = Blank + ((BoxCFrame[1].Position + BoxCFrame[2].Position) / 2)
 
     -- // Position
-    local Position = Midpoint
+    print(Midpoint * data.Offset)
+    print(Midpoint)
+    print(data.Offset)
+    local Position = Midpoint * data.Offset
     Position = Camera:WorldToViewportPoint(Position.Position)
     Position = Vector2.new(Position.X, Position.Y)
 
