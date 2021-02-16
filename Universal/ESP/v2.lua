@@ -15,10 +15,11 @@ getgenv().ESP = ESP
 ESP.Utilites = {}
 
 -- // Get the corners for the box
-function ESP.Utilites:getBoxCorners(Character)
+function ESP.Utilites:getBoxCorners(Character, returnType)
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
-            return CFrame.new((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
+            local modifiedPosition = Vector3.new((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
+            return (a - a.Position) + modifiedPosition
         end
 
         local front = {
@@ -44,21 +45,27 @@ function ESP.Utilites:getBoxCorners(Character)
 
     -- // Convert 3D to 2D
     local function convertTo2D(points)
+        local newPoints = {}
+        
         for i = 1, #points do
             local point = points[i]
             local tPoint, _ = Camera:WorldToViewportPoint(point.Position)
 
-            points[i] = Vector2.new(tPoint.X, tPoint.Y)
+            newPoints[i] = Vector2.new(tPoint.X, tPoint.Y)
         end
 
-        return points
+        return newPoints
     end
 
     local CharacterBoxC, CharacterBoxS = Character:GetBoundingBox()
-    local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
-    local Corners2D = convertTo2D(Corners3D)
+    if (returnType) then
+        return GetPartCorners(CharacterBoxC, CharacterBoxS)
+    else
+        local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
+        local Corners2D = convertTo2D(Corners3D)
 
-    return Corners2D, Corners3D
+        return Corners2D, Corners3D
+    end
 end
 
 -- // Create Drawing Objects with Data
@@ -133,7 +140,7 @@ function ESP.Creation:Header(data)
         Outline = false,
         OutlineColor = Color3.fromRGB(255, 150, 150),
         Font = Drawing.Fonts.UI,
-        Offset = Vector2.new(10, 50)
+        Offset = CFrame.new(1, 5, 1)
     }
     for i,v in pairs(idealData) do
         if (not data[i]) then
@@ -142,13 +149,23 @@ function ESP.Creation:Header(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
     -- // Object
     local Object = ESP.Utilites:Drawing("Text", data)
 
-    -- // Setting Position
-    Object.Position = BoxCorners[1] + Vector2.new((BoxCorners[2].X - BoxCorners[1].X) / 2, data.VerticalOffset)
+    -- // Midpoint
+    local Blank = BoxCFrame[1] - BoxCFrame[1].Position
+    local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
+
+    -- // Position
+    local Position = Midpoint * data.Offset
+    Position = Camera:WorldToViewportPoint(Position.Position)
+    Position = Vector2.new(Position.X, Position.Y)
+
+    -- // Setting stuff
+    Object.Text = data.Player.Name
+    Object.Position = Position
 
     -- // Returning the object
     data.Object = Object
@@ -176,13 +193,22 @@ function ESP.Creation:Tracer(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
     -- // Object
     local Object = ESP.Utilites:Drawing("Line", data)
+    
+    -- // Midpoint
+    local Blank = BoxCFrame[3] - BoxCFrame[3].Position
+    local Midpoint = Blank + (BoxCFrame[4].Position + BoxCFrame[3].Position) / 2
+
+    -- // Position
+    local Position = Midpoint
+    Position = Camera:WorldToViewportPoint(Position.Position)
+    Position = Vector2.new(Position.X, Position.Y)
 
     -- // Setting To position
-    Object.To = BoxCorners[3] + Vector2.new((BoxCorners[4].X - BoxCorners[3].X) / 2, 0)
+    Object.To = Position
 
     -- // Returning the object
     data.Object = Object
@@ -219,16 +245,23 @@ end
 -- // Update Text
 function ESP.Update:Header(data)
     -- // Vars
-    local BoxCorners, BoxCorners3D = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
     -- // Object
     local Object = data.Object
 
-    -- // Calculating vertical offset
+    -- // Midpoint
+    local Blank = BoxCFrame[1] - BoxCFrame[1].Position
+    local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
+
+    -- // Position
+    local Position = Midpoint
+    Position = Camera:WorldToViewportPoint(Position.Position)
+    Position = Vector2.new(Position.X, Position.Y)
 
     -- // Setting stuff
     Object.Text = data.Player.Name
-    Object.Position = BoxCorners[1] + Vector2.new((BoxCorners[2].X - BoxCorners[1].X) / 2, data.Offset.Y)
+    Object.Position = Position
 
     -- // Returning the object
     data.Object = Object
@@ -238,14 +271,21 @@ end
 -- // Update Tracer
 function ESP.Update:Tracer(data)
     -- // Vars
-    local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
-    local To = BoxCorners[3] + Vector2.new((BoxCorners[4].X - BoxCorners[3].X) / 2, 0)
+    -- // Midpoint
+    local Blank = BoxCFrame[3] - BoxCFrame[3].Position
+    local Midpoint = Blank + (BoxCFrame[4].Position + BoxCFrame[3].Position) / 2
+
+    -- // Position
+    local Position = Midpoint
+    Position = Camera:WorldToViewportPoint(Position.Position)
+    Position = Vector2.new(Position.X, Position.Y)
 
     -- // Object
     local Object = data.Object
     Object.From = data.From
-    Object.To = To
+    Object.To = Position
     Object.Thickness = data.Thickness
     Object.Color = data.Color
 
