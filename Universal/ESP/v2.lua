@@ -140,7 +140,7 @@ function ESP.Creation:Header(data)
         Outline = false,
         OutlineColor = Color3.fromRGB(255, 150, 150),
         Font = Drawing.Fonts.UI,
-        Offset = CFrame.new(0, 1, 0)
+        Offset = CFrame.new(0, 2, 0)
     }
     for i,v in pairs(idealData) do
         if (not data[i]) then
@@ -255,9 +255,6 @@ function ESP.Update:Header(data)
     local Midpoint = Blank + ((BoxCFrame[1].Position + BoxCFrame[2].Position) / 2)
 
     -- // Position
-    print(Midpoint * data.Offset)
-    print(Midpoint)
-    print(data.Offset)
     local Position = Midpoint * data.Offset
     Position = Camera:WorldToViewportPoint(Position.Position)
     Position = Vector2.new(Position.X, Position.Y)
@@ -364,4 +361,4 @@ Players.PlayerAdded:Connect(manageNewPlayer)
 Players.PlayerRemoving:Connect(manageOldPlayer)
 
 -- // Constantly updating the ESP
-RunService.RenderStepped:Connect(manageUpdate)
+RunService:BindToRenderStep("ESP", 0, manageUpdate)
