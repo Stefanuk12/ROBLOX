@@ -103,7 +103,7 @@ function API.KillPlayers(Player)
 
             local failsafeCount = 0
             while (Player.Humanoid.Health ~= 0) do
-                if (failsafeCount == 5) then break end
+                if (failsafeCount >= 5) then break end
                 wait(1)
                 failsafeCount = failsafeCount + 1
             end
