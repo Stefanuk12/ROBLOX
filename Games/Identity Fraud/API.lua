@@ -102,7 +102,7 @@ function API.KillPlayers(Player)
             API.teleportNPC("Ralph", Head.CFrame)
 
             local failsafeCount = 0
-            while (Player.Humanoid.Health ~= 0) do
+            while (TargetPlayer.Character.Humanoid.Health ~= 0) do
                 if (failsafeCount >= 5) then break end
                 wait(1)
                 failsafeCount = failsafeCount + 1
