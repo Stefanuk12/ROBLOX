@@ -36,6 +36,11 @@ function API.teleportNPC(NPC, CF)
     Workspace.NPCs[NPC]:SetPrimaryPartCFrame(CF)
 end
 
+-- // Attempt to kill NPC
+function API.AttemptKillNPC(NPC)
+    API.teleportNPC(NPC, CFrame.new(0, -1000, 0))
+end
+
 function API.GetTarget(player)
     -- // Just a player
     if (typeof(player) == "Instance") then
