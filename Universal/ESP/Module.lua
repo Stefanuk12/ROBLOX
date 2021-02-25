@@ -103,7 +103,7 @@ end
 -- // Check if part is visible
 function ESP.Utilites.IsVisible(Part, PartDescendant)
     -- // Vars
-    local Character = ESP.Utilites:GetCharacter(LocalPlayer)
+    local Character = ESP.Utilites.GetCharacter(LocalPlayer)
     local Origin = Camera.CFrame.Position
     local _, OnScreen = WorldToViewportPoint(Camera, Part.Position)
 
