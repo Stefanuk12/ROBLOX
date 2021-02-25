@@ -171,6 +171,7 @@ function ESP.Creation.Box(data)
     Object.PointD = BoxCorners[4]
 
     -- // Returning the object
+    data.Object = Object
     return data
 end
 
@@ -298,7 +299,6 @@ function ESP.Update.Box(data)
     Object.PointD = BoxCorners[4]
 
     -- // Returning the object
-    data.Object = Object
     return data
 end
 
