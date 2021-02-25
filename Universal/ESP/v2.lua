@@ -46,7 +46,7 @@ function ESP.Utilites:getBoxCorners(Character, returnType)
     -- // Convert 3D to 2D
     local function convertTo2D(points)
         local newPoints = {}
-        
+
         for i = 1, #points do
             local point = points[i]
             local tPoint, _ = Camera:WorldToViewportPoint(point.Position)
@@ -84,25 +84,37 @@ function ESP.Utilites:Drawing(Type, data)
 
     return Object
 end
+
+-- // Get Character
+function ESP.Utilites:GetCharacter(Player)
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    return Character, Character.PrimaryPart
+end
+
 -- // Create the elements
 ESP.Creation = {}
 
 -- // Create Box
 function ESP.Creation:Box(data)
     -- // Management
-    if (not data) then data = {} end
-    local idealData = {
-        Player = LocalPlayer,
-        Character = LocalPlayer.Character,
-        PrimaryPart = LocalPlayer.Character.PrimaryPart,
-        Thickness = 3,
-        Color = Color3.fromRGB(255, 150, 150),
-        Visible = true,
-        Filled = false,
-    }
-    for i,v in pairs(idealData) do
-        if (not data[i]) then
-            data[i] = v
+    do
+        if (not data) then data = {} end
+        if (not data.Player) then data.Player = LocalPlayer end
+
+        local Player = data.Player
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local idealData = {
+            Character = Character,
+            PrimaryPart = PrimaryPart,
+            Thickness = 3,
+            Color = Color3.fromRGB(255, 150, 150),
+            Visible = true,
+            Filled = false,
+        }
+        for i,v in pairs(idealData) do
+            if (not data[i]) then
+                data[i] = v
+            end
         end
     end
 
@@ -126,25 +138,30 @@ end
 -- // Create Header (text)
 function ESP.Creation:Header(data)
     -- // Management
-    if (not data) then data = {} end
-    local idealData = {
-        Player = LocalPlayer,
-        Character = LocalPlayer.Character,
-        PrimaryPart = LocalPlayer.Character.PrimaryPart,
-        Thickness = 3,
-        Color = Color3.fromRGB(255, 150, 150),
-        Visible = true,
-        Text = "Sex",
-        Size = 14,
-        Center = true,
-        Outline = false,
-        OutlineColor = Color3.fromRGB(255, 150, 150),
-        Font = Drawing.Fonts.UI,
-        Offset = CFrame.new(0, 2, 0)
-    }
-    for i,v in pairs(idealData) do
-        if (not data[i]) then
-            data[i] = v
+    do
+        if (not data) then data = {} end
+        if (not data.Player) then data.Player = LocalPlayer end
+
+        local Player = data.Player
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local idealData = {
+            Character = Character,
+            PrimaryPart = PrimaryPart,
+            Thickness = 3,
+            Color = Color3.fromRGB(255, 150, 150),
+            Visible = true,
+            Text = "Sex",
+            Size = 14,
+            Center = true,
+            Outline = false,
+            OutlineColor = Color3.fromRGB(255, 150, 150),
+            Font = Drawing.Fonts.UI,
+            Offset = CFrame.new(0, 2, 0)
+        }
+        for i,v in pairs(idealData) do
+            if (not data[i]) then
+                data[i] = v
+            end
         end
     end
 
@@ -176,19 +193,24 @@ end
 local TracerStart = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
 function ESP.Creation:Tracer(data)
     -- // Management
-    if (not data) then data = {} end
-    local idealData = {
-        Player = LocalPlayer,
-        Character = LocalPlayer.Character,
-        PrimaryPart = LocalPlayer.Character.PrimaryPart,
-        Thickness = 3,
-        Color = Color3.fromRGB(255, 150, 150),
-        Visible = true,
-        From = TracerStart,
-    }
-    for i,v in pairs(idealData) do
-        if (not data[i]) then
-            data[i] = v
+    do
+        if (not data) then data = {} end
+        if (not data.Player) then data.Player = LocalPlayer end
+
+        local Player = data.Player
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local idealData = {
+            Character = Character,
+            PrimaryPart = PrimaryPart,
+            Thickness = 3,
+            Color = Color3.fromRGB(255, 150, 150),
+            Visible = true,
+            From = TracerStart,
+        }
+        for i,v in pairs(idealData) do
+            if (not data[i]) then
+                data[i] = v
+            end
         end
     end
 
@@ -221,6 +243,13 @@ local Update = ESP.Update
 
 -- // Update Box
 function ESP.Update:Box(data)
+    -- // Management
+    do
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        data.Character = Character
+        data.PrimaryPart = PrimaryPart
+    end
+
     -- // Vars
     local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
 
@@ -244,6 +273,13 @@ end
 
 -- // Update Text
 function ESP.Update:Header(data)
+    -- // Management
+    do
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        data.Character = Character
+        data.PrimaryPart = PrimaryPart
+    end
+
     -- // Vars
     local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
@@ -270,6 +306,13 @@ end
 
 -- // Update Tracer
 function ESP.Update:Tracer(data)
+    -- // Management
+    do
+        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        data.Character = Character
+        data.PrimaryPart = PrimaryPart
+    end
+
     -- // Vars
     local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
@@ -299,12 +342,16 @@ local ESPManager = {}
 
 local function manageNewPlayer(Player)
     if (not ESPManager[Player.Name]) then
-        local Box = ESP.Creation:Box()
-        local Tracer = ESP.Creation:Tracer()
-        local Header = ESP.Creation:Header()
+        local PlayerCharacter = Player.Character or Player.CharacterAdded:Wait()
+        local Base = {
+            Player = Player,
+            PrimaryPart = PlayerCharacter.PrimaryPart,
+        }
+        local Box = ESP.Creation:Box(Base)
+        local Tracer = ESP.Creation:Tracer(Base)
+        local Header = ESP.Creation:Header(Base)
 
         ESPManager[Player.Name] = {
-            Box = Box,
             Tracer = Tracer,
             Header = Header
         }
