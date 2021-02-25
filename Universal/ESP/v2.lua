@@ -371,7 +371,6 @@ function ESP.Update:Tracer(data)
     do
         local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
         data.Character = Character
-        print(PrimaryPart)
         data.PrimaryPart = PrimaryPart
     end
 
