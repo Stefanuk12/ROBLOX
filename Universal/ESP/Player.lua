@@ -4,7 +4,7 @@ local RunService = game:GetService("RunService")
 
 -- // Load ESP Module
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Module.lua"))()
-local Update = ESP.Update
+local Update = ESP.Update.Player
 
 -- // Drawing Objects
 local DrawingObjects = {}
@@ -53,10 +53,11 @@ local function manageUpdate()
     for i = 1, #DrawingObjects do
         local v = DrawingObjects[i]
 
+        local Player = v[1]
         local Object = v[2]
         local objectType = v[3]
 
-        TypeToUpdate[objectType](Object)
+        TypeToUpdate[objectType](Player, Object)
     end
 end
 
