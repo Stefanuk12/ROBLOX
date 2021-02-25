@@ -7,6 +7,14 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 
+local WorldToViewportPoint = Camera.WorldToViewportPoint
+local newVector2 = Vector2.new
+local newVector3 = Vector3.new
+local newCFrame = CFrame.new
+local newRaycastParams = RaycastParams.new
+local Raycast = Workspace.Raycast
+local Color3fromRGB = Color3.fromRGB
+
 -- // Module
 local ESP = {}
 getgenv().ESP = ESP
@@ -18,21 +26,21 @@ ESP.Utilites = {}
 function ESP.Utilites:getBoxCorners(Character, returnType)
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
-            local modifiedPosition = Vector3.new((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
+            local modifiedPosition = newVector3((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
             return (a - a.Position) + modifiedPosition
         end
 
         local front = {
-            CF * CFrame.new(-Size.X / 2, Size.Y / 2, -Size.Z / 2),
-            CF * CFrame.new(Size.X / 2, Size.Y / 2, -Size.Z / 2),
-            CF * CFrame.new(-Size / 2),
-            CF * CFrame.new(Size.X / 2, -Size.Y / 2, -Size.Z / 2)
+            CF * newCFrame(-Size.X / 2, Size.Y / 2, -Size.Z / 2),
+            CF * newCFrame(Size.X / 2, Size.Y / 2, -Size.Z / 2),
+            CF * newCFrame(-Size / 2),
+            CF * newCFrame(Size.X / 2, -Size.Y / 2, -Size.Z / 2)
         }
         local back = {
-            CF * CFrame.new(-Size.X / 2, Size.Y / 2, Size.Z / 2),
-            CF * CFrame.new(Size / 2),
-            CF * CFrame.new(-Size.X / 2, -Size.Y / 2, Size.Z / 2),
-            CF * CFrame.new(Size.X / 2, -Size.Y / 2, Size.Z / 2)
+            CF * newCFrame(-Size.X / 2, Size.Y / 2, Size.Z / 2),
+            CF * newCFrame(Size / 2),
+            CF * newCFrame(-Size.X / 2, -Size.Y / 2, Size.Z / 2),
+            CF * newCFrame(Size.X / 2, -Size.Y / 2, Size.Z / 2)
         }
         local centre = {}
 
@@ -49,9 +57,9 @@ function ESP.Utilites:getBoxCorners(Character, returnType)
 
         for i = 1, #points do
             local point = points[i]
-            local tPoint, _ = Camera:WorldToViewportPoint(point.Position)
+            local tPoint, _ = Camera.WorldToViewportPoint(Camera, point.Position)
 
-            newPoints[i] = Vector2.new(tPoint.X, tPoint.Y)
+            newPoints[i] = newVector2(tPoint.X, tPoint.Y)
         end
 
         return newPoints
@@ -96,16 +104,16 @@ function ESP.Utilites:IsVisible(Part, PartDescendant)
     -- // Vars
     local Character = ESP.Utilites:GetCharacter(LocalPlayer)
     local Origin = Camera.CFrame.Position
-    local _, OnScreen = Camera:WorldToViewportPoint(Part.Position)
+    local _, OnScreen = WorldToViewportPoint(Camera, Part.Position)
 
     -- // If Part is on the screen
     if (OnScreen) then
         -- // Vars: Calculating if is visible
-        local raycastParams = RaycastParams.new()
+        local raycastParams = newRaycastParams()
         raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
         raycastParams.FilterDescendantsInstances = {Character, Camera}
 
-        local Result = Workspace:Raycast(Origin, Part.Position - Origin, raycastParams)
+        local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
         local PartHit = Result.Instance
         local Visible = (not PartHit or PartHit:IsDescendantOf(PartDescendant))
 
@@ -123,7 +131,7 @@ function ESP.Utilites:IsOnScreen(Part)
     if (not Part) then return false end
 
     -- // Vars
-    local _, OnScreen = Camera:WorldToViewportPoint(Part.Position)
+    local _, OnScreen = WorldToViewportPoint(Camera, Part.Position)
 
     return OnScreen
 end
@@ -144,7 +152,7 @@ function ESP.Creation:Box(data)
             Character = Character,
             PrimaryPart = PrimaryPart,
             Thickness = 3,
-            Color = Color3.fromRGB(255, 150, 150),
+            Color = Color3fromRGB(255, 150, 150),
             Visible = true,
             Filled = false,
         }
@@ -185,15 +193,15 @@ function ESP.Creation:Header(data)
             Character = Character,
             PrimaryPart = PrimaryPart,
             Thickness = 3,
-            Color = Color3.fromRGB(255, 150, 150),
+            Color = Color3fromRGB(255, 150, 150),
             Visible = true,
             Text = "Sex",
             Size = 14,
             Center = true,
             Outline = false,
-            OutlineColor = Color3.fromRGB(255, 150, 150),
+            OutlineColor = Color3fromRGB(255, 150, 150),
             Font = Drawing.Fonts.UI,
-            Offset = CFrame.new(0, 2, 0)
+            Offset = newCFrame(0, 2, 0)
         }
         for i,v in pairs(idealData) do
             if (not data[i]) then
@@ -214,8 +222,8 @@ function ESP.Creation:Header(data)
 
     -- // Position
     local Position = Midpoint * data.Offset
-    Position = Camera:WorldToViewportPoint(Position.Position)
-    Position = Vector2.new(Position.X, Position.Y)
+    Position = WorldToViewportPoint(Camera, Position.Position)
+    Position = newVector2(Position.X, Position.Y)
 
     -- // Setting stuff
     Object.Text = data.Player.Name
@@ -227,7 +235,7 @@ function ESP.Creation:Header(data)
 end
 
 -- // Create Tracer
-local TracerStart = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+local TracerStart = newVector2(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
 function ESP.Creation:Tracer(data)
     -- // Management
     do
@@ -240,7 +248,7 @@ function ESP.Creation:Tracer(data)
             Character = Character,
             PrimaryPart = PrimaryPart,
             Thickness = 3,
-            Color = Color3.fromRGB(255, 150, 150),
+            Color = Color3fromRGB(255, 150, 150),
             Visible = true,
             From = TracerStart,
         }
@@ -263,8 +271,8 @@ function ESP.Creation:Tracer(data)
 
     -- // Position
     local Position = Midpoint
-    Position = Camera:WorldToViewportPoint(Position.Position)
-    Position = Vector2.new(Position.X, Position.Y)
+    Position = WorldToViewportPoint(Camera, Position.Position)
+    Position = newVector2(Position.X, Position.Y)
 
     -- // Setting To position
     Object.To = Position
@@ -354,8 +362,8 @@ function ESP.Update:Header(data)
 
     -- // Position
     local Position = Midpoint * data.Offset
-    Position = Camera:WorldToViewportPoint(Position.Position)
-    Position = Vector2.new(Position.X, Position.Y)
+    Position = WorldToViewportPoint(Camera, Position.Position)
+    Position = newVector2(Position.X, Position.Y)
 
     -- // Setting stuff
     Object.Text = data.Player.Name
@@ -398,8 +406,8 @@ function ESP.Update:Tracer(data)
 
     -- // Position
     local Position = Midpoint
-    Position = Camera:WorldToViewportPoint(Position.Position)
-    Position = Vector2.new(Position.X, Position.Y)
+    Position = WorldToViewportPoint(Camera, Position.Position)
+    Position = newVector2(Position.X, Position.Y)
 
     -- // Object
     Object.From = data.From
@@ -416,7 +424,7 @@ local ESPManager = {}
 
 local function manageNewPlayer(Player)
     if (not ESPManager[Player.Name]) then
-        local PlayerCharacter = Player.Character or Player.CharacterAdded:Wait()
+        local PlayerCharacter = ESP.Utilites:GetCharacter(Player)
 
         local Box = ESP.Creation:Box({
             Player = Player,
