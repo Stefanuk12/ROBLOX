@@ -91,6 +91,43 @@ function ESP.Utilites:GetCharacter(Player)
     return Character, Character.PrimaryPart
 end
 
+-- // Check if part is visible
+function ESP.Utilites:IsVisible(Part, PartDescendant)
+    -- // Vars
+    local Character = ESP.Utilites:GetCharacter(LocalPlayer)
+    local Origin = Camera.CFrame.Position
+    local _, OnScreen = Camera:WorldToViewportPoint(Part.Position)
+
+    -- // If Part is on the screen
+    if (OnScreen) then
+        -- // Vars: Calculating if is visible
+        local raycastParams = RaycastParams.new()
+        raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+        raycastParams.FilterDescendantsInstances = {Character, Camera}
+
+        local Result = Workspace:Raycast(Origin, Part.Position - Origin, raycastParams)
+        local PartHit = Result.Instance
+        local Visible = (not PartHit or PartHit:IsDescendantOf(PartDescendant))
+
+        -- // Return
+        return Visible
+    end
+
+    -- // Return
+    return false
+end
+
+-- // Check if a part is on screen
+function ESP.Utilites:IsOnScreen(Part)
+    -- //
+    if (not Part) then return false end
+
+    -- // Vars
+    local _, OnScreen = Camera:WorldToViewportPoint(Part.Position)
+
+    return OnScreen
+end
+
 -- // Create the elements
 ESP.Creation = {}
 
@@ -250,11 +287,25 @@ function ESP.Update:Box(data)
         data.PrimaryPart = PrimaryPart
     end
 
+    -- // Object
+    local Object = data.Object
+
+    -- // On screen check
+    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+        Object.Visible = false
+        data.Visible = false
+
+        -- // Returning the object
+        return data
+    else
+        Object.Visible = true
+        data.Visible = true
+    end
+
     -- // Vars
     local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
 
     -- // Object
-    local Object = data.Object
     Object.Filled = data.Filled
     Object.Thickness = data.Thickness
     Object.Color = data.Color
@@ -266,8 +317,7 @@ function ESP.Update:Box(data)
     Object.PointC = BoxCorners[3]
     Object.PointD = BoxCorners[4]
 
-    -- // Returning the box
-    data.Object = Object
+    -- // Returning the data
     return data
 end
 
@@ -280,11 +330,23 @@ function ESP.Update:Header(data)
         data.PrimaryPart = PrimaryPart
     end
 
-    -- // Vars
-    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
-
     -- // Object
     local Object = data.Object
+
+    -- // On screen check
+    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+        Object.Visible = false
+        data.Visible = false
+
+        -- // Returning the object
+        return data
+    else
+        Object.Visible = true
+        data.Visible = true
+    end
+
+    -- // Vars
+    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -299,8 +361,7 @@ function ESP.Update:Header(data)
     Object.Text = data.Player.Name
     Object.Position = Position
 
-    -- // Returning the text
-    data.Object = Object
+    -- // Returning the data
     return data
 end
 
@@ -310,7 +371,23 @@ function ESP.Update:Tracer(data)
     do
         local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
         data.Character = Character
+        print(PrimaryPart)
         data.PrimaryPart = PrimaryPart
+    end
+
+    -- // Object
+    local Object = data.Object
+
+    -- // On screen check
+    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+        Object.Visible = false
+        data.Visible = false
+
+        -- // Returning the object
+        return data
+    else
+        Object.Visible = true
+        data.Visible = true
     end
 
     -- // Vars
@@ -326,14 +403,12 @@ function ESP.Update:Tracer(data)
     Position = Vector2.new(Position.X, Position.Y)
 
     -- // Object
-    local Object = data.Object
     Object.From = data.From
     Object.To = Position
     Object.Thickness = data.Thickness
     Object.Color = data.Color
 
-    -- // Returning the tracer
-    data.Object = Object
+    -- // Returning the data
     return data
 end
 
@@ -343,10 +418,7 @@ local ESPManager = {}
 local function manageNewPlayer(Player)
     if (not ESPManager[Player.Name]) then
         local PlayerCharacter = Player.Character or Player.CharacterAdded:Wait()
-        local Base = {
-            Player = Player,
-            PrimaryPart = PlayerCharacter.PrimaryPart,
-        }
+
         local Box = ESP.Creation:Box({
             Player = Player,
             PrimaryPart = PlayerCharacter.PrimaryPart,
@@ -375,13 +447,11 @@ local TypeToUpdate = {
 }
 
 local function manageOldPlayer(Player)
-    for _,v in pairs(ESPManager) do
-        for a,x in pairs(v) do
-            local TypeUpdate = TypeToUpdate[a]
+    for i,v in pairs(ESPManager[Player.Name]) do
+        local TypeUpdate = TypeToUpdate[i]
 
-            if (TypeUpdate) then
-                x.Object:Remove()
-            end
+        if (TypeUpdate) then
+            v.Object:Remove()
         end
     end
 
