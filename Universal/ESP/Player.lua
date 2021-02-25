@@ -12,19 +12,19 @@ local DrawingObjects = {}
 local function manageNewPlayer(Player)
     wait(0.1)
 
-    local PlayerCharacter = ESP.Utilites.GetCharacter(Player)
+    local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
 
     local Box = ESP.Creation.Box({
-        Player = Player,
-        PrimaryPart = PlayerCharacter.PrimaryPart,
+        Model = Character,
+        TargetPart = PrimaryPart,
     })
     local Tracer = ESP.Creation.Tracer({
-        Player = Player,
-        PrimaryPart = PlayerCharacter.PrimaryPart,
+        Model = Character,
+        TargetPart = PrimaryPart,
     })
     local Header = ESP.Creation.Header({
-        Player = Player,
-        PrimaryPart = PlayerCharacter.PrimaryPart,
+        Model = Character,
+        TargetPart = PrimaryPart,
     })
 
     DrawingObjects[#DrawingObjects + 1] = {Player, Box, "Box"}
@@ -57,7 +57,8 @@ local function manageUpdate()
         local Object = v[2]
         local objectType = v[3]
 
-        TypeToUpdate[objectType](Player, Object)
+        local data = TypeToUpdate[objectType](Player, Object)
+        v[2] = data
     end
 end
 
