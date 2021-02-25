@@ -208,7 +208,7 @@ function ESP.Creation.Header(data)
     local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
 
     -- // Position
-    local Position = Midpoint * data
+    local Position = Midpoint * data.Offset
     Position = WorldToViewportPoint(Camera, Position.Position)
     Position = newVector2(Position.X, Position.Y)
 
@@ -217,6 +217,7 @@ function ESP.Creation.Header(data)
     Object.Position = Position
 
     -- // Returning the object
+    data.Object = Object
     return data
 end
 
@@ -257,6 +258,7 @@ function ESP.Creation.Tracer(data)
     Object.To = Position
 
     -- // Returning the object
+    data.Object = Object
     return data
 end
 
@@ -295,7 +297,8 @@ function ESP.Update.Box(data)
     Object.PointC = BoxCorners[3]
     Object.PointD = BoxCorners[4]
 
-    -- // Returning the data
+    -- // Returning the object
+    data.Object = Object
     return data
 end
 
