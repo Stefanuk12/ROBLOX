@@ -38,30 +38,18 @@ local TypeToUpdate = {
     Header = Update.Header
 }
 
-
--- // Get all drawing objects belonging to a player
-local function getPlayerDrawings(Player)
-    local Drawings = {}
-
+-- // Handle Left Player
+local function manageOldPlayer(Player)
     for i = 1, #DrawingObjects do
         local Object = DrawingObjects[i]
 
         if (Object[1] == Player) then
-            Drawings[#Drawings + 1] = {Object, i}
+            if (Object[2].Remove) then
+                Object[2]:Remove()
+            end
+
+            table.remove(DrawingObjects, i)
         end
-    end
-
-    return Drawings
-end
-
--- // Handle Player Leave
-local function manageOldPlayer(Player)
-    local Drawings = getPlayerDrawings(Player)
-    for i = 1, #Drawings do
-        local Object = Player[i]
-
-        Object[1][2]:Remove()
-        table.remove(DrawingObjects, Object[2])
     end
 end
 
