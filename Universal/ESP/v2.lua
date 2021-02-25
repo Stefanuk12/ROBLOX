@@ -299,7 +299,7 @@ function ESP.Update:Header(data)
     Object.Text = data.Player.Name
     Object.Position = Position
 
-    -- // Returning the object
+    -- // Returning the text
     data.Object = Object
     return data
 end
@@ -332,7 +332,7 @@ function ESP.Update:Tracer(data)
     Object.Thickness = data.Thickness
     Object.Color = data.Color
 
-    -- // Returning the box
+    -- // Returning the tracer
     data.Object = Object
     return data
 end
@@ -347,11 +347,21 @@ local function manageNewPlayer(Player)
             Player = Player,
             PrimaryPart = PlayerCharacter.PrimaryPart,
         }
-        local Box = ESP.Creation:Box(Base)
-        local Tracer = ESP.Creation:Tracer(Base)
-        local Header = ESP.Creation:Header(Base)
+        local Box = ESP.Creation:Box({
+            Player = Player,
+            PrimaryPart = PlayerCharacter.PrimaryPart,
+        })
+        local Tracer = ESP.Creation:Tracer({
+            Player = Player,
+            PrimaryPart = PlayerCharacter.PrimaryPart,
+        })
+        local Header = ESP.Creation:Header({
+            Player = Player,
+            PrimaryPart = PlayerCharacter.PrimaryPart,
+        })
 
         ESPManager[Player.Name] = {
+            Box = Box,
             Tracer = Tracer,
             Header = Header
         }
@@ -363,7 +373,6 @@ local TypeToUpdate = {
     Tracer = ESP.Update.Tracer,
     Header = ESP.Update.Header
 }
-
 
 local function manageOldPlayer(Player)
     for _,v in pairs(ESPManager) do
