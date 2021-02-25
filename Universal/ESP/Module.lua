@@ -332,7 +332,7 @@ function ESP.Update.Header(data)
     Position = newVector2(Position.X, Position.Y)
 
     -- // Setting stuff
-    Object.Text = data.Player.Name
+    Object.Text = data.Text
     Object.Position = Position
 
     -- // Returning the data
