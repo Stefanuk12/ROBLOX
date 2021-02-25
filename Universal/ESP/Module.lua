@@ -13,6 +13,8 @@ local newCFrame = CFrame.new
 local newRaycastParams = RaycastParams.new
 local Raycast = Workspace.Raycast
 local Color3fromRGB = Color3.fromRGB
+local IsDescendantOf = Instance.new("Part").IsDescendantOf
+local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
 
 -- // Module
 local ESP = {}
@@ -22,7 +24,7 @@ getgenv().ESP = ESP
 ESP.Utilites = {}
 
 -- // Get the corners for the box
-function ESP.Utilites:getBoxCorners(Character, returnType)
+function ESP.Utilites.getBoxCorners(Character, returnType)
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
             local modifiedPosition = newVector3((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
@@ -64,7 +66,7 @@ function ESP.Utilites:getBoxCorners(Character, returnType)
         return newPoints
     end
 
-    local CharacterBoxC, CharacterBoxS = Character:GetBoundingBox()
+    local CharacterBoxC, CharacterBoxS = Character.GetBoundingBox()
     if (returnType) then
         return GetPartCorners(CharacterBoxC, CharacterBoxS)
     else
@@ -76,7 +78,7 @@ function ESP.Utilites:getBoxCorners(Character, returnType)
 end
 
 -- // Create Drawing Objects with Data
-function ESP.Utilites:Drawing(Type, data)
+function ESP.Utilites.Drawing(Type, data)
     local Object = Drawing.new(Type)
 
     for i,v in pairs(data) do
@@ -93,13 +95,13 @@ function ESP.Utilites:Drawing(Type, data)
 end
 
 -- // Get Character
-function ESP.Utilites:GetCharacter(Player)
+function ESP.Utilites.GetCharacter(Player)
     local Character = Player.Character or Player.CharacterAdded:Wait()
     return Character, Character.PrimaryPart
 end
 
 -- // Check if part is visible
-function ESP.Utilites:IsVisible(Part, PartDescendant)
+function ESP.Utilites.IsVisible(Part, PartDescendant)
     -- // Vars
     local Character = ESP.Utilites:GetCharacter(LocalPlayer)
     local Origin = Camera.CFrame.Position
@@ -109,12 +111,12 @@ function ESP.Utilites:IsVisible(Part, PartDescendant)
     if (OnScreen) then
         -- // Vars: Calculating if is visible
         local raycastParams = newRaycastParams()
-        raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+        raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
         raycastParams.FilterDescendantsInstances = {Character, Camera}
 
         local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
         local PartHit = Result.Instance
-        local Visible = (not PartHit or PartHit:IsDescendantOf(PartDescendant))
+        local Visible = (not PartHit or IsDescendantOf(PartHit, PartDescendant))
 
         -- // Return
         return Visible
@@ -125,7 +127,7 @@ function ESP.Utilites:IsVisible(Part, PartDescendant)
 end
 
 -- // Check if a part is on screen
-function ESP.Utilites:IsOnScreen(Part)
+function ESP.Utilites.IsOnScreen(Part)
     -- //
     if (not Part) then return false end
 
@@ -139,14 +141,14 @@ end
 ESP.Creation = {}
 
 -- // Create Box
-function ESP.Creation:Box(data)
+function ESP.Creation.Box(data)
     -- // Management
     do
         if (not data) then data = {} end
         if (not data.Player) then data.Player = LocalPlayer end
 
         local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
             Character = Character,
             PrimaryPart = PrimaryPart,
@@ -163,10 +165,10 @@ function ESP.Creation:Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCorners = ESP.Utilites.getBoxCorners(data.Character)
 
     -- // Object
-    local Object = ESP.Utilites:Drawing("Quad", data)
+    local Object = ESP.Utilites.Drawing("Quad", data)
 
     -- // Setting Points
     Object.PointA = BoxCorners[2]
@@ -180,14 +182,14 @@ function ESP.Creation:Box(data)
 end
 
 -- // Create Header (text)
-function ESP.Creation:Header(data)
+function ESP.Creation.Header(data)
     -- // Management
     do
         if (not data) then data = {} end
         if (not data.Player) then data.Player = LocalPlayer end
 
         local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
             Character = Character,
             PrimaryPart = PrimaryPart,
@@ -210,10 +212,10 @@ function ESP.Creation:Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
 
     -- // Object
-    local Object = ESP.Utilites:Drawing("Text", data)
+    local Object = ESP.Utilites.Drawing("Text", data)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -235,14 +237,14 @@ end
 
 -- // Create Tracer
 local TracerStart = newVector2(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
-function ESP.Creation:Tracer(data)
+function ESP.Creation.Tracer(data)
     -- // Management
     do
         if (not data) then data = {} end
         if (not data.Player) then data.Player = LocalPlayer end
 
         local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
             Character = Character,
             PrimaryPart = PrimaryPart,
@@ -259,10 +261,10 @@ function ESP.Creation:Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
 
     -- // Object
-    local Object = ESP.Utilites:Drawing("Line", data)
+    local Object = ESP.Utilites.Drawing("Line", data)
 
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
@@ -285,10 +287,10 @@ end
 ESP.Update = {}
 
 -- // Update Box
-function ESP.Update:Box(data)
+function ESP.Update.Box(data)
     -- // Management
     do
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
         data.Character = Character
         data.PrimaryPart = PrimaryPart
     end
@@ -297,7 +299,7 @@ function ESP.Update:Box(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -309,7 +311,7 @@ function ESP.Update:Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites:getBoxCorners(data.Character)
+    local BoxCorners = ESP.Utilites.getBoxCorners(data.Character)
 
     -- // Object
     Object.Filled = data.Filled
@@ -328,10 +330,10 @@ function ESP.Update:Box(data)
 end
 
 -- // Update Text
-function ESP.Update:Header(data)
+function ESP.Update.Header(data)
     -- // Management
     do
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
         data.Character = Character
         data.PrimaryPart = PrimaryPart
     end
@@ -340,7 +342,7 @@ function ESP.Update:Header(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -352,7 +354,7 @@ function ESP.Update:Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -372,10 +374,10 @@ function ESP.Update:Header(data)
 end
 
 -- // Update Tracer
-function ESP.Update:Tracer(data)
+function ESP.Update.Tracer(data)
     -- // Management
     do
-        local Character, PrimaryPart = ESP.Utilites:GetCharacter(data.Player)
+        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
         data.Character = Character
         data.PrimaryPart = PrimaryPart
     end
@@ -384,7 +386,7 @@ function ESP.Update:Tracer(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites:IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -396,7 +398,7 @@ function ESP.Update:Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites:getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
