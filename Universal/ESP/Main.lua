@@ -6,63 +6,57 @@ local RunService = game:GetService("RunService")
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Module.lua"))()
 local Update = ESP.Update
 
--- // Player Manager
-local ESPManager = {}
+-- // Drawing Objects
+local DrawingObjects = {}
 
 local function manageNewPlayer(Player)
-    if (not ESPManager[Player.Name]) then
-        local PlayerCharacter = ESP.Utilites.GetCharacter(Player)
+    wait(0.1)
 
-        local Box = ESP.Creation.Box({
-            Player = Player,
-            PrimaryPart = PlayerCharacter.PrimaryPart,
-        })
-        local Tracer = ESP.Creation.Tracer({
-            Player = Player,
-            PrimaryPart = PlayerCharacter.PrimaryPart,
-        })
-        local Header = ESP.Creation.Header({
-            Player = Player,
-            PrimaryPart = PlayerCharacter.PrimaryPart,
-        })
+    local PlayerCharacter = ESP.Utilites.GetCharacter(Player)
 
-        ESPManager[Player.Name] = {
-            Box = Box,
-            Tracer = Tracer,
-            Header = Header
-        }
-    end
+    local Box = ESP.Creation.Box({
+        Player = Player,
+        PrimaryPart = PlayerCharacter.PrimaryPart,
+    })
+    local Tracer = ESP.Creation.Tracer({
+        Player = Player,
+        PrimaryPart = PlayerCharacter.PrimaryPart,
+    })
+    local Header = ESP.Creation.Header({
+        Player = Player,
+        PrimaryPart = PlayerCharacter.PrimaryPart,
+    })
+
+    DrawingObjects[#DrawingObjects + 1] = {Player, Box, "Box"}
+    DrawingObjects[#DrawingObjects + 1] = {Player, Tracer, "Tracer"}
+    DrawingObjects[#DrawingObjects + 1] = {Player, Header, "Header"}
 end
 
 local TypeToUpdate = {
-    Box = ESP.Update.Box,
-    Tracer = ESP.Update.Tracer,
-    Header = ESP.Update.Header
+    Box = Update.Box,
+    Tracer = Update.Tracer,
+    Header = Update.Header
 }
 
 local function manageOldPlayer(Player)
-    for i,v in pairs(ESPManager[Player.Name]) do
-        local TypeUpdate = TypeToUpdate[i]
+    for i = 1, #DrawingObjects do
+        local Object = DrawingObjects[i]
 
-        if (TypeUpdate) then
-            v.Object:Remove()
+        if (Object[1] == Player) then
+            Object[2]:Remove()
+            table.remove(DrawingObjects, i)
         end
-    end
-
-    if (ESPManager[Player.Name]) then
-        ESPManager[Player.Name] = nil
     end
 end
 
 local function manageUpdate()
-    for _,v in pairs(ESPManager) do
-        for a,x in pairs(v) do
-            local TypeUpdate = TypeToUpdate[a]
+    for i = 1, #DrawingObjects do
+        local v = DrawingObjects[i]
 
-            if (TypeUpdate) then
-                TypeUpdate(x)
-            end
-        end
+        local Object = v[2]
+        local objectType = v[3]
+
+        TypeToUpdate[objectType](Object)
     end
 end
 
