@@ -11,17 +11,17 @@ local ESPManager = {}
 
 local function manageNewPlayer(Player)
     if (not ESPManager[Player.Name]) then
-        local PlayerCharacter = ESP.Utilites:GetCharacter(Player)
+        local PlayerCharacter = ESP.Utilites.GetCharacter(Player)
 
-        local Box = ESP.Creation:Box({
+        local Box = ESP.Creation.Box({
             Player = Player,
             PrimaryPart = PlayerCharacter.PrimaryPart,
         })
-        local Tracer = ESP.Creation:Tracer({
+        local Tracer = ESP.Creation.Tracer({
             Player = Player,
             PrimaryPart = PlayerCharacter.PrimaryPart,
         })
-        local Header = ESP.Creation:Header({
+        local Header = ESP.Creation.Header({
             Player = Player,
             PrimaryPart = PlayerCharacter.PrimaryPart,
         })
