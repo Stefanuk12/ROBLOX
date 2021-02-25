@@ -171,7 +171,6 @@ function ESP.Creation.Box(data)
     Object.PointD = BoxCorners[4]
 
     -- // Returning the object
-    data.Object = Object
     return data
 end
 
@@ -209,7 +208,7 @@ function ESP.Creation.Header(data)
     local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
 
     -- // Position
-    local Position = Midpoint * data.Offset
+    local Position = Midpoint * data
     Position = WorldToViewportPoint(Camera, Position.Position)
     Position = newVector2(Position.X, Position.Y)
 
@@ -218,7 +217,6 @@ function ESP.Creation.Header(data)
     Object.Position = Position
 
     -- // Returning the object
-    data.Object = Object
     return data
 end
 
@@ -259,7 +257,6 @@ function ESP.Creation.Tracer(data)
     Object.To = Position
 
     -- // Returning the object
-    data.Object = Object
     return data
 end
 
@@ -413,7 +410,7 @@ function ESP.Update.Player.Tracer(Player, data)
     data.Model = Character
     data.TargetPart = PrimaryPart
 
-    data = ESP.Update.Header(data)
+    data = ESP.Update.Tracer(data)
 
     return data
 end
