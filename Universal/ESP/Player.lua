@@ -42,7 +42,7 @@ local function manageLeavePlayer(Player)
         local Object = DrawingObjects[i]
 
         if (Object[1] == Player) then
-            Object[2]:Remove()
+            Object[2].Object:Remove()
 
             table.remove(DrawingObjects, i)
         end
