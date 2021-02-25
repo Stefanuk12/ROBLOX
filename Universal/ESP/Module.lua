@@ -71,7 +71,7 @@ function ESP.Utilites.getBoxCorners(Character, returnType)
     if (returnType) then
         return GetPartCorners(CharacterBoxC, CharacterBoxS)
     else
-        local Corners3D = GetPartCorners(CharacterBoxC, CharacteCharacterBoxS)
+        local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
         local Corners2D = convertTo2D(Corners3D)
 
         return Corners2D, Corners3D
