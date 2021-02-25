@@ -43,7 +43,10 @@ local function manageOldPlayer(Player)
         local Object = DrawingObjects[i]
 
         if (Object[1] == Player) then
-            Object[2]:Remove()
+            if (Object[2]) then
+                Object[2]:Remove()
+            end
+            
             table.remove(DrawingObjects, i)
         end
     end

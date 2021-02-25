@@ -97,7 +97,7 @@ end
 
 -- // Get Character
 function ESP.Utilites.GetCharacter(Player)
-    local Character = Player.Character or Player.CharacterAdded.Wait(Player)
+    local Character = Player.Character or Player.CharacterAdded.Wait(Player.CharacterAdded)
     return Character, Character.PrimaryPart
 end
 
