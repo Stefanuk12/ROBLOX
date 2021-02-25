@@ -38,20 +38,34 @@ local TypeToUpdate = {
     Header = Update.Header
 }
 
-local function manageOldPlayer(Player)
+
+-- // Get all drawing objects belonging to a player
+local function getPlayerDrawings(Player)
+    local Drawings = {}
+
     for i = 1, #DrawingObjects do
         local Object = DrawingObjects[i]
 
-        if (Object and Object[1] == Player) then
-            if (Object[2] and Object[2].Remove) then
-                Object[2]:Remove()
-            end
-
-            table.remove(DrawingObjects, i)
+        if (Object[1] == Player) then
+            Drawings[#Drawings + 1] = {Object, i}
         end
+    end
+
+    return Drawings
+end
+
+-- // Handle Player Leave
+local function manageOldPlayer(Player)
+    local Drawings = getPlayerDrawings(Player)
+    for i = 1, #Drawings do
+        local Object = Player[i]
+
+        Object[1][2]:Remove()
+        table.remove(DrawingObjects, Object[2])
     end
 end
 
+-- // Handle ESP Update
 local function manageUpdate()
     for i = 1, #DrawingObjects do
         local v = DrawingObjects[i]
