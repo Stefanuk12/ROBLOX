@@ -43,7 +43,7 @@ local function manageOldPlayer(Player)
         local Object = DrawingObjects[i]
 
         if (Object[1] == Player) then
-            if (Object[2]) then
+            if (Object[2] and Object[2].Remove) then
                 Object[2]:Remove()
             end
 
