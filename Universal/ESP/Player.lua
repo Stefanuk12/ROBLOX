@@ -2,6 +2,9 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+-- // Vars
+local LocalPlayer = Players.LocalPlayer
+
 -- // Load ESP Module
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Module.lua"))()
 local Update = ESP.Update.Player
@@ -67,7 +70,11 @@ end
 do
     local AllPlayers = Players:GetPlayers()
     for i = 1, #AllPlayers do
-        manageNewPlayer(AllPlayers[i])
+        local Player = AllPlayers[i]
+
+        if (Player ~= LocalPlayer) then
+            manageNewPlayer(AllPlayers[i])
+        end
     end
 end
 
