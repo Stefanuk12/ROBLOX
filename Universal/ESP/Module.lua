@@ -145,14 +145,7 @@ ESP.Creation = {}
 function ESP.Creation.Box(data)
     -- // Management
     do
-        if (not data) then data = {} end
-        if (not data.Player) then data.Player = LocalPlayer end
-
-        local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
-            Character = Character,
-            PrimaryPart = PrimaryPart,
             Thickness = 3,
             Color = Color3fromRGB(255, 150, 150),
             Visible = true,
@@ -166,7 +159,7 @@ function ESP.Creation.Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites.getBoxCorners(data.Character)
+    local BoxCorners = ESP.Utilites.getBoxCorners(data.Model)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Quad", data)
@@ -186,14 +179,7 @@ end
 function ESP.Creation.Header(data)
     -- // Management
     do
-        if (not data) then data = {} end
-        if (not data.Player) then data.Player = LocalPlayer end
-
-        local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
-            Character = Character,
-            PrimaryPart = PrimaryPart,
             Thickness = 3,
             Color = Color3fromRGB(255, 150, 150),
             Visible = true,
@@ -213,7 +199,7 @@ function ESP.Creation.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Text", data)
@@ -228,7 +214,7 @@ function ESP.Creation.Header(data)
     Position = newVector2(Position.X, Position.Y)
 
     -- // Setting stuff
-    Object.Text = data.Player.Name
+    Object.Text = data.Text
     Object.Position = Position
 
     -- // Returning the object
@@ -241,14 +227,7 @@ local TracerStart = newVector2(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
 function ESP.Creation.Tracer(data)
     -- // Management
     do
-        if (not data) then data = {} end
-        if (not data.Player) then data.Player = LocalPlayer end
-
-        local Player = data.Player
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
         local idealData = {
-            Character = Character,
-            PrimaryPart = PrimaryPart,
             Thickness = 3,
             Color = Color3fromRGB(255, 150, 150),
             Visible = true,
@@ -262,7 +241,7 @@ function ESP.Creation.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Line", data)
@@ -289,18 +268,11 @@ ESP.Update = {}
 
 -- // Update Box
 function ESP.Update.Box(data)
-    -- // Management
-    do
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
-        data.Character = Character
-        data.PrimaryPart = PrimaryPart
-    end
-
     -- // Object
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -312,7 +284,7 @@ function ESP.Update.Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites.getBoxCorners(data.Character)
+    local BoxCorners = ESP.Utilites.getBoxCorners(data.Model)
 
     -- // Object
     Object.Filled = data.Filled
@@ -332,18 +304,11 @@ end
 
 -- // Update Text
 function ESP.Update.Header(data)
-    -- // Management
-    do
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
-        data.Character = Character
-        data.PrimaryPart = PrimaryPart
-    end
-
     -- // Object
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -355,7 +320,7 @@ function ESP.Update.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -376,18 +341,11 @@ end
 
 -- // Update Tracer
 function ESP.Update.Tracer(data)
-    -- // Management
-    do
-        local Character, PrimaryPart = ESP.Utilites.GetCharacter(data.Player)
-        data.Character = Character
-        data.PrimaryPart = PrimaryPart
-    end
-
     -- // Object
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.PrimaryPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
         Object.Visible = false
         data.Visible = false
 
@@ -399,7 +357,7 @@ function ESP.Update.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Character, true)
+    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
@@ -420,4 +378,45 @@ function ESP.Update.Tracer(data)
     return data
 end
 
+-- // For updating Player ESP
+ESP.Update.Player = {}
+
+-- // Update Box for Player
+function ESP.Update.Player.Box(Player, data)
+    local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
+
+    data.Model = Character
+    data.TargetPart = PrimaryPart
+
+    data = ESP.Update.Box(data)
+
+    return data
+end
+
+-- // Update Header for Player
+function ESP.Update.Player.Header(Player, data)
+    local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
+
+    data.Model = Character
+    data.TargetPart = PrimaryPart
+    data.Text = Player.Name
+
+    data = ESP.Update.Header(data)
+
+    return data
+end
+
+-- // Update Tracer for Player
+function ESP.Update.Player.Tracer(Player, data)
+    local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
+
+    data.Model = Character
+    data.TargetPart = PrimaryPart
+
+    data = ESP.Update.Header(data)
+
+    return data
+end
+
+-- // Return module
 return ESP
