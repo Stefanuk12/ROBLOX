@@ -1,4 +1,10 @@
+-- // Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+-- // Load ESP Module
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Module.lua"))()
+local Update = ESP.Update
 
 -- // Player Manager
 local ESPManager = {}

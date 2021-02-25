@@ -1,7 +1,6 @@
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
@@ -284,7 +283,6 @@ end
 
 -- // Update the elements
 ESP.Update = {}
-local Update = ESP.Update
 
 -- // Update Box
 function ESP.Update:Box(data)
