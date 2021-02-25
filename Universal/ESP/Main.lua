@@ -55,12 +55,12 @@ local function manageOldPlayer(Player)
 end
 
 local function manageUpdate()
-    for i,v in pairs(ESPManager) do
+    for _,v in pairs(ESPManager) do
         for a,x in pairs(v) do
             local TypeUpdate = TypeToUpdate[a]
 
             if (TypeUpdate) then
-                TypeUpdate(Update, x)
+                TypeUpdate(x)
             end
         end
     end
