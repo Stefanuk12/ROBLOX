@@ -15,6 +15,7 @@ local Raycast = Workspace.Raycast
 local Color3fromRGB = Color3.fromRGB
 local IsDescendantOf = Instance.new("Part").IsDescendantOf
 local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
+local GetBoundingBox = Instance.new("Model").GetBoundingBox
 
 -- // Module
 local ESP = {}
@@ -66,11 +67,11 @@ function ESP.Utilites.getBoxCorners(Character, returnType)
         return newPoints
     end
 
-    local CharacterBoxC, CharacterBoxS = Character.GetBoundingBox()
+    local CharacterBoxC, CharacterBoxS = GetBoundingBox(Character)
     if (returnType) then
         return GetPartCorners(CharacterBoxC, CharacterBoxS)
     else
-        local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
+        local Corners3D = GetPartCorners(CharacterBoxC, CharacteCharacterBoxS)
         local Corners2D = convertTo2D(Corners3D)
 
         return Corners2D, Corners3D
@@ -96,7 +97,7 @@ end
 
 -- // Get Character
 function ESP.Utilites.GetCharacter(Player)
-    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Character = Player.Character or Player.CharacterAdded.Wait(Player)
     return Character, Character.PrimaryPart
 end
 
