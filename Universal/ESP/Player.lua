@@ -10,8 +10,6 @@ local Update = ESP.Update.Player
 local DrawingObjects = {}
 
 local function manageNewPlayer(Player)
-    wait(0.1)
-
     local Character, PrimaryPart = ESP.Utilites.GetCharacter(Player)
 
     local Box = ESP.Creation.Box({
@@ -39,14 +37,12 @@ local TypeToUpdate = {
 }
 
 -- // Handle Left Player
-local function manageOldPlayer(Player)
-    for i = 1, #DrawingObjects do
+local function manageLeavePlayer(Player)
+    for i = #DrawingObjects, 1, -1 do
         local Object = DrawingObjects[i]
 
         if (Object[1] == Player) then
-            if (Object[2].Remove) then
-                Object[2]:Remove()
-            end
+            Object[2]:Remove()
 
             table.remove(DrawingObjects, i)
         end
@@ -79,7 +75,7 @@ end
 Players.PlayerAdded:Connect(manageNewPlayer)
 
 -- // Remove Old Players
-Players.PlayerRemoving:Connect(manageOldPlayer)
+Players.PlayerRemoving:Connect(manageLeavePlayer)
 
 -- // Constantly updating the ESP
 RunService:BindToRenderStep("ESP", 0, manageUpdate)
