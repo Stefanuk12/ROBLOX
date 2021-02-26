@@ -18,7 +18,7 @@ MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGet(MusicAPI.MusicTableLin
 function MusicAPI.CheckSound(SoundId)
     local Source = game:HttpGet("https://roblox.com/library/" .. SoundId)
 
-    -- // Loop through Removed assets and see if they're found 
+    -- // Loop through Removed assets and see if they're found
     for i = 1, #MusicAPI.RemovedAssets do
         if (Source:find(MusicAPI.RemovedAssets[i])) then
             return false
@@ -84,7 +84,7 @@ function MusicAPI.CheckAllSounds()
             if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
                 table.remove(MusicTable, i)
             end
-    
+
             checkedAmount = checkedAmount + 1
         end)()
     end
@@ -93,21 +93,21 @@ function MusicAPI.CheckAllSounds()
     repeat wait() until (checkedAmount == startAmount)
 
     -- // Verbose output
-    if (MusicAPI.Verbose) then 
+    if (MusicAPI.Verbose) then
         print('Check All Sounds done in ' .. tick() - startTime .. " seconds.")
     end
-    
+
     -- // Sort UUIDs and return
     return MusicAPI.SetUUIDs(MusicTable)
 end
 
 function MusicAPI.Benchmark(FunctionToBench, Iterations, ...)
     local startTime = tick()
-    
+
     for i = 1, Iterations do
         FunctionToBench(...)
     end
-    
+
     return tick() - startTime
 end
 
@@ -121,10 +121,10 @@ end
 -- // Save Music Table as JSON
 function MusicAPI.SaveAsJSON()
     if (not writefile) then return false end
-    
+
     local MusicTable = MusicAPI.SetUUIDs()
     local Content = HttpService:JSONEncode(MusicTable)
-    
+
     writefile("MusicTable.json", Content)
 end
 
@@ -146,8 +146,33 @@ function MusicAPI.GetAll()
     return String
 end
 
+-- // Export Music Table to clipboard
 function MusicAPI.SetClipboard()
     setclipboard(MusicAPI.GetAll())
 end
 
+-- // Search for a specific song
+function MusicAPI.Search(searchTerm, MusicTable)
+    -- // Failsafe
+    if (not MusicTable) then MusicTable = MusicAPI.MusicTable end
+
+    -- // Vars
+    local FoundSongs = {}
+
+    -- // Loop through Music Table
+    for i = 1, #MusicTable do
+        -- // Vars
+        local sound = MusicTable[i]
+
+        -- // Check if it closely matches it
+        if (sound.Name:lower():sub(1, #searchTerm) == searchTerm:lower()) then
+
+            -- // Add to found
+            FoundSongs[#FoundSongs + 1] = FoundSongs
+        end
+    end
+
+    -- // Return found
+    return FoundSongs
+end
 return MusicAPI
