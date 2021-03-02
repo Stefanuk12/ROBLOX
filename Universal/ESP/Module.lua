@@ -274,7 +274,10 @@ function ESP.Update.Box(data)
     -- // On screen check
     if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
         Object.Visible = false
-        data.Visible = false
+
+        if (data.Visible) then
+            data.Visible = false
+        end
 
         -- // Returning the object
         return data
@@ -298,9 +301,6 @@ function ESP.Update.Box(data)
     Object.PointC = BoxCorners[3]
     Object.PointD = BoxCorners[4]
 
-    -- // Setting visibility
-    Object.Visible = data.Visible
-
     -- // Returning the object
     return data
 end
@@ -311,9 +311,12 @@ function ESP.Update.Header(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart) or not data.Visible) then
         Object.Visible = false
-        data.Visible = false
+
+        if (data.Visible) then
+            data.Visible = false
+        end
 
         -- // Returning the object
         return data
@@ -338,9 +341,6 @@ function ESP.Update.Header(data)
     Object.Text = data.Text
     Object.Position = Position
 
-    -- // Setting visibility
-    Object.Visible = data.Visible
-
     -- // Returning the data
     return data
 end
@@ -353,7 +353,10 @@ function ESP.Update.Tracer(data)
     -- // On screen check
     if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
         Object.Visible = false
-        data.Visible = false
+
+        if (data.Visible) then
+            data.Visible = false
+        end
 
         -- // Returning the object
         return data
@@ -379,9 +382,6 @@ function ESP.Update.Tracer(data)
     Object.To = Position
     Object.Thickness = data.Thickness
     Object.Color = data.Color
-
-    -- // Setting visibility
-    Object.Visible = data.Visible
 
     -- // Returning the data
     return data
