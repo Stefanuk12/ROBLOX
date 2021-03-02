@@ -298,6 +298,9 @@ function ESP.Update.Box(data)
     Object.PointC = BoxCorners[3]
     Object.PointD = BoxCorners[4]
 
+    -- // Setting visibility
+    Object.Visible = data.Visible
+
     -- // Returning the object
     return data
 end
@@ -334,6 +337,9 @@ function ESP.Update.Header(data)
     -- // Setting stuff
     Object.Text = data.Text
     Object.Position = Position
+
+    -- // Setting visibility
+    Object.Visible = data.Visible
 
     -- // Returning the data
     return data
@@ -373,6 +379,9 @@ function ESP.Update.Tracer(data)
     Object.To = Position
     Object.Thickness = data.Thickness
     Object.Color = data.Color
+
+    -- // Setting visibility
+    Object.Visible = data.Visible
 
     -- // Returning the data
     return data
