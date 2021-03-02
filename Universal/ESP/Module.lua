@@ -184,7 +184,7 @@ function ESP.Creation.Header(data)
             Color = Color3fromRGB(255, 150, 150),
             Visible = true,
             Text = "Sex",
-            Size = 14,
+            Size = 24,
             Center = true,
             Outline = false,
             OutlineColor = Color3fromRGB(255, 150, 150),
