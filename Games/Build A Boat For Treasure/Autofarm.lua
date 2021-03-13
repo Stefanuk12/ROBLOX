@@ -1,5 +1,9 @@
--- // Toggle
-getgenv().autofarm = true
+-- // Custom Settings
+getgenv().TreasureAutoFarm = {
+    Enabled = true, -- // Toggle the auto farm on and off
+    Teleport = 2, -- // How fast between each teleport between the stages and stuff
+    ClaimGold = 2, -- // How long to wait until it claims the gold after going through all of the stages
+}
 
 -- // Services
 local Players = game:GetService("Players")
@@ -53,7 +57,7 @@ local walkthrough = function()
                 Character.HumanoidRootPart.CFrame = DarknessPart.CFrame
 
                 local Part = createTempPart()
-                wait(2)
+                wait(getgenv().TreasureAutoFarm.Teleport)
                 Part:Destroy()
             end
         end
@@ -65,7 +69,7 @@ local walkthrough = function()
     until Lighting.ClockTime ~= 14
 
     -- // Instant Die
-    wait(2)
+    wait(getgenv().TreasureAutoFarm.ClaimGold)
     InstaLoadFunction:InvokeServer(nil, true)
     LocalPlayer.CharacterAdded:Wait()
 
@@ -75,7 +79,7 @@ end
 
 -- // Whilst the autofarm is enable, constantly do it
 while wait() do
-    if (getgenv().autofarm) then
+    if (getgenv().TreasureAutoFarm.Enabled) then
         walkthrough()
     end
 end
