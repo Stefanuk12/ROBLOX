@@ -1,7 +1,8 @@
 -- // Custom Settings
 getgenv().TreasureAutoFarm = {
     Enabled = true, -- // Toggle the auto farm on and off
-    Teleport = 2 -- // How fast between each teleport between the stages and stuff
+    Teleport = 2, -- // How fast between each teleport between the stages and stuff
+    TimeBetweenRuns = 5 -- // How long to wait until it goes to the next run
 }
 
 -- // Services
@@ -14,38 +15,28 @@ local LocalPlayer = Players.LocalPlayer
 
 -- // Goes through all of the stages
 local autoFarm = function(currentRun)
-    -- // Claim gold (if you have any to get)
-    local RiverResultsGui = LocalPlayer.PlayerGui:FindFirstChild("RiverResultsGui")
-
-    if (RiverResultsGui) then
-        local ClaimButton = RiverResultsGui.Frame.BuyButton
-        firesignal(ClaimButton.MouseButton1Click)
-    end
-
     -- // Variables
     local Character = LocalPlayer.Character
     local NormalStages = Workspace.BoatStages.NormalStages
 
     -- // Go to each stage thing
-    do
-        for i = 1, 10 do
-            local Stage = NormalStages["CaveStage" .. i]
-            local DarknessPart = Stage:FindFirstChild("DarknessPart")
+    for i = 1, 10 do
+        local Stage = NormalStages["CaveStage" .. i]
+        local DarknessPart = Stage:FindFirstChild("DarknessPart")
 
-            if (DarknessPart) then
-                -- // Teleport to next stage
-                print("Teleporting to next stage: Stage " .. i)
-                Character.HumanoidRootPart.CFrame = DarknessPart.CFrame
+        if (DarknessPart) then
+            -- // Teleport to next stage
+            print("Teleporting to next stage: Stage " .. i)
+            Character.HumanoidRootPart.CFrame = DarknessPart.CFrame
 
-                -- // Create a temp part under you
-                local Part = Instance.new("Part", LocalPlayer.Character)
-                Part.Anchored = true
-                Part.Position = LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(0, 6, 0)
+            -- // Create a temp part under you
+            local Part = Instance.new("Part", LocalPlayer.Character)
+            Part.Anchored = true
+            Part.Position = LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(0, 6, 0)
 
-                -- // Wait and remove temp part
-                wait(getgenv().TreasureAutoFarm.Teleport)
-                Part:Destroy()
-            end
+            -- // Wait and remove temp part
+            wait(getgenv().TreasureAutoFarm.Teleport)
+            Part:Destroy()
         end
     end
 
@@ -64,6 +55,7 @@ local autoFarm = function(currentRun)
     end)
 
     repeat wait() until Respawned
+    wait(getgenv().TreasureAutoFarm.TimeBetweenRuns)
     print("Auto Farm: Run " .. currentRun .. " finished")
 end
 
