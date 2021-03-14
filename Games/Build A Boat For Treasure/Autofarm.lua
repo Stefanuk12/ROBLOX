@@ -12,19 +12,15 @@ local Lighting = game:GetService("Lighting")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
-local ClaimFunction
 local InstaLoadFunction = Workspace.InstaLoadFunction
 
--- // Get the claim function
-do
-    local gGC = getgc()
-    for i = 1, #gGC do
-        local v = gGC[i]
-        local fScript = getfenv(v).script
-
-        if (debug.getinfo(v).name == "claim" and fScript.Parent) then
-            ClaimFunction = v
-        end
+-- // Claim money
+local ClaimFunction = function()
+    local RiverResultsGui = LocalPlayer.PlayerGui:FindFirstChild("RiverResultsGui")
+    
+    if (RiverResultsGui) then
+        local ClaimButton = RiverResultsGui.Frame.BuyButton
+        firesignal(ClaimButton.MouseButton1Click)
     end
 end
 
