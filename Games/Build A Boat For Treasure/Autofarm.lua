@@ -53,6 +53,7 @@ local walkthrough = function()
                 Character.HumanoidRootPart.CFrame = DarknessPart.CFrame
 
                 local Part = createTempPart()
+                Character:WaitForChild("Humanoid").Jump = true -- // Jump to make sure it registers
                 wait(getgenv().TreasureAutoFarm.Teleport)
                 Part:Destroy()
             end
