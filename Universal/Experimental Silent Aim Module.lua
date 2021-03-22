@@ -211,10 +211,10 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
         local TargetPart = FindFirstChild(Character, TargetPartName)
 
         if (TargetPart) then
-            local PartPos, _ = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
+            local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
             local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
 
-            if (Magnitude < ShortestDistance) then
+            if (onScreen and Magnitude < ShortestDistance) then
                 ClosestPart = TargetPart
                 ShortestDistance = Magnitude
             end
