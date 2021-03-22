@@ -203,6 +203,9 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
 
     -- // Vars
     local ClosestPart = nil
+    local ClosestPartPosition = nil
+    local ClosestPartOnScreen = false
+    local ClosestPartMagnitudeFromMouse = nil
     local ShortestDistance = 1/0
 
     -- // Loop through all target parts
@@ -214,15 +217,18 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
             local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
             local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
 
-            if (onScreen and Magnitude < ShortestDistance) then
+            if (Magnitude < ShortestDistance) then
                 ClosestPart = TargetPart
+                ClosestPartPosition = PartPos
+                ClosestPartOnScreen = onScreen
+                ClosestPartMagnitudeFromMouse = Magnitude
                 ShortestDistance = Magnitude
             end
         end
     end
 
     -- //
-    return ClosestPart
+    return ClosestPart, ClosestPartPosition, ClosestPartOnScreen, ClosestPartMagnitudeFromMouse
 end
 
 -- // Silent Aim Function
@@ -247,15 +253,11 @@ function ValiantAimHacks.getClosestPlayerToCursor()
         local Character = ValiantAimHacks.getCharacter(Player)
 
         if (not ValiantAimHacks.checkWhitelisted(Player) and ValiantAimHacks.checkPlayer(Player) and Character) then
-            TargetPart = ValiantAimHacks.getClosestTargetPartToCursor(Character)
+            local TargetPartTemp, PartPos, onScreen, Magnitude = ValiantAimHacks.getClosestTargetPartToCursor(Character)
 
-            if (TargetPart and ValiantAimHacks.checkHealth(Player)) then
+            if (TargetPartTemp and ValiantAimHacks.checkHealth(Player)) then
                 -- // Team Check
                 if (ValiantAimHacks.TeamCheck and not ValiantAimHacks.checkTeam(Player, LocalPlayer)) then continue end
-
-                -- // Vars
-                local PartPos, _ = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
-                local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
 
                 -- // Check if is in FOV
                 if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
@@ -265,6 +267,7 @@ function ValiantAimHacks.getClosestPlayerToCursor()
                     -- //
                     ClosestPlayer = Player
                     ShortestDistance = Magnitude
+                    TargetPart = TargetPartTemp
                 end
             end
         end
@@ -272,7 +275,9 @@ function ValiantAimHacks.getClosestPlayerToCursor()
 
     -- // End
     ValiantAimHacks.Selected = (Chance and ClosestPlayer or LocalPlayer)
-    ValiantAimHacks.SelectedPart = (Chance and TargetPart or nil)
+    if (ValiantAimHacks.Selected ~= ClosestPlayer) then
+        ValiantAimHacks.SelectedPart = TargetPart
+    end
 end
 
 -- // Heartbeat Function
