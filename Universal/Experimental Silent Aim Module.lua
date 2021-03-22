@@ -241,9 +241,10 @@ function ValiantAimHacks.getClosestPlayerToCursor()
 
     -- // Chance
     if (not Chance) then
-        ValiantAimHacks.Selected = (Chance and LocalPlayer or LocalPlayer)
+        ValiantAimHacks.Selected = LocalPlayer
+        ValiantAimHacks.SelectedPart = nil
 
-        return (Chance and LocalPlayer or LocalPlayer)
+        return LocalPlayer
     end
 
     -- // Loop through all players
@@ -274,10 +275,8 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     end
 
     -- // End
-    ValiantAimHacks.Selected = (Chance and ClosestPlayer or LocalPlayer)
-    if (ValiantAimHacks.Selected ~= ClosestPlayer) then
-        ValiantAimHacks.SelectedPart = TargetPart
-    end
+    ValiantAimHacks.Selected = ClosestPlayer
+    ValiantAimHacks.SelectedPart = TargetPart
 end
 
 -- // Heartbeat Function
