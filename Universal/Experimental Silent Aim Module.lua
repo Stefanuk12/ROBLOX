@@ -198,11 +198,6 @@ end
 function ValiantAimHacks.getClosestTargetPartToCursor(Character)
     local TargetParts = ValiantAimHacks.TargetPart
 
-    -- // String check
-    if (typeof(TargetParts) == "string") then
-        return FindFirstChild(Character, TargetParts)
-    end
-
     -- // Vars
     local ClosestPart = nil
     local ClosestPartPosition = nil
@@ -210,9 +205,8 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
     local ClosestPartMagnitudeFromMouse = nil
     local ShortestDistance = 1/0
 
-    -- // Loop through all target parts
-    for i = 1, #TargetParts do
-        local TargetPartName = TargetParts[i]
+    -- //
+    local function checkTargetPart(TargetPartName)
         local TargetPart = FindFirstChild(Character, TargetPartName)
 
         if (TargetPart) then
@@ -226,6 +220,19 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
                 ClosestPartMagnitudeFromMouse = Magnitude
                 ShortestDistance = Magnitude
             end
+        end
+    end
+
+    -- // String check
+    if (typeof(TargetParts) == "string") then
+        checkTargetPart(TargetParts)
+    end
+
+    -- // Loop through all target parts
+    if (typeof(TargetParts) == "table") then
+        for i = 1, #TargetParts do
+            local TargetPartName = TargetParts[i]
+            checkTargetPart(TargetPartName)
         end
     end
 
