@@ -10,20 +10,23 @@ local LocalPlayer = Players.LocalPlayer
 local function toolMatch(Handle)
     local allPlayers = Players:GetPlayers()
     for i = 1, #allPlayers do
+        -- // Vars
         local Player = allPlayers[i]
         if (Player == LocalPlayer) then continue end -- // ignore local player
 
+        -- // Vars
         local Character = Player.Character
         local RightArm = Character:WaitForChild("Right Arm")
         local RightGrip = RightArm:FindFirstChild("RightGrip")
 
+        -- // Check if they share the same Part1 Handle of the Grip
         if (RightGrip and RightGrip.Part1 == Handle) then
             return Player
         end
     end
 end
 
--- // Manager
+-- // Manage
 local function onCharacter(Character)
     local RightArm = Character:WaitForChild("Right Arm")
 
@@ -36,7 +39,7 @@ local function onCharacter(Character)
             -- // Check if someone else has something equipped too with the same handle as you
             local matched = toolMatch(ConnectedHandle)
 
-            -- // Destroy the tool is found someone who is voiding you
+            -- // Destroy the tool, if someone who is found voiding you
             if (matched) then
                 ConnectedHandle.Parent:Destroy()
                 print(matched, "just tried to void you lol!")
