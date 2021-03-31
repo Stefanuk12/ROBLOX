@@ -26,7 +26,7 @@ local function toolMatch(Handle)
     end
 end
 
--- // Manage
+-- // Manager
 local function onCharacter(Character)
     local RightArm = Character:WaitForChild("Right Arm")
 
@@ -39,7 +39,7 @@ local function onCharacter(Character)
             -- // Check if someone else has something equipped too with the same handle as you
             local matched = toolMatch(ConnectedHandle)
 
-            -- // Destroy the tool, if someone who is found voiding you
+            -- // Destroy the tool, if someone is voiding you
             if (matched) then
                 ConnectedHandle.Parent:Destroy()
                 print(matched, "just tried to void you lol!")
