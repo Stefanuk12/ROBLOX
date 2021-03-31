@@ -20,7 +20,7 @@ function MusicAPI.CheckSound(SoundId)
     Sound.SoundId = SoundIdAsset
     Sound:Play()
 
-    wait(0.05)
+    wait(0.1)
 
     -- // Get Log History
     local LogHistory = LogService:GetLogHistory()
