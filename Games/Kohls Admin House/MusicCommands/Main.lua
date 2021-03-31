@@ -4,7 +4,7 @@ getgenv().MusicCommands = true;
 
 -- // Dependencies
 local MusicAPI = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/Controller.lua"))()
-MusicAPI.CheckAllSounds()
+MusicAPI.MusicTable = MusicAPI.CheckAllSounds()
 
 -- // Services
 local Players = game:GetService("Players")
