@@ -1,28 +1,36 @@
 -- // Services
 local HttpService = game:GetService("HttpService")
+local LogService = game:GetService("LogService")
 
 -- // Music API Table
 getgenv().MusicAPI = {
     Verbose = true, -- // prints audio failed if it did,
-    MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json",
-    RemovedAssets = {
-        "https://images.rbxcdn.com/9281912c23312bc0d08ab750afa588cc.png",
-        "https://t6.rbxcdn.com/70608418c648be7ac4e323e3294bb059",
-        "https://t5.rbxcdn.com/d28c1b5eed271a7aa76f16689e74ca04",
-        "This audio asset has been blocked due to copyright violations."
-    }
+    MusicTableLink = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Music%20API/MusicTable.json"
 }
 MusicAPI.MusicTable = HttpService:JSONDecode(game:HttpGet(MusicAPI.MusicTableLink))
 
 -- // Check if a sound works
 function MusicAPI.CheckSound(SoundId)
-    local Source = game:HttpGet("https://roblox.com/library/" .. SoundId)
+    -- // Vars
+    local SoundIdAsset = "http://www.roblox.com/asset/?id=" .. SoundId
 
-    -- // Loop through Removed assets and see if they're found
-    for i = 1, #MusicAPI.RemovedAssets do
-        if (Source:find(MusicAPI.RemovedAssets[i])) then
-            return false
-        end
+    -- // Create Sound and Play
+    local Sound = Instance.new("Sound", workspace)
+    Sound.Volume = 0
+    Sound.SoundId = SoundIdAsset
+    Sound:Play()
+
+    -- // Get Log History
+    local LogHistory = LogService:GetLogHistory()
+    local AudioLog = LogHistory[#LogHistory]
+    local searchError = "Failed to load sound " .. SoundIdAsset .. ":"
+
+    -- // Remove sound
+    Sound:Destroy()
+
+    -- // Check if the sound has been removed or not and return accordingly
+    if (AudioLog.message:sub(1, #searchError) == searchError and AudioLog.messageType == Enum.MessageType.MessageError) then
+        return false
     end
 
     -- // Return
@@ -80,7 +88,6 @@ function MusicAPI.CheckAllSounds()
     -- // Loop through all sounds and remove bad sounds
     for i = 1, #MusicTable do
         coroutine.wrap(function()
-            wait(math.random(0, 8))
             if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
                 table.remove(MusicTable, i)
             end
