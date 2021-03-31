@@ -29,7 +29,7 @@ function MusicAPI.CheckSound(SoundId)
     Sound:Destroy()
 
     -- // Check if the sound has been removed or not and return accordingly
-    if (AudioLog.message:sub(1, #searchError) == searchError and AudioLog.messageType == Enum.MessageType.MessageError) then
+    if (AudioLog and AudioLog.message:sub(1, #searchError) == searchError and AudioLog.messageType == Enum.MessageType.MessageError) then
         return false
     end
 
