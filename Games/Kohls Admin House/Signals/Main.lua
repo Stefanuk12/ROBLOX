@@ -320,7 +320,8 @@ local onChatted = function(Player, Message)
     if (Message:sub(1, 1) ~= " ") then
         -- // Kohls Commands
         if (FirstSpace > FirstSlash) then
-            local Command = Message:sub(1, FirstSpace - 1):lower()
+            Message = Message:lower()
+            local Command = Message:sub(1, FirstSpace - 1)
 
             -- // Check if command exists
             if (kohlsCommands[Command]) then
@@ -332,7 +333,8 @@ local onChatted = function(Player, Message)
                 Player.CommandChatted:Fire(Command, Arguments)
             end
         else -- // Persons299 Commands
-            local Command = Message:sub(1, FirstSpace - 1):lower()
+            Message = Message:lower()
+            local Command = Message:sub(1, FirstSpace - 1)
 
             -- // Check if command exists
             if (personsCommands[Command]) then
