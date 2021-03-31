@@ -19,19 +19,19 @@ function MusicAPI.CheckSound(SoundId)
     Sound.Volume = 0
     Sound.SoundId = SoundIdAsset
     Sound:Play()
-
-    wait(0.1)
-
+    
     -- // Get Log History
     local LogHistory = LogService:GetLogHistory()
     local AudioLog = LogHistory[#LogHistory]
     local searchError = "Failed to load sound " .. SoundIdAsset .. ":"
 
+    wait(0.1)
+    
     -- // Remove sound
     Sound:Destroy()
 
     -- // Check if the sound has been removed or not and return accordingly
-    if (AudioLog and AudioLog.message:sub(1, #searchError) == searchError and AudioLog.messageType == Enum.MessageType.MessageError) then
+    if (AudioLog.message:sub(1, #searchError) == searchError and AudioLog.messageType == Enum.MessageType.MessageError) then
         return false
     end
 
@@ -81,25 +81,16 @@ function MusicAPI.CheckAllSounds()
     -- // Vars
     local MusicTable = HttpService:JSONDecode(game:HttpGet(MusicAPI.MusicTableLink))
     local startTime = tick()
-    local checkedAmount = 0
 
     -- // Remove duplicates
     MusicTable = MusicAPI.RemoveDuplicates(MusicTable)
-    local startAmount = #MusicTable
 
     -- // Loop through all sounds and remove bad sounds
     for i = 1, #MusicTable do
-        coroutine.wrap(function()
-            if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
-                table.remove(MusicTable, i)
-            end
-
-            checkedAmount = checkedAmount + 1
-        end)()
+        if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
+            table.remove(MusicTable, i)
+        end
     end
-
-    -- // Wait for finish
-    repeat wait() until (checkedAmount == startAmount)
 
     -- // Verbose output
     if (MusicAPI.Verbose) then
