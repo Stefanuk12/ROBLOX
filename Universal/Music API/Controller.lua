@@ -20,12 +20,12 @@ function MusicAPI.CheckSound(SoundId)
     Sound.SoundId = SoundIdAsset
     Sound:Play()
 
+    wait(0.1)
+
     -- // Get Log History
     local LogHistory = LogService:GetLogHistory()
     local AudioLog = LogHistory[#LogHistory]
     local searchError = "Failed to load sound " .. SoundIdAsset .. ":"
-
-    wait(0.1)
 
     -- // Remove sound
     Sound:Destroy()
@@ -86,8 +86,9 @@ function MusicAPI.CheckAllSounds()
     MusicTable = MusicAPI.RemoveDuplicates(MusicTable)
 
     -- // Loop through all sounds and remove bad sounds
-    for i = 1, #MusicTable do
-        if (not MusicTable[i] or (MusicTable[i] and not MusicAPI.CheckSound(MusicTable[i].SoundId))) then
+    for i = #MusicTable, 1, -1  do
+        local validSound = MusicAPI.CheckSound(MusicTable[i].SoundId)
+        if (not validSound) then
             table.remove(MusicTable, i)
         end
     end
