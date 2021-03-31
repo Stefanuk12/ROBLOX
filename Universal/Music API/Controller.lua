@@ -122,7 +122,7 @@ end
 function MusicAPI.SaveAsJSON()
     if (not writefile) then return false end
 
-    local MusicTable = MusicAPI.SetUUIDs()
+    local MusicTable = MusicAPI.SetUUIDs(MusicAPI.MusicTable)
     local Content = HttpService:JSONEncode(MusicTable)
 
     writefile("MusicTable.json", Content)
