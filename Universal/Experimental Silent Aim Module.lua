@@ -419,11 +419,10 @@ mt.__index = newcclosure(function(t, k)
         -- // If we can use the silent aim
         if (ValiantAimHacks.checkSilentAim()) then
             -- // Vars
-            local CPlayer = ValiantAimHacks.Selected
-            local Character = ValiantAimHacks.getCharacter(CPlayer) -- // good practice to use this to get the character
+            local TargetPart = ValiantAimHacks.SelectedPart
 
             -- // Return modded val
-            return (k == "Hit" and Character.Head.CFrame or Character.Head)
+            return (k == "Hit" and TargetPart.CFrame or TargetPart)
         end
     end
 
