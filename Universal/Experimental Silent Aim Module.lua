@@ -153,6 +153,78 @@ function ValiantAimHacks.checkWhitelisted(targetPlayer)
     return false
 end
 
+-- // Blacklist player
+function ValiantAimHacks.BlacklistPlayer(Player)
+    local BlacklistedPlayers = ValiantAimHacks.BlacklistedPlayers
+
+    -- // Find player in table
+    for i = 1, #BlacklistedPlayers do
+        local BlacklistedPlayer = BlacklistedPlayers[i]
+
+        if (BlacklistedPlayer == Player) then
+            return false
+        end
+    end
+
+    -- // Blacklist player
+    BlacklistedPlayers[#BlacklistedPlayers + 1] = Player
+    return true
+end
+
+-- // Unblacklist Player
+function ValiantAimHacks.UnblacklistPlayer(Player)
+    local BlacklistedPlayers = ValiantAimHacks.BlacklistedPlayers
+
+    -- // Find player in table
+    for i = 1, #BlacklistedPlayers do
+        local BlacklistedPlayer = BlacklistedPlayers[i]
+
+        if (BlacklistedPlayer == Player) then
+            table.remove(BlacklistedPlayer, i)
+            return true
+        end
+    end
+
+    -- //
+    return false
+end
+
+-- // Whitelist player
+function ValiantAimHacks.WhitelistPlayer(PlayerId)
+    local WhitelistedPUIDs = ValiantAimHacks.WhitelistedPUIDs
+
+    -- // Find player in table
+    for i = 1, #WhitelistedPUIDs do
+        local WhitelistedPUID = WhitelistedPUIDs[i]
+
+        if (WhitelistedPUID == PlayerId) then
+            return false
+        end
+    end
+
+    -- // Whitelist player
+    WhitelistedPUIDs[#WhitelistedPUIDs + 1] = PlayerId
+    return true
+end
+
+-- // Unwhitelist Player
+function ValiantAimHacks.UnwhitelistPlayer(PlayerId)
+    local WhitelistedPUIDs = ValiantAimHacks.WhitelistedPUIDs
+
+    -- // Find player in table
+    for i = 1, #WhitelistedPUIDs do
+        local WhitelistedPUID = WhitelistedPUIDs[i]
+
+        if (WhitelistedPUID == PlayerId) then
+            table.remove(WhitelistedPUID, i)
+            return true
+        end
+    end
+
+    -- //
+    return false
+end
+
 -- // Get the Direction, Normal and Material
 function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMultiplier)
     if (typeof(Origin) == "Vector3" and typeof(Destination) == "Vector3") then
