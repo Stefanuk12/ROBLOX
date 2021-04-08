@@ -144,6 +144,9 @@ do
 
             if (Argument == "player") then
                 TargetIndex = i
+            elseif (Argument == "number") then
+                local _Argument = Template.Arguments[i]
+                Template.Arguments[i] = tonumber(Argument) or _Argument
             end
         end
 
