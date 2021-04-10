@@ -19,7 +19,8 @@ local Vector2new = Vector2.new
 local GetGuiInset = GuiService.GetGuiInset
 local Randomnew = Random.new
 local mathfloor = math.floor
-local CharacterAddedWait = LocalPlayer.CharacterAdded.Wait
+local CharacterAdded = LocalPlayer.CharacterAdded
+local CharacterAddedWait = CharacterAdded.Wait
 local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
 local RaycastParamsnew = RaycastParams.new
 local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
@@ -81,7 +82,7 @@ end
 -- // Customisable Checking Functions: Is a part visible
 function ValiantAimHacks.isPartVisible(Part, PartDescendant)
     -- // Vars
-    local Character = LocalPlayer.Character or CharacterAddedWait(LocalPlayer)
+    local Character = LocalPlayer.Character or CharacterAddedWait(CharacterAdded)
     local Origin = CurrentCamera.CFrame.Position
     local _, OnScreen = WorldToViewportPoint(CurrentCamera, Part.Position)
 
