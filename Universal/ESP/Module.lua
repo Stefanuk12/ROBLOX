@@ -112,8 +112,11 @@ end
 
 -- // Get Character
 function ESP.Utilites.GetCharacter(Player)
-    local Character = Player.Character or Player.CharacterAdded.Wait(Player.CharacterAdded)
-    return Character, Character.PrimaryPart
+    local Character = Player.Character
+
+    if (Character) then
+        return Character, Character.PrimaryPart
+    end
 end
 
 -- // Check if part is visible
@@ -214,7 +217,7 @@ function ESP.Creation.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Text", data)
@@ -256,7 +259,7 @@ function ESP.Creation.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Line", data)
@@ -302,7 +305,7 @@ function ESP.Update.Box(data)
     end
 
     -- // Vars
-    local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(data.Model)
+    local BoxCorners, _,  Failsafed = ESP.Utilites.getBoxCorners(data.Model)
 
     -- // Object
     Object.Filled = data.Filled
@@ -347,7 +350,7 @@ function ESP.Update.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -393,7 +396,7 @@ function ESP.Update.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
