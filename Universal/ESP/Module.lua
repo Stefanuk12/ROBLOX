@@ -17,6 +17,9 @@ local IsDescendantOf = Instance.new("Part").IsDescendantOf
 local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
 local GetBoundingBox = Instance.new("Model").GetBoundingBox
 
+local BlankVector3 = Vector3.new(1, 1, 1)
+local BlankCFrame = CFrame.new(BlankVector3, BlankVector3)
+
 -- // Module
 local ESP = {}
 getgenv().ESP = ESP
@@ -26,6 +29,7 @@ ESP.Utilites = {}
 
 -- // Get the corners for the box
 function ESP.Utilites.getBoxCorners(Character, returnType)
+    -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
             local modifiedPosition = newVector3((a.X + b.X) / 2, a.Y, (a.Z + b.Z) / 2)
@@ -67,14 +71,25 @@ function ESP.Utilites.getBoxCorners(Character, returnType)
         return newPoints
     end
 
-    local CharacterBoxC, CharacterBoxS = GetBoundingBox(Character)
+    -- // Failsafe
+    local CharacterBoxC, CharacterBoxS
+    local Failsafed = false
+    if (Character) then
+        CharacterBoxC, CharacterBoxS = GetBoundingBox(Character)
+    else
+        CharacterBoxC = BlankCFrame
+        CharacterBoxS = BlankVector3
+        Failsafed = true
+    end
+
+    -- //
     if (returnType) then
-        return GetPartCorners(CharacterBoxC, CharacterBoxS)
+        return GetPartCorners(CharacterBoxC, CharacterBoxS), Failsafed
     else
         local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
         local Corners2D = convertTo2D(Corners3D)
 
-        return Corners2D, Corners3D
+        return Corners2D, Corners3D, Failsafed
     end
 end
 
@@ -159,7 +174,7 @@ function ESP.Creation.Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites.getBoxCorners(data.Model)
+    local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(data.Model)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Quad", data)
@@ -199,7 +214,7 @@ function ESP.Creation.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Text", data)
@@ -241,7 +256,7 @@ function ESP.Creation.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Object
     local Object = ESP.Utilites.Drawing("Line", data)
@@ -287,7 +302,7 @@ function ESP.Update.Box(data)
     end
 
     -- // Vars
-    local BoxCorners = ESP.Utilites.getBoxCorners(data.Model)
+    local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(data.Model)
 
     -- // Object
     Object.Filled = data.Filled
@@ -300,6 +315,12 @@ function ESP.Update.Box(data)
     Object.PointB = BoxCorners[1]
     Object.PointC = BoxCorners[3]
     Object.PointD = BoxCorners[4]
+
+    -- // Failsafe Visibility
+    if (Failsafed) then
+        Object.Visible = false
+        data.Visible = false
+    end
 
     -- // Returning the object
     return data
@@ -326,7 +347,7 @@ function ESP.Update.Header(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -340,6 +361,12 @@ function ESP.Update.Header(data)
     -- // Setting stuff
     Object.Text = data.Text
     Object.Position = Position
+
+    -- // Failsafe Visibility
+    if (Failsafed) then
+        Object.Visible = false
+        data.Visible = false
+    end
 
     -- // Returning the data
     return data
@@ -366,7 +393,7 @@ function ESP.Update.Tracer(data)
     end
 
     -- // Vars
-    local BoxCFrame = ESP.Utilites.getBoxCorners(data.Model, true)
+    local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(data.Model, true)
 
     -- // Midpoint
     local Blank = BoxCFrame[3] - BoxCFrame[3].Position
@@ -382,6 +409,12 @@ function ESP.Update.Tracer(data)
     Object.To = Position
     Object.Thickness = data.Thickness
     Object.Color = data.Color
+
+    -- // Failsafe Visibility
+    if (Failsafed) then
+        Object.Visible = false
+        data.Visible = false
+    end
 
     -- // Returning the data
     return data
