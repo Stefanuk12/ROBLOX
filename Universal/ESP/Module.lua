@@ -290,7 +290,7 @@ function ESP.Update.Box(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart) or not data.Visible) then
         Object.Visible = false
 
         if (data.Visible) then
@@ -381,7 +381,7 @@ function ESP.Update.Tracer(data)
     local Object = data.Object
 
     -- // On screen check
-    if (not ESP.Utilites.IsOnScreen(data.TargetPart)) then
+    if (not ESP.Utilites.IsOnScreen(data.TargetPart) or not data.Visible) then
         Object.Visible = false
 
         if (data.Visible) then
