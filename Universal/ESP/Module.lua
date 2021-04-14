@@ -30,8 +30,6 @@ ESP.Utilites = {}
 
 -- // Get the corners for the box
 function ESP.Utilites.getBoxCorners(Model, returnType)
-    local _Model = Model
-
     -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
@@ -74,22 +72,22 @@ function ESP.Utilites.getBoxCorners(Model, returnType)
         return newPoints
     end
 
-    -- // If not model
-    local notModel = false
-    if (not Model:IsA("Model")) then
-        _Model = Instance.new("Model")
-        notModel = Model.Parent
-        Model.Parent = _Model
-    end
-
     -- // Failsafe
     local ModelBoxC, ModelBoxS
     local Failsafed = false
     if (Model) then
-        ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, _Model)
-        if (notModel) then
-            Model.Parent = notModel
-            _Model:Destroy()
+        if (Model:IsA("BasePart")) then
+            ModelBoxC = Model.CFrame
+            ModelBoxS = Model.Size
+        elseif (Model:IsA("Model")) then
+            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, Model)
+        else
+            local tempModel = Instance.new("Model", workspace)
+            local savedParent = Model.Parent
+            Model.Parent = tempModel
+            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, tempModel)
+            Model.Parent = savedParent
+            Model:Destroy()
         end
     else
         ModelBoxC = BlankCFrame
