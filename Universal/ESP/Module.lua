@@ -15,7 +15,8 @@ local Raycast = Workspace.Raycast
 local Color3fromRGB = Color3.fromRGB
 local IsDescendantOf = Instance.new("Part").IsDescendantOf
 local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
-local GetBoundingBox = Instance.new("Model").GetBoundingBox
+local ModelInstance = Instance.new("Model")
+local GetBoundingBox = ModelInstance.GetBoundingBox
 
 local BlankVector3 = Vector3.new(1, 1, 1)
 local BlankCFrame = CFrame.new(BlankVector3, BlankVector3)
@@ -28,7 +29,9 @@ getgenv().ESP = ESP
 ESP.Utilites = {}
 
 -- // Get the corners for the box
-function ESP.Utilites.getBoxCorners(Character, returnType)
+function ESP.Utilites.getBoxCorners(Model, returnType)
+    local _Model = Model
+
     -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
@@ -71,22 +74,34 @@ function ESP.Utilites.getBoxCorners(Character, returnType)
         return newPoints
     end
 
+    -- // If not model
+    local notModel = false
+    if (not Model:IsA("Model")) then
+        _Model = Instance.new("Model")
+        notModel = Model.Parent
+        Model.Parent = _Model
+    end
+
     -- // Failsafe
-    local CharacterBoxC, CharacterBoxS
+    local ModelBoxC, ModelBoxS
     local Failsafed = false
-    if (Character) then
-        CharacterBoxC, CharacterBoxS = GetBoundingBox(Character)
+    if (Model) then
+        ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, _Model)
+        if (notModel) then
+            Model.Parent = notModel
+            _Model:Destroy()
+        end
     else
-        CharacterBoxC = BlankCFrame
-        CharacterBoxS = BlankVector3
+        ModelBoxC = BlankCFrame
+        ModelBoxS = BlankVector3
         Failsafed = true
     end
 
     -- //
     if (returnType) then
-        return GetPartCorners(CharacterBoxC, CharacterBoxS), Failsafed
+        return GetPartCorners(ModelBoxC, ModelBoxS), Failsafed
     else
-        local Corners3D = GetPartCorners(CharacterBoxC, CharacterBoxS)
+        local Corners3D = GetPartCorners(ModelBoxC, ModelBoxS)
         local Corners2D = convertTo2D(Corners3D)
 
         return Corners2D, Corners3D, Failsafed
