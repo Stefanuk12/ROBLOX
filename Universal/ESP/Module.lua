@@ -18,7 +18,7 @@ local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
 local ModelInstance = Instance.new("Model")
 local GetBoundingBox = ModelInstance.GetBoundingBox
 
-local BlankVector3 = Vector3.new(1, 1, 1)
+local BlankVector3 = Vector3.new(69, 69, 69)
 local BlankCFrame = CFrame.new(BlankVector3, BlankVector3)
 
 -- // Module
@@ -29,7 +29,7 @@ getgenv().ESP = ESP
 ESP.Utilites = {}
 
 -- // Get the corners for the box
-function ESP.Utilites.getBoxCorners(Model, returnType)
+function ESP.Utilites.getBoxCorners(Target, returnType)
     -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
@@ -73,25 +73,23 @@ function ESP.Utilites.getBoxCorners(Model, returnType)
     end
 
     -- // Failsafe
-    local ModelBoxC, ModelBoxS
+    local ModelBoxC, ModelBoxS = BlankCFrame, BlankVector3
     local Failsafed = false
-    if (Model) then
-        if (Model:IsA("BasePart")) then
-            ModelBoxC = Model.CFrame
-            ModelBoxS = Model.Size
-        elseif (Model:IsA("Model")) then
-            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, Model)
+    if (Target) then
+        if (Target:IsA("Model")) then
+            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, Target)
+        elseif (Target:IsA("BasePart")) then
+            ModelBoxC = Target.CFrame
+            ModelBoxS = Target.Size
         else
             local tempModel = Instance.new("Model", workspace)
-            local savedParent = Model.Parent
-            Model.Parent = tempModel
+            local savedParent = Target.Parent
+            Target.Parent = tempModel
             ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, tempModel)
-            Model.Parent = savedParent
-            Model:Destroy()
+            Target.Parent = savedParent
+            Target:Destroy()
         end
     else
-        ModelBoxC = BlankCFrame
-        ModelBoxS = BlankVector3
         Failsafed = true
     end
 
