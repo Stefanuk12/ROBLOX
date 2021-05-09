@@ -35,6 +35,7 @@ local FindFirstChild = Instancenew("Part").FindFirstChild
 getgenv().ValiantAimHacks = {
     SilentAimEnabled = true,
     ShowFOV = true,
+    FOVSides = 12,
     VisibleCheck = true,
     TeamCheck = true,
     FOV = 60,
@@ -58,7 +59,6 @@ local circle = Drawingnew("Circle")
 circle.Transparency = 1
 circle.Thickness = 2
 circle.Color = Color3fromRGB(231, 84, 128)
-circle.NumSides = 12
 circle.Filled = false
 function ValiantAimHacks.updateCircle()
     if (circle) then
@@ -66,6 +66,7 @@ function ValiantAimHacks.updateCircle()
         circle.Visible = ValiantAimHacks.ShowFOV
         circle.Radius = (ValiantAimHacks.FOV * 3)
         circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
+        circle.NumSides = ValiantAimHacks.FOVSides
 
         -- // Return circle
         return circle
