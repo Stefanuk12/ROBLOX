@@ -1,4 +1,4 @@
-if getgenv().ValiantAimHacks then return getgenv().ValiantAimHacks end
+if getgenv().Aiming then return getgenv().Aiming end
 
 -- // Services
 local Players = game:GetService("Players")
@@ -33,7 +33,7 @@ local FindFirstChild = Instancenew("Part").FindFirstChild
 local tableremove = table.remove
 
 -- // Silent Aim Vars
-getgenv().ValiantAimHacks = {
+getgenv().Aiming = {
     SilentAimEnabled = true,
     ShowFOV = true,
     FOVSides = 12,
@@ -56,7 +56,7 @@ getgenv().ValiantAimHacks = {
         }
     }
 }
-local ValiantAimHacks = getgenv().ValiantAimHacks
+local Aiming = getgenv().Aiming
 
 -- // Show FOV
 local circle = Drawingnew("Circle")
@@ -64,13 +64,13 @@ circle.Transparency = 1
 circle.Thickness = 2
 circle.Color = Color3fromRGB(231, 84, 128)
 circle.Filled = false
-function ValiantAimHacks.updateCircle()
+function Aiming.updateCircle()
     if (circle) then
         -- // Set Circle Properties
-        circle.Visible = ValiantAimHacks.ShowFOV
-        circle.Radius = (ValiantAimHacks.FOV * 3)
+        circle.Visible = Aiming.ShowFOV
+        circle.Radius = (Aiming.FOV * 3)
         circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
-        circle.NumSides = ValiantAimHacks.FOVSides
+        circle.NumSides = Aiming.FOVSides
 
         -- // Return circle
         return circle
@@ -85,7 +85,7 @@ local calcChance = function(percentage)
 end
 
 -- // Customisable Checking Functions: Is a part visible
-function ValiantAimHacks.isPartVisible(Part, PartDescendant)
+function Aiming.isPartVisible(Part, PartDescendant)
     -- // Vars
     local Character = LocalPlayer.Character or CharacterAddedWait(CharacterAdded)
     local Origin = CurrentCamera.CFrame.Position
@@ -113,9 +113,9 @@ function ValiantAimHacks.isPartVisible(Part, PartDescendant)
 end
 
 -- // Check teams
-function ValiantAimHacks.isIgnoredTeam(targetPlayer)
+function Aiming.isIgnoredTeam(targetPlayer)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredTeams = Ignored.Teams
 
     -- // Check if team is ignored
@@ -132,9 +132,9 @@ function ValiantAimHacks.isIgnoredTeam(targetPlayer)
 end
 
 -- // Ignore player
-function ValiantAimHacks.IgnorePlayer(Player)
+function Aiming.IgnorePlayer(Player)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredPlayers = Ignored.Players
 
     -- // Find player in table
@@ -152,9 +152,9 @@ function ValiantAimHacks.IgnorePlayer(Player)
 end
 
 -- // Unignore Player
-function ValiantAimHacks.UnIgnorePlayer(Player)
+function Aiming.UnIgnorePlayer(Player)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredPlayers = Ignored.Players
 
     -- // Find player in table
@@ -172,9 +172,9 @@ function ValiantAimHacks.UnIgnorePlayer(Player)
 end
 
 -- // Ignore team
-function ValiantAimHacks.IgnoreTeam(Team, TeamColor)
+function Aiming.IgnoreTeam(Team, TeamColor)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredTeams = Ignored.Teams
 
     -- // Find team in table
@@ -192,9 +192,9 @@ function ValiantAimHacks.IgnoreTeam(Team, TeamColor)
 end
 
 -- // Unignore team
-function ValiantAimHacks.UnIgnoreTeam(Team, TeamColor)
+function Aiming.UnIgnoreTeam(Team, TeamColor)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredTeams = Ignored.Teams
 
     -- // Find team in table
@@ -213,18 +213,18 @@ function ValiantAimHacks.UnIgnoreTeam(Team, TeamColor)
 end
 
 -- //  Toggle team check
-function ValiantAimHacks.TeamCheck(Toggle)
+function Aiming.TeamCheck(Toggle)
     if (Toggle) then
-        return ValiantAimHacks.IgnoreTeam(LocalPlayer.Team, LocalPlayer.TeamColor)
+        return Aiming.IgnoreTeam(LocalPlayer.Team, LocalPlayer.TeamColor)
     end
 
-    return ValiantAimHacks.UnIgnoreTeam(LocalPlayer.Team, LocalPlayer.TeamColor)
+    return Aiming.UnIgnoreTeam(LocalPlayer.Team, LocalPlayer.TeamColor)
 end
 
 -- // Check if player (and team) is ignored
-function ValiantAimHacks.isIgnored(Player)
+function Aiming.isIgnored(Player)
     -- // Vars
-    local Ignored = ValiantAimHacks.Ignored
+    local Ignored = Aiming.Ignored
     local IgnoredPlayers = Ignored.Players
 
     -- // Loop
@@ -245,8 +245,8 @@ function ValiantAimHacks.isIgnored(Player)
     end
 
     -- // Team check
-    if (ValiantAimHacks.TeamCheck) then
-        return not ValiantAimHacks.isIgnoredTeam(Player)
+    if (Aiming.TeamCheck) then
+        return not Aiming.isIgnoredTeam(Player)
     end
 
     -- // Return
@@ -254,7 +254,7 @@ function ValiantAimHacks.isIgnored(Player)
 end
 
 -- // Get the Direction, Normal and Material
-function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMultiplier)
+function Aiming.findDirectionNormalMaterial(Origin, Destination, UnitMultiplier)
     if (typeof(Origin) == "Vector3" and typeof(Destination) == "Vector3") then
         -- // Handling
         if (not UnitMultiplier) then UnitMultiplier = 1 end
@@ -276,13 +276,13 @@ function ValiantAimHacks.findDirectionNormalMaterial(Origin, Destination, UnitMu
 end
 
 -- // Get Character
-function ValiantAimHacks.getCharacter(Player)
+function Aiming.getCharacter(Player)
     return Player.Character
 end
 
 -- // Check Health
-function ValiantAimHacks.checkHealth(Player)
-    local Character = ValiantAimHacks.getCharacter(Player)
+function Aiming.checkHealth(Player)
+    local Character = Aiming.getCharacter(Player)
     local Humanoid = FindFirstChildWhichIsA(Character, "Humanoid")
 
     local Health = (Humanoid and Humanoid.Health or 0)
@@ -290,13 +290,13 @@ function ValiantAimHacks.checkHealth(Player)
 end
 
 -- // Check if silent aim can used
-function ValiantAimHacks.checkSilentAim()
-    return (ValiantAimHacks.SilentAimEnabled == true and ValiantAimHacks.Selected ~= LocalPlayer and ValiantAimHacks.SelectedPart ~= nil)
+function Aiming.checkSilentAim()
+    return (Aiming.SilentAimEnabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
 end
 
 -- // Get Closest Target Part
-function ValiantAimHacks.getClosestTargetPartToCursor(Character)
-    local TargetParts = ValiantAimHacks.TargetPart
+function Aiming.getClosestTargetPartToCursor(Character)
+    local TargetParts = Aiming.TargetPart
 
     -- // Vars
     local ClosestPart = nil
@@ -341,17 +341,17 @@ function ValiantAimHacks.getClosestTargetPartToCursor(Character)
 end
 
 -- // Silent Aim Function
-function ValiantAimHacks.getClosestPlayerToCursor()
+function Aiming.getClosestPlayerToCursor()
     -- // Vars
     local TargetPart = nil
     local ClosestPlayer = nil
-    local Chance = calcChance(ValiantAimHacks.HitChance)
+    local Chance = calcChance(Aiming.HitChance)
     local ShortestDistance = 1/0
 
     -- // Chance
     if (not Chance) then
-        ValiantAimHacks.Selected = LocalPlayer
-        ValiantAimHacks.SelectedPart = nil
+        Aiming.Selected = LocalPlayer
+        Aiming.SelectedPart = nil
 
         return LocalPlayer
     end
@@ -360,17 +360,17 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     local AllPlayers = GetPlayers(Players)
     for i = 1, #AllPlayers do
         local Player = AllPlayers[i]
-        local Character = ValiantAimHacks.getCharacter(Player)
+        local Character = Aiming.getCharacter(Player)
 
-        if (not ValiantAimHacks.isIgnored(Player) and Character) then
-            local TargetPartTemp, PartPos, onScreen, Magnitude = ValiantAimHacks.getClosestTargetPartToCursor(Character)
+        if (not Aiming.isIgnored(Player) and Character) then
+            local TargetPartTemp, PartPos, onScreen, Magnitude = Aiming.getClosestTargetPartToCursor(Character)
 
             -- // Check if part exists and health
-            if (TargetPartTemp and ValiantAimHacks.checkHealth(Player)) then
+            if (TargetPartTemp and Aiming.checkHealth(Player)) then
                 -- // Check if is in FOV
                 if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                     -- // Check if Visible
-                    if (ValiantAimHacks.VisibleCheck and not ValiantAimHacks.isPartVisible(TargetPartTemp, Character)) then continue end
+                    if (Aiming.VisibleCheck and not Aiming.isPartVisible(TargetPartTemp, Character)) then continue end
 
                     -- // Set vars
                     ClosestPlayer = Player
@@ -382,17 +382,17 @@ function ValiantAimHacks.getClosestPlayerToCursor()
     end
 
     -- // End
-    ValiantAimHacks.Selected = ClosestPlayer
-    ValiantAimHacks.SelectedPart = TargetPart
+    Aiming.Selected = ClosestPlayer
+    Aiming.SelectedPart = TargetPart
 end
 
 -- // Heartbeat Function
 Heartbeat:Connect(function()
-    ValiantAimHacks.updateCircle()
-    ValiantAimHacks.getClosestPlayerToCursor()
+    Aiming.updateCircle()
+    Aiming.getClosestPlayerToCursor()
 end)
 
-return ValiantAimHacks
+return Aiming
 
 --[[
 Examples:
@@ -404,7 +404,7 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Load Silent Aim
-local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
+local Aiming = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 
 -- // Hook
 mt.__namecall = newcclosure(function(...)
@@ -436,16 +436,16 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Load Silent Aim
-local ValiantAimHacks = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
+local Aiming = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
 
 -- // Hook
 mt.__index = newcclosure(function(t, k)
     -- // Check if it trying to get our mouse's hit or target
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
         -- // If we can use the silent aim
-        if (ValiantAimHacks.checkSilentAim()) then
+        if (Aiming.checkSilentAim()) then
             -- // Vars
-            local TargetPart = ValiantAimHacks.SelectedPart
+            local TargetPart = Aiming.SelectedPart
 
             -- // Return modded val
             return (k == "Hit" and TargetPart.CFrame or TargetPart)
