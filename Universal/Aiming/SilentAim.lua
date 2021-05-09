@@ -112,25 +112,6 @@ function Aiming.isPartVisible(Part, PartDescendant)
     return false
 end
 
--- // Check teams
-function Aiming.isIgnoredTeam(targetPlayer)
-    -- // Vars
-    local Ignored = Aiming.Ignored
-    local IgnoredTeams = Ignored.Teams
-
-    -- // Check if team is ignored
-    for i = 1, #IgnoredTeams do
-        local v = IgnoredTeams[i]
-
-        if (targetPlayer.Team == v.Team and targetPlayer.TeamColor == v.TeamColor) then
-            return true
-        end
-    end
-
-    -- // Return
-    return false
-end
-
 -- // Ignore player
 function Aiming.IgnorePlayer(Player)
     -- // Vars
@@ -221,6 +202,25 @@ function Aiming.TeamCheck(Toggle)
     return Aiming.UnIgnoreTeam(LocalPlayer.Team, LocalPlayer.TeamColor)
 end
 
+-- // Check teams
+function Aiming.isIgnoredTeam(Player)
+    -- // Vars
+    local Ignored = Aiming.Ignored
+    local IgnoredTeams = Ignored.Teams
+
+    -- // Check if team is ignored
+    for i = 1, #IgnoredTeams do
+        local IgnoredTeam = IgnoredTeams[i]
+
+        if (Player.Team == IgnoredTeam.Team and Player.TeamColor == IgnoredTeam.TeamColor) then
+            return true
+        end
+    end
+
+    -- // Return
+    return false
+end
+
 -- // Check if player (and team) is ignored
 function Aiming.isIgnored(Player)
     -- // Vars
@@ -245,12 +245,7 @@ function Aiming.isIgnored(Player)
     end
 
     -- // Team check
-    if (Aiming.TeamCheck) then
-        return not Aiming.isIgnoredTeam(Player)
-    end
-
-    -- // Return
-    return false
+    return Aiming.isIgnoredTeam(Player)
 end
 
 -- // Get the Direction, Normal and Material
@@ -362,7 +357,7 @@ function Aiming.getClosestPlayerToCursor()
         local Player = AllPlayers[i]
         local Character = Aiming.getCharacter(Player)
 
-        if (not Aiming.isIgnored(Player) and Character) then
+        if (Aiming.isIgnored(Player) == false and Character) then
             local TargetPartTemp, PartPos, onScreen, Magnitude = Aiming.getClosestTargetPartToCursor(Character)
 
             -- // Check if part exists and health
