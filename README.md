@@ -1,4 +1,4 @@
 # lol docs
-[Aiming Documentation](./AimingModule/docs/index.html)
+[Aiming Documentation](https://stefanuk12.github.io/ROBLOX/AimingModule/docs/index.html)
 
-[Other Docs - lol idk either](./OtherDocs/book/index.html)
+[Other Docs - lol idk either](https://stefanuk12.github.io/ROBLOX/OtherDocs/book/index.html)
