@@ -1,0 +1,44 @@
+site_name: Aiming Module Documentation
+docs_dir: 'src'
+site_dir: 'docs'
+nav:
+  - Home: ./index.md
+  - Examples:
+    - Index: ./Examples/index.md
+    - Namecall: ./Examples/namecall.md
+  - API Reference:
+    - Checks:
+      - Index: ./APIReference/Checks/index.md
+      - Global: ./APIReference/Checks/global.md
+      - Ignored: ./APIReference/Checks/ignored.md
+      - Visible: ./APIReference/Checks/visible.md
+      - Health: ./APIReference/Checks/health.md
+    - Ignore:
+      - Index: ./APIReference/Ignore/index.md
+      - Player: ./APIReference/Ignore/player.md
+      - Team: ./APIReference/Ignore/team.md
+    - Utilities:
+      - Index: ./APIReference/Utilities/index.md
+      - Chance: ./APIReference/Utilities/chance.md
+      - Character: ./APIReference/Utilities/character.md
+      - FOV Circle: ./APIReference/Utilities/fovcircle.md
+      - Raycast: ./APIReference/Utilities/raycast.md
+      - Team Check: ./APIReference/Utilities/teamcheck.md
+      - Closest Player: ./APIReference/Utilities/closestplayer.md
+      - Target Part: ./APIReference/Utilities/targetpart.md
+    - Settings:
+      - Index: ./APIReference/Settings/index.md
+      - Enabled: ./APIReference/Settings/enabled.md
+      - FOV: ./APIReference/Settings/fov.md
+      - FOV Sides: ./APIReference/Settings/fovsides.md
+      - Hit Chance: ./APIReference/Settings/hitchance.md
+      - Show FOV: ./APIReference/Settings/showfov.md
+      - Target Part: ./APIReference/Settings/targetpart.md
+      - Visible Check: ./APIReference/Settings/visiblecheck.md
+
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
