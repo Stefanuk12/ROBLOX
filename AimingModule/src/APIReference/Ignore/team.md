@@ -14,6 +14,8 @@ Of course, you do not want to shoot against your own teams, so you can use this 
 * `bool` success
 > Returns false if already is being ignored
 
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L156)
+
 
 # Un-ignore Teams
 ```lua
@@ -30,3 +32,5 @@ However, if they are being toxic, you can get back at them with this function wh
 ### Returns
 * `bool` success
 > Returns false if already is being ignored
+
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L176)

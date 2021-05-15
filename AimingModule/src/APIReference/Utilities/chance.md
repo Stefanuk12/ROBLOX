@@ -10,3 +10,5 @@ This function does the maths for a chance. For example, inputting 50 would retur
 
 ## Returns
 * `bool` success
+
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L81)

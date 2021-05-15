@@ -11,3 +11,4 @@ This simple function returns your character. Useful to overwrite for games that 
 ## Returns
 * `Model` Character
 
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L274)

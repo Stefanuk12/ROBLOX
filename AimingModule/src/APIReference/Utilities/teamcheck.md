@@ -10,3 +10,5 @@ Due to the nature of how the ignore system works, I have made a simple function 
 
 ## Returns
 * `Part` The target part
+
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L197)

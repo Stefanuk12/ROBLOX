@@ -13,3 +13,5 @@ This simple function does the maths for you and fires a ray. You only need to in
 * `Vector3` Direction
 * `Vector3` Normal
 * `Material` Material
+
+[Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L252)
