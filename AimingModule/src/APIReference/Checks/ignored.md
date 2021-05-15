@@ -6,7 +6,6 @@ This check does a couple things, like returning true if:
 
 [Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L248)
 
-# Usage
 
 ## Team Check
 ```lua
@@ -15,7 +14,7 @@ This check does a couple things, like returning true if:
 
 [Source](https://github.com/Stefanuk12/ROBLOX/blob/master/Universal/Aiming/Module.lua#L206)
 
-# Team + Player Check
+## Team + Player Check
 ```lua
 <bool> Aiming.IsIgnored(<Player> Player)
 ```
