@@ -400,7 +400,7 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Load Silent Aim
-local Aiming = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
+local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
 mt.__namecall = newcclosure(function(...)
@@ -432,7 +432,7 @@ local backupindex = mt.__index
 setreadonly(mt, false)
 
 -- // Load Silent Aim
-local Aiming = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Experimental%20Silent%20Aim%20Module.lua"))()
+local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
 mt.__index = newcclosure(function(t, k)
