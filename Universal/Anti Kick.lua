@@ -37,4 +37,4 @@ end)
 
 -- // Credits
 getgenv().AntiKickExecuted = true
-messagebox("Loaded.\n\n\nCreated by Stefanuk12.", "Anti Kick", 0)
+messagebox("Loaded.\n\n\n- Created by Stefanuk12.", "Anti Kick", 0)
