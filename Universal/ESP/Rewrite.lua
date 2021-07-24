@@ -187,7 +187,7 @@ end
 
 -- // Create a box element
 function ESP:Box(Data)
-    self = setmetatable(self, ESP)
+    self = setmetatable({}, ESP)
     self.ClassName = "Box"
 
     -- // Management
@@ -213,7 +213,7 @@ function ESP:Box(Data)
     -- // Update function
     function self:Update(_Data)
         -- // Update data, if sent
-        local Data = self:UpdateData(_Data)
+        Data = self:UpdateData(_Data)
 
         -- // Vars
         local Object = self.Object
@@ -233,7 +233,7 @@ end
 
 -- // Create a header element
 function ESP:Header(Data)
-    self = setmetatable(self, ESP)
+    self = setmetatable({}, ESP)
     self.ClassName = "Header"
 
     -- // Management
@@ -264,7 +264,7 @@ function ESP:Header(Data)
     -- // Update function
     function self:Update(_Data)
         -- // Update data, if sent
-        local Data = self:UpdateData(_Data)
+        Data = self:UpdateData(_Data)
 
         -- // Vars
         local Object = self.Object
@@ -291,7 +291,7 @@ end
 
 -- // Create a tracer element
 function ESP:Tracer(Data)
-    self = setmetatable(self, ESP)
+    self = setmetatable({}, ESP)
     self.ClassName = "Tracer"
 
     -- // Management
@@ -317,7 +317,7 @@ function ESP:Tracer(Data)
     -- // Update function
     function self:Update(_Data)
         -- // Update data, if sent
-        local Data = self:UpdateData(_Data)
+        Data = self:UpdateData(_Data)
 
         -- // Vars
         local Object = self.Object
@@ -328,8 +328,7 @@ function ESP:Tracer(Data)
         local Midpoint = Blank + (BoxCFrame[4].Position + BoxCFrame[3].Position) / 2
 
         -- // Position
-        local Position = Midpoint
-        Position = WorldToViewportPoint(CurrentCamera, Position.Position)
+        local Position, _ = WorldToViewportPoint(CurrentCamera, Midpoint.Position)
         Position = Vector2new(Position.X, Position.Y)
 
         -- // Setting To position
