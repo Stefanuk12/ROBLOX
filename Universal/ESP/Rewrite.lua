@@ -18,7 +18,11 @@ local GetBoundingBox = ModelInstance.GetBoundingBox
 local BlankVector3 = Vector3.new(69, 69, 69)
 local BlankCFrame = CFrame.new(BlankVector3, BlankVector3)
 
-local TracerStart = Vector2new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y)
+local TracerStart = Vector2new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y - 34)
+local mathatan2 = math.atan2
+local mathrad = math.rad
+local CFrameAngles = CFrame.Angles
+local mathpi = math.pi
 
 -- // Module
 local ESP = {}
@@ -27,6 +31,25 @@ ESP.__index = ESP
 
 -- // Utilites
 ESP.Utilites = {}
+
+-- // ty ic3 - failsafe if behind
+ESP.Utilites.BehindPosition = function(TargetPosition)
+    -- // Vars
+    local ScreenPosition, _ = WorldToViewportPoint(CurrentCamera, TargetPosition)
+    local OPosition = CurrentCamera.CFrame:PointToObjectSpace(TargetPosition)
+
+    -- // Check if behind
+    if (ScreenPosition.Z < 0) then
+        local AT = mathatan2(OPosition.Y, OPosition.X) + mathpi
+        OPosition = CFrameAngles(0, 0, AT):VectorToWorldSpace((CFrameAngles(0, mathrad(89.9), 0):VectorToWorldSpace(Vector3new(0, 0, -1))))
+    end
+
+    -- // Convert to 2D
+    local Position, _ = WorldToViewportPoint(CurrentCamera, CurrentCamera.CFrame:PointToWorldSpace(OPosition))
+
+    -- //
+    return Position
+end
 
 -- // Get the corners for the box
 ESP.Utilites.getBoxCorners = function(Target, returnType)
@@ -64,8 +87,7 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
 
         for i = 1, #points do
             local point = points[i]
-            local tPoint, _ = CurrentCamera.WorldToViewportPoint(CurrentCamera, point.Position)
-
+            local tPoint = ESP.Utilites.BehindPosition(point.Position)
             newPoints[i] = Vector2new(tPoint.X, tPoint.Y)
         end
 
@@ -275,13 +297,12 @@ function ESP:Header(Data)
         local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
 
         -- // Position
-        local Position = Midpoint * Data.Offset
-        Position = WorldToViewportPoint(CurrentCamera, Position.Position)
-        Position = Vector2new(Position.X, Position.Y)
+        local Position = ESP.Utilites.BehindPosition((Midpoint * Data.Offset).Position)
 
         -- // Setting stuff
-        Object.Text = Data.Text or Data.Model.Name
-        Object.Position = Position
+        local ModelName = Data.Model and Data.Model.Name or Data.Text
+        Object.Text = Data.Text or ModelName or "[sex]"
+        Object.Position = Vector2new(Position.X, Position.Y)
     end
     self:Update()
 
@@ -327,12 +348,11 @@ function ESP:Tracer(Data)
         local Blank = BoxCFrame[3] - BoxCFrame[3].Position
         local Midpoint = Blank + (BoxCFrame[4].Position + BoxCFrame[3].Position) / 2
 
-        -- // Position
-        local Position, _ = WorldToViewportPoint(CurrentCamera, Midpoint.Position)
-        Position = Vector2new(Position.X, Position.Y)
+        -- // Position - ty ic3
+        local Position = ESP.Utilites.BehindPosition(Midpoint.Position)
 
         -- // Setting To position
-        Object.To = Position
+        Object.To = Vector2new(Position.X, Position.Y)
     end
     self:Update()
 
