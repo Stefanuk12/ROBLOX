@@ -8,10 +8,10 @@ Creates a new ESP Header Object.
 * `table` Data
 > A table that configures the new ESP Header Object.
 
-| Field        | Type                      | Description                                                                                |
-| ------------ | ------------------------  | ------------------------------------------------------------------------------------------ |
-| `Model`      | `Instance (Model / Part)` | Despite being called `Model`, you may also supply a part to it as well                     |
-| `ObjectData` | `table`                   | This is the data for the Drawing Object, please only supply valid indexes or it will break |
+| Field   | Type                      | Description                                                                                |
+| ------- | ------------------------  | ------------------------------------------------------------------------------------------ |
+| `Model` | `Instance (Model / Part)` | Despite being called `Model`, you may also supply a part to it as well                     |
+| `Data`  | `ObjectData`              | This is the data for the Drawing Object, please only supply valid indexes or it will break |
 
 ## ObjectData
 Please refer to [this](https://x.synapse.to/docs/reference/drawing_lib.html#text) for the possible indexes and values you can put for `ObjectData`
