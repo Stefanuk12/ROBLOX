@@ -23,7 +23,7 @@ local initialisePlayer = function(Player)
     local Tracer = ESP:Tracer({Model = Player.Character})
 
     -- // Add to manager
-    table.insert(Manager, {Box, Header, Tracer})
+    table.insert(Manager, {Player, {Box, Header, Tracer}})
 end
 
 -- // Deinitialise ESP for that player
@@ -39,9 +39,11 @@ local deinitialisePlayer = function(Player)
         end
 
         -- // Remove each object
-        Object[2]:Remove()
-        Object[3]:Remove()
-        Object[4]:Remove()
+        local ESPObjects = Object[2]
+        for x = 1, #ESPObjects do
+            local ESPObject = ESPObjects[x]
+            ESPObject:Remove()
+        end
 
         -- // Remove from table
         table.remove(Manager, i)
@@ -82,14 +84,10 @@ RunService:BindToRenderStep("ESPUpdate", 0, function()
         local Object = Manager[i]
         local Character = getCharacter(Object[1])
 
-        -- // Update
-        for x = 2, 4 do
-            local ESPObject = Object[x]
-
-            if not (ESPObject) then
-                continue
-            end
-
+        -- // Update every ESP Object
+        local ESPObjects = Object[2]
+        for x = 1, #ESPObjects do
+            local ESPObject = ESPObjects[x]
             ESPObject:Update({Model = Character})
         end
     end

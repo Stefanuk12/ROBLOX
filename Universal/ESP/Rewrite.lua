@@ -132,13 +132,7 @@ ESP.Utilites.Drawing = function(Type, Data)
     local Object = Drawing.new(Type)
 
     for i,v in pairs(Data) do
-        local success, _ = pcall(function()
-            local test = Object[i]
-        end)
-
-        if (success) then
-            Object[i] = v
-        end
+        Object[i] = v
     end
 
     return Object
@@ -182,6 +176,34 @@ ESP.Utilites.GetCenter = function(Object)
     end
 end
 
+-- // Add data (recursive tables)
+local function addTableData(Data, ToAdd)
+    -- // Check to add exists
+    if not (ToAdd) then
+        return Data
+    end
+
+    -- // Loop through data we want to add
+    for i,v in pairs(ToAdd) do
+        -- // If data does not exist
+        if not (Data[i]) then
+            Data[i] = v
+            continue
+        end
+
+        -- // Check if table
+        if (typeof(v) == "table") then
+            Data[i] = addTableData(Data, v)
+            continue
+        end
+
+        -- // Just add
+        Data[i] = v
+    end
+
+    return Data
+end
+
 -- // Update an element's data
 function ESP:UpdateData(Data)
     -- // Return if no data
@@ -189,19 +211,15 @@ function ESP:UpdateData(Data)
         return self.Data
     end
 
-    -- // Loop through given data
-    for i,v in pairs(Data) do
-        -- // Set
-        self.Data[i] = v
+    -- // Add the data
+    self.Data = addTableData(self.Data, Data)
 
-        -- // Make sure it is an object value
-        local objectI = self.Object[i]
-        if not (objectI) then
-            continue
+    -- // See if any object data was given to update
+    local ObjectData = Data.ObjectData
+    if (ObjectData) then
+        for i,v in pairs(ObjectData) do
+            self.Object[i] = v
         end
-
-        -- // Set data
-        objectI = v
     end
 
     -- // Return
@@ -216,22 +234,19 @@ function ESP:Box(Data)
     -- // Management
     do
         local idealData = {
-            Thickness = 3,
-            Color = Color3fromRGB(255, 150, 150),
-            Visible = true,
-            Filled = false,
+            ObjectData = {
+                Thickness = 3,
+                Color = Color3fromRGB(255, 150, 150),
+                Visible = true,
+                Filled = false
+            }
         }
-        for i,v in pairs(idealData) do
-            if (not Data[i]) then
-                Data[i] = v
-            end
-        end
-
+        Data = addTableData(Data, idealData)
         self.Data = Data
     end
 
     -- // Object
-    self.Object = ESP.Utilites.Drawing("Quad", Data)
+    self.Object = ESP.Utilites.Drawing("Quad", Data.ObjectData)
 
     -- // Update function
     function self:Update(_Data)
@@ -243,11 +258,15 @@ function ESP:Box(Data)
         local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
 
         -- // Setting Points
-        print("called", BoxCorners[2])
         Object.PointA = BoxCorners[2]
         Object.PointB = BoxCorners[1]
         Object.PointC = BoxCorners[3]
         Object.PointD = BoxCorners[4]
+
+        Data.ObjectData.PointA = Object.PointA
+        Data.ObjectData.PointB = Object.PointB
+        Data.ObjectData.PointC = Object.PointC
+        Data.ObjectData.PointD = Object.PointD
     end
     self:Update()
 
@@ -263,27 +282,23 @@ function ESP:Header(Data)
     -- // Management
     do
         local idealData = {
-            Thickness = 3,
-            Color = Color3fromRGB(255, 150, 150),
-            Visible = true,
-            Size = 18,
-            Center = true,
-            Outline = false,
-            OutlineColor = Color3fromRGB(255, 150, 150),
-            Font = Drawing.Fonts.UI,
+            ObjectData = {
+                Color = Color3fromRGB(255, 150, 150),
+                Visible = true,
+                Size = 18,
+                Center = true,
+                Outline = false,
+                OutlineColor = Color3fromRGB(255, 150, 150),
+                Font = Drawing.Fonts.UI
+            },
             Offset = CFramenew(0, 2, 0)
         }
-        for i,v in pairs(idealData) do
-            if (not Data[i]) then
-                Data[i] = v
-            end
-        end
-
+        Data = addTableData(Data, idealData)
         self.Data = Data
     end
 
     -- // Object
-    self.Object = ESP.Utilites.Drawing("Text", Data)
+    self.Object = ESP.Utilites.Drawing("Text", Data.ObjectData)
 
     -- // Update function
     function self:Update(_Data)
@@ -300,11 +315,15 @@ function ESP:Header(Data)
 
         -- // Position
         local Position = ESP.Utilites.BehindPosition((Midpoint * Data.Offset).Position)
+        Position = Vector2new(Position.X, Position.Y)
 
         -- // Setting stuff
-        local ModelName = Data.Model and Data.Model.Name or Data.Text
+        local ModelName = Data.Model and Data.Model.Name or Data.ObjectData.Text
         Object.Text = Data.Text or ModelName or "[sex]"
-        Object.Position = Vector2new(Position.X, Position.Y)
+        Object.Position = Position
+
+        Data.ObjectData.Text = Object.Text
+        Data.ObjectData.Position = Object.Position
     end
     self:Update()
 
@@ -320,22 +339,19 @@ function ESP:Tracer(Data)
     -- // Management
     do
         local idealData = {
-            Thickness = 3,
-            Color = Color3fromRGB(255, 150, 150),
-            Visible = true,
-            From = TracerStart,
+            ObjectData = {
+                Thickness = 3,
+                Color = Color3fromRGB(255, 150, 150),
+                Visible = true,
+                From = TracerStart
+            }
         }
-        for i,v in pairs(idealData) do
-            if (not Data[i]) then
-                Data[i] = v
-            end
-        end
-
+        Data = addTableData(Data, idealData)
         self.Data = Data
     end
 
     -- // Object
-    self.Object = ESP.Utilites.Drawing("Line", Data)
+    self.Object = ESP.Utilites.Drawing("Line", Data.ObjectData)
 
     -- // Update function
     function self:Update(_Data)
@@ -354,7 +370,9 @@ function ESP:Tracer(Data)
         local Position = ESP.Utilites.BehindPosition(Midpoint.Position)
 
         -- // Setting To position
-        Object.To = Vector2new(Position.X, Position.Y)
+        local To = Vector2new(Position.X, Position.Y)
+        Object.To = To
+        Data.ObjectData = Object.To
     end
     self:Update()
 
