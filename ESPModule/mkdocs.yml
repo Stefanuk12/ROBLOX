@@ -1,0 +1,27 @@
+site_name: ESP Module Documentation
+docs_dir: 'src'
+site_dir: 'docs'
+nav:
+  - Home: ./index.md
+  - Examples:
+    - PlayerESP: ./Examples/PlayerESP.md
+  - API Reference:
+    - Creation:
+      - Box: ./APIReference/Creation/Box.md
+      - Header: ./APIReference/Creation/Header.md
+      - Tracer: ./APIReference/Creation/Tracer.md
+    - Update:
+      - Update: ./APIReference/Update/Update.md
+      - IsVisible: ./APIReference/Update/IsVisible.md
+      - IsOnScreen: ./APIReference/Update/IsOnScreen.md
+    - Utilities:
+      - BehindPosition: ./APIReference/Utilities/BehindPosition.md
+      - IsVisible: ./APIReference/Utilities/IsVisible.md
+      - GetCenter: ./APIReference/Utilities/GetCenter.md
+
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
