@@ -52,7 +52,7 @@ ESP.Utilites.BehindPosition = function(TargetPosition)
 end
 
 -- // Get the corners for the box
-ESP.Utilites.getBoxCorners = function(Target, return3D)
+ESP.Utilites.getBoxCorners = function(Target, return3D, convertBehind)
     -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
@@ -87,8 +87,14 @@ ESP.Utilites.getBoxCorners = function(Target, return3D)
 
         for i = 1, #points do
             local point = points[i]
-            local tPoint, _ = WorldToViewportPoint(CurrentCamera, point.Position)
-            newPoints[i] = Vector2new(tPoint.X, tPoint.Y)
+
+            if not (convertBehind) then
+                local tPoint, _ = WorldToViewportPoint(CurrentCamera, point.Position)
+                newPoints[i] = Vector2new(tPoint.X, tPoint.Y)
+            else
+                local Position = ESP.Utilites.BehindPosition(point.Position)
+                newPoints[i] = Vector2new(Position.X, Position.Y)
+            end
         end
 
         return newPoints
@@ -255,7 +261,7 @@ function ESP:Box(Data)
 
         -- // Vars
         local Object = self.Object
-        local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
+        local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(Data.Model, false, true)
 
         -- // Setting Points
         Object.PointA = BoxCorners[2]
