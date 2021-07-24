@@ -83,6 +83,14 @@ RunService:BindToRenderStep("ESPUpdate", 0, function()
         local Character = getCharacter(Object[1])
 
         -- // Update
-        Object:Update({Model = Character})
+        for x = 2, 4 do
+            local ESPObject = Object[x]
+
+            if not (ESPObject) then
+                continue
+            end
+
+            ESPObject:Update({Model = Character})
+        end
     end
 end)

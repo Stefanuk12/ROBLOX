@@ -87,7 +87,7 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
 
         for i = 1, #points do
             local point = points[i]
-            local tPoint = ESP.Utilites.BehindPosition(point.Position)
+            local tPoint, _ = WorldToViewportPoint(CurrentCamera, point.Position)
             newPoints[i] = Vector2new(tPoint.X, tPoint.Y)
         end
 
@@ -116,12 +116,11 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
     end
 
     -- //
+    local Corners3D = GetPartCorners(ModelBoxC, ModelBoxS)
     if (returnType) then
-        return GetPartCorners(ModelBoxC, ModelBoxS), Failsafed
+        return Corners3D, Failsafed
     else
-        local Corners3D = GetPartCorners(ModelBoxC, ModelBoxS)
         local Corners2D = convertTo2D(Corners3D)
-
         return Corners2D, Corners3D, Failsafed
     end
 end
@@ -239,7 +238,7 @@ function ESP:Box(Data)
 
         -- // Vars
         local Object = self.Object
-        local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
+        local BoxCorners, _, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
 
         -- // Setting Points
         Object.PointA = BoxCorners[2]
@@ -290,7 +289,7 @@ function ESP:Header(Data)
 
         -- // Vars
         local Object = self.Object
-        local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(Data.Model, true)
+        local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(Data.Model, true)
 
         -- // Midpoint
         local Blank = BoxCFrame[1] - BoxCFrame[1].Position
@@ -342,7 +341,7 @@ function ESP:Tracer(Data)
 
         -- // Vars
         local Object = self.Object
-        local BoxCFrame, _, Failsafed = ESP.Utilites.getBoxCorners(Data.Model, true)
+        local BoxCFrame, Failsafed = ESP.Utilites.getBoxCorners(Data.Model, true)
 
         -- // Midpoint
         local Blank = BoxCFrame[3] - BoxCFrame[3].Position
