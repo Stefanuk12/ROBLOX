@@ -52,7 +52,7 @@ ESP.Utilites.BehindPosition = function(TargetPosition)
 end
 
 -- // Get the corners for the box
-ESP.Utilites.getBoxCorners = function(Target, returnType)
+ESP.Utilites.getBoxCorners = function(Target, return3D)
     -- // Get Part Corners
     local function GetPartCorners(CF, Size)
         local function getMidpoint(a, b)
@@ -99,7 +99,7 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
     local Failsafed = false
     if (Target) then
         if (Target:IsA("Model")) then
-            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, Target)
+            ModelBoxC, ModelBoxS = Target:GetBoundingBox()
         elseif (Target:IsA("BasePart")) then
             ModelBoxC = Target.CFrame
             ModelBoxS = Target.Size
@@ -107,7 +107,7 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
             local tempModel = Instance.new("Model", workspace)
             local savedParent = Target.Parent
             Target.Parent = tempModel
-            ModelBoxC, ModelBoxS = GetBoundingBox(ModelInstance, tempModel)
+            ModelBoxC, ModelBoxS = tempModel:GetBoundingBox()
             Target.Parent = savedParent
             Target:Destroy()
         end
@@ -117,11 +117,13 @@ ESP.Utilites.getBoxCorners = function(Target, returnType)
 
     -- //
     local Corners3D = GetPartCorners(ModelBoxC, ModelBoxS)
-    if (returnType) then
+
+    -- //
+    if (return3D) then
         return Corners3D, Failsafed
     else
         local Corners2D = convertTo2D(Corners3D)
-        return Corners2D, Corners3D, Failsafed
+        return Corners2D, Failsafed
     end
 end
 
@@ -238,9 +240,10 @@ function ESP:Box(Data)
 
         -- // Vars
         local Object = self.Object
-        local BoxCorners, _, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
+        local BoxCorners, Failsafed = ESP.Utilites.getBoxCorners(Data.Model)
 
         -- // Setting Points
+        print("called", BoxCorners[2])
         Object.PointA = BoxCorners[2]
         Object.PointB = BoxCorners[1]
         Object.PointC = BoxCorners[3]
