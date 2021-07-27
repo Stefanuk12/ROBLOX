@@ -31,6 +31,7 @@ local IsDescendantOf = Instancenew("Part").IsDescendantOf
 local FindFirstChildWhichIsA = Instancenew("Part").FindFirstChildWhichIsA
 local FindFirstChild = Instancenew("Part").FindFirstChild
 local tableremove = table.remove
+local tableinsert = table.insert
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
@@ -128,7 +129,7 @@ function Aiming.IgnorePlayer(Player)
     end
 
     -- // Blacklist player
-    IgnoredPlayers[#IgnoredPlayers + 1] = Player
+    tableinsert(IgnoredPlayers, Player)
     return true
 end
 
@@ -168,7 +169,7 @@ function Aiming.IgnoreTeam(Team, TeamColor)
     end
 
     -- // Ignore team
-    IgnoredTeams[#IgnoredTeams + 1] = {Team, TeamColor}
+    tableinsert(IgnoredTeams, {Team, TeamColor})
     return true
 end
 
@@ -359,7 +360,7 @@ function Aiming.GetClosestPlayerToCursor()
         local Character = Aiming.Character(Player)
 
         if (Aiming.IsIgnored(Player) == false and Character) then
-            local TargetPartTemp, PartPos, onScreen, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
+            local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
             -- // Check if part exists and health
             if (TargetPartTemp and Aiming.CheckHealth(Player)) then
