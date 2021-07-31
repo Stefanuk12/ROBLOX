@@ -1,5 +1,5 @@
 --[[
-- Synapse, unlike ScriptWare, has not implemented a feature into syn.protect_gui where it protects from this type of attack; thus making it vulnerable.
+- Synapse, unlike ScriptWare, has not implemented a feature into syn.protect_gui where it protects from this type of attack; thus making it vulnerable. You can easily patch this though.
 
 How does this work?
 
@@ -20,7 +20,7 @@ RunService:BindToRenderStep("DetectGUI", 0, function()
         return
     end
 
-    -- // Get the descendant - e.g. CoreGui.DarkDex.Whatever -> CoreGui
+    -- // Get the descendant - e.g. CoreGui.DarkDex.Whatever -> {CoreGui, DarkDex, Whatever}
     local Path = FocusedTextBox:GetFullName():split(".")
     local Descendant = Path[1]
 
