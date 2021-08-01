@@ -1,10 +1,8 @@
 -- // Services
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
-local CharStats = ReplicatedStorage.CharStats
 
 -- // the main thing
 local function initialiseInfiniteStamina()
@@ -12,7 +10,7 @@ local function initialiseInfiniteStamina()
     local u110 = getrenv()._G.S_Get
     local u24 = debug.getupvalue(u110, 2)
 
-    -- //
+    -- // Spoofing
     local set = setmetatable({WS = 16}, {
         -- // Spoofing value
         __index = function(t, k)
