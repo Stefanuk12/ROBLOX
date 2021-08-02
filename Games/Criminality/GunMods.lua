@@ -33,20 +33,22 @@ end
 for _,v in ipairs(getloadedmodules()) do
     if (v.Name == "Config") then
         local Require = require(v)
-        GunTables[Require.Name] = Require
-        BackupGunTables[Require.Name] = Require
+        local GunName = Require.Name
+        GunTables[GunName] = Require
+        BackupGunTables[GunName] = Require
 
         -- // To bypass any checks
-        GunTables[Require.Name] = setmetatable(GunTables[Require.Name], {
+        GunTables[GunName] = setmetatable({}, {
             __index = function(t, k)
                 -- // Return the spoof values to the Anti Cheat Script only
                 if (getcallingscript() == AntiCheatScript) then
-                    local BackupGunTable = rawget(BackupGunTables, Require.Name)
+                    local BackupGunTable = rawget(BackupGunTables, GunName)
                     return rawget(BackupGunTable, k)
                 end
 
                 -- // Return
-                return rawget(t, k)
+                local GunTable = rawget(GunTables, GunName)
+                return rawget(GunTable, k)
             end
         })
     end
