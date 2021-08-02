@@ -11,13 +11,16 @@ local function initialiseInfiniteStamina()
     local u24 = debug.getupvalue(u110, 2)
 
     -- // Spoofing
-    local set = setmetatable({WS = 16}, {
+    local set = setmetatable({}, {
         -- // Spoofing value
         __index = function(t, k)
             -- // See when it tries to index S - Stamina
             if (k == "S") then
                 -- // Return our spoofed value
                 return 100
+            elseif (k == "WS") then -- // See when it tries to index WS - WalkSpeed
+                -- // Return our spoofed value
+                return 16
             end
 
             -- // Return
