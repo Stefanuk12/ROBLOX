@@ -247,7 +247,7 @@ function ESP:Box(Data)
                 Filled = false
             }
         }
-        Data = addTableData(Data, idealData)
+        Data = addTableData(idealData, Data)
         self.Data = Data
     end
 
@@ -299,7 +299,7 @@ function ESP:Header(Data)
             },
             Offset = CFramenew(0, 2, 0)
         }
-        Data = addTableData(Data, idealData)
+        Data = addTableData(idealData, Data)
         self.Data = Data
     end
 
@@ -358,7 +358,7 @@ function ESP:Tracer(Data)
                 From = TracerStart
             }
         }
-        Data = addTableData(Data, idealData)
+        Data = addTableData(idealData, Data)
         self.Data = Data
     end
 
