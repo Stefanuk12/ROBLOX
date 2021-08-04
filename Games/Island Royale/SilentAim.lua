@@ -16,7 +16,7 @@ __namecall = hookmetamethod(game, "__namecall", function(self, ...)
     local method = getnamecallmethod()
 
     -- //
-    if (method == "FindPartOnRayWithIgnoreList" and getfenv(2).script.Name == "RC" and Aiming.Check()) then
+    if (method == "FindPartOnRayWithIgnoreList" and getfenv(2).script.Name == "RC" and Aiming.Check()) then -- // Instead of getfenv(2).script, can't you do getcallingscript() ?
         -- // Vars
         local SelectedPart = Aiming.SelectedPart
         local CurrentCameraPosition = CurrentCamera.CFrame.Position

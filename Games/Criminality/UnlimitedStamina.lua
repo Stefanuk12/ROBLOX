@@ -18,9 +18,9 @@ local function initialiseInfiniteStamina()
             if (k == "S") then
                 -- // Return our spoofed value
                 return 100
-            elseif (k == "WS") then -- // See when it tries to index WS - WalkSpeed
+            elseif (k == "WS") then -- // See when it tries to index WS - WalkSpeed, disabled atm
                 -- // Return our spoofed value
-                return 16
+                return 25
             end
 
             -- // Return
