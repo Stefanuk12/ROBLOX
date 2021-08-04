@@ -15,11 +15,20 @@ local getCharacter = function(Player)
     end
 end
 
+-- // Dynamic Offset function
+local function dynamicOffset(Midpoint, BoxCFrame)
+    local BottomLeft = BoxCFrame[3] + Vector3.new(0, -0.5, 0)
+    local MidpointPosition = Midpoint.Position
+
+    local Position = Vector3.new(MidpointPosition.X, BottomLeft.Position.Y, MidpointPosition.Z)
+    return CFrame.new(Position, BottomLeft.LookVector)
+end
+
 -- // Initialise ESP for that player
 local initialisePlayer = function(Player)
     -- // Create the ESP Objects
     local Box = ESP:Box({Model = Player.Character})
-    local Header = ESP:Header({Model = Player.Character})
+    local Header = ESP:Header({Model = Player.Character, Offset = dynamicOffset})
     local Tracer = ESP:Tracer({Model = Player.Character})
 
     -- // Add to manager

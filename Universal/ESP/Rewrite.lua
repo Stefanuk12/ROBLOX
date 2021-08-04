@@ -289,13 +289,13 @@ function ESP:Header(Data)
     do
         local idealData = {
             ObjectData = {
-                Color = Color3fromRGB(255, 150, 150),
+                Color = Color3fromRGB(255, 255, 255),
                 Visible = true,
-                Size = 18,
+                Size = 12,
                 Center = true,
-                Outline = false,
+                Outline = true,
                 OutlineColor = Color3fromRGB(255, 150, 150),
-                Font = Drawing.Fonts.UI
+                Font = Drawing.Fonts.Plex
             },
             Offset = CFramenew(0, 2, 0)
         }
