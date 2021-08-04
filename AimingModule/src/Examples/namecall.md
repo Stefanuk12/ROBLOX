@@ -2,31 +2,24 @@
 This is a framework to build your own silent aim.
 
 ```lua
--- // Metatable Variables
-local mt = getrawmetatable(game)
-local __namecall = mt.__index
-setreadonly(mt, false)
-
 -- // Load Silent Aim
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
-mt.__namecall = newcclosure(function(...)
+local __namecall
+__namecall = hookmetamethod(game, "__namecall", function(...)
     -- // Vars
     local args = {...}
+    local self = args[1]
     local method = getnamecallmethod()
 
     -- // Checks
     if (method == "FireServer") then
-        if (args[1].Name == "RemoteNameHere" and Aiming.Check()) then
-            -- // Vars
-            local SelectedPart = Aiming.SelectedPart
-    
-            -- // Change the arguments here, for example:
-            args[2].Target = SelectedPart
+        if (self.Name == "RemoteNameHere") then
+            -- change args
 
             -- // Return changed arguments
-            return backupnamecall(unpack(args))
+            return __namecall(unpack(args))
         end
     end
 
