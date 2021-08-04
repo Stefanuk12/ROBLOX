@@ -391,52 +391,46 @@ end)
 
 return Aiming
 
---[[
-Examples:
+-- // Examples // --
 
 --// Namecall Version // --
--- // Metatable Variables
-local mt = getrawmetatable(game)
-local backupindex = mt.__index
-setreadonly(mt, false)
 
+--[[
 -- // Load Silent Aim
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
-mt.__namecall = newcclosure(function(...)
+local __namecall
+__namecall = hookmetamethod(game, "__namecall", function(...)
     -- // Vars
     local args = {...}
+    local self = args[1]
     local method = getnamecallmethod()
 
     -- // Checks
     if (method == "FireServer") then
-        if (args[1].Name == "RemoteNameHere") then
+        if (self.Name == "RemoteNameHere") then
             -- change args
 
             -- // Return changed arguments
-            return backupnamecall(unpack(args))
+            return __namecall(unpack(args))
         end
     end
 
     -- // Return
-    return backupnamecall(...)
+    return __namecall(...)
 end)
-
--- // Revert Metatable readonly status
-setreadonly(mt, true)
+]]--
 
 -- // Index Version // --
--- // Metatable Variables
-local mt = getrawmetatable(game)
-local backupindex = mt.__index
-setreadonly(mt, false)
 
+--[[
 -- // Load Silent Aim
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
-mt.__index = newcclosure(function(t, k)
+local __index
+__index = hookmetamethod(game, "__index", (function(t, k)
     -- // Check if it trying to get our mouse's hit or target
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
         -- // If we can use the silent aim
@@ -450,9 +444,6 @@ mt.__index = newcclosure(function(t, k)
     end
 
     -- // Return
-    return backupindex(t, k)
+    return __index(t, k)
 end)
-
--- // Revert Metatable readonly status
-setreadonly(mt, true)
-]]
+]]--
