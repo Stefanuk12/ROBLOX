@@ -320,7 +320,13 @@ function ESP:Header(Data)
         local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
 
         -- // Position
-        local Position = ESP.Utilites.BehindPosition((Midpoint * Data.Offset).Position)
+        local Position
+        if (typeof(Data.Offset) == "function") then -- // Allow dynamic offset
+            Position = Data.Offset(Midpoint, BoxCFrame)
+        else
+            Position = Midpoint * Data.Offset
+        end
+        Position = ESP.Utilites.BehindPosition(Position.Position)
         Position = Vector2new(Position.X, Position.Y)
 
         -- // Setting stuff
