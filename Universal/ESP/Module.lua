@@ -238,7 +238,12 @@ function ESP.Creation.Header(data)
     local Midpoint = Blank + (BoxCFrame[1].Position + BoxCFrame[2].Position) / 2
 
     -- // Position
-    local Position = Midpoint * data.Offset
+    local Position
+    if (typeof(data.Offset) == "function") then -- // Allow dynamic offset
+        Position = data.Offset(Midpoint, BoxCFrame)
+    else
+        Position = Midpoint * data.Offset
+    end
     Position = WorldToViewportPoint(Camera, Position.Position)
     Position = newVector2(Position.X, Position.Y)
 
