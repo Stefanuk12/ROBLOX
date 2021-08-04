@@ -434,7 +434,7 @@ __index = hookmetamethod(game, "__index", (function(t, k)
     -- // Check if it trying to get our mouse's hit or target
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
         -- // If we can use the silent aim
-        if (Aiming.checkSilentAim()) then
+        if (Aiming.Check()) then
             -- // Vars
             local TargetPart = Aiming.SelectedPart
 
