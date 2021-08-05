@@ -2,12 +2,12 @@
 Here is an example silent aim, it will work on some games that purely use the Mouse's `Hit` and `Target` properties.
 
 ```lua
--- // Load Silent Aim
+-- // Load Aiming Module
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
 local __index
-__index = hookmetamethod(game, "__index", (function(t, k)
+__index = hookmetamethod(game, "__index", function(t, k)
     -- // Check if it trying to get our mouse's hit or target
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
         -- // If we can use the silent aim

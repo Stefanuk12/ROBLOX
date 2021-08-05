@@ -706,12 +706,12 @@
                 
                 <h1 id="index-example">Index Example</h1>
 <p>Here is an example silent aim, it will work on some games that purely use the Mouse's <code>Hit</code> and <code>Target</code> properties.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">-- // Load Silent Aim</span>
+<div class="highlight"><pre><span></span><code><span class="c1">-- // Load Aiming Module</span>
 <span class="kd">local</span> <span class="n">Aiming</span> <span class="o">=</span> <span class="n">loadstring</span><span class="p">(</span><span class="n">game</span><span class="p">:</span><span class="n">HttpGet</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua&quot;</span><span class="p">))()</span>
 
 <span class="c1">-- // Hook</span>
 <span class="kd">local</span> <span class="n">__index</span>
-<span class="n">__index</span> <span class="o">=</span> <span class="n">hookmetamethod</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="s2">&quot;__index&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="n">__index</span> <span class="o">=</span> <span class="n">hookmetamethod</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="s2">&quot;__index&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
     <span class="c1">-- // Check if it trying to get our mouse&#39;s hit or target</span>
     <span class="kr">if</span> <span class="p">(</span><span class="n">t</span><span class="p">:</span><span class="n">IsA</span><span class="p">(</span><span class="s2">&quot;Mouse&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Hit&quot;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Target&quot;</span><span class="p">))</span> <span class="kr">then</span>
         <span class="c1">-- // If we can use the silent aim</span>

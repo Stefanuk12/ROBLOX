@@ -2,7 +2,7 @@
 This is a framework to build your own silent aim.
 
 ```lua
--- // Load Silent Aim
+-- // Load Aiming Module
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
 -- // Hook
