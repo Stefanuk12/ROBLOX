@@ -1,3 +1,5 @@
+-- // doesnt work lol someone fix it
+
 -- // Dependencies
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 
