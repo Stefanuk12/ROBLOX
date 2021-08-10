@@ -3,6 +3,7 @@
 -- // Why do people randomly join servers and crash? It is not cool
 -- // Anyway, this should cover most of the crash methods I know
 -- // This uses my signals API, but know that this version is not polished as the polished version is being kept private at the moment and is able to "dehash" certain commands. Its very OP :smirk:
+-- // ^ there is another verison within Signals/Modules/Signals.lua but i didnt use it because it might slow things down
 -- // Also reason I made reset all and stuff a variable, same with Chat is to make sure it is as fast as possible to intercept the crashes. The clone crash is very effective so you want to make sure you are as fast as possible, so fast that if you put it (the check) lower down - it might not be able to catch it!
 
 -- // Load Dependencies
