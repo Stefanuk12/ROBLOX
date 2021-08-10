@@ -12,7 +12,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/mas
 local Players = game:GetService("Players")
 
 -- // Vars
-local LocalPlayer = Players.LocalPlayer
 local Chat = Players.Chat
 
 local ResetAll = ":reset all"
@@ -20,7 +19,7 @@ local RemoveClones = ":removeclones"
 local Clear = ":clr"
 
 -- // See when someone says a command
-Players.CommandChatted:Connect(function(Player, Command, Arguments)
+Players.CommandChatted:Connect(function(_, Command, Arguments)
     -- // Anti Clone
     if (Command == "clone") then
         Chat(Players, RemoveClones)
@@ -30,16 +29,16 @@ Players.CommandChatted:Connect(function(Player, Command, Arguments)
     if (Command == "size" or Command == "freeze") then
         Chat(Players, ResetAll)
     end
-    
+
     -- // Crashes that involve tools - Vampire/Car
     if (Command == "gear") then
         local Gear = tonumber(Arguments[2])
-        
+
         if (Gear == 94794847 or Gear == 253519495) then
             Chat(Players, ResetAll)
         end
     end
-    
+
     -- // Disable messages
     if (Command == "m" or Command == "h" or Command == "pm" or Command == "message") then
         Chat(Players, Clear)
