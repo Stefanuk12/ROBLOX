@@ -2,95 +2,7 @@
 local Players = game:GetService("Players")
 
 -- // Signal Constructor
-local Signal = {}
-do
-    -- // Credit: https://raw.githubusercontent.com/Quenty/NevermoreEngine/version2/Modules/Shared/Events/Signal.lua
-
-    --- Lua-side duplication of the API of events on Roblox objects.
-    -- Signals are needed for to ensure that for local events objects are passed by
-    -- reference rather than by value where possible, as the BindableEvent objects
-    -- always pass signal arguments by value, meaning tables will be deep copied.
-    -- Roblox's deep copy method parses to a non-lua table compatable format.
-    -- @classmod Signal
-
-    local ENABLE_TRACEBACK = false
-
-    Signal.ClassName = "Signal"
-
-    --- Constructs a new signal.
-    -- @constructor Signal.new()
-    -- @treturn Signal
-    function Signal.new(Name)
-        Name = Name or ""
-        local self = setmetatable({}, {
-            __index = Signal,
-            __type = "CustomScriptSignal",
-            __tostring = function()
-                return "Signal " .. Name
-            end
-        })
-
-        self._bindableEvent = Instance.new("BindableEvent")
-        self._argData = nil
-        self._argCount = nil -- Prevent edge case of :Fire("A", nil) --> "A" instead of "A", nil
-
-        self._source = ENABLE_TRACEBACK and debug.traceback() or ""
-
-        return self
-    end
-
-    --- Fire the event with the given arguments. All handlers will be invoked. Handlers follow
-    -- Roblox signal conventions.
-    -- @param ... Variable arguments to pass to handler
-    -- @treturn nil
-    function Signal:Fire(...)
-        if not self._bindableEvent then
-            warn(("Signal is already destroyed. %s"):format(self._source))
-            return
-        end
-
-        self._argData = {...}
-        self._argCount = select("#", ...)
-        self._bindableEvent:Fire()
-        -- self._argData = nil
-        -- self._argCount = nil
-    end
-
-    --- Connect a new handler to the event. Returns a connection object that can be disconnected.
-    -- @tparam function handler Function handler called with arguments passed when `:Fire(...)` is called
-    -- @treturn Connection Connection object that can be disconnected
-    function Signal:Connect(handler)
-        if not (type(handler) == "function") then
-            error(("connect(%s)"):format(typeof(handler)), 2)
-        end
-
-        return self._bindableEvent.Event:Connect(function()
-            handler(unpack(self._argData, 1, self._argCount))
-        end)
-    end
-
-    --- Wait for fire to be called, and return the arguments it was given.
-    -- @treturn ... Variable arguments from connection
-    function Signal:Wait()
-        self._bindableEvent.Event:Wait()
-        assert(self._argData, "Missing arg data, likely due to :TweenSize/Position corrupting threadrefs.")
-        return unpack(self._argData, 1, self._argCount)
-    end
-
-    --- Disconnects all connected events to the signal. Voids the signal as unusable.
-    -- @treturn nil
-    function Signal:Destroy()
-        if self._bindableEvent then
-            self._bindableEvent:Destroy()
-            self._bindableEvent = nil
-        end
-
-        self._argData = nil
-        self._argCount = nil
-
-        setmetatable(self, nil)
-    end
-end
+local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Quenty/NevermoreEngine/version2/Modules/Shared/Events/Signal.lua"))()
 
 -- // Add custom property to an Object
 local addProperty = function(Object, Name, Value)
@@ -121,70 +33,60 @@ end
 
 -- // Command stuff
 do
-    -- // Array find
-    local arrayFind = function(Array, Find)
-        for i = 1, #Array do
-            local result = Array[i]
-
-            if (result == Find) then
-                return i
-            end
-        end
-    end
+    -- //
+    local tablefind = table.find
+    local tableremove = table.remove
+    local tableinsert = table.insert
 
     -- // Format command arguments correctly
     local formatArguments = function(Player, Command, Arguments)
         -- // Vars
-        local Template = {Arguments = Arguments, Targets = {}, TargetIndex = -1}
-        local TargetIndex = Template.TargetIndex
+        local Targets = {}
+        local CommandArguments = Command.Arguments
+        local TargetIndex = tablefind(CommandArguments, "player") or -1
 
         -- // Find target index
-        for i = 1, #Command.Arguments do
-            local Argument = Command.Arguments[i]
-
-            if (Argument == "player") then
-                TargetIndex = i
-            elseif (Argument == "number") then
-                local _Argument = Template.Arguments[i]
-                Template.Arguments[i] = tonumber(Argument) or _Argument
+        for i, Argument in ipairs(CommandArguments) do
+            if (Argument == "number") then
+                local _Argument = Arguments[i]
+                Arguments[i] = tonumber(Argument) or _Argument
             end
         end
 
         -- // Check if there are any targets
-        if (TargetIndex ~= -1) then
-            -- // Get Targets
-            local Targets = Arguments[TargetIndex]:split(",")
-            for i = 1, #Targets do
-                local Target = Targets[i]
+        if (TargetIndex == -1) then
+            return {Arguments = Arguments, Targets = Targets, TargetIndex = -1}
+        end
 
-                -- // Affect self
-                if (Target == "me" and not arrayFind(Template.Targets, Player)) then
-                    Template.Targets[#Template.Targets + 1] = Player
-                elseif (Target == "others") then -- // Affect others
-                    local others = Players:GetPlayers()
-                    local selfIndex = arrayFind(others, Player)
+        -- // Get Targets
+        for _, Target in ipairs(Arguments[TargetIndex]:split(",")) do
+            -- // Lower
+            Target = Target:lower()
 
-                    table.remove(others, selfIndex)
-                elseif (Targets == "all") then -- // Affect everyone
-                    Template.Targets = Players:GetPlayers()
-                else -- // Affect individual
-                    local allPlayers = Players:GetPlayers()
-                    for i2 = 1, #allPlayers do
-                        local _Player = allPlayers[i2]
+            -- // Affect self
+            if (Target == "me" and not tablefind(Targets, Player)) then
+                tableinsert(Targets, Player)
+            elseif (Target == "others") then
+                -- // Affect others
+                local others = Players:GetPlayers()
+                local selfIndex = tablefind(others, Player)
 
-                        if (_Player.Name:lower():sub(1, #Target) == Target:lower() and not arrayFind(Template.Targets, Player)) then
-                            Template.Targets[#Template.Targets + 1] = _Player
-                        end
+                tableremove(others, selfIndex)
+            elseif (Targets == "all") then
+                -- // Affect everyone
+                Targets = Players:GetPlayers()
+            else
+                -- // Affect individual
+                for _, _Player in ipairs(Players:GetPlayers()) do
+                    if (_Player.Name:lower():sub(1, #Target) == Target and not tablefind(Targets, Player)) then
+                        tableinsert(Targets, _Player)
                     end
                 end
             end
-
-            -- // Set Arguments
-            table.remove(Template.Arguments, TargetIndex)
         end
 
         -- // Return
-        return Template
+        return {Arguments = Arguments, Targets = Targets}
     end
 
     -- // Every command in the game
@@ -194,6 +96,7 @@ do
             ["clear"] = {Arguments = {"player"}},
             ["logs"] = {Arguments = {"player"}},
             ["m"] = {Arguments = {"string"}},
+            ["message"] = {Arguments = {"string"}},
             ["h"] = {Arguments = {"string"}},
             ["kill"] = {Arguments = {"player"}},
             ["respawn"] = {Arguments = {"player"}},
@@ -320,60 +223,63 @@ do
             ["removeclones"] = {Arguments = {"player"}}
         },
         Persons = {
-            ["fix/"] = {Arguments = {}},
-            ["kill/"] = {Arguments = {"player"}},
-            ["heal/"] = {Arguments = {"player"}},
-            ["damage/"] = {Arguments = {"player", "number"}},
-            ["health/"] = {Arguments = {"player", "number"}},
-            ["explode/"] = {Arguments = {"player"}},
-            ["rocket/"] = {Arguments = {"player"}},
-            ["unrocket/"] = {Arguments = {"player"}},
-            ["removetools/"] = {Arguments = {"player"}},
-            ["sit/"] = {Arguments = {"player"}},
-            ["jump/"] = {Arguments = {"player"}},
-            ["stand/"] = {Arguments = {"player"}},
-            ["part/"] = {Arguments = {"number", "number", "number"}},
-            ["respawn/"] = {Arguments = {"player"}},
-            ["jail/"] = {Arguments = {"player"}},
-            ["unjail/"] = {Arguments = {"player"}},
-            ["punish/"] = {Arguments = {"player"}},
-            ["unpunish/"] = {Arguments = {"player"}},
-            ["teleport/"] = {Arguments = {"player", "string"}},
-            ["control/"] = {Arguments = {"player"}},
-            ["time/"] = {Arguments = {"number"}},
-            ["ambient/"] = {Arguments = {"number"}},
-            ["outdoorambient/"] = {Arguments = {"number", "number", "number"}},
-            ["fogend/"] = {Arguments = {"number"}},
-            ["fogstart/"] = {Arguments = {"number"}},
-            ["unblind/"] = {Arguments = {"player"}},
-            ["nograv/"] = {Arguments = {"player"}},
-            ["antigrav/"] = {Arguments = {"player"}},
-            ["grav/"] = {Arguments = {"player"}},
-            ["highrav/"] = {Arguments = {"player"}},
-            ["setgrav/"] = {Arguments = {"player", "number"}},
-            ["trip/"] = {Arguments = {"player"}},
-            ["walkspeed/"] = {Arguments = {"player", "number"}},
-            ["invisible/"] = {Arguments = {"player"}},
-            ["visible/"] = {Arguments = {"player"}},
-            ["freeze/"] = {Arguments = {"player"}},
-            ["thaw/"] = {Arguments = {"player"}},
-            ["unlock/"] = {Arguments = {"player"}},
-            ["lock/"] = {Arguments = {"player"}},
-            ["ff/"] = {Arguments = {"player"}},
-            ["unff/"] = {Arguments = {"player"}},
-            ["sparkles/"] = {Arguments = {"player"}},
-            ["unsparkles/"] = {Arguments = {"player"}},
-            ["shield/"] = {Arguments = {"player"}},
-            ["unshield/"] = {Arguments = {"player"}},
-            ["god/"] = {Arguments = {"player"}},
-            ["ungod/"] = {Arguments = {"player"}},
-            ["zombify/"] = {Arguments = {"player"}},
-            ["normal/"] = {Arguments = {"player"}},
-            ["m/"] = {Arguments = {"player"}},
-            ["h/"] = {Arguments = {"player"}},
-            ["clear/"] = {Arguments = {"player"}},
+            ["fix"] = {Arguments = {}},
+            ["kill"] = {Arguments = {"player"}},
+            ["heal"] = {Arguments = {"player"}},
+            ["damage"] = {Arguments = {"player", "number"}},
+            ["health"] = {Arguments = {"player", "number"}},
+            ["explode"] = {Arguments = {"player"}},
+            ["rocket"] = {Arguments = {"player"}},
+            ["unrocket"] = {Arguments = {"player"}},
+            ["removetools"] = {Arguments = {"player"}},
+            ["sit"] = {Arguments = {"player"}},
+            ["jump"] = {Arguments = {"player"}},
+            ["stand"] = {Arguments = {"player"}},
+            ["part"] = {Arguments = {"number", "number", "number"}},
+            ["respawn"] = {Arguments = {"player"}},
+            ["jail"] = {Arguments = {"player"}},
+            ["unjail"] = {Arguments = {"player"}},
+            ["punish"] = {Arguments = {"player"}},
+            ["unpunish"] = {Arguments = {"player"}},
+            ["teleport"] = {Arguments = {"player", "string"}},
+            ["control"] = {Arguments = {"player"}},
+            ["time"] = {Arguments = {"number"}},
+            ["ambient"] = {Arguments = {"number"}},
+            ["outdoorambient"] = {Arguments = {"number", "number", "number"}},
+            ["fogend"] = {Arguments = {"number"}},
+            ["fogstart"] = {Arguments = {"number"}},
+            ["unblind"] = {Arguments = {"player"}},
+            ["nograv"] = {Arguments = {"player"}},
+            ["antigrav"] = {Arguments = {"player"}},
+            ["grav"] = {Arguments = {"player"}},
+            ["highrav"] = {Arguments = {"player"}},
+            ["setgrav"] = {Arguments = {"player", "number"}},
+            ["trip"] = {Arguments = {"player"}},
+            ["walkspeed"] = {Arguments = {"player", "number"}},
+            ["invisible"] = {Arguments = {"player"}},
+            ["visible"] = {Arguments = {"player"}},
+            ["freeze"] = {Arguments = {"player"}},
+            ["thaw"] = {Arguments = {"player"}},
+            ["unlock"] = {Arguments = {"player"}},
+            ["lock"] = {Arguments = {"player"}},
+            ["ff"] = {Arguments = {"player"}},
+            ["unff"] = {Arguments = {"player"}},
+            ["sparkles"] = {Arguments = {"player"}},
+            ["unsparkles"] = {Arguments = {"player"}},
+            ["shield"] = {Arguments = {"player"}},
+            ["unshield"] = {Arguments = {"player"}},
+            ["god"] = {Arguments = {"player"}},
+            ["ungod"] = {Arguments = {"player"}},
+            ["zombify"] = {Arguments = {"player"}},
+            ["normal"] = {Arguments = {"player"}},
+            ["m"] = {Arguments = {"player"}},
+            ["message"] = {Arguments = {"string"}},
+            ["h"] = {Arguments = {"player"}},
+            ["clear"] = {Arguments = {"player"}},
         }
     }
+    local kohlsCommands = Commands.Kohls
+    local personsCommands = Commands.Persons
 
     -- // On Chatted
     local onChatted = function(Player, Message)
@@ -386,39 +292,44 @@ do
         local FirstSpace = Message:find(" ") or -1
         local FirstSlash = Message:find("/") or -1
 
-        -- // Kohls Command
+        -- // If someone does ": kill" or " kill", that invalids the command
         if (Message:sub(1, 1) ~= " ") then
-            Message = Message:lower()
-
-            -- // Kohls Commands
-            if (FirstSpace > FirstSlash) then
-                local Command = Message:sub(1, FirstSpace - 1)
-                local CommandData = Commands.Kohls[Command]
-
-                -- // Check if command exists
-                if (Command and CommandData) then
-                    local Body = Message:sub(FirstSpace + 1)
-                    local Arguments = formatArguments(Player, CommandData, Body:split(" "))
-
-                    -- // Fire Events
-                    Players.CommandChatted:Fire(Player, Command, Arguments)
-                    Player.CommandChatted:Fire(Command, Arguments)
-                end
-            else -- // Persons299 Commands
-                local Command = Message:sub(1, FirstSpace - 1)
-                local CommandData = Commands.Kohls[Command]
-
-                -- // Check if command exists
-                if (Command and CommandData) then
-                    local Body = Message:sub(FirstSpace + 1)
-                    local Arguments = formatArguments(Player, CommandData, Body:split("/"))
-
-                    -- // Fire Events
-                    Players.CommandChatted:Fire(Player, Command, Arguments)
-                    Player.CommandChatted:Fire(Command, Arguments)
-                end
-            end
+            return
         end
+
+        -- // Vars
+        local Command
+        local CommandData
+        local Body
+        local Arguments = {}
+
+        -- // Check if Kohls Admin
+        local IsKohls = FirstSpace > FirstSlash
+        if (IsKohls) then
+            -- // Check if command exists
+            Command = Message:sub(1, FirstSpace - 1):lower()
+            if not (tablefind(kohlsCommands, Command)) then
+                return
+            end
+
+            -- //
+            CommandData = kohlsCommands[Command]
+            Arguments = formatArguments(Player, CommandData, Body:split(" "))
+        else -- // Persons299 Admin
+            -- // Check if command exists
+            Command = Message:sub(1, FirstSlash - 1):lower()
+            if not (tablefind(personsCommands, Command)) then
+                return
+            end
+
+            -- //
+            CommandData = personsCommands[Command]
+            Arguments = formatArguments(Player, CommandData, Body:split("/"))
+        end
+
+        -- // Fire Events
+        Players.CommandChatted:Fire(Player, Command, Arguments)
+        Player.CommandChatted:Fire(Command, Arguments)
     end
 
     -- // Initialise Player
@@ -434,9 +345,7 @@ do
     -- // Initialise all players
     do
         local allPlayers = Players:GetPlayers()
-        for i = 1, #allPlayers do
-            local Player = allPlayers[i]
-
+        for _, Player in ipairs(allPlayers) do
             initPlayer(Player)
         end
     end
