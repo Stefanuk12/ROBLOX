@@ -236,7 +236,7 @@ local onChatted = function(Player, Message)
 
     -- // Vars
     local Command
-    local Body = Message:sub(FirstSpace + 1)
+    local Body
     local Arguments = {}
 
     -- // Check if Kohls Admin
@@ -249,6 +249,7 @@ local onChatted = function(Player, Message)
         end
 
         -- //
+        Body = Message:sub(FirstSpace + 1)
         Arguments = Body:split(" ")
     else -- // Persons299 Admin
         -- // Check if command exists
@@ -258,6 +259,7 @@ local onChatted = function(Player, Message)
         end
 
         -- //
+        Body = Message:sub(FirstSlash + 1)
         Arguments = Body:split("/")
     end
 
