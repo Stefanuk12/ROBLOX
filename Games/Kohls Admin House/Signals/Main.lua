@@ -7,6 +7,7 @@ local kohlsCommands = {
     ["clear"] = true,
     ["logs"] = true,
     ["m"] = true,
+    ["message"] = true,
     ["h"] = true,
     ["kill"] = true,
     ["respawn"] = true,
@@ -183,6 +184,7 @@ local personsCommands = {
     ["zombify/"] = true,
     ["normal/"] = true,
     ["m/"] = true,
+    ["message/"] = true,
     ["h/"] = true,
     ["clear/"] = true,
 }
