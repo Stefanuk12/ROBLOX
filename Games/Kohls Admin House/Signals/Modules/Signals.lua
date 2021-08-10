@@ -314,6 +314,7 @@ do
 
             -- //
             CommandData = kohlsCommands[Command]
+            Body = Message:sub(FirstSpace + 1)
             Arguments = formatArguments(Player, CommandData, Body:split(" "))
         else -- // Persons299 Admin
             -- // Check if command exists
@@ -324,6 +325,7 @@ do
 
             -- //
             CommandData = personsCommands[Command]
+            Body = Message:sub(FirstSlash + 1)
             Arguments = formatArguments(Player, CommandData, Body:split("/"))
         end
 
