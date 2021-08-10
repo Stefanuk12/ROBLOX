@@ -7,7 +7,6 @@ local kohlsCommands = {
     ["clear"] = true,
     ["logs"] = true,
     ["m"] = true,
-    ["message"] = true,
     ["h"] = true,
     ["kill"] = true,
     ["respawn"] = true,
@@ -134,59 +133,58 @@ local kohlsCommands = {
     ["removeclones"] = true
 }
 local personsCommands = {
-    ["fix/"] = true,
-    ["kill/"] = true,
-    ["heal/"] = true,
-    ["damage/"] = true,
-    ["health/"] = true,
-    ["explode/"] = true,
-    ["rocket/"] = true,
-    ["unrocket/"] = true,
-    ["removetools/"] = true,
-    ["sit/"] = true,
-    ["jump/"] = true,
-    ["stand/"] = true,
-    ["part/"] = true,
-    ["respawn/"] = true,
-    ["jail/"] = true,
-    ["unjail/"] = true,
-    ["punish/"] = true,
-    ["unpunish/"] = true,
-    ["teleport/"] = true,
-    ["control/"] = true,
-    ["time/"] = true,
-    ["ambient/"] = true,
-    ["outdoorambient/"] = true,
-    ["fogend/"] = true,
-    ["fogstart/"] = true,
-    ["unblind/"] = true,
-    ["nograv/"] = true,
-    ["antigrav/"] = true,
-    ["grav/"] = true,
-    ["highrav/"] = true,
-    ["setgrav/"] = true,
-    ["trip/"] = true,
-    ["walkspeed/"] = true,
-    ["invisible/"] = true,
-    ["visible/"] = true,
-    ["freeze/"] = true,
-    ["thaw/"] = true,
-    ["unlock/"] = true,
-    ["lock/"] = true,
-    ["ff/"] = true,
-    ["unff/"] = true,
-    ["sparkles/"] = true,
-    ["unsparkles/"] = true,
-    ["shield/"] = true,
-    ["unshield/"] = true,
-    ["god/"] = true,
-    ["ungod/"] = true,
-    ["zombify/"] = true,
-    ["normal/"] = true,
-    ["m/"] = true,
-    ["message/"] = true,
-    ["h/"] = true,
-    ["clear/"] = true,
+    ["fix"] = true,
+    ["kill"] = true,
+    ["heal"] = true,
+    ["damage"] = true,
+    ["health"] = true,
+    ["explode"] = true,
+    ["rocket"] = true,
+    ["unrocket"] = true,
+    ["removetools"] = true,
+    ["sit"] = true,
+    ["jump"] = true,
+    ["stand"] = true,
+    ["part"] = true,
+    ["respawn"] = true,
+    ["jail"] = true,
+    ["unjail"] = true,
+    ["punish"] = true,
+    ["unpunish"] = true,
+    ["teleport"] = true,
+    ["control"] = true,
+    ["time"] = true,
+    ["ambient"] = true,
+    ["outdoorambient"] = true,
+    ["fogend"] = true,
+    ["fogstart"] = true,
+    ["unblind"] = true,
+    ["nograv"] = true,
+    ["antigrav"] = true,
+    ["grav"] = true,
+    ["highrav"] = true,
+    ["setgrav"] = true,
+    ["trip"] = true,
+    ["walkspeed"] = true,
+    ["invisible"] = true,
+    ["visible"] = true,
+    ["freeze"] = true,
+    ["thaw"] = true,
+    ["unlock"] = true,
+    ["lock"] = true,
+    ["ff"] = true,
+    ["unff"] = true,
+    ["sparkles"] = true,
+    ["unsparkles"] = true,
+    ["shield"] = true,
+    ["unshield"] = true,
+    ["god"] = true,
+    ["ungod"] = true,
+    ["zombify"] = true,
+    ["normal"] = true,
+    ["m"] = true,
+    ["h"] = true,
+    ["clear"] = true,
 }
 
 -- // Signal Constructor
@@ -318,37 +316,41 @@ local onChatted = function(Player, Message)
     local FirstSpace = Message:find(" ") or -1
     local FirstSlash = Message:find("/") or -1
 
-    -- // Kohls Command
-    if (Message:sub(1, 1) ~= " ") then
-        -- // Kohls Commands
-        if (FirstSpace > FirstSlash) then
-            Message = Message:lower()
-            local Command = Message:sub(1, FirstSpace - 1)
-
-            -- // Check if command exists
-            if (kohlsCommands[Command]) then
-                local Body = Message:sub(FirstSpace + 1)
-                local Arguments = Body:split(" ") or {}
-
-                -- // Fire Events
-                Players.CommandChatted:Fire(Player, Command, Arguments)
-                Player.CommandChatted:Fire(Command, Arguments)
-            end
-        else -- // Persons299 Commands
-            Message = Message:lower()
-            local Command = Message:sub(1, FirstSpace - 1)
-
-            -- // Check if command exists
-            if (personsCommands[Command]) then
-                local Body = Message:sub(FirstSpace + 1)
-                local Arguments = Body:split("/") or {}
-
-                -- // Fire Events
-                Players.CommandChatted:Fire(Player, Command, Arguments)
-                Player.CommandChatted:Fire(Command, Arguments)
-            end
-        end
+    -- // If someone does ": kill" or " kill", that invalids the command
+    if (Message:sub(1, 1) == " ") then
+        return
     end
+
+    -- // Vars
+    local Command
+    local Body = Message:sub(FirstSpace + 1)
+    local Arguments = {}
+
+    -- // Check if Kohls Admin
+    local IsKohls = FirstSpace > FirstSlash
+    if (IsKohls) then
+        -- // Check if command exists
+        Command = Message:sub(1, FirstSpace - 1):lower()
+        if not (kohlsCommands[Command]) then
+            return
+        end
+
+        -- //
+        Arguments = Body:split(" ")
+    else -- // Persons299 Admin
+        -- // Check if command exists
+        Command = Message:sub(1, FirstSlash - 1):lower()
+        if not (personsCommands[Command]) then
+            return
+        end
+
+        -- //
+        Arguments = Body:split("/")
+    end
+
+    -- // Fire Events
+    Players.CommandChatted:Fire(Player, Command, Arguments)
+    Player.CommandChatted:Fire(Command, Arguments)
 end
 
 -- // Initialise Player
