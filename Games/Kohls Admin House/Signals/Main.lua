@@ -269,8 +269,8 @@ local onChatted = function(Player, Message)
 end
 
 -- // Initialise Player
+addProperty(Players, "CommandChatted", Signal.new("CommandChatted"))
 local initPlayer = function(Player)
-    addProperty(Players, "CommandChatted", Signal.new("CommandChatted"))
     addProperty(Player, "CommandChatted", Signal.new("CommandChatted"))
 
     Player.Chatted:Connect(function(Message)
