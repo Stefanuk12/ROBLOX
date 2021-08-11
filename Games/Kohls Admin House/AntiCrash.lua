@@ -16,14 +16,13 @@ local Players = game:GetService("Players")
 local Chat = Players.Chat
 
 local ResetAll = ":reset all"
-local RemoveClones = ":removeclones"
 local Clear = ":clr"
 
 -- // See when someone says a command
 Players.CommandChatted:Connect(function(_, Command, Arguments)
     -- // Anti Clone
     if (Command == "clone") then
-        Chat(Players, RemoveClones)
+        Chat(Players, Clear)
     end
 
     -- // Anti Size and Freeze
