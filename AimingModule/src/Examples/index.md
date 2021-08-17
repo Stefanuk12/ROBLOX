@@ -1,5 +1,6 @@
 # Index Example
-Here is an example silent aim, it will work on some games that purely use the Mouse's `Hit` and `Target` properties.
+!!! warning "Compatibility warning"
+    This will work on some games that **purely** use the Mouse's `Hit` and `Target` properties.
 
 ```lua
 -- // Load Aiming Module

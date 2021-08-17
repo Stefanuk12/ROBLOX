@@ -705,9 +705,25 @@
                 
                 
                 <h1 id="namecall-example">Namecall Example</h1>
-<p>This is a framework to build your own silent aim.</p>
+<div class="admonition warning">
+<p class="admonition-title">Needed Changes</p>
+<p>Make sure you add the names of the calling scripts to the <code>CallingScripts</code> variable because what this does it set <strong>every</strong> <code>Ray</code>'s direction towards the <code>Selected Part</code>'s position.</p>
+<p>If we make it do this to every single <code>Ray</code>, it <em>may</em> <strong>break</strong> the game.</p>
+<p>Also, if it <strong>does not</strong> use <code>FindPartOnRayWithIgnoreList</code>, you <strong>need</strong> to change it accordingly.</p>
+</div>
 <div class="highlight"><pre><span></span><code><span class="c1">-- // Load Aiming Module</span>
 <span class="kd">local</span> <span class="n">Aiming</span> <span class="o">=</span> <span class="n">loadstring</span><span class="p">(</span><span class="n">game</span><span class="p">:</span><span class="n">HttpGet</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua&quot;</span><span class="p">))()</span>
+
+<span class="c1">-- // Services</span>
+<span class="kd">local</span> <span class="n">Workspace</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;Workspace&quot;</span><span class="p">)</span>
+
+<span class="c1">-- // Vars</span>
+<span class="kd">local</span> <span class="n">CurrentCamera</span> <span class="o">=</span> <span class="n">Workspace</span><span class="p">.</span><span class="n">CurrentCamera</span>
+
+<span class="c1">-- // Configure this</span>
+<span class="kd">local</span> <span class="n">CallingScripts</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ScriptName&quot;</span>
+<span class="p">}</span>
 
 <span class="c1">-- // Hook</span>
 <span class="kd">local</span> <span class="n">__namecall</span>
@@ -716,15 +732,20 @@
     <span class="kd">local</span> <span class="n">args</span> <span class="o">=</span> <span class="p">{...}</span>
     <span class="kd">local</span> <span class="n">self</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="kd">local</span> <span class="n">method</span> <span class="o">=</span> <span class="n">getnamecallmethod</span><span class="p">()</span>
+    <span class="kd">local</span> <span class="n">callingscript</span> <span class="o">=</span> <span class="n">getcallingscript</span><span class="p">()</span>
 
     <span class="c1">-- // Checks</span>
-    <span class="kr">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;FireServer&quot;</span><span class="p">)</span> <span class="kr">then</span>
-        <span class="kr">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">Name</span> <span class="o">==</span> <span class="s2">&quot;RemoteNameHere&quot;</span><span class="p">)</span> <span class="kr">then</span>
-            <span class="c1">-- change args</span>
+    <span class="kr">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">checkcaller</span><span class="p">()</span> <span class="ow">and</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;FindPartOnRayWithIgnoreList&quot;</span> <span class="ow">and</span> <span class="n">table</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">CallingScripts</span><span class="p">,</span> <span class="n">callingscript</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">Aiming</span><span class="p">.</span><span class="n">Check</span><span class="p">())</span> <span class="kr">then</span>
+        <span class="c1">-- // Vars</span>
+        <span class="kd">local</span> <span class="n">Origin</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">Origin</span>
+        <span class="kd">local</span> <span class="n">Destination</span> <span class="o">=</span> <span class="n">Aiming</span><span class="p">.</span><span class="n">SelectedPart</span><span class="p">.</span><span class="n">Position</span>
+        <span class="kd">local</span> <span class="n">Direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">Destination</span> <span class="o">-</span> <span class="n">Origin</span><span class="p">).</span><span class="n">Unit</span> <span class="o">*</span> <span class="mi">1000</span>
 
-            <span class="c1">-- // Return changed arguments</span>
-            <span class="kr">return</span> <span class="n">__namecall</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
-        <span class="kr">end</span>
+        <span class="c1">-- // Set ray</span>
+        <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ray</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">Origin</span><span class="p">,</span> <span class="n">Direction</span><span class="p">)</span>
+
+        <span class="c1">-- // Return modified arguments</span>
+        <span class="kr">return</span> <span class="n">__namecall</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
     <span class="kr">end</span>
 
     <span class="c1">-- // Return</span>
