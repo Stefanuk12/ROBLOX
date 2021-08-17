@@ -8,11 +8,7 @@ local Manager = {} -- // Contains every player
 
 -- // Get character
 local getCharacter = function(Player)
-    local Character = Player.Character
-
-    if (Character) then
-        return Character, Character.PrimaryPart
-    end
+    return Player.Character
 end
 
 -- // Dynamic Offset function
@@ -28,11 +24,12 @@ end
 local initialisePlayer = function(Player)
     -- // Create the ESP Objects
     local Box = ESP:Box({Model = Player.Character})
+    local HealthBar = ESP:HealthBar({Model = Player.Character})
     local Header = ESP:Header({Model = Player.Character, Offset = dynamicOffset})
     local Tracer = ESP:Tracer({Model = Player.Character})
 
     -- // Add to manager
-    table.insert(Manager, {Player, {Box, Header, Tracer}})
+    table.insert(Manager, {Player, {Box, HealthBar, Header, Tracer}})
 end
 
 -- // Deinitialise ESP for that player
@@ -76,7 +73,7 @@ end
 Players.PlayerAdded:Connect(initialisePlayer)
 
 -- // Deinitialise left players
-Players.PlayerAdded:Connect(deinitialisePlayer)
+Players.PlayerRemoving:Connect(deinitialisePlayer)
 
 -- // Update loop
 RunService:BindToRenderStep("ESPUpdate", 0, function()
@@ -85,10 +82,23 @@ RunService:BindToRenderStep("ESPUpdate", 0, function()
         -- // Vars
         local Character = getCharacter(Object[1])
 
+        -- // Check character
+        if not (Character) then
+            continue
+        end
+
+        -- //
+        local Humanoid = Character.Humanoid
+
         -- // Update every ESP Object
         local ESPObjects = Object[2]
         for _, ESPObject in ipairs(ESPObjects) do
-            ESPObject:Update({Model = Character})
+            if (ESPObject.ClassName == "HealthBar" and Humanoid) then
+                local HealthPercentage = Humanoid.Health / Humanoid.MaxHealth
+                ESPObject:Update({Model = Character, HealthPercentage = HealthPercentage})
+            else
+                ESPObject:Update({Model = Character})
+            end
         end
     end
 end)
