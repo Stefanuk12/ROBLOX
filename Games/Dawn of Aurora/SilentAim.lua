@@ -22,7 +22,6 @@ __index = hookmetamethod(game, "__index", function(t, k)
 
         -- // Create fake ray
         local FakeRay = Ray.new(Origin, Direction)
-        print(FakeRay)
 
         -- // Return it
         return FakeRay
