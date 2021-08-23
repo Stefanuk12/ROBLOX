@@ -329,10 +329,12 @@ function Aiming.GetClosestTargetPartToCursor(Character)
             -- // Loop through character descendants
             for _, v in ipairs(Character:GetDescendants()) do
                 -- // See if it a part
-                if (v:IsA("BasePart")) then
-                    -- // Check it
-                    CheckTargetPart(v.Name)
+                if not (v:IsA("BasePart")) then
+                    continue
                 end
+
+                -- // Check it
+                CheckTargetPart(v.Name)
             end
         else
             -- // Individual
