@@ -324,7 +324,20 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
     -- // String check
     if (typeof(TargetParts) == "string") then
-        CheckTargetPart(TargetParts)
+        -- // Check if it all
+        if (TargetParts == "All") then
+            -- // Loop through character descendants
+            for _, v in ipairs(Character:GetDescendants()) do
+                -- // See if it a part
+                if (v:IsA("BasePart")) then
+                    -- // Check it
+                    CheckTargetPart(v.Name)
+                end
+            end
+        else
+            -- // Individual
+            CheckTargetPart(TargetParts)
+        end
     end
 
     -- // Loop through all target parts
