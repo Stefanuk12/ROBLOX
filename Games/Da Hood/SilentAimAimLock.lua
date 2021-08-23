@@ -69,9 +69,11 @@ RunService:BindToRenderStep("AimLock", 0, function()
     if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
         -- // Vars
         local SelectedPart = Aiming.SelectedPart
+
+        -- // Hit to account prediction
         local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
 
-        -- //
+        -- // Set the camera to face towards the Hit
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
 end)
