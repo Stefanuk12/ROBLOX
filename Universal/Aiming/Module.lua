@@ -305,23 +305,20 @@ function Aiming.GetClosestTargetPartToCursor(Character)
     local ShortestDistance = 1/0
 
     -- //
-    local function CheckTargetPart(TargetPart)
-        TargetPart = TargetPart or FindFirstChild(Character, TargetPart)
+    local function CheckTargetPart(TargetPartName)
+        local TargetPart = FindFirstChild(Character, TargetPartName)
 
-        if (not TargetPart) then
-            return
-        end
+        if (TargetPart) then
+            local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
+            local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
 
-        local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
-        local GuiInset = GetGuiInset(GuiService)
-        local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y + GuiInset.Y)).Magnitude
-
-        if (Magnitude < ShortestDistance) then
-            ClosestPart = TargetPart
-            ClosestPartPosition = PartPos
-            ClosestPartOnScreen = onScreen
-            ClosestPartMagnitudeFromMouse = Magnitude
-            ShortestDistance = Magnitude
+            if (Magnitude < ShortestDistance) then
+                ClosestPart = TargetPart
+                ClosestPartPosition = PartPos
+                ClosestPartOnScreen = onScreen
+                ClosestPartMagnitudeFromMouse = Magnitude
+                ShortestDistance = Magnitude
+            end
         end
     end
 
@@ -337,7 +334,7 @@ function Aiming.GetClosestTargetPartToCursor(Character)
                 end
 
                 -- // Check it
-                CheckTargetPart(v)
+                CheckTargetPart(v.Name)
             end
         else
             -- // Individual
