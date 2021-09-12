@@ -314,7 +314,7 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
         local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
         local GuiInset = GetGuiInset(GuiService)
-        local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y - GuiInset.Y)).Magnitude
+        local Magnitude = (Vector2new(PartPos.X, PartPos.Y) - Vector2new(Mouse.X, Mouse.Y + GuiInset.Y)).Magnitude
 
         if (Magnitude < ShortestDistance) then
             ClosestPart = TargetPart
