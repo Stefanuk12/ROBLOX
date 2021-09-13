@@ -6,7 +6,7 @@ do
         local concated = ""
 
         -- // Loop through table
-        for i= 1, #tbl do
+        for i = 1, #tbl do
             -- // Concat
             concated = concated .. tbl[i] .. suffix
         end
