@@ -1,3 +1,22 @@
+-- // This is in place because table.concat is currently broken with Synapse
+do
+    setreadonly(table, false)
+    function table.concat(tbl, suffix)
+        -- // Vars
+        local concated = ""
+
+        -- // Loop through table
+        for i= 1, #tbl do
+            -- // Concat
+            concated = concated .. tbl[i] .. suffix
+        end
+
+        -- // Return
+        return concated
+    end
+    setreadonly(table, true)
+end
+
 -- // Services
 local HttpService = game:GetService("HttpService")
 
