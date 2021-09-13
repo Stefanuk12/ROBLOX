@@ -8,7 +8,13 @@ local function TypeCheck(FunctionName, Data)
         -- // Vars
         local AllowedTypes = Argument[1]
         local typeofArgument = typeof(Argument[2])
+        local isOptional = Argument[3]
         local PossibleArguments = table.concat(AllowedTypes, "|")
+
+        -- // Bypass optional arguments
+        if (isOptional and Argument[2] == nil) then
+            continue
+        end
 
         -- // Raise an error if not allowed type
         local isAllowed = table.find(AllowedTypes, typeofArgument)
@@ -45,8 +51,8 @@ GitHubClient.__index = GitHubClient
 function GitHubClient.new(Username, Token)
     -- // Check the inputs
     TypeCheck("new", {
-        {{"string", "nil"}, Username},
-        {{"string", "nil"}, Token},
+        {{"string"}, Username, true},
+        {{"string"}, Token, true},
     })
 
     -- // Initialise Class and Properties
@@ -143,9 +149,8 @@ do
         local Client = Repository.Client
         local Owner = Repository.Owner
     
-        local Directory = {...}
-        local DirectoryConcat = table.concat(Directory, "/")
-        local Url = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(Owner.Name, Repository.Name, Fork, DirectoryConcat)
+        local Path = table.concat({...}, "/")
+        local Url = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(Owner.Name, Repository.Name, Fork, Path)
 
         -- // Send the request
         local Response = HttpSend({
