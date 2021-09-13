@@ -87,13 +87,13 @@ do
 
         -- // Get the data
         local Response = HttpSend({
-            Url = (Client.APIBase .. "/users/%s/repos"):format(Name),
+            Url = (Client.APIBase .. "/users/%s"):format(Name),
             Method = "GET",
             Headers = {
                 Authorization = Client.Auth
             }
         })
-        self.Data = HttpService:JSONDecode(Response.Body).owner
+        self.Data = HttpService:JSONDecode(Response.Body)
 
         -- // Return Object
         return self
