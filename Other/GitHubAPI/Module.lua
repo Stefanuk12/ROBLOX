@@ -11,6 +11,9 @@ do
             concated = concated .. tbl[i] .. suffix
         end
 
+        -- // Remove last character
+        concated = concated:sub(1, #concated - 1)
+
         -- // Return
         return concated
     end
