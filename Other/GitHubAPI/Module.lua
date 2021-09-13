@@ -171,16 +171,30 @@ do
         local Client = Repository.Client
         local Owner = Repository.Owner
     
-        local Path = table.concat({...}, "/")
-        local Url = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(Owner.Name, Repository.Name, Fork, Path)
+        -- // URL Encode each "segment"
+        local PathSegments = {...}
+        for i, v in ipairs(PathSegments) do
+            PathSegments[i] = HttpService:UrlEncode(v)
+        end
 
-        -- // Send the request
-        local Response = HttpSend({
+        -- // Get URL
+        local Path = table.concat(PathSegments, "/")
+        local Url = (Client.APIBase .. "/repos/%s/%s/contents/%s"):format(Owner.Name, Repository.Name, Path)
+
+        -- // Send the request to get the download url
+        local ResponseContent = HttpSend({
             Url = Url,
             Method = "GET",
             Headers = {
                 Authorization = Client.Auth
             }
+        })
+        local ResponseContentBody = HttpService:JSONDecode(ResponseContent.Body)
+       
+        -- // Send the request to get the file
+        local Response = HttpSend({
+            Url = ResponseContentBody["download_url"],
+            Method = "GET"
         })
 
         -- // Return body
