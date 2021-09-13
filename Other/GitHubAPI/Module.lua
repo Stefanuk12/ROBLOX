@@ -190,15 +190,10 @@ do
             }
         })
         local ResponseContentBody = HttpService:JSONDecode(ResponseContent.Body)
-       
-        -- // Send the request to get the file
-        local Response = HttpSend({
-            Url = ResponseContentBody["download_url"],
-            Method = "GET"
-        })
+        local Content = syn.crypt.base64.decode(ResponseContentBody.content)
 
-        -- // Return body
-        return Response.Body
+        -- // Return
+        return Content
     end
 end
 
