@@ -36,15 +36,21 @@ local tableinsert = table.insert
 -- // Silent Aim Vars
 getgenv().Aiming = {
     Enabled = true,
+
     ShowFOV = true,
+    FOV = 60,
     FOVSides = 12,
     FOVColour = Color3fromRGB(231, 84, 128),
+
     VisibleCheck = true,
-    FOV = 60,
+    
     HitChance = 100,
-    Selected = LocalPlayer,
+
+    Selected = nil,
     SelectedPart = nil,
+
     TargetPart = {"Head", "HumanoidRootPart"},
+
     Ignored = {
         Teams = {
             {
@@ -60,24 +66,30 @@ getgenv().Aiming = {
 }
 local Aiming = getgenv().Aiming
 
--- // Show FOV
+-- // Create circle
 local circle = Drawingnew("Circle")
 circle.Transparency = 1
 circle.Thickness = 2
 circle.Color = Aiming.FOVColour
 circle.Filled = false
-function Aiming.UpdateFOV()
-    if (circle) then
-        -- // Set Circle Properties
-        circle.Visible = Aiming.ShowFOV
-        circle.Radius = (Aiming.FOV * 3)
-        circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
-        circle.NumSides = Aiming.FOVSides
-        circle.Color = Aiming.FOVColour
+Aiming.FOVCircle = circle
 
-        -- // Return circle
-        return circle
+-- // Update
+function Aiming.UpdateFOV()
+    -- // Make sure the circle exists
+    if not (circle) then
+        return
     end
+
+    -- // Set Circle Properties
+    circle.Visible = Aiming.ShowFOV
+    circle.Radius = (Aiming.FOV * 3)
+    circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
+    circle.NumSides = Aiming.FOVSides
+    circle.Color = Aiming.FOVColour
+
+    -- // Return circle
+    return circle
 end
 
 -- // Custom Functions
@@ -106,8 +118,12 @@ function Aiming.IsPartVisible(Part, PartDescendant)
         raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
         raycastParams.FilterDescendantsInstances = {Character, CurrentCamera}
 
+        -- // Cast ray
         local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
+
+        -- // Make sure we get a result
         if (Result) then
+            -- // Vars
             local PartHit = Result.Instance
             local Visible = (not PartHit or IsDescendantOf(PartHit, PartDescendant))
 
@@ -128,6 +144,7 @@ function Aiming.IgnorePlayer(Player)
 
     -- // Find player in table
     for _, IgnoredPlayer in ipairs(IgnoredPlayers) do
+        -- // Make sure player matches
         if (IgnoredPlayer == Player) then
             return false
         end
@@ -146,7 +163,9 @@ function Aiming.UnIgnorePlayer(Player)
 
     -- // Find player in table
     for i, IgnoredPlayer in ipairs(IgnoredPlayers) do
+        -- // Make sure player matches
         if (IgnoredPlayer == Player) then
+            -- // Remove from ignored
             tableremove(IgnoredPlayers, i)
             return true
         end
@@ -164,6 +183,7 @@ function Aiming.IgnoreTeam(Team, TeamColor)
 
     -- // Find team in table
     for _, IgnoredTeam in ipairs(IgnoredTeams) do
+        -- // Make sure team matches
         if (IgnoredTeam.Team == Team and IgnoredTeam.TeamColor == TeamColor) then
             return false
         end
@@ -182,6 +202,7 @@ function Aiming.UnIgnoreTeam(Team, TeamColor)
 
     -- // Find team in table
     for i, IgnoredTeam in ipairs(IgnoredTeams) do
+        -- // Make sure team matches
         if (IgnoredTeam.Team == Team and IgnoredTeam.TeamColor == TeamColor) then
             -- // Remove
             tableremove(IgnoredTeams, i)
@@ -297,16 +318,22 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
     -- //
     local function CheckTargetPart(TargetPart)
-        local TargetPart = typeof(TargetPart) == "string" and FindFirstChild(Character, TargetPart) or TargetPart
+        -- // Convert string -> Instance
+        if (typeof(TargetPart) == "string") then
+            TargetPart = FindFirstChild(Character, TargetPart)
+        end
 
+        -- // Make sure we have a target
         if not (TargetPart) then
             return
         end
 
+        -- // Get the length between Mouse and Target Part (on screen)
         local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
         local GuiInset = GetGuiInset(GuiService)
         local Magnitude = (Vector2new(PartPos.X, PartPos.Y - GuiInset.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
 
+        -- //
         if (Magnitude < ShortestDistance) then
             ClosestPart = TargetPart
             ClosestPartPosition = PartPos
@@ -336,8 +363,9 @@ function Aiming.GetClosestTargetPartToCursor(Character)
         end
     end
 
-    -- // Loop through all target parts
+    -- //
     if (typeof(TargetParts) == "table") then
+        -- // Loop through all target parts and check them
         for _, TargetPartName in ipairs(TargetParts) do
             CheckTargetPart(TargetPartName)
         end
@@ -364,11 +392,13 @@ function Aiming.GetClosestPlayerToCursor()
     end
 
     -- // Loop through all players
-    local AllPlayers = GetPlayers(Players)
-    for _, Player in ipairs(AllPlayers) do
+    for _, Player in ipairs(GetPlayers(Players)) do
+        -- // Get Character
         local Character = Aiming.Character(Player)
 
+        -- // Make sure isn't ignored and Character exists
         if (Aiming.IsIgnored(Player) == false and Character) then
+            -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
             -- // Check if part exists and health
