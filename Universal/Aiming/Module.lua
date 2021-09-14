@@ -82,8 +82,13 @@ end
 
 -- // Custom Functions
 local CalcChance = function(percentage)
+    -- // Floor the percentage
     percentage = mathfloor(percentage)
+
+    -- // Get the chance
     local chance = mathfloor(Randomnew().NextNumber(Randomnew(), 0, 1) * 100) / 100
+
+    -- // Return
     return chance <= percentage / 100
 end
 
@@ -122,9 +127,7 @@ function Aiming.IgnorePlayer(Player)
     local IgnoredPlayers = Ignored.Players
 
     -- // Find player in table
-    for i = 1, #IgnoredPlayers do
-        local IgnoredPlayer = IgnoredPlayers[i]
-
+    for _, IgnoredPlayer in ipairs(IgnoredPlayers) do
         if (IgnoredPlayer == Player) then
             return false
         end
@@ -142,9 +145,7 @@ function Aiming.UnIgnorePlayer(Player)
     local IgnoredPlayers = Ignored.Players
 
     -- // Find player in table
-    for i = 1, #IgnoredPlayers do
-        local IgnoredPlayer = IgnoredPlayers[i]
-
+    for i, IgnoredPlayer in ipairs(IgnoredPlayers) do
         if (IgnoredPlayer == Player) then
             tableremove(IgnoredPlayers, i)
             return true
@@ -162,9 +163,7 @@ function Aiming.IgnoreTeam(Team, TeamColor)
     local IgnoredTeams = Ignored.Teams
 
     -- // Find team in table
-    for i = 1, #IgnoredTeams do
-        local IgnoredTeam = IgnoredTeams[i]
-
+    for _, IgnoredTeam in ipairs(IgnoredTeams) do
         if (IgnoredTeam.Team == Team and IgnoredTeam.TeamColor == TeamColor) then
             return false
         end
@@ -182,9 +181,7 @@ function Aiming.UnIgnoreTeam(Team, TeamColor)
     local IgnoredTeams = Ignored.Teams
 
     -- // Find team in table
-    for i = 1, #IgnoredTeams do
-        local IgnoredTeam = IgnoredTeams[i]
-
+    for i, IgnoredTeam in ipairs(IgnoredTeams) do
         if (IgnoredTeam.Team == Team and IgnoredTeam.TeamColor == TeamColor) then
             -- // Remove
             tableremove(IgnoredTeams, i)
@@ -212,9 +209,7 @@ function Aiming.IsIgnoredTeam(Player)
     local IgnoredTeams = Ignored.Teams
 
     -- // Check if team is ignored
-    for i = 1, #IgnoredTeams do
-        local IgnoredTeam = IgnoredTeams[i]
-
+    for _, IgnoredTeam in ipairs(IgnoredTeams) do
         if (Player.Team == IgnoredTeam.Team and Player.TeamColor == IgnoredTeam.TeamColor) then
             return true
         end
@@ -231,14 +226,10 @@ function Aiming.IsIgnored(Player)
     local IgnoredPlayers = Ignored.Players
 
     -- // Loop
-    for i = 1, #IgnoredPlayers do
-        local IgnoredPlayer = IgnoredPlayers[i]
-
+    for _, IgnoredPlayer in ipairs(IgnoredPlayers) do
         -- // Check if Player Id
-        if (typeof(IgnoredPlayer) == "number") then
-            if (Player.UserId == IgnoredPlayer) then
-                return true
-            end
+        if (typeof(IgnoredPlayer) == "number" and Player.UserId == IgnoredPlayer) then
+            return true
         end
 
         -- // Normal Player Instance
@@ -347,8 +338,7 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
     -- // Loop through all target parts
     if (typeof(TargetParts) == "table") then
-        for i = 1, #TargetParts do
-            local TargetPartName = TargetParts[i]
+        for _, TargetPartName in ipairs(TargetParts) do
             CheckTargetPart(TargetPartName)
         end
     end
@@ -375,8 +365,7 @@ function Aiming.GetClosestPlayerToCursor()
 
     -- // Loop through all players
     local AllPlayers = GetPlayers(Players)
-    for i = 1, #AllPlayers do
-        local Player = AllPlayers[i]
+    for _, Player in ipairs(AllPlayers) do
         local Character = Aiming.Character(Player)
 
         if (Aiming.IsIgnored(Player) == false and Character) then
