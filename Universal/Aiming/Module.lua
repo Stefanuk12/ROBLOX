@@ -111,9 +111,9 @@ function Aiming.IsPartVisible(Part, PartDescendant)
     local Origin = CurrentCamera.CFrame.Position
     local _, OnScreen = WorldToViewportPoint(CurrentCamera, Part.Position)
 
-    -- // If Part is on the screen
+    -- //
     if (OnScreen) then
-        -- // Vars: Calculating if is visible
+        -- // Vars
         local raycastParams = RaycastParamsnew()
         raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
         raycastParams.FilterDescendantsInstances = {Character, CurrentCamera}
@@ -231,6 +231,7 @@ function Aiming.IsIgnoredTeam(Player)
 
     -- // Check if team is ignored
     for _, IgnoredTeam in ipairs(IgnoredTeams) do
+        -- // Make sure team matches
         if (Player.Team == IgnoredTeam.Team and Player.TeamColor == IgnoredTeam.TeamColor) then
             return true
         end
@@ -271,11 +272,12 @@ function Aiming.Raycast(Origin, Destination, UnitMultiplier)
 
         -- // Vars
         local Direction = (Destination - Origin).Unit * UnitMultiplier
-        local RaycastResult = Raycast(Workspace, Origin, Direction)
+        local Result = Raycast(Workspace, Origin, Direction)
 
-        if (RaycastResult ~= nil) then
-            local Normal = RaycastResult.Normal
-            local Material = RaycastResult.Material
+        -- // Make sure we have a result
+        if (Result) then
+            local Normal = Result.Normal
+            local Material = Result.Material
 
             return Direction, Normal, Material
         end
@@ -292,10 +294,14 @@ end
 
 -- // Check Health
 function Aiming.CheckHealth(Player)
+    -- // Get Humanoid
     local Character = Aiming.Character(Player)
     local Humanoid = FindFirstChildWhichIsA(Character, "Humanoid")
 
+    -- // Get Health
     local Health = (Humanoid and Humanoid.Health or 0)
+
+    -- //
     return Health > 0
 end
 
@@ -428,61 +434,7 @@ Heartbeat:Connect(function()
     Aiming.GetClosestPlayerToCursor()
 end)
 
+-- //
 return Aiming
 
--- // Examples // --
-
---// Namecall Version // --
-
---[[
--- // Load Aiming Module
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
-
--- // Hook
-local __namecall
-__namecall = hookmetamethod(game, "__namecall", function(...)
-    -- // Vars
-    local args = {...}
-    local self = args[1]
-    local method = getnamecallmethod()
-
-    -- // Checks
-    if (method == "FireServer") then
-        if (self.Name == "RemoteNameHere") then
-            -- change args
-
-            -- // Return changed arguments
-            return __namecall(unpack(args))
-        end
-    end
-
-    -- // Return
-    return __namecall(...)
-end)
-]]--
-
--- // Index Version // --
-
---[[
--- // Load Aiming Module
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
-
--- // Hook
-local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    -- // Check if it trying to get our mouse's hit or target
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target")) then
-        -- // If we can use the silent aim
-        if (Aiming.Check()) then
-            -- // Vars
-            local TargetPart = Aiming.SelectedPart
-
-            -- // Return modded val
-            return (k == "Hit" and TargetPart.CFrame or TargetPart)
-        end
-    end
-
-    -- // Return
-    return __index(t, k)
-end)
-]]--
+-- // If you want the examples, look at the docs.
