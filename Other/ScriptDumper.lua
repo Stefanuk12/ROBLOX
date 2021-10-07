@@ -202,7 +202,7 @@ local function MakeInstance(ClassName, Name, Object)
     -- //
 	if (Object and table.find(Configuration.Scripts, Object.ClassName)) then
         -- //
-		if Object.ClassName == "LocalScript" then
+		if (Object.ClassName == "LocalScript") then
 			table.insert(Output, '<bool name="Disabled">' .. tostring(Object.Disabled) .. '</bool>')
 		end
 
