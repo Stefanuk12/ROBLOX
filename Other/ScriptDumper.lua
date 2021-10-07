@@ -325,8 +325,5 @@ local function Main(_Configuration)
     ProgressText.Visible = false
 end
 
--- // Start
-Main()
-
 -- // Return
 return Main
