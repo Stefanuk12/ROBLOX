@@ -25,7 +25,7 @@ local Configuration = {
     Ignored = {
         RobloxReplicatedStorage,
         CoreGui,
-        CorePackages, 
+        CorePackages,
         Chat
     },
 
@@ -63,10 +63,10 @@ local LoadedIds
 
 -- // Ignore others
 for _, Player in ipairs(Players:GetPlayers()) do
-	if (Player ~= LocalPlayer) then
+    if (Player ~= LocalPlayer) then
         table.insert(Configuration.Ignored, Player)
         table.insert(Configuration.Ignored, Player.Character)
-	end
+    end
 end
 
 -- // Drawings
@@ -98,14 +98,14 @@ Credits.Color = Color3.new(1, 1, 1)
 
 -- // Check if an object is allowed
 local function IsAllowed(Item)
-    -- // Loop through Ignored things
-	for _, Object in ipairs(Configuration.Ignored) do
+-- // Loop through Ignored things
+    for _, Object in ipairs(Configuration.Ignored) do
         -- // See if Ignored
-		if (Item == Object or Item:IsDescendantOf(Object)) then
+        if (Item == Object or Item:IsDescendantOf(Object)) then
             -- // Return
-			return false
-		end
-	end
+            return false
+        end
+    end
 
     -- // Return
 	return true
@@ -114,16 +114,16 @@ end
 -- // Get the parents of object
 local function GetParentTree(Object)
     -- // Vars
-	local trees = {}
+    local trees = {}
 
     -- // Make sure have a parent to go to
-	while (Object.Parent ~= nil and Object.Parent ~= game) do
+    while (Object.Parent ~= nil and Object.Parent ~= game) do
         -- //
-		Object = Object.Parent
+        Object = Object.Parent
 
         -- // Add
-		table.insert(trees, 1, Object)
-	end
+        table.insert(trees, 1, Object)
+    end
 
     -- // Return
 	return trees
@@ -193,24 +193,24 @@ end
 -- //
 local function MakeInstance(ClassName, Name, Object)
     -- //
-	table.insert(Output, '<Item class="' .. ClassName .. '" referent="RBX' .. #Output .. '"><Properties>')
-	table.insert(Output, '<string name="Name">' .. Name:gsub("['\"<>&]", Configuration.Replace) .. '</string>')
-	
+    table.insert(Output, '<Item class="' .. ClassName .. '" referent="RBX' .. #Output .. '"><Properties>')
+    table.insert(Output, '<string name="Name">' .. Name:gsub("['\"<>&]", Configuration.Replace) .. '</string>')
+
     -- //
-	if (Object and table.find(Configuration.Scripts, Object.ClassName)) then
+    if (Object and table.find(Configuration.Scripts, Object.ClassName)) then
         -- //
-		if (Object.ClassName == "LocalScript") then
-			table.insert(Output, '<bool name="Disabled">' .. tostring(Object.Disabled) .. '</bool>')
-		end
+        if (Object.ClassName == "LocalScript") then
+            table.insert(Output, '<bool name="Disabled">' .. tostring(Object.Disabled) .. '</bool>')
+        end
 
         -- //
-		table.insert(Output, '<ProtectedString name="Source"><![CDATA[')
-		table.insert(Output, "") -- // haha funny stole from moon
-		table.insert(Output, ']]></ProtectedString>')
+        table.insert(Output, '<ProtectedString name="Source"><![CDATA[')
+        table.insert(Output, "") -- // haha funny stole from moon
+        table.insert(Output, ']]></ProtectedString>')
 
         -- //
         table.insert(NeedsDecompile, {Script = Object, Index = #Output - 1})
-	end
+    end
 
     -- //
     table.insert(Output, "</Properties>")
@@ -241,7 +241,7 @@ local function Main(_Configuration)
 
     Output = {'<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">'}
     Hierarchy = {["NIL"] = {Class = "Folder", Children = {}}, ["LOADED MODULES"] = {Class = "Folder", Children = {}}}
-    
+
     ScriptCount = 0
     DoneScripts = 0
     NeedsDecompile = {}
