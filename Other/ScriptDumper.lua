@@ -41,7 +41,8 @@ local Configuration = {
         Credits = "stefanu1k2 hub when?",
         CollectingScripts = "Collecting scripts...",
         CreatingXMLLayout = "Creating XML Layout...",
-        DecompileFail = "-- Failed to decompile script, or script is empty"
+        DecompileFail = "-- Failed to decompile script, or script is empty",
+        DecompileFailTimeout = "-- Failed to decompile script (timed out)"
     }
 }
 
@@ -297,8 +298,10 @@ local function Main(_Configuration)
                 until result ~= nil or tick() - DecompileStartTime >= 30
 
                 -- // Script decompile failsure
-                if (result) then
+                if (result ~= nil) then
                     Output[Data.Index] = (result == "" and Configuration.Strings.DecompileFail or result)
+                else
+                    Output[Data.Index] = Configuration.Strings.DecompileFailTimeout
                 end
                 wait()
 
