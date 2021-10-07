@@ -284,7 +284,7 @@ local function Main(_Configuration)
                 -- // Vars
                 local Data = table.remove(NeedsDecompile)
                 local DecompileStartTime = tick()
-                local result
+                local result = ""
 
                 -- // Decompile
                 task.spawn(function()
