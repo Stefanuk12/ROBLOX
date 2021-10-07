@@ -284,7 +284,7 @@ local function Main(_Configuration)
                 -- // Vars
                 local Data = table.remove(NeedsDecompile)
                 local DecompileStartTime = tick()
-                local result = ""
+                local result
 
                 -- // Decompile
                 task.spawn(function()
@@ -297,7 +297,9 @@ local function Main(_Configuration)
                 until result ~= nil or tick() - DecompileStartTime >= 30
 
                 -- // Script decompile failsure
-                Output[Data.Index] = (result == "" and Configuration.Strings.DecompileFail or result)
+                if (result) then
+                    Output[Data.Index] = (result == "" and Configuration.Strings.DecompileFail or result)
+                end
                 wait()
 
                 -- // Update
