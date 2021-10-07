@@ -283,7 +283,18 @@ local function Main(_Configuration)
             while (#NeedsDecompile > 0) do
                 -- // Vars
                 local Data = table.remove(NeedsDecompile)
-                local result = decompile(Data.Script, false, 30)
+                local DecompileStartTime = tick()
+                local result
+
+                -- // Decompile
+                task.spawn(function()
+                    result = decompile(Data.Script, false, 30)
+                end)
+
+                -- // Wait until we have a decompiled script or not (default decompiler timeout isn't reliable)
+                repeat
+                    wait()
+                until result ~= nil or tick() - DecompileStartTime >= 30
 
                 -- // Script decompile failsure
                 Output[Data.Index] = (result == "" and Configuration.Strings.DecompileFail or result)
