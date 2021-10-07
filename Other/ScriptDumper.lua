@@ -44,7 +44,6 @@ local Configuration = {
         DecompileFail = "-- Failed to decompile script, or script is empty"
     }
 }
-local Ignored = Configuration.Ignored
 
 -- // Vars
 local CurrentCamera = Workspace.CurrentCamera
@@ -65,8 +64,8 @@ local LoadedIds
 -- // Ignore others
 for _, Player in ipairs(Players:GetPlayers()) do
 	if (Player ~= LocalPlayer) then
-        table.insert(Ignored, Player)
-        table.insert(Ignored, Player.Character)
+        table.insert(Configuration.Ignored, Player)
+        table.insert(Configuration.Ignored, Player.Character)
 	end
 end
 
@@ -89,20 +88,18 @@ ProgressText.Color = Color3.new(1, 1, 1)
 ProgressText.Center = true
 ProgressText.Size = ProgressBar.Size.Y
 ProgressText.Position = ProgressBar.Position + Vector2.new(CompleteBar.Size.X / 2, 35)
-ProgressText.Text = Configuration.StringFormats.Welcome:format(Configuration.Version)
 ProgressText.Color = Color3.new(1, 1, 1)
 
 local Credits = Drawing.new("Text")
 Credits.Color = Color3.new(1, 1, 1)
 Credits.Position = Vector2.new(Viewport.X - 100, Viewport.Y - 25)
 Credits.Size = 15
-Credits.Text = Configuration.Strings.Credits
 Credits.Color = Color3.new(1, 1, 1)
 
 -- // Check if an object is allowed
 local function IsAllowed(Item)
-    -- // Loop through Ignored services
-	for _, Object in ipairs(Ignored) do
+    -- // Loop through Ignored things
+	for _, Object in ipairs(Configuration.Ignored) do
         -- // See if Ignored
 		if (Item == Object or Item:IsDescendantOf(Object)) then
             -- // Return
@@ -250,7 +247,10 @@ local function Main(_Configuration)
     NeedsDecompile = {}
     LoadedIds = {}
 
-    -- // Make drawings visible
+    -- // Set drawings stuff
+    ProgressText.Text = Configuration.StringFormats.Welcome:format(Configuration.Version)
+    Credits.Text = Configuration.Strings.Credits
+
     ProgressBar.Visible = true
     CompleteBar.Visible = true
     Credits.Visible = true
