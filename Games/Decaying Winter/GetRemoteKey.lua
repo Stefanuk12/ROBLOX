@@ -13,5 +13,5 @@ do
     local stagger = getsenv(mainHandler).stagger
 
     -- //
-    RemoteKey = debug.getupvalue(RemoteKey, 6)
+    RemoteKey = debug.getupvalue(stagger, 6)
 end
