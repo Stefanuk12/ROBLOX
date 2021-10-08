@@ -53,7 +53,7 @@ end
 local function Kill(Target)
     -- // Make sure is a target
     if (Target.Name:find("AI")) then
-        KillTarget(Target, Target.Torso)
+        KillTarget(Target, Target:WaitForChild("Torso"))
         print("Killed: " .. Target.Name)
     end
 end
