@@ -1,5 +1,3 @@
--- // Not sure if this replicates
-
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
