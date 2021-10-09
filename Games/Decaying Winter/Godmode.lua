@@ -45,9 +45,7 @@ local function onCharacter(Character)
     HealthFull(Humanoid.Health)
 
     -- // See whenever lose health, heal back up
-    Humanoid.HealthChanged:Connect(function(Health)
-        HealthFull(Health)
-    end)
+    Humanoid.HealthChanged:Connect(HealthFull)
 end
 onCharacter(LocalPlayer.Character)
 
