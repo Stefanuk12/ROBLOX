@@ -1,3 +1,8 @@
+-- // Information
+--[[
+    This may get you banned on later rounds as the game checks if you spam remotes. BEWARE
+]]
+
 -- // Dependencies
 local DecayHax = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Decaying%20Winter/GetRemoteKey.lua"))()
 
