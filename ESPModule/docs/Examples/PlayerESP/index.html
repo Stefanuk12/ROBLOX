@@ -521,10 +521,7 @@
 <span class="c1">-- // Deinitialise ESP for that player</span>
 <span class="kd">local</span> <span class="n">deinitialisePlayer</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">Player</span><span class="p">)</span>
     <span class="c1">-- // Find player in manager</span>
-    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">Manager</span> <span class="kr">do</span>
-        <span class="c1">-- // Vars</span>
-        <span class="kd">local</span> <span class="n">Object</span> <span class="o">=</span> <span class="n">Manager</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
+    <span class="kr">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">Object</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">Manager</span><span class="p">)</span> <span class="kr">do</span>
         <span class="c1">-- // Check for player</span>
         <span class="kr">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">Object</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">Player</span><span class="p">)</span> <span class="kr">then</span>
             <span class="n">continue</span>
@@ -532,8 +529,7 @@
 
         <span class="c1">-- // Remove each object</span>
         <span class="kd">local</span> <span class="n">ESPObjects</span> <span class="o">=</span> <span class="n">Object</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="kr">for</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">ESPObjects</span> <span class="kr">do</span>
-            <span class="kd">local</span> <span class="n">ESPObject</span> <span class="o">=</span> <span class="n">ESPObjects</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ESPObject</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">ESPObjects</span><span class="p">)</span> <span class="kr">do</span>
             <span class="n">ESPObject</span><span class="p">:</span><span class="n">Remove</span><span class="p">()</span>
         <span class="kr">end</span>
 
@@ -548,10 +544,7 @@
 <span class="c1">-- // Initialise for existing players</span>
 <span class="kr">do</span>
     <span class="kd">local</span> <span class="n">AllPlayers</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;Players&quot;</span><span class="p">):</span><span class="n">GetPlayers</span><span class="p">()</span>
-    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">AllPlayers</span> <span class="kr">do</span>
-        <span class="c1">-- // Vars</span>
-        <span class="kd">local</span> <span class="n">Player</span> <span class="o">=</span> <span class="n">AllPlayers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">Player</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">AllPlayers</span><span class="p">)</span> <span class="kr">do</span>
         <span class="c1">-- // Skip LocalPlayer</span>
         <span class="kr">if</span> <span class="p">(</span><span class="n">Player</span> <span class="o">==</span> <span class="n">LocalPlayer</span><span class="p">)</span> <span class="kr">then</span>
             <span class="n">continue</span>
@@ -566,20 +559,17 @@
 <span class="n">Players</span><span class="p">.</span><span class="n">PlayerAdded</span><span class="p">:</span><span class="n">Connect</span><span class="p">(</span><span class="n">initialisePlayer</span><span class="p">)</span>
 
 <span class="c1">-- // Deinitialise left players</span>
-<span class="n">Players</span><span class="p">.</span><span class="n">PlayerAdded</span><span class="p">:</span><span class="n">Connect</span><span class="p">(</span><span class="n">deinitialisePlayer</span><span class="p">)</span>
+<span class="n">Players</span><span class="p">.</span><span class="n">PlayerRemoving</span><span class="p">:</span><span class="n">Connect</span><span class="p">(</span><span class="n">deinitialisePlayer</span><span class="p">)</span>
 
 <span class="c1">-- // Update loop</span>
 <span class="n">RunService</span><span class="p">:</span><span class="n">BindToRenderStep</span><span class="p">(</span><span class="s2">&quot;ESPUpdate&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
     <span class="c1">-- // Loop through manager</span>
-    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">Manager</span> <span class="kr">do</span>
-        <span class="c1">-- // Vars</span>
-        <span class="kd">local</span> <span class="n">Object</span> <span class="o">=</span> <span class="n">Manager</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">Object</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">Manager</span><span class="p">)</span> <span class="kr">do</span>
         <span class="kd">local</span> <span class="n">Character</span> <span class="o">=</span> <span class="n">getCharacter</span><span class="p">(</span><span class="n">Object</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1">-- // Update every ESP Object</span>
         <span class="kd">local</span> <span class="n">ESPObjects</span> <span class="o">=</span> <span class="n">Object</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="kr">for</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">#</span><span class="n">ESPObjects</span> <span class="kr">do</span>
-            <span class="kd">local</span> <span class="n">ESPObject</span> <span class="o">=</span> <span class="n">ESPObjects</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ESPObject</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">ESPObjects</span><span class="p">)</span> <span class="kr">do</span>
             <span class="n">ESPObject</span><span class="p">:</span><span class="n">Update</span><span class="p">({</span><span class="n">Model</span> <span class="o">=</span> <span class="n">Character</span><span class="p">})</span>
         <span class="kr">end</span>
     <span class="kr">end</span>

@@ -36,10 +36,7 @@ end
 -- // Deinitialise ESP for that player
 local deinitialisePlayer = function(Player)
     -- // Find player in manager
-    for i = 1, #Manager do
-        -- // Vars
-        local Object = Manager[i]
-
+    for i, Object in ipairs(Manager) do
         -- // Check for player
         if not (Object[1] == Player) then
             continue
@@ -47,8 +44,7 @@ local deinitialisePlayer = function(Player)
 
         -- // Remove each object
         local ESPObjects = Object[2]
-        for x = 1, #ESPObjects do
-            local ESPObject = ESPObjects[x]
+        for _, ESPObject in ipairs(ESPObjects) do
             ESPObject:Remove()
         end
 
@@ -63,10 +59,7 @@ end
 -- // Initialise for existing players
 do
     local AllPlayers = game:GetService("Players"):GetPlayers()
-    for i = 1, #AllPlayers do
-        -- // Vars
-        local Player = AllPlayers[i]
-
+    for _, Player in ipairs(AllPlayers) do
         -- // Skip LocalPlayer
         if (Player == LocalPlayer) then
             continue
@@ -81,20 +74,17 @@ end
 Players.PlayerAdded:Connect(initialisePlayer)
 
 -- // Deinitialise left players
-Players.PlayerAdded:Connect(deinitialisePlayer)
+Players.PlayerRemoving:Connect(deinitialisePlayer)
 
 -- // Update loop
 RunService:BindToRenderStep("ESPUpdate", 0, function()
     -- // Loop through manager
-    for i = 1, #Manager do
-        -- // Vars
-        local Object = Manager[i]
+    for _, Object in ipairs(Manager) do
         local Character = getCharacter(Object[1])
 
         -- // Update every ESP Object
         local ESPObjects = Object[2]
-        for x = 1, #ESPObjects do
-            local ESPObject = ESPObjects[x]
+        for _, ESPObject in ipairs(ESPObjects) do
             ESPObject:Update({Model = Character})
         end
     end
