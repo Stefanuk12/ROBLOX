@@ -34,7 +34,7 @@ end
 local function Kill(Target)
     -- // Make sure is a target
     if (Target.Name:find("AI")) then
-        Target = Target.npc.Value
+        Target = Target:WaitForChild("npc").Value
         KillTarget(Target, Target:WaitForChild("Torso"))
         print("Killed: " .. Target.Name)
     end
