@@ -1,3 +1,8 @@
+-- // Information
+--[[
+    Note: If you set the amount to a high value, make sure you also execute the anti-cheat bypass as well
+]]
+
 -- // Vars
 local Amount = 200
 
