@@ -1,6 +1,8 @@
 -- // Information
 --[[
     This may get you banned on later rounds as the game checks if you spam remotes. BEWARE
+
+    THIS MAY GET YOU ALSO BANNED IF YOU DIE AND IT IS STILL ACTIVE
 ]]
 
 -- // Dependencies
