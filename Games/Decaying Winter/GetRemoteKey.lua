@@ -59,9 +59,6 @@ local function SetRemoteKeys()
         -- //
         break
     end
-
-    -- //
-    print(DecayHax.RemoteKey, DecayHax.RemoteKey2)
 end
 SetRemoteKeys()
 
