@@ -234,7 +234,7 @@ end
 
 -- // Returns all of the NPCs to target
 function AimingNPC.GetNPCs()
-    return Workspace.NPCs:GetChildren()
+    return {} --Workspace.NPCs:GetChildren()
 end
 
 -- //
