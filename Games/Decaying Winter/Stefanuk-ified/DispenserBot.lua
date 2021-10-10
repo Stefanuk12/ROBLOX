@@ -56,13 +56,12 @@ end
 local Handler = CommandHandler.new()
 
 -- // Help command
-local AllCommands = {"!mre -- Gives you an mre lunchbox (mom packed a gogurt)", "!water -- Gives you a water bottle (Its not dasani)", "!scrap -- Gives you 500 scrap", "!ammo -- Gives you lots of ammo (Case sensitve, e.g. to get light ammo would be !ammo Light)", "Item spawning soon!"}
 CommandClass.new({
     Name = {"help", "cmds"},
     Handler = Handler,
     Callback = function()
         -- // Loop through each help message
-        for _, Command in ipairs(AllCommands) do
+        for _, Command in ipairs(Handler:HelpMenu():split("\n")) do
             -- // Chat it, delay
             ChatMessage(Command)
             wait(0.5)
