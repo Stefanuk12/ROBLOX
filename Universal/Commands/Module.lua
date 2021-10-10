@@ -36,7 +36,7 @@ do
         -- // Prefix failsafe
         if (self.Prefix ~= "") then
             -- // Check if starts with prefix
-            if not (Message:sub(1) == self.Prefix) then
+            if not (Message:sub(1, 1) == self.Prefix) then
                 return
             end
 
