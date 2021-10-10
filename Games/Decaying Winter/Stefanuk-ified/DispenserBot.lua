@@ -61,6 +61,7 @@ local Handler = CommandHandler.new({
 -- // Help command
 CommandClass.new({
     Name = {"help", "cmds"},
+    Description = "Shows this.",
     Handler = Handler,
     Members = {},
     MemberType = "Blacklist",
@@ -77,6 +78,7 @@ CommandClass.new({
 -- // MRE command
 CommandClass.new({
     Name = {"mre", "lunchbox"},
+    Description = "Gives you an mre lunchbox (mom packed a gogurt)",
     Handler = Handler,
     Members = {},
     MemberType = "Blacklist",
@@ -90,6 +92,7 @@ CommandClass.new({
 -- // Water command
 CommandClass.new({
     Name = {"water", "bottle", "thirsty", "aquafill"},
+    Description = "Gives you a water bottle (Its not dasani)",
     Handler = Handler,
     Members = {},
     MemberType = "Blacklist",
@@ -103,6 +106,7 @@ CommandClass.new({
 -- // Scrap command
 CommandClass.new({
     Name = {"scrap"},
+    Description = "Gives you 500 scrap",
     Handler = Handler,
     Members = {},
     MemberType = "Blacklist",
@@ -116,7 +120,8 @@ CommandClass.new({
 -- // Ammo command
 local AmmoTypes = {"light", "short", "small", "medium", "heavy", "long", "shells"}
 CommandClass.new({
-    Name = {"scrap"},
+    Name = {"ammo"},
+    Description = "Gives you lots of ammo (Case sensitve, e.g. to get light ammo would be !ammo Light)",
     ArgParse = {"string"},
     Handler = Handler,
     Members = {},
