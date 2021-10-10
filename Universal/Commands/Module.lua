@@ -128,6 +128,21 @@ do
         -- // Add to connections
         table.insert(self.ChatListenerConnections, Connection)
     end
+
+    -- // Generates a help menu
+    function CommandHandler.HelpMenu(self)
+        -- // Vars
+        local Output = ""
+
+        -- // Loop through each command
+        for i, Command in ipairs(self.Commands) do
+            -- // Add to output
+            Output = Output .. self.Prefix .. tostring(Command) .. (i == #self.Commands and "" or "\n")
+        end
+
+        -- // Return
+        return Output
+    end
 end
 
 -- // Command class
