@@ -53,7 +53,10 @@ local function GoToCallback(Player, Callback)
 end
 
 -- //
-local Handler = CommandHandler.new()
+local Handler = CommandHandler.new({
+    Members = {},
+    MemberType = "Blacklist",
+})
 
 -- // Help command
 CommandClass.new({
