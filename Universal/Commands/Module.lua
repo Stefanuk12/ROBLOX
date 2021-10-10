@@ -1,3 +1,27 @@
+-- // table.concat broken on syn
+do
+    -- // Make sure is synapse
+    if (syn) then
+        setreadonly(table, false)
+        function table.concat(tbl, suffix)
+            -- // Vars
+            local concated = ""
+
+            -- // Loop through table
+            for _, str in ipairs(tbl) do
+                concated = concated .. str .. suffix
+            end
+
+            -- // Remove last character
+            concated = concated:sub(1, #concated - 1)
+
+            -- // Return
+            return concated
+        end
+        setreadonly(table, true)
+    end
+end
+
 -- // Services
 local Players = game:GetService("Players")
 
@@ -112,6 +136,13 @@ do
     -- //
     CommandClass.__index = CommandClass
 
+    -- //
+    local tostringPattern = "%s -- %s"
+    CommandClass.__tostring = function(t)
+        local Name = table.concat(t.Name, "/")
+        return tostringPattern:format(Name, t.Description)
+    end
+
     -- // Constructor
     function CommandClass.new(Data)
         -- // Initialise
@@ -123,6 +154,7 @@ do
         self.ArgParse = Data.ArgParse or {}
         self.ArgSeperator = Data.ArgSeperator or ""
         self.Callback = Data.Callback or function() end
+        self.Description = Data.Description or ""
         self.Handler = nil
         self.Name = Data.Name
 
