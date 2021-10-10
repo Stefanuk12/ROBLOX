@@ -43,7 +43,9 @@ do
         local self = setmetatable({}, CommandHandler)
 
         -- // Set vars
-        self.AllowedUsers = Data.AllowedUsers or {LocalPlayer}
+        self.Members = Data.Members or {LocalPlayer}
+        self.MemberType = Data.MemberType or "Whitelist"
+
         self.ArgSeperator = Data.ArgSeperator or " "
         self.ChatListenerConnections = {}
         self.Commands = Data.Commands or {}
@@ -57,6 +59,15 @@ do
     function CommandHandler.AddCommand(self, _Command)
         _Command.Handler = self
         table.insert(self.Commands, _Command)
+    end
+
+    -- // Check if a user is whitelisted/blacklisted
+    function CommandHandler.CheckUser(self, User)
+        -- // Vars
+        local isInMembers = table.find(self.Members, User) ~= nil
+
+        -- // Return
+        return (self.MemberType == "Whitelist" and isInMembers or not isInMembers)
     end
 
     -- //
@@ -95,7 +106,8 @@ do
         end
 
         -- // Make sure was executed by allowed player
-        if not (table.find(self.AllowedUsers, ExecutePlayer) and table.find(Command.AllowedUsers, ExecutePlayer)) then
+        local IsAllowedUser = self:CheckUser(ExecutePlayer) and Command:CheckUser(ExecutePlayer)
+        if (not IsAllowedUser) then
             return
         end
 
@@ -168,7 +180,10 @@ do
 
         -- // Set Vars
         self.Active = Data.Active or true
-        self.AllowedUsers = Data.AllowedUsers or {LocalPlayer}
+
+        self.Members = Data.Members or {LocalPlayer}
+        self.MemberType = Data.MemberType or "Whitelist"
+
         self.ArgParse = Data.ArgParse or {}
         self.ArgSeperator = Data.ArgSeperator or ""
         self.Callback = Data.Callback or function() end
@@ -293,6 +308,15 @@ do
 
         -- //
         return ParsedArguments, MissedArguments
+    end
+
+    -- // Check if a user is whitelisted/blacklisted
+    function CommandClass.CheckUser(self, User)
+        -- // Vars
+        local isInMembers = table.find(self.Members, User) ~= nil
+
+        -- // Return
+        return (self.MemberType == "Whitelist" and isInMembers or not isInMembers)
     end
 end
 
