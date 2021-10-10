@@ -137,6 +137,68 @@ do
         return self
     end
 
+    -- // Parses a type
+    function CommandHandler.ParseType(ExecutePlayer, Argument, Type)
+        -- // Vars
+        local Parsed = nil
+
+        -- // Parse
+        if (Type == "string" or Type == "any") then
+            Parsed = Argument
+        elseif (Type == "number") then
+            Parsed = tonumber(Argument)
+        elseif (Type == "color") then
+            -- // Split into three numbers
+            local R = tonumber(Argument:sub(1, 3))
+            local G = tonumber(Argument:sub(3, 6))
+            local B = tonumber(Argument:sub(6, 9))
+
+            -- // Make sure we have each
+            if (R and G and B) then
+                Parsed = Color3.fromRGB(R, G, B)
+            end
+        elseif (Type == "player") then
+            if (Parsed == "me") then
+                Parsed = ExecutePlayer
+            elseif (Parsed == "all") then
+                -- // Get everyone
+                Parsed = Players:GetPlayers()
+            elseif (Parsed == "others") then
+                -- // Get everyone
+                local AllPlayers = Players:GetPlayers()
+
+                -- // Remove self
+                table.remove(AllPlayers, table.find(AllPlayers, ExecutePlayer))
+
+                -- //
+                Parsed = AllPlayers
+            elseif (Parsed == "random") then
+                -- // Get everyone
+                local AllPlayers = Players:GetPlayers()
+
+                -- // Select random player
+                Parsed = AllPlayers[math.random(1, #AllPlayers)]
+            else
+                -- // Loop through each player
+                for _, Player in ipairs(Players:GetPlayers()) do
+                    -- // See if their name matches
+                    if (Player.Name:lower():sub(1, #Argument) == Argument) then
+                        -- // Set
+                        Parsed = Player
+
+                        -- // Break
+                        break
+                    end
+                end
+            end
+        else
+            Parsed = Argument
+        end
+
+        -- // Return
+        return Parsed
+    end
+
     -- // Parse Arguments
     function CommandClass.ParseArguments(self, ExecutePlayer, Arguments)
         -- // Vars
@@ -146,68 +208,14 @@ do
         for i, Argument in ipairs(Arguments) do
             -- // Vars
             local Type = self.ArgParse[i]
-            local Parsed = nil
 
             -- // Make sure parser data exists for argument
             if (not Type) then
                 continue
             end
 
-            -- // Parse
-            if (Type == "string" or Type == "any") then
-                Parsed = Argument
-            elseif (Type == "number") then
-                table.insert(ParsedArguments, i, tonumber(Argument))
-            elseif (Type == "color") then
-                -- // Split into three numbers
-                local R = tonumber(Argument:sub(1, 3))
-                local G = tonumber(Argument:sub(3, 6))
-                local B = tonumber(Argument:sub(6, 9))
-
-                -- // Make sure we have each
-                if (R and G and B) then
-                    Parsed = Color3.fromRGB(R, G, B)
-                end
-            elseif (Type == "player") then
-                if (Parsed == "me") then
-                    Parsed = ExecutePlayer
-                elseif (Parsed == "all") then
-                    -- // Get everyone
-                    Parsed = Players:GetPlayers()
-                elseif (Parsed == "others") then
-                    -- // Get everyone
-                    local AllPlayers = Players:GetPlayers()
-
-                    -- // Remove self
-                    table.remove(AllPlayers, table.find(AllPlayers, ExecutePlayer))
-
-                    -- //
-                    Parsed = AllPlayers
-                elseif (Parsed == "random") then
-                    -- // Get everyone
-                    local AllPlayers = Players:GetPlayers()
-
-                    -- // Select random player
-                    Parsed = AllPlayers[math.random(1, #AllPlayers)]
-                else
-                    -- // Loop through each player
-                    for _, Player in ipairs(Players:GetPlayers()) do
-                        -- // See if their name matches
-                        if (Player.Name:lower():sub(1, #Argument) == Argument) then
-                            -- // Set
-                            Parsed = Player
-
-                            -- // Break
-                            break
-                        end
-                    end
-                end
-            else
-                Parsed = Argument
-            end
-
             -- // Set
-            ParsedArguments[i] = Parsed
+            ParsedArguments[i] = self.ParseType(ExecutePlayer, Argument, Type)
         end
 
         -- //
