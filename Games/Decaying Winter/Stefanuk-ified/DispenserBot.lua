@@ -59,6 +59,8 @@ local Handler = CommandHandler.new()
 CommandClass.new({
     Name = {"help", "cmds"},
     Handler = Handler,
+    Members = {},
+    MemberType = "Blacklist",
     Callback = function()
         -- // Loop through each help message
         for _, Command in ipairs(Handler:HelpMenu():split("\n")) do
@@ -73,6 +75,8 @@ CommandClass.new({
 CommandClass.new({
     Name = {"mre", "lunchbox"},
     Handler = Handler,
+    Members = {},
+    MemberType = "Blacklist",
     Callback = function(ExecutePlayer)
         GoToCallback(ExecutePlayer, function()
             dropAmmo:FireServer("rations", "MRE")
@@ -84,6 +88,8 @@ CommandClass.new({
 CommandClass.new({
     Name = {"water", "bottle", "thirsty", "aquafill"},
     Handler = Handler,
+    Members = {},
+    MemberType = "Blacklist",
     Callback = function(ExecutePlayer)
         GoToCallback(ExecutePlayer, function()
             dropAmmo:FireServer("rations", "Bottle")
@@ -95,6 +101,8 @@ CommandClass.new({
 CommandClass.new({
     Name = {"scrap"},
     Handler = Handler,
+    Members = {},
+    MemberType = "Blacklist",
     Callback = function(ExecutePlayer)
         GoToCallback(ExecutePlayer, function()
             dropAmmo:FireServer("scrap", 500)
@@ -108,6 +116,8 @@ CommandClass.new({
     Name = {"scrap"},
     ArgParse = {"string"},
     Handler = Handler,
+    Members = {},
+    MemberType = "Blacklist",
     Callback = function(ExecutePlayer, Arguments)
         -- // Validate ammo
         local AmmoType = Arguments[1]
