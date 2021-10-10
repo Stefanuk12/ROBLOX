@@ -47,7 +47,7 @@ do
 
         -- // Vars
         local Command
-        local SeperatorIndex = Message:find(self.ArgSeperator) or -1
+        local SeperatorIndex = Message:find(self.ArgSeperator) or 0
         local CommandName = Message:sub(1, SeperatorIndex - 1)
 
         -- // Loop through each command
@@ -72,37 +72,37 @@ do
             return
         end
 
-        -- // Get and parse arguments
-        local Body = Message:sub(SeperatorIndex + 1)
+        -- // Get arguments
+        local Body = SeperatorIndex == 0 and "" or Message:sub(SeperatorIndex + 1)
         local Arguments = Body:split(self.ArgSeperator)
-        Arguments = Command:ParseArguments(ExecutePlayer, Arguments)
+
+        -- // Remove "ghost argument"
+        if (#Arguments == 1 and Arguments[1] == "") then
+            Arguments = {}
+        end
+
+        -- // Parse arguments
+        local MissedArguments
+        Arguments, MissedArguments = Command:ParseArguments(ExecutePlayer, Arguments)
+
+        -- // Ignore if missed any arguments
+        if (MissedArguments) then
+            return
+        end
 
         -- // Callback
         Command.Callback(ExecutePlayer, Arguments)
     end
 
-    -- // Initialises a chat listener for player
-    function CommandHandler.StartChatListenPlayer(self, Player)
-        -- // Create listener
-        local Connection = Player.Chatted:Connect(function(Message)
+    -- // Starts a chat listener to all players
+    function CommandHandler.StartChatListen(self)
+        -- // Start a listener for all current players
+        local Connection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
             self:Execute(Player, Message)
         end)
 
         -- // Add to connections
         table.insert(self.ChatListenerConnections, Connection)
-    end
-
-    -- // Starts a chat listener to all players
-    function CommandHandler.StartChatListen(self)
-        -- // Start a listener for all current players
-        for _, Player in ipairs(Players:GetPlayers()) do
-            self:StartChatListenPlayer(Player)
-        end
-
-        -- // Start a listener for all new players
-        Players.PlayerAdded:Connect(function(Player)
-            self:StartChatListenPlayer(Player)
-        end)
     end
 end
 
@@ -138,7 +138,7 @@ do
     end
 
     -- // Parses a type
-    function CommandHandler.ParseType(ExecutePlayer, Argument, Type)
+    function CommandClass.ParseType(ExecutePlayer, Argument, Type)
         -- // Vars
         local Parsed = nil
 
@@ -203,25 +203,50 @@ do
     function CommandClass.ParseArguments(self, ExecutePlayer, Arguments)
         -- // Vars
         local ParsedArguments = Arguments
+        local MissedArguments = false
 
-        -- // Loop through each argument
-        for i, Argument in ipairs(Arguments) do
+        -- // Loop through each argument type
+        for i, Types in ipairs(self.ArgParse) do
             -- // Vars
-            local Type = self.ArgParse[i]
+            local Argument = Arguments[i]
 
-            -- // Make sure parser data exists for argument
-            if (not Type) then
+            -- // Convert string -> table
+            if (typeof(Types) == "string") then
+                Types = {Types}
+                self.ArgParse[i] = Types
+            end
+
+            -- // Check for missing arguments
+            local isOptional = table.find(Types, "optional")
+            if (not isOptional and not Argument) then
+                MissedArguments = true
+                ParsedArguments[i] = nil
+                warn("missed")
                 continue
             end
 
+            -- // Attempt to parse
+            local Parsed
+            for _, Type in ipairs(Types) do
+                -- // Parse
+                Parsed = self.ParseType(ExecutePlayer, Argument, Type)
+
+                -- // Stop if parsed
+                if (Parsed) then
+                    continue
+                end
+            end
+
             -- // Set
-            ParsedArguments[i] = self.ParseType(ExecutePlayer, Argument, Type)
+            ParsedArguments[i] = Parsed
         end
 
         -- //
-        return ParsedArguments
+        return ParsedArguments, MissedArguments
     end
 end
 
 -- // Return
+-- getgenv().CommandHandler = CommandHandler
+-- getgenv().CommandClass = CommandClass
 return CommandHandler, CommandClass
