@@ -7,16 +7,14 @@ local Handler = CommandHandler.new({
 })
 
 -- // Create a command
-local PrintCommand = CommandClass.new({
-    Name = {"print"},
+CommandClass.new({
+    Name = {"aaa", "warn"},
     ArgParse = {"string"},
+    Handler = Handler,
     Callback = function(ExecutePlayer, Arguments)
-        print(Arguments[1])
+        warn(Arguments[1])
     end
 })
-
--- // Add it to the handler
-Handler:AddCommand(PrintCommand)
 
 -- //
 Handler:StartChatListen()
