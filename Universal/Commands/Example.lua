@@ -9,6 +9,7 @@ local Handler = CommandHandler.new({
 -- // Create a command
 CommandClass.new({
     Name = {"aaa", "warn"},
+    Description = "Test",
     ArgParse = {"string"},
     Handler = Handler,
     Callback = function(ExecutePlayer, Arguments)
