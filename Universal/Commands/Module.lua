@@ -28,6 +28,7 @@ do
 
     -- // Add Command
     function CommandHandler.AddCommand(self, _Command)
+        _Command.Handler = self
         table.insert(self.Commands, _Command)
     end
 
@@ -122,7 +123,15 @@ do
         self.ArgParse = Data.ArgParse or {}
         self.ArgSeperator = Data.ArgSeperator or ""
         self.Callback = Data.Callback or function() end
+        self.Handler = nil
         self.Name = Data.Name
+
+        -- // Check if handler given
+        if (Data.Handler) then
+            -- // Set and add to handler
+            self.Handler = Data.Handler
+            self.Handler:AddCommand(self)
+        end
 
         -- // Return
         return self
