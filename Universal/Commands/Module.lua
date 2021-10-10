@@ -36,6 +36,9 @@ do
 
     -- // Constructor
     function CommandHandler.new(Data)
+        -- // Default values
+        Data = Data or {}
+
         -- // Initialise
         local self = setmetatable({}, CommandHandler)
 
