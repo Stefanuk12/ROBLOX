@@ -7,6 +7,7 @@ local Players = game:GetService("Players")
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
 local KickAttemptFormat = "Kick attempted for: %s"
+local BlockedMethods = {"Kick", "kick"}
 
 -- // What to do when Kick detected
 local function kickDetected(Player, Reason)
@@ -24,7 +25,7 @@ __namecall = hookmetamethod(game, "__namecall", function(self, ...)
     local method = getnamecallmethod()
     
     -- // Check if kick attempt
-    if (self == LocalPlayer and method:lower() == "kick") then
+    if (self == LocalPlayer and table.find(BlockedMethods, method)) then
         -- // Alert
         kickDetected(self, args[1])
         
