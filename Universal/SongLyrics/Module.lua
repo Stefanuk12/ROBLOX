@@ -33,6 +33,9 @@ function Module.GetSongLyrics(Artist, Title)
         end
     end
 
+    -- // Remove first character from first lyric
+    Song[1] = Song[1]:sub(2)
+
     -- // Return
     return Song
 end
