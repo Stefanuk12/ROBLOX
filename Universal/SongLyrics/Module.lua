@@ -8,7 +8,7 @@ local Module = {}
 -- //
 local URLMatch = "https://www.azlyrics.com/lyrics/%s/%s.html"
 function Module.GetSongLyrics(Artist, Title)
-    -- // Lower Artist and Title, and remove any non-alphanumeric symbols
+    -- // Lower Artist and Title, and remove any non-alphanumeric characters
     Artist = Artist:lower():gsub("[^%w]+", "")
     Title = Title:lower():gsub("[^%w]+", "")
 
@@ -22,7 +22,13 @@ function Module.GetSongLyrics(Artist, Title)
     -- // Parse the song
     local Data = Body:split("<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->")[2]
     local End = Data:find("</div>")
-    local Song = Data:sub(0, End - 1):gsub("\n", ""):split("<br>")
+    local Song = Data:sub(0, End - 1)
+
+    -- // Remove any non-alphanumeric characters (except spaces)
+    Song = Song:gsub("\n", ""):gsub("[^%w%s<>]+", "")
+
+    -- // Split line by line
+    Song = Song:split("<br>")
 
     -- // Remove any empty lyrics
     for i, Lyric in ipairs(Song) do
