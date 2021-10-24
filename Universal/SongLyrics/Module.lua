@@ -24,8 +24,8 @@ function Module.GetSongLyrics(Artist, Title)
     local End = Data:find("</div>")
     local Song = Data:sub(0, End - 1)
 
-    -- // Remove any non-alphanumeric characters (except spaces)
-    Song = Song:gsub("\n", ""):gsub("[^%w%s<>]+", "")
+    -- // Remove any odd whitespace
+    Song = Song:gsub("[\n\t]+", "")
 
     -- // Split line by line
     Song = Song:split("<br>")
