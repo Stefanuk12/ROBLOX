@@ -14,10 +14,7 @@ function Module.GetSongLyrics(Artist, Title)
 
     -- // Vars
     local URL = URLMatch:format(Artist, Title)
-    local Body = syn.request({
-        Url = URL,
-        Method = "GET"
-    }).Body
+    local Body = game:HttpGet(URL)
 
     -- // Parse the song
     local Data = Body:split("<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->")[2]
