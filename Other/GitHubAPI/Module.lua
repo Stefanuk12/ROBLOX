@@ -1,25 +1,3 @@
--- // This is in place because table.concat is currently broken with Synapse
-do
-    setreadonly(table, false)
-    function table.concat(tbl, suffix)
-        -- // Vars
-        local concated = ""
-
-        -- // Loop through table
-        for i = 1, #tbl do
-            -- // Concat
-            concated = concated .. tbl[i] .. suffix
-        end
-
-        -- // Remove last character
-        concated = concated:sub(1, #concated - 1)
-
-        -- // Return
-        return concated
-    end
-    setreadonly(table, true)
-end
-
 -- // Services
 local HttpService = game:GetService("HttpService")
 
