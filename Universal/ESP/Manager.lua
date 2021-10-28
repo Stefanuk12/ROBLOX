@@ -218,3 +218,6 @@ RunService:BindToRenderStep("ManagerUpdate", 0, function()
         end
     end
 end)
+
+-- // Return
+return Manager
