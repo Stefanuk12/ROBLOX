@@ -13,6 +13,12 @@ nav:
       - Constructor: ./APIReference/Handler/constructor.md
       - Execute: ./APIReference/Handler/execute.md
       - HelpMenu: ./APIReference/Handler/helpmenu.md
+    - Command:
+      - CheckUser: ./APIReference/Command/checkuser.md
+      - Constructor: ./APIReference/Command/constructor.md
+      - ParseArguments: ./APIReference/Command/parsearguments.md
+      - ParsePlayerType: ./APIReference/Command/parseplayertype.md
+      - ParseType: ./APIReference/Command/parsetype.md
 
 theme:
   name: material

@@ -398,6 +398,93 @@
   
 
           
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Command
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Command" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Command
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Command/checkuser/" class="md-nav__link">
+        CheckUser
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Command/constructor/" class="md-nav__link">
+        Constructor
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Command/parsearguments/" class="md-nav__link">
+        ParseArguments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Command/parseplayertype/" class="md-nav__link">
+        ParsePlayerType
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Command/parsetype/" class="md-nav__link">
+        ParseType
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
         </ul>
       </nav>
     </li>
@@ -463,17 +550,58 @@ You use this to create a new command handler instance</p>
 <h3 id="parameters">Parameters</h3>
 <ul>
 <li><code>CommandHandlerData</code> Data<blockquote>
-<p>There is a lot of things you may configure
-| Name         | Description                                           | Type            | Default       | Required |
-| ------------ | ----------------------------------------------------- | --------------- | ------------- | -------- |
-| Members      | These are the allowed/disallowed players              | Player[]        | {LocalPlayer} | NO       |
-| MemberType   | Can either be <code>Whitelist</code> or <code>Blacklist</code>              | string          | Whitelist     | NO       |
-| ArgSeperator | This is what seperates each argument out              | string          | <code></code>           | NO       |
-| Commands     | Holds all of the commands registered to this handler  | Command[]       | {}            | NO       |
-| Prefix       | What the command has to start with in order to be one | string/string[] | !             | NO       |</p>
+<p>There is a lot of things you may configure, see below</p>
 </blockquote>
 </li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Members</td>
+<td>These are the allowed/disallowed players</td>
+<td><code>Player[]</code></td>
+<td><code>{LocalPlayer}</code></td>
+<td><code>NO</code></td>
+</tr>
+<tr>
+<td>MemberType</td>
+<td>Can either be <code>Whitelist</code> or <code>Blacklist</code></td>
+<td><code>string</code></td>
+<td><code>Whitelist</code></td>
+<td><code>NO</code></td>
+</tr>
+<tr>
+<td>ArgSeperator</td>
+<td>This is what seperates each argument out</td>
+<td><code>string</code></td>
+<td><code></code></td>
+<td><code>NO</code></td>
+</tr>
+<tr>
+<td>Commands</td>
+<td>Holds all of the commands registered to this handler</td>
+<td><code>Command[]</code></td>
+<td><code>{}</code></td>
+<td><code>NO</code></td>
+</tr>
+<tr>
+<td>Prefix</td>
+<td>What the command has to start with in order to be one</td>
+<td><code>string/string[]</code></td>
+<td><code>!</code></td>
+<td><code>NO</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="returns">Returns</h3>
 <ul>
 <li><code>CommandHandler</code> Handler<blockquote>
