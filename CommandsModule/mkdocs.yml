@@ -1,0 +1,22 @@
+site_name: Commands Module Documentation
+docs_dir: 'src'
+site_dir: 'docs'
+nav:
+  - Home: ./index.md
+  - Examples:
+    - Index: ./Examples/index.md
+  - API Reference:
+    - Handler:
+      - AddCommand: ./APIReference/Handler/add.md
+      - StartChatListen: ./APIReference/Handler/chatlisten.md
+      - CheckUser: ./APIReference/Handler/checkuser.md
+      - Constructor: ./APIReference/Handler/constructor.md
+      - Execute: ./APIReference/Handler/execute.md
+      - HelpMenu: ./APIReference/Handler/helpmenu.md
+
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
