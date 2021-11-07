@@ -3,8 +3,7 @@ local CommandHandler, CommandClass = loadstring(game:HttpGet("https://raw.github
 
 -- // Create a handler
 local Handler = CommandHandler.new({
-    Prefix = ".",
-    TargetSeperator = ","
+    Prefix = "."
 })
 
 -- // Create a command
@@ -52,6 +51,7 @@ CommandClass.new({
     Name = {"playertest"},
     Description = "Test",
     ArgParse = {"player"},
+    TargetSeperator = ","
     Handler = Handler,
     Callback = function(ExecutePlayer, Arguments)
         warn(Arguments[1], typeof(Arguments[1]))
