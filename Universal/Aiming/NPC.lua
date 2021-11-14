@@ -49,6 +49,8 @@ local AimingNPC = {
     SelectedPart = nil,
 
     TargetPart = {"Head", "HumanoidRootPart"},
+
+    RaycastIgnore = nil
 }
 getgenv().AimingNPC = AimingNPC
 
@@ -102,7 +104,9 @@ function AimingNPC.IsPartVisible(Part, PartDescendant)
         -- // Vars
         local raycastParams = RaycastParamsnew()
         raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
-        raycastParams.FilterDescendantsInstances = {Character, CurrentCamera}
+
+        -- // Raycast Ignore
+        raycastParams.FilterDescendantsInstances = AimingNPC.RaycastIgnore or {Character, CurrentCamera}
 
         -- // Cast ray
         local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
