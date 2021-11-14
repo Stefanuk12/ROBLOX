@@ -10,7 +10,6 @@ local UserInputService = game:GetService("UserInputService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
-local CurrentCamera = Workspace.CurrentCamera
 local Network = debug.getupvalue(require(ReplicatedStorage.Network), 2)
 
 AimingNPC.RaycastIgnore = {LocalPlayer.Character, CurrentCamera}
@@ -18,7 +17,7 @@ AimingNPC.FOV = 150
 
 local ThunderSettings = {
     AimLock = true,
-    AimLockKeybind = Enum.KeyCode.E
+    AimLockKeybind = Enum.KeyCode.W
 }
 getgenv().ThunderSettings = ThunderSettings
 
@@ -60,6 +59,7 @@ RunService:BindToRenderStep("AimLock", 0, function()
     -- // Make sure aimlock is enabled and we have a target
     if (ThunderSettings.AimLock and AimingNPC.Check() and UserInputService:IsKeyDown(ThunderSettings.AimLockKeybind)) then
         -- // Vars
+        local CurrentCamera = Workspace.CurrentCamera
         local SelectedPart = AimingNPC.SelectedPart
 
         -- // Set the camera to face towards the Hit
