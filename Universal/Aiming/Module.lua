@@ -62,7 +62,9 @@ getgenv().Aiming = {
             LocalPlayer,
             91318356
         }
-    }
+    },
+
+    RaycastIgnore = nil
 }
 local Aiming = getgenv().Aiming
 
@@ -116,7 +118,7 @@ function Aiming.IsPartVisible(Part, PartDescendant)
         -- // Vars
         local raycastParams = RaycastParamsnew()
         raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
-        raycastParams.FilterDescendantsInstances = {Character, CurrentCamera}
+        raycastParams.FilterDescendantsInstances = Aiming.RaycastIgnore or {Character, CurrentCamera}
 
         -- // Cast ray
         local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
