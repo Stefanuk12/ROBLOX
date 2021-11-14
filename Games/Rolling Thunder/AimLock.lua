@@ -54,7 +54,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     local callingscript = getcallingscript()
 
     -- // See if it's trying to get camera cframe, and if we have a target
-    if (t == CurrentCamera and k == "CFrame" and AimingNPC.Check()) then
+    if (t:IsA("Camera") and k == "CFrame" and AimingNPC.Check()) then
         -- // Modify it so we are looking at target
         local Original = __index(t, k)
         local Modified = CFrame.lookAt(Original.Position, AimingNPC.SelectedPart.Position)
