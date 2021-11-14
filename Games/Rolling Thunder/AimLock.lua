@@ -53,7 +53,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     -- // Vars
     local callingscript = getcallingscript()
 
-    -- // Make sure it's the correct script trying to get Camera.CFrame and that silent aim is available
+    -- // See if it's trying to get camera cframe, and if we have a target
     if (t == CurrentCamera and k == "CFrame" and AimingNPC.Check()) then
         -- // Modify it so we are looking at target
         local Original = __index(t, k)
