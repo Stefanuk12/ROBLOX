@@ -5,6 +5,7 @@ local AimingNPC = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ste
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
@@ -13,6 +14,12 @@ local Network = debug.getupvalue(require(ReplicatedStorage.Network), 2)
 
 AimingNPC.RaycastIgnore = {LocalPlayer.Character, CurrentCamera}
 AimingNPC.FOV = 150
+
+local ThunderSettings = {
+    AimLock = true,
+    AimLockKeybind = Enum.KeyCode.E
+}
+getgenv().ThunderSettings = ThunderSettings
 
 -- // Parse ignored stuff
 for _, child in ipairs(Workspace.Walls:GetChildren()) do
@@ -47,22 +54,14 @@ function AimingNPC.GetNPCs()
     return NPCs
 end
 
--- // Hook
-local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    -- // Vars
-    local callingscript = getcallingscript()
+-- // Constant Loop
+RunService:BindToRenderStep("AimLock", 0, function()
+    -- // Make sure aimlock is enabled and we have a target
+    if (ThunderSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(ThunderSettings.AimLockKeybind)) then
+        -- // Vars
+        local SelectedPart = Aiming.SelectedPart
 
-    -- // See if it's trying to get camera cframe, and if we have a target
-    if (t:IsA("Camera") and k == "CFrame" and AimingNPC.Check()) then
-        -- // Modify it so we are looking at target
-        local Original = __index(t, k)
-        local Modified = CFrame.lookAt(Original.Position, AimingNPC.SelectedPart.Position)
-
-        -- // Return it
-        return Modified
+        -- // Set the camera to face towards the Hit
+        CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, SelectedPart.Position)
     end
-
-    -- // Return
-    return __index(t, k)
 end)
