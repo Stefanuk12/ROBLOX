@@ -57,9 +57,9 @@ end
 -- // Constant Loop
 RunService:BindToRenderStep("AimLock", 0, function()
     -- // Make sure aimlock is enabled and we have a target
-    if (ThunderSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(ThunderSettings.AimLockKeybind)) then
+    if (ThunderSettings.AimLock and AimingNPC.Check() and UserInputService:IsKeyDown(ThunderSettings.AimLockKeybind)) then
         -- // Vars
-        local SelectedPart = Aiming.SelectedPart
+        local SelectedPart = AimingNPC.SelectedPart
 
         -- // Set the camera to face towards the Hit
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, SelectedPart.Position)
