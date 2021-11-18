@@ -101,7 +101,7 @@ do
         for _, child in ipairs(self.Parent[GetType](self.Parent)) do
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
-                return
+                continue
             end
 
             -- // Add
@@ -113,7 +113,7 @@ do
         self.ConnectionAdded = self.Parent[AddedType]:Connect(function(child)
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
-                return
+                continue
             end
 
             -- // Add
@@ -125,7 +125,7 @@ do
         self.ConnectionRemoved = self.Parent[RemovedType]:Connect(function(child)
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
-                return
+                continue
             end
 
             -- // Remove
