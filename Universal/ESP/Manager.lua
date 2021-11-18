@@ -4,7 +4,7 @@
 ]]
 
 -- // Dependencies
-local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Signal.lua"))()
+local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Module.lua"))()
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Rewrite.lua"))()
 
 -- // Services
