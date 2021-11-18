@@ -318,7 +318,8 @@ function ESP:HealthBar(Data)
                 Color = Color3fromRGB(0, 0, 0),
                 Visible = true,
                 Filled = true
-            }
+            },
+            Enabled = false
         }
 
         Data = addTableData(idealData, Data)
@@ -434,7 +435,8 @@ function ESP:Header(Data)
                 OutlineColor = Color3fromRGB(255, 150, 150),
                 Font = Drawing.Fonts.Plex
             },
-            Offset = CFramenew(0, 2, 0)
+            Offset = CFramenew(0, 2, 0),
+            Enabled = true
         }
         Data = addTableData(idealData, Data)
         self.Data = Data
@@ -493,7 +495,8 @@ function ESP:Tracer(Data)
                 Color = Color3fromRGB(255, 150, 150),
                 Visible = true,
                 From = TracerStart
-            }
+            },
+            Enabled = true
         }
         Data = addTableData(idealData, Data)
         self.Data = Data
@@ -537,7 +540,9 @@ function ESP:IsVisible()
 
     -- // Set the visibility
     return self:Update({
-        Visible = Visible
+        ObjectData = {
+            Visible = Visible and self.Data.Enabled
+        }
     })
 end
 
@@ -549,7 +554,9 @@ function ESP:IsOnScreen()
 
     -- // Set the visibility
     return self:Update({
-        Visible = OnScreen
+        ObjectData = {
+            Visible = OnScreen and self.Data.Enabled
+        }
     })
 end
 
