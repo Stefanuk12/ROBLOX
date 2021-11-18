@@ -23,14 +23,14 @@ local Manager = {}
 Manager.__index = Manager
 do
     -- // Constructor
-    function Manager.new(Parent, Filter, Descendants)
+    function Manager.new(Parent, Data)
         -- // Initialise
         local self = setmetatable({}, Manager)
 
         -- // Set Vars
         self.Parent = Parent
-        self.Filter = Filter or function() return true end
-        self.Descendants = Descendants or false
+        self.Filter = Data.Filter or function() return true end
+        self.Descendants = Data.Descendants or false
 
         self.Objects = {}
         self.ConnectionAdded = nil
@@ -198,6 +198,31 @@ do
 
         -- // Fire Signal
         Signals.ObjectUpdated:Fire(self, Object, Model)
+    end
+
+    -- // Set
+    function Manager.SetEnabled(self, Enabled, Filter)
+        -- // Default value
+        Filter = Filter or function() return true end
+
+        -- // Loop through each object
+        for _, Object in ipairs(self.Objects) do
+            -- // Make sure abides by filter
+            if (not Filter(Object, "Object")) then
+                continue
+            end
+
+            -- // Loop through each drawing
+            for Type, Drawing in pairs(Object.Drawings) do
+                -- // Make sure abides by filter
+                if (not Filter(Object, Type)) then
+                    continue
+                end
+
+                -- // Set
+                Drawing.Enabled = Enabled
+            end
+        end
     end
 end
 
