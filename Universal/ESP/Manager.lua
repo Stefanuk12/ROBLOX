@@ -113,7 +113,7 @@ do
         self.ConnectionAdded = self.Parent[AddedType]:Connect(function(child)
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
-                continue
+                return
             end
 
             -- // Add
@@ -125,7 +125,7 @@ do
         self.ConnectionRemoved = self.Parent[RemovedType]:Connect(function(child)
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
-                continue
+                return
             end
 
             -- // Remove
