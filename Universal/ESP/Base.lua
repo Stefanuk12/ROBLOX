@@ -153,14 +153,22 @@ do
     end
 
     -- //
-    function Utilities.CalculateCornersBox(Object, Get2D, OnScreenCheck, RenderDistance, CornerHandler)
+    function Utilities.CalculateCornersBox(Object, Get2D, OnScreenCheck, RenderDistance, LookAtCamera, CornerHandler)
+        -- // Vars
+        local CameraPosition = CurrentCamera.CFrame.Position
+
         -- // Getting CF and Size
         local CF, Size = Utilities.GetCFrameAndSize(Object)
 
         -- // Check render distance
-        local Magnitude = (CF.Position - CurrentCamera.CFrame.Position).Magnitude
+        local Magnitude = (CF.Position - CameraPosition).Magnitude
         if (Magnitude > RenderDistance) then
             return
+        end
+
+        -- //
+        if (LookAtCamera) then
+            CF = CFrame.lookAt(CF.Position, CameraPosition)
         end
 
         -- // Calculate where the corners are within 3D space
@@ -200,6 +208,7 @@ do
         RenderDistance = 1/0
     }
     Box.GlobalEnabled = true
+    Box.GlobalLookAtCamera = false
 
     -- // Constructor
     function Box.new(Data, DrawingData)
@@ -241,7 +250,7 @@ do
         end
 
         -- // Get the points
-        local _, Points = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance)
+        local _, Points = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance, self.GlobalLookAtCamera)
         DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
@@ -290,6 +299,7 @@ do
         RenderDistance = 1/0
     }
     Header.GlobalEnabled = true
+    Header.GlobalLookAtCamera = false
 
     -- // Constructor
     function Header.new(Data, DrawingData)
@@ -331,7 +341,7 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, false, true, Data.RenderDistance)
+        local Points = Utilities.CalculateCornersBox(Object, false, true, Data.RenderDistance, self.GlobalLookAtCamera)
         DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
@@ -405,6 +415,7 @@ do
         RenderDistance = 1/0
     }
     Tracer.GlobalEnabled = true
+    Tracer.GlobalLookAtCamera = false
 
     -- // Constructor
     function Tracer.new(Data, DrawingData)
@@ -446,7 +457,7 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, false, false, Data.RenderDistance)
+        local Points = Utilities.CalculateCornersBox(Object, false, false, Data.RenderDistance, self.GlobalLookAtCamera)
         DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
