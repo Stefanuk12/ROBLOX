@@ -44,7 +44,6 @@ do
         -- // Loop through the data
         for i, v in pairs(Data) do
             -- // Assign the properties
-            print(i)
             Object[i] = v
         end
 
@@ -233,7 +232,7 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, true, true)
+        local _, Points = Utilities.CalculateCornersBox(Object, true, true)
 
         -- // Make sure we have them
         if (not Points) then
