@@ -361,6 +361,7 @@ do
         Transparency = 1,
         Color = Color3.fromRGB(255, 150, 150),
 
+        From = Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y - 34),
         Thickness = 3
     }
     Tracer.IdealData = {
