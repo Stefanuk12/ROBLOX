@@ -8,10 +8,10 @@ local CurrentCamera = Workspace.CurrentCamera
 local Utilities = {}
 do
     -- // Combine two tables
-    function Utilities.CombineTables(Data, ToAdd)
+    function Utilities.CombineTables(ToAdd, Data)
         -- // Default
-        Data = Data or {}
         ToAdd = ToAdd or {}
+        Data = Data or {}
 
         -- // Loop through data we want to add
         for i, v in pairs(ToAdd) do
