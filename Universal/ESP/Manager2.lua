@@ -187,6 +187,18 @@ do
         Signals.ObjectUpdated:Fire(self, ESPObject, Object)
     end
 
+    -- // Update all object
+    function Manager.UpdateAllObjects(self)
+        -- // Loop through each Object
+        for _, Object in ipairs(self.ESPObjects) do
+            -- // Loop through Object Drawings
+            for _, DrawingObject in pairs(Object.Drawings) do
+                -- // Update
+                self:UpdateObject(DrawingObject, Object.Object)
+            end
+        end
+    end
+
     -- // Set
     function Manager.SetEnabled(self, Enabled, Filter)
         -- // Default value
@@ -216,18 +228,8 @@ end
 -- // Constantly update
 RunService:BindToRenderStep("ManagerUpdate", 0, function()
     -- // Loop through Managers
-    for _, Manager in ipairs(Managers) do
-        -- // Vars
-        local ESPObjects = Manager.ESPObjects
-
-        -- // Loop through each Object
-        for _, Object in ipairs(ESPObjects) do
-            -- // Loop through Object Drawings
-            for _, DrawingObject in pairs(Object.Drawings) do
-                -- // Update
-                Manager:UpdateObject(DrawingObject, Object.Object)
-            end
-        end
+    for _, ESPManager in ipairs(Managers) do
+        ESPManager:UpdateAllObjects()
     end
 end)
 
