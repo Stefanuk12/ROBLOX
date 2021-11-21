@@ -123,7 +123,7 @@ do
             end
 
             -- // Add it
-            table.insert(ConvertedPoints, Point2D)
+            table.insert(ConvertedPoints, Vector2.new(Point2D.X, Point2D.Y))
         end
 
         -- // Retun
@@ -312,7 +312,7 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, true, true)
+        local Points = Utilities.CalculateCornersBox(Object, false, true)
 
         -- // Make sure we have them
         if (not Points) then
@@ -408,7 +408,7 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, true, true)
+        local Points = Utilities.CalculateCornersBox(Object, false, true)
 
         -- // Make sure we have them
         if (not Points) then
