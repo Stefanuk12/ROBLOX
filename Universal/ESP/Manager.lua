@@ -86,17 +86,20 @@ do
     end
 
     -- // Start
-    function Manager.Start(self)
+    function Manager.Start(self, Data)
         -- // Vars
         local AlreadyStarted = table.find(Managers, self)
+        local Descendants = Data.Descendants or self.Descendants
 
         -- // Make sure hasn't already started
         if (AlreadyStarted) then
             return false
         end
 
+        self.Descendants = Descendants
+
         -- // Initialise current objects
-        local GetType = self.Descendants and "GetDescendants" or "GetChildren"
+        local GetType = Descendants and "GetDescendants" or "GetChildren"
         for _, child in ipairs(self.Parent[GetType](self.Parent)) do
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
@@ -108,7 +111,7 @@ do
         end
 
         -- // See whenever there is a new descendant/child
-        local AddedType = self.Descendants and "DescendantAdded" or "ChildAdded"
+        local AddedType = Descendants and "DescendantAdded" or "ChildAdded"
         self.ConnectionAdded = self.Parent[AddedType]:Connect(function(child)
             -- // Make sure filter is good
             if not (self.Filter(Manager, child)) then
@@ -200,26 +203,21 @@ do
     end
 
     -- // Set
-    function Manager.SetEnabled(self, Enabled, Filter)
-        -- // Default value
-        Filter = Filter or function(ESPObject, Type) return true end
+    function Manager.ModifyDataProperty(self, Name, Value, Filter)
+        -- // Default
+        Filter = Filter or function(Manager, DrawingObject) return true end
 
         -- // Loop through each object
-        for _, ESPObject in ipairs(self.ESPObjects) do
-            -- // Make sure abides by filter
-            if (not Filter(ESPObject, "ESPObject")) then
-                continue
-            end
-
-            -- // Loop through each drawing
-            for Type, Drawing in pairs(ESPObject.Drawings) do
-                -- // Make sure abides by filter
-                if (not Filter(ESPObject, Type)) then
-                    continue
+        for _, Object in ipairs(self.ESPObjects) do
+            -- // Loop through Object Drawings
+            for _, DrawingObject in pairs(Object.Drawings) do
+                -- // Make sure passes
+                if (not Filter(self, DrawingObject)) then
+                    return
                 end
 
                 -- // Set
-                Drawing.Enabled = Enabled
+                DrawingObject[Name] = Value
             end
         end
     end
