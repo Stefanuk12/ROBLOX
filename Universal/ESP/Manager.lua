@@ -5,7 +5,7 @@
 
 -- // Dependencies
 local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Module.lua"))()
-local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Rewrite.lua"))()
+local Base = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Base.lua"))()
 
 -- // Services
 local RunService = game:GetService("RunService")
@@ -32,7 +32,7 @@ do
         self.Filter = Data.Filter or function() return true end
         self.Descendants = Data.Descendants or false
 
-        self.Objects = {}
+        self.ESPObjects = {}
         self.ConnectionAdded = nil
         self.ConnectionRemoved = nil
 
@@ -44,17 +44,16 @@ do
     function Manager.AddObject(self, child)
         -- // Create the ESP Objects
         local ESPObjects = {
-            Model = child,
+            Object = child,
             Drawings = {
-                Box = ESP:Box({Model = child}),
-                Header = ESP:Header({Model = child}),
-                HealthBar = ESP:HealthBar({Model = child}),
-                Tracer = ESP:Tracer({Model = child})
+                Box = Base.Box.new({Object = child}),
+                Header = Base.Header.new({Object = child}),
+                Tracer = Base.Tracer.new({Object = child})
             }
         }
 
         -- // Add to the Manager's Objects
-        table.insert(self.Objects, ESPObjects)
+        table.insert(self.ESPObjects, ESPObjects)
 
         -- // Fire signal
         Signals.ObjectAdded:Fire(ESPObjects, Manager)
@@ -63,23 +62,23 @@ do
     -- // Remove Object
     function Manager.RemoveObject(self, child)
         -- // Loop through each Object
-        for i, Object in ipairs(self.Objects) do
-            -- // Make sure model matches
-            if not (child == Object.Model) then
+        for i, ESPObject in ipairs(self.ESPObjects) do
+            -- // Make sure object matches
+            if not (child == ESPObject.Object) then
                 continue
             end
 
             -- // Loop through each Drawing
-            for _, DrawingObject in pairs(Object.Drawings) do
+            for _, DrawingObject in pairs(ESPObject.Drawings) do
                 -- // Remove it
                 DrawingObject:Remove()
             end
 
             -- // Remove object from table
-            table.remove(self.Objects, i)
+            table.remove(self.ESPObjects, i)
 
             -- // Fire signal
-            Signals.ObjectRemoved:Fire(Object, Manager)
+            Signals.ObjectRemoved:Fire(ESPObject, Manager)
 
             -- // Break
             break
@@ -107,7 +106,7 @@ do
             -- // Add
             self:AddObject(child)
         end
-    
+
         -- // See whenever there is a new descendant/child
         local AddedType = self.Descendants and "DescendantAdded" or "ChildAdded"
         self.ConnectionAdded = self.Parent[AddedType]:Connect(function(child)
@@ -180,42 +179,42 @@ do
     end
 
     -- // Update
-    function Manager.UpdateObject(self, Object, Model)
-        -- // Attempt to get the humanoid
-        local Humanoid = Model:FindFirstChildWhichIsA("Humanoid")
-
-        -- // Update Health Bar
-        if (Object.ClassName == "HealthBar" and Humanoid) then
-            -- // Get the health perecentage
-            local HealthPercentage = Humanoid.Health / Humanoid.MaxHealth
-
-            -- // Update
-            Object:Update({Model = Model, HealthPercentage = HealthPercentage})
-        else
-            -- // Update
-            Object:Update({Model = Model})
-        end
+    function Manager.UpdateObject(self, ESPObject, Object)
+        -- // Update
+        ESPObject:Update({Object = Object})
 
         -- // Fire Signal
-        Signals.ObjectUpdated:Fire(self, Object, Model)
+        Signals.ObjectUpdated:Fire(self, ESPObject, Object)
+    end
+
+    -- // Update all object
+    function Manager.UpdateAllObjects(self)
+        -- // Loop through each Object
+        for _, Object in ipairs(self.ESPObjects) do
+            -- // Loop through Object Drawings
+            for _, DrawingObject in pairs(Object.Drawings) do
+                -- // Update
+                self:UpdateObject(DrawingObject, Object.Object)
+            end
+        end
     end
 
     -- // Set
     function Manager.SetEnabled(self, Enabled, Filter)
         -- // Default value
-        Filter = Filter or function() return true end
+        Filter = Filter or function(ESPObject, Type) return true end
 
         -- // Loop through each object
-        for _, Object in ipairs(self.Objects) do
+        for _, ESPObject in ipairs(self.ESPObjects) do
             -- // Make sure abides by filter
-            if (not Filter(Object, "Object")) then
+            if (not Filter(ESPObject, "ESPObject")) then
                 continue
             end
 
             -- // Loop through each drawing
-            for Type, Drawing in pairs(Object.Drawings) do
+            for Type, Drawing in pairs(ESPObject.Drawings) do
                 -- // Make sure abides by filter
-                if (not Filter(Object, Type)) then
+                if (not Filter(ESPObject, Type)) then
                     continue
                 end
 
@@ -229,20 +228,10 @@ end
 -- // Constantly update
 RunService:BindToRenderStep("ManagerUpdate", 0, function()
     -- // Loop through Managers
-    for _, Manager in ipairs(Managers) do
-        -- // Vars
-        local ManagerObjects = Manager.Objects
-        
-        -- // Loop through each Object
-        for _, Object in ipairs(ManagerObjects) do
-            -- // Loop through Object Drawings
-            for _, DrawingObject in pairs(Object.Drawings) do
-                -- // Update
-                Manager:UpdateObject(DrawingObject, Object.Model)
-            end
-        end
+    for _, ESPManager in ipairs(Managers) do
+        ESPManager:UpdateAllObjects()
     end
 end)
 
 -- // Return
-return Manager
+return Manager, Base
