@@ -235,7 +235,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled
-        if (not Data.Enabled or not self.GlobalEnabled) then
+        if (not Data.Enabled or not self.GlobalEnabled or not Object) then
             DrawingObject.Visible = false
             return
         end
@@ -320,7 +320,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled
-        if (not Data.Enabled or not self.GlobalEnabled) then
+        if (not Data.Enabled or not self.GlobalEnabled or not Object) then
             DrawingObject.Visible = false
             return
         end
@@ -430,7 +430,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled
-        if (not Data.Enabled or not self.GlobalEnabled) then
+        if (not Data.Enabled or not self.GlobalEnabled or not Object) then
             DrawingObject.Visible = false
             return
         end
