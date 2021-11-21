@@ -154,9 +154,15 @@ do
     end
 
     -- //
-    function Utilities.CalculateCornersBox(Object, Get2D, OnScreenCheck, CornerHandler)
+    function Utilities.CalculateCornersBox(Object, Get2D, OnScreenCheck, RenderDistance, CornerHandler)
         -- // Getting CF and Size
         local CF, Size = Utilities.GetCFrameAndSize(Object)
+
+        -- // Check render distance
+        local Magnitude = (CF.Position - CurrentCamera.CFrame.Position).Magnitude
+        if (Magnitude > RenderDistance) then
+            return
+        end
 
         -- // Calculate where the corners are within 3D space
         local Corners3D = Utilities.CalculateCorners(CF, Size, CornerHandler)
@@ -190,7 +196,9 @@ do
     }
     Box.IdealData = {
         Enabled = true,
-        Object = nil
+        Object = nil,
+
+        RenderDistance = 1/0
     }
 
     -- // Constructor
@@ -226,17 +234,18 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
+        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+            DrawingObject.Visible = false
             return
         end
 
         -- // Get the points
-        local _, Points = Utilities.CalculateCornersBox(Object, true, true)
+        local _, Points = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance)
+        DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
-        if (not Points) then
-            DrawingObject.Visible = false
+        if (not DrawingObject.Visible) then
             return
         end
 
@@ -271,7 +280,9 @@ do
     Header.IdealData = {
         Enabled = true,
         Object = nil,
-        Offset = nil
+        Offset = nil,
+
+        RenderDistance = 1/0
     }
 
     -- // Constructor
@@ -307,17 +318,18 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
+        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+            DrawingObject.Visible = false
             return
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, false, true)
+        local Points = Utilities.CalculateCornersBox(Object, false, true, Data.RenderDistance)
+        DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
-        if (not Points) then
-            DrawingObject.Visible = false
+        if (not DrawingObject.Visible) then
             return
         end
 
@@ -341,7 +353,15 @@ do
         end
 
         -- // Convert Position
-        Position = CurrentCamera:WorldToViewportPoint(Position.Position)
+        local Position, OnScreen = CurrentCamera:WorldToViewportPoint(Position.Position)
+
+        -- // Onscreen check, just in case
+        if (not OnScreen) then
+            DrawingObject.Visible = false
+            return
+        end
+
+        -- // Convert position
         Position = Vector2.new(Position.X, Position.Y)
 
         -- // Configuring the drawing
@@ -369,7 +389,9 @@ do
     Tracer.IdealData = {
         Enabled = true,
         Object = nil,
-        Offset = nil
+        Offset = nil,
+
+        RenderDistance = 1/0
     }
 
     -- // Constructor
@@ -405,17 +427,18 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
+        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+            DrawingObject.Visible = false
             return
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object)
+        local Points = Utilities.CalculateCornersBox(Object, false, false, Data.RenderDistance)
+        DrawingObject.Visible = not not Points
 
         -- // Make sure we have them
-        if (not Points) then
-            DrawingObject.Visible = false
+        if (not DrawingObject.Visible) then
             return
         end
 
