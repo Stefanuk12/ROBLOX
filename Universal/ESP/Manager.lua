@@ -24,6 +24,9 @@ Manager.__index = Manager
 do
     -- // Constructor
     function Manager.new(Parent, Data)
+        -- // Default
+        Data = Data or {}
+
         -- // Initialise
         local self = setmetatable({}, Manager)
 
