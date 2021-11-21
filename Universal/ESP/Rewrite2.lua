@@ -236,6 +236,7 @@ do
 
         -- // Make sure we have them
         if (not Points) then
+            Object.Visible = false
             return
         end
 
@@ -316,6 +317,7 @@ do
 
         -- // Make sure we have them
         if (not Points) then
+            DrawingObject.Visible = false
             return
         end
 
@@ -409,10 +411,11 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, false, true)
+        local Points = Utilities.CalculateCornersBox(Object)
 
         -- // Make sure we have them
         if (not Points) then
+            Object.Visible = false
             return
         end
 
