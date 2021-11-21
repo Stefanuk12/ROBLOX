@@ -340,7 +340,7 @@ do
         end
 
         -- // Convert Position
-        Position = CurrentCamera:WorldToViewportPoint(Position)
+        Position = CurrentCamera:WorldToViewportPoint(Position.Position)
         Position = Vector2.new(Position.X, Position.Y)
 
         -- // Configuring the drawing
