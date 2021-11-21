@@ -255,6 +255,11 @@ do
         DrawingObject.PointC = Points[3]
         DrawingObject.PointD = Points[4]
     end
+
+    -- // Remove
+    function Box.Remove(self)
+        self.Drawing:Remove()
+    end
 end
 
 -- // Header Class
@@ -369,6 +374,11 @@ do
         DrawingObject.Text = Data.Text or Object.Name or "nil"
         DrawingObject.Position = Position
     end
+
+    -- // Remove
+    function Header.Remove(self)
+        self.Drawing:Remove()
+    end
 end
 
 -- // Tracer Class
@@ -454,6 +464,11 @@ do
 
         -- // Set To
         DrawingObject.To = Position
+    end
+
+    -- // Remove
+    function Tracer.Remove(self)
+        self.Drawing:Remove()
     end
 end
 
