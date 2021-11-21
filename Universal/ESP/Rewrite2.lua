@@ -200,6 +200,7 @@ do
 
         RenderDistance = 1/0
     }
+    Box.GlobalEnabled = true
 
     -- // Constructor
     function Box.new(Data, DrawingData)
@@ -235,7 +236,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
             DrawingObject.Visible = false
             return
         end
@@ -284,6 +285,7 @@ do
 
         RenderDistance = 1/0
     }
+    Header.GlobalEnabled = true
 
     -- // Constructor
     function Header.new(Data, DrawingData)
@@ -319,7 +321,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
             DrawingObject.Visible = false
             return
         end
@@ -393,6 +395,7 @@ do
 
         RenderDistance = 1/0
     }
+    Tracer.GlobalEnabled = true
 
     -- // Constructor
     function Tracer.new(Data, DrawingData)
@@ -428,7 +431,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not Data.Enabled or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
             DrawingObject.Visible = false
             return
         end
