@@ -235,8 +235,8 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled
+        if (not Data.Enabled or not self.GlobalEnabled) then
             DrawingObject.Visible = false
             return
         end
@@ -320,8 +320,8 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled
+        if (not Data.Enabled or not self.GlobalEnabled) then
             DrawingObject.Visible = false
             return
         end
@@ -430,8 +430,8 @@ do
         local Object = Data.Object
         local DrawingObject = self.Drawing
 
-        -- // Skip if disabled or invisible or transparency is 0 or not within render distance
-        if (not (Data.Enabled or self.GlobalEnabled) or DrawingObject.Transparency == 0) then
+        -- // Skip if disabled
+        if (not Data.Enabled or not self.GlobalEnabled) then
             DrawingObject.Visible = false
             return
         end
