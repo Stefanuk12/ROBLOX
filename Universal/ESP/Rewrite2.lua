@@ -180,7 +180,7 @@ do
     -- // Vars
     Box.DrawingType = "Quad"
     Box.DrawingDefault = {
-        Visible = false,
+        Visible = true,
         ZIndex = 0,
         Transparency = 1,
         Color = Color3.fromRGB(255, 150, 150),
@@ -255,7 +255,7 @@ do
     -- // Vars
     Header.DrawingType = "Text"
     Header.DrawingDefault = {
-        Visible = false,
+        Visible = true,
         ZIndex = 0,
         Transparency = 1,
         Color = Color3.fromRGB(255, 150, 150),
@@ -356,7 +356,7 @@ do
     -- // Vars
     Tracer.DrawingType = "Line"
     Tracer.DrawingDefault = {
-        Visible = false,
+        Visible = true,
         ZIndex = 0,
         Transparency = 1,
         Color = Color3.fromRGB(255, 150, 150),
