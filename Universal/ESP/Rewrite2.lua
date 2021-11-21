@@ -227,7 +227,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Disabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
             return
         end
 
@@ -307,7 +307,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Disabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
             return
         end
 
@@ -403,7 +403,7 @@ do
         local DrawingObject = self.Drawing
 
         -- // Skip if disabled or invisible or transparency is 0
-        if (not (Data.Disabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
+        if (not (Data.Enabled or DrawingObject.Visible) or DrawingObject.Transparency == 0) then
             return
         end
 
