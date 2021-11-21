@@ -44,6 +44,7 @@ do
         -- // Loop through the data
         for i, v in pairs(Data) do
             -- // Assign the properties
+            print(i)
             Object[i] = v
         end
 
@@ -354,7 +355,7 @@ Tracer.__index = Tracer
 Tracer.__type = "Tracer"
 do
     -- // Vars
-    Tracer.DrawingType = "Text"
+    Tracer.DrawingType = "Line"
     Tracer.DrawingDefault = {
         Visible = false,
         ZIndex = 0,
