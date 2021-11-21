@@ -234,4 +234,4 @@ RunService:BindToRenderStep("ManagerUpdate", 0, function()
 end)
 
 -- // Return
-return Manager
+return Manager, ESP
