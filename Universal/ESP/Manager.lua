@@ -57,6 +57,9 @@ do
 
         -- // Fire signal
         Signals.ObjectAdded:Fire(ESPObjects, Manager)
+
+        -- // Return
+        return ESPObjects
     end
 
     -- // Remove Object
