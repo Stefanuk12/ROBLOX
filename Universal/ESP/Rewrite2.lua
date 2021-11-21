@@ -236,7 +236,7 @@ do
 
         -- // Make sure we have them
         if (not Points) then
-            Object.Visible = false
+            DrawingObject.Visible = false
             return
         end
 
@@ -415,7 +415,7 @@ do
 
         -- // Make sure we have them
         if (not Points) then
-            Object.Visible = false
+            DrawingObject.Visible = false
             return
         end
 
