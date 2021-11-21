@@ -87,6 +87,8 @@ do
 
     -- // Start
     function Manager.Start(self, Data)
+        Data = Data or {}
+
         -- // Vars
         local AlreadyStarted = table.find(Managers, self)
         local Descendants = Data.Descendants or self.Descendants
@@ -217,7 +219,7 @@ do
                 end
 
                 -- // Set
-                DrawingObject[Name] = Value
+                DrawingObject.Data[Name] = Value
             end
         end
     end

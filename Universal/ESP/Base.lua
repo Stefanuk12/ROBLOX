@@ -9,10 +9,9 @@ local Utilities = {}
 do
     -- // Combine two tables
     function Utilities.CombineTables(Data, ToAdd)
-        -- // Check to add exists
-        if not (ToAdd) then
-            return Data
-        end
+        -- // Default
+        Data = Data or {}
+        ToAdd = ToAdd or {}
 
         -- // Loop through data we want to add
         for i, v in pairs(ToAdd) do
