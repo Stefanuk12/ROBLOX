@@ -70,9 +70,6 @@ function PlayerManager.StopPlayer(self, Player)
 
         -- // Remove object from table
         table.remove(self.ESPObjects, i)
-
-        -- // Break
-        break
     end
 end
 
