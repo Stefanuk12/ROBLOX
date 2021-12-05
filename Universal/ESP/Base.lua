@@ -299,7 +299,8 @@ do
         RenderDistance = 1/0,
 
         ScaleWithDistance = true,
-        _Size = 14
+        _Size = 1/6,
+        _SizeClamp = {1, 14}
     }
     Header.GlobalEnabled = true
     Header.GlobalLookAtCamera = false
@@ -374,12 +375,15 @@ do
         -- // Figuring out the size
         if (Data.ScaleWithDistance) then
             -- // Vars
-            local Distance = (CurrentCamera.CFrame.Position - Position.Position).Magnitude
-            local Constant = 1/10
+            local TopLeft, _ = CurrentCamera:WorldToViewportPoint(Points[1].Position)
+            local BottomLeft, _ = CurrentCamera:WorldToViewportPoint(Points[3].Position)
+
+            local Height = BottomLeft.Y - TopLeft.Y
+            local Size = Height * Data._Size
+            local SizeClamp = Data._SizeClamp
 
             -- //
-            local Multiplier = (Constant * Distance)
-            DrawingObject.Size = Data._Size * Multiplier
+            --DrawingObject.Size = math.clamp(Size, SizeClamp[1], SizeClamp[2])
         end
 
         -- // Convert Position
@@ -498,9 +502,11 @@ do
 end
 
 -- // Return
-return {
+local Base = {
     Box = Box,
     Header = Header,
     Tracer = Tracer,
     Utilities = Utilities
 }
+--getgenv().Base = Base
+return Base
