@@ -38,15 +38,17 @@ do
     end
 
     -- // Add Object
-    function Manager.AddObject(self, child, Types)
+    function Manager.AddObject(self, child, Types, Modifier)
         -- // Default
         Types = Types or {"Box", "Tracer", "Header"}
+        Modifier = Modifier or function(ESPObject) return ESPObject end
 
         -- // Create the ESP Objects
         local Objects = {}
         for _, Type in ipairs(Types) do
             -- // Create the object
             local ESPObject = Base[Type].new({Object = child})
+            ESPObject = Modifier(ESPObject)
 
             -- // Add to the Manager's Objects
             table.insert(self.ESPObjects, ESPObject)
