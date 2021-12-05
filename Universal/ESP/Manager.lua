@@ -4,18 +4,12 @@
 ]]
 
 -- // Dependencies
-local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Module.lua"))()
 local Base = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Base.lua"))()
 
 -- // Services
 local RunService = game:GetService("RunService")
 
 -- // Vars
-local Signals = {
-    ObjectAdded = Signal.new("ObjectAdded"),
-    ObjectRemoved = Signal.new("ObjectRemoved"),
-    ObjectUpdated = Signal.new("ObjectUpdated")
-}
 local Managers = {}
 
 -- // Manager Class
@@ -44,25 +38,25 @@ do
     end
 
     -- // Add Object
-    function Manager.AddObject(self, child)
+    function Manager.AddObject(self, child, Types)
+        -- // Default
+        Types = Types or {"Box", "Tracer", "Header"}
+
         -- // Create the ESP Objects
-        local ESPObjects = {
-            Object = child,
-            Drawings = {
-                Box = Base.Box.new({Object = child}),
-                Header = Base.Header.new({Object = child}),
-                Tracer = Base.Tracer.new({Object = child})
-            }
-        }
+        local Objects = {}
+        for _, Type in ipairs(Types) do
+            -- // Create the object
+            local ESPObject = Base[Type].new({Object = child})
 
-        -- // Add to the Manager's Objects
-        table.insert(self.ESPObjects, ESPObjects)
+            -- // Add to the Manager's Objects
+            table.insert(self.ESPObjects, ESPObject)
 
-        -- // Fire signal
-        Signals.ObjectAdded:Fire(ESPObjects, Manager)
+            -- // Add to created objects
+            table.insert(Objects, ESPObject)
+        end
 
         -- // Return
-        return ESPObjects
+        return Objects
     end
 
     -- // Remove Object
@@ -74,21 +68,33 @@ do
                 continue
             end
 
-            -- // Loop through each Drawing
-            for _, DrawingObject in pairs(ESPObject.Drawings) do
-                -- // Remove it
-                DrawingObject:Remove()
-            end
+            -- // Remove the drawing
+            ESPObject.Drawing:Remove()
 
             -- // Remove object from table
             table.remove(self.ESPObjects, i)
 
-            -- // Fire signal
-            Signals.ObjectRemoved:Fire(ESPObject, Manager)
-
             -- // Break
             break
         end
+    end
+
+    -- // Get Objects
+    function Manager.GetObjectsOfType(self, Type)
+        -- // Vars
+        local Found = {}
+
+        -- // Loop through Objects
+        for _, ESPObject in ipairs(self.ESPObjects) do
+            -- // Check that the type matches
+            if (ESPObject.__type == Type) then
+                -- // Add to found
+                table.insert(Found, ESPObject)
+            end
+        end
+
+        -- // Return found
+        return Found
     end
 
     -- // Start
@@ -189,44 +195,29 @@ do
         end
     end
 
-    -- // Update
-    function Manager.UpdateObject(self, ESPObject, Object)
-        -- // Update
-        ESPObject:Update({Object = Object})
-
-        -- // Fire Signal
-        Signals.ObjectUpdated:Fire(self, ESPObject, Object)
-    end
-
     -- // Update all object
     function Manager.UpdateAllObjects(self)
         -- // Loop through each Object
-        for _, Object in ipairs(self.ESPObjects) do
-            -- // Loop through Object Drawings
-            for _, DrawingObject in pairs(Object.Drawings) do
-                -- // Update
-                self:UpdateObject(DrawingObject, Object.Object)
-            end
+        for _, ESPObject in ipairs(self.ESPObjects) do
+            -- // Update
+            ESPObject:Update()
         end
     end
 
     -- // Set
     function Manager.ModifyDataProperty(self, Name, Value, Filter)
         -- // Default
-        Filter = Filter or function(Manager, DrawingObject) return true end
+        Filter = Filter or function(Manager, ESPObject) return true end
 
         -- // Loop through each object
-        for _, Object in ipairs(self.ESPObjects) do
-            -- // Loop through Object Drawings
-            for _, DrawingObject in pairs(Object.Drawings) do
-                -- // Make sure passes
-                if (not Filter(self, DrawingObject)) then
-                    return
-                end
-
-                -- // Set
-                DrawingObject.Data[Name] = Value
+        for _, ESPObject in ipairs(self.ESPObjects) do
+            -- // Make sure passes
+            if (not Filter(self, ESPObject)) then
+                return
             end
+
+            -- // Set
+            ESPObject.Data[Name] = Value
         end
     end
 end
@@ -240,4 +231,4 @@ RunService:BindToRenderStep("ManagerUpdate", 0, function()
 end)
 
 -- // Return
-return Manager, Base, Signals
+return Manager, Base
