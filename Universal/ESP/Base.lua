@@ -296,7 +296,8 @@ do
         Object = nil,
         Offset = nil,
 
-        RenderDistance = 1/0
+        RenderDistance = 1/0,
+        ScaleWithDistance = true
     }
     Header.GlobalEnabled = true
     Header.GlobalLookAtCamera = false
@@ -366,6 +367,16 @@ do
         -- // Static Offset
         elseif (OffsetType == "number") then
             Position = Position * Offset
+        end
+
+        -- // Figuring out the size
+        if (Data.ScaleWithDistance) then
+            -- // Vars
+            local Distance = (CurrentCamera.CFrame.Position - Object.Position.Position).Magnitude
+            local Constant = 1
+
+            -- // The size of the text is inversely proportional to the distance to the object.
+            DrawingObject.Size = Constant/Distance
         end
 
         -- // Convert Position
