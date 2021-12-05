@@ -45,7 +45,11 @@ function PlayerManager.StartPlayer(self, Player)
 
     -- // Create ESP
     local ESPObject = self:AddObject(Character, nil, function(ESPObject)
+        -- // Add Player
         ESPObject.Player = Player
+
+        -- // Return
+        return ESPObject
     end)
 
     -- // Return
