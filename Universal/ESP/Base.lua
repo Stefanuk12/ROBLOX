@@ -374,7 +374,7 @@ do
         -- // Figuring out the size
         if (Data.ScaleWithDistance) then
             -- // Vars
-            local Distance = (CurrentCamera.CFrame.Position - Object.Position.Position).Magnitude
+            local Distance = (CurrentCamera.CFrame.Position - Position.Position).Magnitude
             local Constant = 1/10
 
             -- //
