@@ -1,5 +1,5 @@
 -- // Dependencies
-local Manager, Base, Signals = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Manager.lua"))()
+local Manager, Base = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/Manager.lua"))()
 
 -- // Services
 local Players = game:GetService("Players")
@@ -44,11 +44,11 @@ function PlayerManager.StartPlayer(self, Player)
     local Character = self:GetCharacter(Player)
 
     -- // Create ESP
-    local ESPObjects = self:AddObject(Character)
-    ESPObjects.Player = Player
+    local ESPObject = self:AddObject(Character)
+    ESPObject.Player = Player
 
     -- // Return
-    return ESPObjects
+    return ESPObject
 end
 
 -- // Stop a specific player's ESP
@@ -61,16 +61,10 @@ function PlayerManager.StopPlayer(self, Player)
         end
 
         -- // Loop through each Drawing
-        for _, DrawingObject in pairs(ESPObject.Drawings) do
-            -- // Remove it
-            DrawingObject:Remove()
-        end
+        ESPObject.Drawing:Remove()
 
         -- // Remove object from table
         table.remove(self.ESPObjects, i)
-
-        -- // Fire signal
-        Signals.ObjectRemoved:Fire(ESPObject, Manager)
 
         -- // Break
         break
@@ -141,15 +135,12 @@ end
 -- // Override
 function PlayerManager.UpdateAllObjects(self)
     -- // Loop through each Object
-    for _, Object in ipairs(self.ESPObjects) do
-        -- // Loop through Object Drawings
-        for _, DrawingObject in pairs(Object.Drawings) do
-            -- // Vars
-            local Character = self:GetCharacter(Object.Player)
+    for _, ESPObject in ipairs(self.ESPObjects) do
+        -- // Vars
+        local Character = self:GetCharacter(ESPObject.Player)
 
-            -- // Update
-            self:UpdateObject(DrawingObject, Character)
-        end
+        -- // Update
+        ESPObject:Update({Object = Character})
     end
 end
 
@@ -162,4 +153,4 @@ RunService:BindToRenderStep("PlayerManagerUpdate", 0, function()
 end)
 
 -- // Return
-return PlayerManager, Base, Signals
+return PlayerManager, Base
