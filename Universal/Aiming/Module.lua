@@ -307,6 +307,11 @@ function Aiming.CheckHealth(Player)
     return Health > 0
 end
 
+-- // Custom Check Function
+function Aiming.CheckCustom(Player)
+    return true
+end
+
 -- // Check if silent aim can used
 function Aiming.Check()
     return (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
@@ -409,8 +414,8 @@ function Aiming.GetClosestPlayerToCursor()
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
-            -- // Check if part exists and health
-            if (TargetPartTemp and Aiming.CheckHealth(Player)) then
+            -- // Check if part exists, health and custom
+            if (TargetPartTemp and Aiming.CheckHealth(Player) and Aiming.CheckCustom(Player)) then
                 -- // Check if is in FOV
                 if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                     -- // Check if Visible
