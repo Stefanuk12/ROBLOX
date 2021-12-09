@@ -23,6 +23,13 @@ function PlayerManager.new(Data)
 
     -- // Set Vars
     self.Filter = Data.Filter or function() return true end
+    self.UpdateObjectManage = Data.UpdateObjectManage or function(self, ESPObject)
+        -- // Vars
+        local Character = self:GetCharacter(ESPObject.Player)
+
+        -- // Update
+        ESPObject:Update({Object = Character})
+    end
     self.Descendants = Data.Descendants or false
 
     self.ESPObjects = {}
@@ -138,11 +145,7 @@ end
 function PlayerManager.UpdateAllObjects(self)
     -- // Loop through each Object
     for _, ESPObject in ipairs(self.ESPObjects) do
-        -- // Vars
-        local Character = self:GetCharacter(ESPObject.Player)
-
-        -- // Update
-        ESPObject:Update({Object = Character})
+        self:UpdateObjectManage(ESPObject)
     end
 end
 
