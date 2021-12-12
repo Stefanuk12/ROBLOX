@@ -592,11 +592,12 @@ do
 
         -- // Get the points
         local _, Points = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance, self.GlobalLookAtCamera)
-        Background.Visible = not not Points
-        Main.Visible = Background.Visible
+        local isVisible = not not Points
+        Background.Visible = isVisible
+        Main.Visible = isVisible
 
         -- // Make sure we have them
-        if (not Background.Visible) then
+        if (not isVisible) then
             return
         end
 
