@@ -220,7 +220,7 @@ do
         self.DrawingData = Utilities.CombineTables(self.DrawingDefault, DrawingData)
 
         -- //
-        self.Drawing = Utilities.CreateDrawing(self.DrawingType, self.DrawingData)
+        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData)}
 
         -- // Return
         return self
@@ -235,13 +235,13 @@ do
         end
         for i, v in pairs(DrawingData or {}) do
             -- // Set
-            self.Drawing[i] = v
+            self.Drawings[1][i] = v
         end
 
         -- // Vars
         Data = self.Data
         local Object = Data.Object
-        local DrawingObject = self.Drawing
+        local DrawingObject = self.Drawings[1]
 
         -- // Skip if disabled
         if (not Data.Enabled or not self.GlobalEnabled or not Object) then
@@ -267,7 +267,7 @@ do
 
     -- // Remove
     function Box.Remove(self)
-        self.Drawing:Remove()
+        self.Drawings[1]:Remove()
     end
 end
 
@@ -299,7 +299,7 @@ do
         RenderDistance = 1/0,
 
         ScaleWithDistance = true,
-        _Size = 1/6,
+        _Size = 1/4,
         _SizeClamp = {1, 14}
     }
     Header.GlobalEnabled = true
@@ -315,7 +315,7 @@ do
         self.DrawingData = Utilities.CombineTables(self.DrawingDefault, DrawingData)
 
         -- //
-        self.Drawing = Utilities.CreateDrawing(self.DrawingType, self.DrawingData)
+        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData)}
 
         -- // Return
         return self
@@ -330,13 +330,13 @@ do
         end
         for i, v in pairs(DrawingData or {}) do
             -- // Set
-            self.Drawing[i] = v
+            self.Drawings[1][i] = v
         end
 
         -- // Vars
         Data = self.Data
         local Object = Data.Object
-        local DrawingObject = self.Drawing
+        local DrawingObject = self.Drawings[1]
 
         -- // Skip if disabled
         if (not Data.Enabled or not self.GlobalEnabled or not Object) then
@@ -372,8 +372,8 @@ do
             Position = Position * Offset
         end
 
-        -- // Figuring out the size
-        if (Data.ScaleWithDistance) then
+        -- // Figuring out the size (Disabled)
+        if (Data.ScaleWithDistance and false) then
             -- // Vars
             local TopLeft, _ = CurrentCamera:WorldToViewportPoint(Points[1].Position)
             local BottomLeft, _ = CurrentCamera:WorldToViewportPoint(Points[3].Position)
@@ -383,7 +383,7 @@ do
             local SizeClamp = Data._SizeClamp
 
             -- //
-            --DrawingObject.Size = math.clamp(Size, SizeClamp[1], SizeClamp[2])
+            DrawingObject.Size = math.clamp(Size, unpack(SizeClamp))
         end
 
         -- // Convert Position
@@ -405,7 +405,7 @@ do
 
     -- // Remove
     function Header.Remove(self)
-        self.Drawing:Remove()
+        self.Drawings[1]:Remove()
     end
 end
 
@@ -445,7 +445,7 @@ do
         self.DrawingData = Utilities.CombineTables(self.DrawingDefault, DrawingData)
 
         -- //
-        self.Drawing = Utilities.CreateDrawing(self.DrawingType, self.DrawingData)
+        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData)}
 
         -- // Return
         return self
@@ -460,13 +460,13 @@ do
         end
         for i, v in pairs(DrawingData or {}) do
             -- // Set
-            self.Drawing[i] = v
+            self.Drawings[1][i] = v
         end
 
         -- // Vars
         Data = self.Data
         local Object = Data.Object
-        local DrawingObject = self.Drawing
+        local DrawingObject = self.Drawings[1]
 
         -- // Skip if disabled
         if (not Data.Enabled or not self.GlobalEnabled or not Object) then
@@ -497,7 +497,7 @@ do
 
     -- // Remove
     function Tracer.Remove(self)
-        self.Drawing:Remove()
+        self.Drawings[1]:Remove()
     end
 end
 
@@ -508,5 +508,5 @@ local Base = {
     Tracer = Tracer,
     Utilities = Utilities
 }
---getgenv().Base = Base
+getgenv().Base = Base
 return Base
