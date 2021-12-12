@@ -66,9 +66,11 @@ end
 -- // Stop a specific player's ESP
 function PlayerManager.StopPlayer(self, Player)
     -- // Loop through each Object
-    for i, ESPObject in ipairs(self.ESPObjects) do
+    for i = #self.ESPObjects, 1, -1 do
+        local ESPObject = self.ESPObjects[i]
+
         -- // Make sure player matches
-        if not (Player == ESPObject.Player) then
+        if (Player ~= ESPObject.Player) then
             continue
         end
 
