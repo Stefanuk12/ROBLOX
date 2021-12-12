@@ -40,7 +40,7 @@ do
     -- // Add Object
     function Manager.AddObject(self, child, Types, Modifier)
         -- // Default
-        Types = Types or {"Box", "Tracer", "Header"}
+        Types = Types or {"Box", "Tracer", "Header", "Healthbar"}
         Modifier = Modifier or function(ESPObject) return ESPObject end
 
         -- // Create the ESP Objects
