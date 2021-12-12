@@ -520,6 +520,7 @@ do
         Thickness = 3,
         Filled = true
     }
+    Healthbar.DrawingType2 = "Quad"
     Healthbar.DrawingDefault2 = {
         Visible = true,
         ZIndex = 1,
@@ -544,16 +545,17 @@ do
     Healthbar.GlobalLookAtCamera = false
 
     -- // Constructor
-    function Healthbar.new(Data, DrawingData)
+    function Healthbar.new(Data, DrawingData, DrawingData2)
         -- // Initialise class
         local self = setmetatable({}, Tracer)
 
         -- // Data
         self.Data = Utilities.CombineTables(self.IdealData, Data)
         self.DrawingData = Utilities.CombineTables(self.DrawingDefault, DrawingData)
+        self.DrawingData2 = Utilities.CombineTables(self.DrawingDefault2, DrawingData2)
 
         -- //
-        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData), Utilities.CreateDrawing(self.DrawingType, self.DrawingDefault2)}
+        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData), Utilities.CreateDrawing(self.DrawingType2, self.DrawingData2)}
 
         -- // Return
         return self
