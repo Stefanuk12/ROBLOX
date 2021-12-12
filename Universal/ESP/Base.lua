@@ -547,7 +547,7 @@ do
     -- // Constructor
     function Healthbar.new(Data, DrawingData, DrawingData2)
         -- // Initialise class
-        local self = setmetatable({}, Tracer)
+        local self = setmetatable({}, Healthbar)
 
         -- // Data
         self.Data = Utilities.CombineTables(self.IdealData, Data)
@@ -584,7 +584,7 @@ do
         local Main = self.Drawings[2]
 
         -- // Skip if disabled
-        if (not Data.Enabled or not self.GlobalEnabled or not Object) then
+        if (not Data.Enabled or not self.GlobalEnabled or not Object) or true then
             Background.Visible = false
             Main.Visible = false
             return
@@ -615,8 +615,8 @@ do
         local TopRightOffset = TopLeft - Vector2.new(TopWidth * Data.Offset, 0)
         local BottomRightOffset = TopRight - Vector2.new(TopWidth * Data.Offset, 0)
 
-        local TopLeftPoint = TopRightOffset - (TopWidth * Data.Width)
-        local BottomLeftPoint = BottomRightOffset - (BottomWidth * Data.Width)
+        local TopLeftPoint = TopRightOffset - Vector2.new(TopWidth * Data.Width, 0)
+        local BottomLeftPoint = BottomRightOffset - Vector2.new(BottomWidth * Data.Width, 0)
 
         -- // Set the points for the background
         Background.PointA = TopRightOffset
