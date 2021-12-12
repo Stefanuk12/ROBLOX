@@ -70,8 +70,11 @@ do
                 continue
             end
 
-            -- // Remove the drawing
-            ESPObject.Drawing:Remove()
+            -- // Loop through each Drawing
+            for _, Drawing in ipairs(ESPObject.Drawings) do
+                -- // Remove the drawing
+                Drawing:Remove()
+            end
 
             -- // Remove object from table
             table.remove(self.ESPObjects, i)

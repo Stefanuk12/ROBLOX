@@ -75,7 +75,10 @@ function PlayerManager.StopPlayer(self, Player)
         end
 
         -- // Loop through each Drawing
-        ESPObject.Drawing:Remove()
+        for _, Drawing in ipairs(ESPObject.Drawings) do
+            -- // Remove the drawing
+            Drawing:Remove()
+        end
 
         -- // Remove object from table
         table.remove(self.ESPObjects, i)
