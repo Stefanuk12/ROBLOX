@@ -1,3 +1,6 @@
+-- // Dependencies
+local CIELUV = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/ESP/CIELUV.lua"))()
+
 -- // Services
 local Workspace = game:GetService("Workspace")
 
@@ -501,12 +504,141 @@ do
     end
 end
 
+-- // Healthbar Class
+local Healthbar = {}
+Healthbar.__index = Healthbar
+Healthbar.__type = "Healthbar"
+do
+    -- // Vars
+    Healthbar.DrawingType = "Quad"
+    Healthbar.DrawingDefault = {
+        Visible = true,
+        ZIndex = 0,
+        Transparency = 1,
+        Color = Color3.fromRGB(30, 30, 30),
+
+        Thickness = 3,
+        Filled = true
+    }
+    Healthbar.DrawingDefault2 = {
+        Visible = true,
+        ZIndex = 1,
+        Transparency = 1,
+        Color = Color3.fromRGB(169, 220, 118),
+
+        Thickness = 3,
+        Filled = true
+    }
+    Healthbar.IdealData = {
+        Enabled = true,
+        Object = nil,
+
+        RenderDistance = 1/0,
+
+        HealthPercentage = 1,
+        Width = 1/3,
+        Offset = 1/6
+    }
+    Healthbar.CIELUV = CIELUV(Color3.fromRGB(255, 97, 136), Color3.fromRGB(169, 220, 118))
+    Healthbar.GlobalEnabled = true
+    Healthbar.GlobalLookAtCamera = false
+
+    -- // Constructor
+    function Healthbar.new(Data, DrawingData)
+        -- // Initialise class
+        local self = setmetatable({}, Tracer)
+
+        -- // Data
+        self.Data = Utilities.CombineTables(self.IdealData, Data)
+        self.DrawingData = Utilities.CombineTables(self.DrawingDefault, DrawingData)
+
+        -- //
+        self.Drawings = {Utilities.CreateDrawing(self.DrawingType, self.DrawingData), Utilities.CreateDrawing(self.DrawingType, self.DrawingDefault2)}
+
+        -- // Return
+        return self
+    end
+
+    -- // Update
+    function Healthbar.Update(self, Data, DrawingData, DrawingData2)
+        -- // Loop through the data
+        for i, v in pairs(Data or {}) do
+            -- // Set
+            self.Data[i] = v
+        end
+        for i, v in pairs(DrawingData or {}) do
+            -- // Set
+            self.Drawings[1][i] = v
+        end
+        for i, v in pairs(DrawingData2 or {}) do
+            -- // Set
+            self.Drawings[2][i] = v
+        end
+
+        -- // Vars
+        Data = self.Data
+        local Object = Data.Object
+        local Background = self.Drawings[1]
+        local Main = self.Drawings[2]
+
+        -- // Skip if disabled
+        if (not Data.Enabled or not self.GlobalEnabled or not Object) then
+            Background.Visible = false
+            Main.Visible = false
+            return
+        end
+
+        -- // Get the points
+        local _, Points = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance, self.GlobalLookAtCamera)
+        Background.Visible = not not Points
+        Main.Visible = Background.Visible
+
+        -- // Make sure we have them
+        if (not Background.Visible) then
+            return
+        end
+
+        -- // Vars
+        local TopRight = Points[2]
+        local TopLeft = Points[1]
+        local BottomLeft = Points[3]
+        local BottomRight = Points[4]
+
+        local LeftHeight = (TopLeft.Y - BottomLeft.Y)
+        local RightHeight = (TopRight.Y - BottomRight.Y)
+        local TopWidth = (TopRight.X - TopLeft.X)
+        local BottomWidth = (BottomRight.X - BottomLeft.X)
+
+        local TopRightOffset = TopLeft - Vector2.new(TopWidth * Data.Offset, 0)
+        local BottomRightOffset = TopRight - Vector2.new(TopWidth * Data.Offset, 0)
+
+        local TopLeftPoint = TopRightOffset - (TopWidth * Data.Width)
+        local BottomLeftPoint = BottomRightOffset - (BottomWidth * Data.Width)
+
+        -- // Set the points for the background
+        Background.PointA = TopRightOffset
+        Background.PointB = TopLeftPoint
+        Background.PointC = BottomLeftPoint
+        Background.PointD = BottomRightOffset
+
+        -- // Set the points for the main
+        Main.PointA = TopRightOffset - Vector2.new(0, RightHeight - (RightHeight * (1 - Data.HealthPercentage)))
+        Main.PointB = TopLeftPoint - Vector2.new(0, LeftHeight - (LeftHeight * (1 - Data.HealthPercentage)))
+        Main.PointC = BottomLeftPoint
+        Main.PointD = BottomRightOffset
+
+        -- // Work out the fill colour for the main
+        Main.Color = Healthbar.CIELUV(Data.HealthPercentage)
+    end
+end
+
 -- // Return
 local Base = {
     Box = Box,
     Header = Header,
     Tracer = Tracer,
+    Healthbar = Healthbar,
     Utilities = Utilities
 }
-getgenv().Base = Base
+-- getgenv().Base = Base
 return Base

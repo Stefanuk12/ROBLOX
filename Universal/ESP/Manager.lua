@@ -236,4 +236,5 @@ RunService:BindToRenderStep("ManagerUpdate", 0, function()
 end)
 
 -- // Return
+-- getgenv().Manager = Manager
 return Manager, Base
