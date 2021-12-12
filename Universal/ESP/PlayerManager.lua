@@ -163,4 +163,5 @@ RunService:BindToRenderStep("PlayerManagerUpdate", 0, function()
 end)
 
 -- // Return
+-- getgenv().PlayerManager = PlayerManager
 return PlayerManager, Base
