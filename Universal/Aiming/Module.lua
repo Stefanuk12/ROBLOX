@@ -463,7 +463,7 @@ function Aiming.BeizerCurve.AimTo(Data)
     -- // Vars
     local MousePosition = GetMouseLocation(UserInputService)
     local TargetPosition = Data.TargetPosition
-    local Smoothness = Data.Smoothness
+    local Smoothness = Data.Smoothness or 0.0025
 
     -- // Work out curve type
     local Curve = Vector2new()
