@@ -9,15 +9,23 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 -- // Vars
+local RenderStepped = RunService.RenderStepped
 local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
 
 local DaHoodSettings = {
-    SilentAim = true,
-    AimLock = true,
     Prediction = 0.165,
-    AimLockKeybind = Enum.KeyCode.E
+
+    SilentAim = true,
+
+    AimLock = true,
+    AimLockKeybind = Enum.KeyCode.E,
+    BeizerLock = {
+        Enabled = true,
+
+        IsLinear = false,
+        Smoothness = 0.05
+    }
 }
 getgenv().DaHoodSettings = DaHoodSettings
 
@@ -65,15 +73,31 @@ __index = hookmetamethod(game, "__index", function(t, k)
 end)
 
 -- // Aimlock
-RunService:BindToRenderStep("AimLock", 0, function()
+while (true) do RenderStepped:Wait()
     if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
         -- // Vars
         local SelectedPart = Aiming.SelectedPart
 
         -- // Hit to account prediction
         local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+        local HitPosition = Hit.Position
 
-        -- // Set the camera to face towards the Hit
-        CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
+        -- //
+        local BeizerLock = DaHoodSettings.BeizerLock
+        if (BeizerLock.Enabled) then
+            -- // Work out in 2d
+            local Vector, _ = CurrentCamera:WorldToViewportPoint(HitPosition)
+            local Vector2D = Vector2.new(Vector.X, Vector.Y)
+
+            -- // Aim
+            Aiming.BeizerCurve.AimTo({
+                TargetPosition = Vector2D,
+                Smoothness = BeizerLock.Smoothness,
+                IsLinear = BeizerLock.IsLinear
+            })
+        else
+            -- // Set the camera to face towards the Hit
+            CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, HitPosition)
+        end
     end
-end)
+end
