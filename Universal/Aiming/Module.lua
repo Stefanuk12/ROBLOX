@@ -479,11 +479,15 @@ function Aiming.BeizerCurve.AimTo(Data)
         Curve = DataCurve(MousePosition, TargetPosition)
     end
 
-    -- //
-    for i = 0, 1, Smoothness do RenderSteppedWait(RenderStepped)
+    -- // I have to do it this way because a for loop stops before hand
+    local t = 0
+    while (t <= 1) do RenderSteppedWait(RenderStepped)
+        -- // Increment
+        t = t + Smoothness
+
         -- // Work out X, Y based upon the curve
-        local X = BeizerCurve(i, MousePosition.X, TargetPosition.X, Curve.X)
-        local Y = BeizerCurve(i, MousePosition.Y, TargetPosition.Y, Curve.Y)
+        local X = BeizerCurve(t, MousePosition.X, TargetPosition.X, Curve.X)
+        local Y = BeizerCurve(t, MousePosition.Y, TargetPosition.Y, Curve.Y)
 
         -- // Move mouse
         mousemoveabs(X, Y)
