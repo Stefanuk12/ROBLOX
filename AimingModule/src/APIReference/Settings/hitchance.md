@@ -1,5 +1,7 @@
 # Aiming.HitChance
+This is the percentage of when the process actually goes through.
+
+## Example
 ```lua
-Aiming.HitChance = <number> 100
+Aiming.HitChance = 100
 ```
-The percentage amount of times where the module will actually work

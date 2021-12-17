@@ -1,6 +1,7 @@
 # Aiming.VisibleCheck
-```lua
-Aiming.VisibleCheck = <bool> true
-```
-This toggles the [visibility check](../Checks/visible.md)
+Whenever this is enabled, if you are unable to see the player, they will not be registered.
 
+## Example
+```lua
+Aiming.VisibleCheck = true
+```

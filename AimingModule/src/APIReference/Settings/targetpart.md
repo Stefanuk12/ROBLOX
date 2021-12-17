@@ -1,5 +1,17 @@
 # Aiming.TargetPart
+Which parts (of the target's character) the script looks for.
+
+!!!note
+    This can either be an array of strings, or just a string.
+
+## Examples
 ```lua
-Aiming.TargetPart = <array/string> {"Head", "HumanoidRootPart"}
+Aiming.TargetPart = "Head"
 ```
-This one is special, you can either have it as an array of parts you want to target or only one as a string. It does as it says and returns the target part; e.g. a player's head.
+
+```lua
+Aiming.TargetPart = {
+    "Head",
+    "HumanoidRootPart"
+}
+```

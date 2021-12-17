@@ -1,5 +1,7 @@
 # Aiming.FOVSides
+This lets you control how many sides the FOV Circle has.
+
+## Example
 ```lua
-Aiming.FOVSides = <number> 12
+Aiming.FOVSides = 12
 ```
-This is the amount of sides the FOV Circle will have

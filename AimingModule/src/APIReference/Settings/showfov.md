@@ -1,5 +1,7 @@
 # Aiming.ShowFOV
+This lets you toggle the FOV on and off.
+
+## Example
 ```lua
-Aiming.ShowFOV = <bool> true
+Aiming.ShowFOV = false
 ```
-Shows the FOV Circle or not

@@ -1,5 +1,7 @@
 # Aiming.FOV
+This controls how big the FOV is.
+
+## Example
 ```lua
-Aiming.FOV = <number> 60
+Aiming.FOV = 60
 ```
-This number dictates how big the FOV Circle will be
