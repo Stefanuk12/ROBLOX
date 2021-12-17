@@ -461,6 +461,10 @@ do
 
         return A + B + C
     end
+    local function DefaultControlPoint(MousePosition, EndPoint)
+        local Midpoint = (MousePosition.X + EndPoint.X) / 2
+        return Vector2.new(Midpoint, EndPoint.Y)
+    end
 
     -- // Vars
     local t = 0
@@ -484,10 +488,8 @@ do
         -- // Work out curve type
         if (not IsLinear) then
             -- // Calculate Control Point
-            local DataControlPoint = Data.ControlPoint
-            if (DataControlPoint) then
-                ControlPoint = DataControlPoint(MousePosition, EndPoint)
-            end
+            local DataControlPoint = Data.ControlPoint or DefaultControlPoint
+            ControlPoint = DataControlPoint(MousePosition, EndPoint)
         end
 
         -- // Set Active
