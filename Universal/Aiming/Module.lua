@@ -35,6 +35,7 @@ local tableremove = table.remove
 local tableinsert = table.insert
 local RenderStepped = RunService.RenderStepped
 local RenderSteppedWait = RenderStepped.Wait
+local GetMouseLocation = UserInputService.GetMouseLocation
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
@@ -465,13 +466,13 @@ function Aiming.BeizerCurve.AimTo(Position, Smoothness, Curve)
         BeizerCurve = Aiming.BeizerCurve.Quadratic
     else
         -- // Just so it doesn't break
-        Curve = Vector2.new()
+        Curve = Vector2new()
     end
 
     -- //
-    for i = 0, 1, Smoothness do RenderStepped:Wait()
+    for i = 0, 1, Smoothness do RenderSteppedWait(RenderStepped)
         -- // Vars
-        local MousePosition = UserInputService:GetMouseLocation()
+        local MousePosition = GetMouseLocation(UserInputService)
 
         -- // Work out X, Y based upon the curve
         local X = BeizerCurve(i, MousePosition.X, Position.X, Curve.Y)
