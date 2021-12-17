@@ -459,24 +459,32 @@ function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, Curve)
 end
 
 -- // AimTo with Beizer Curves
-function Aiming.BeizerCurve.AimTo(Position, Smoothness, Curve)
+function Aiming.BeizerCurve.AimTo(Data)
+    -- // Vars
+    local MousePosition = GetMouseLocation(UserInputService)
+    local TargetPosition = Data.TargetPosition
+    local Smoothness = Data.Smoothness
+
     -- // Work out curve type
+    local Curve = Vector2.new((MousePosition.X + TargetPosition.X) / 2, MousePosition.Y)
     local BeizerCurve = AimingBeizerCurve.Linear
-    if (Curve) then
-        BeizerCurve = Aiming.BeizerCurve.Quadratic
-    else
-        -- // Just so it doesn't break
-        Curve = Vector2new()
+    if (not Data.IsLinear) then
+        -- // Set the Type
+        BeizerCurve = AimingBeizerCurve.Quadratic
+
+        -- // Check if there is a custom curve
+        local DataCurve = Data.Curve
+        if (DataCurve) then
+            -- // Set
+            Curve = DataCurve(MousePosition, TargetPosition)
+        end
     end
 
     -- //
     for i = 0, 1, Smoothness do RenderSteppedWait(RenderStepped)
-        -- // Vars
-        local MousePosition = GetMouseLocation(UserInputService)
-
         -- // Work out X, Y based upon the curve
-        local X = BeizerCurve(i, MousePosition.X, Position.X, Curve.Y)
-        local Y = BeizerCurve(i, MousePosition.Y, Position.Y, Curve.Y)
+        local X = BeizerCurve(i, MousePosition.X, TargetPosition.X, Curve.Y)
+        local Y = BeizerCurve(i, MousePosition.Y, TargetPosition.Y, Curve.Y)
 
         -- // Move mouse
         mousemoveabs(X, Y)
