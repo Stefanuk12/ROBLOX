@@ -452,11 +452,11 @@ do
 
         return A + B
     end
-    function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, Curve)
+    function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, ControlPoint)
         local t1 = (1 - t)
 
         local A = t1^2 * StartPoint
-        local B = 2 * t1 * t * Curve
+        local B = 2 * t1 * t * ControlPoint
         local C = t^2 * EndPoint
 
         return A + B + C
@@ -467,7 +467,7 @@ do
     local tThreshold = 0.99995
     local StartPoint = Vector2new()
     local EndPoint = Vector2new()
-    local Curve = Vector2new()
+    local ControlPoint = Vector2new()
     local IsLinear = false
     local IsActive = false
     local Smoothness = 0.0025
@@ -483,10 +483,10 @@ do
 
         -- // Work out curve type
         if (not IsLinear) then
-            -- // Do the cruve
-            local DataCurve = Data.Curve
-            if (DataCurve) then
-                Curve = DataCurve(MousePosition, EndPoint)
+            -- // Calculate Control Point
+            local DataControlPoint = Data.ControlPoint
+            if (DataControlPoint) then
+                ControlPoint = DataControlPoint(MousePosition, EndPoint)
             end
         end
 
@@ -520,8 +520,8 @@ do
                 mousemoveabs(New.X, New.Y)
             else
                 -- // Work out X, Y based upon the curve
-                local X = BeizerCurve(t, StartPoint.X, EndPoint.X, Curve.X)
-                local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, Curve.Y)
+                local X = BeizerCurve(t, StartPoint.X, EndPoint.X, ControlPoint.X)
+                local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, ControlPoint.Y)
 
                 -- // Move mouse
                 mousemoveabs(X, Y)
