@@ -486,8 +486,7 @@ function Aiming.BeizerCurve.AimTo(Data)
         local Y = BeizerCurve(i, MousePosition.Y, TargetPosition.Y, Curve.Y)
 
         -- // Move mouse
-        local Change = Vector2.new(X, Y) - GetMouseLocation(UserInputService)
-        mousemoverel(Change.X, Change.Y)
+        mousemoveabs(X, Y)
     end
 end
 
