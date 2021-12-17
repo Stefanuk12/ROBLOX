@@ -491,13 +491,14 @@ do
         end
 
         -- // Set Active
+        t = 0
         IsActive = true
     end
 
     -- //
     RunService:BindToRenderStep("AimLockBeizer", 0, function()
         -- // Make sure is active
-        if (t >= tThreshold or not IsActive) then
+        if (not IsActive) then
             return
         end
 
@@ -505,26 +506,30 @@ do
         local BeizerCurve = IsLinear and AimingBeizerCurve.Linear or AimingBeizerCurve.Quadratic
 
         -- // I have to do it this way because a for loop stops before hand
-        while (t <= 1) do RenderSteppedWait(RenderStepped)
+        while (t <= 1 and IsActive) do RenderSteppedWait(RenderStepped)
             -- // Increment
             t = t + Smoothness
 
-            -- // Make sure is active
-            if (t >= tThreshold or not IsActive) then
-                continue
+            -- // If past threshold, then do regular smoothing
+            if (t >= tThreshold) then
+                -- // Regular smoothing
+                local clampedT = math.clamp(t, 0, 1)
+                local New = StartPoint:Lerp(EndPoint, clampedT)
+
+                -- // Move mouse
+                mousemoveabs(New.X, New.Y)
+            else
+                -- // Work out X, Y based upon the curve
+                local X = BeizerCurve(t, StartPoint.X, EndPoint.X, Curve.X)
+                local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, Curve.Y)
+
+                -- // Move mouse
+                mousemoveabs(X, Y)
             end
-
-            -- // Work out X, Y based upon the curve
-            local X = BeizerCurve(t, StartPoint.X, EndPoint.X, Curve.X)
-            local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, Curve.Y)
-
-            -- // Move mouse
-            mousemoveabs(X, Y)
         end
 
-        -- // Reset is active
+        -- // Reset
         IsActive = false
-        t = 0
     end)
 end
 
