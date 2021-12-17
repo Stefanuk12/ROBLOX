@@ -441,57 +441,91 @@ end
 
 -- // Beizer Aim Curves
 Aiming.BeizerCurve = {}
-local AimingBeizerCurve = Aiming.BeizerCurve
-function Aiming.BeizerCurve.Linear(t, StartPoint, EndPoint)
-    local A = StartPoint
-    local B = t * (EndPoint - StartPoint)
-
-    return A + B
-end
-function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, Curve)
-    local t1 = (1 - t)
-
-    local A = t1^2 * StartPoint
-    local B = 2 * t1 * t * Curve
-    local C = t^2 * EndPoint
-
-    return A + B + C
-end
-
--- // AimTo with Beizer Curves
-function Aiming.BeizerCurve.AimTo(Data)
+do
     -- // Vars
-    local MousePosition = GetMouseLocation(UserInputService)
-    local TargetPosition = Data.TargetPosition
-    local Smoothness = Data.Smoothness or 0.0025
+    local AimingBeizerCurve = Aiming.BeizerCurve
 
-    -- // Work out curve type
-    local Curve = Vector2new()
-    local BeizerCurve = AimingBeizerCurve.Linear
-    if (not Data.IsLinear) then
-        -- // Set the Type
-        BeizerCurve = AimingBeizerCurve.Quadratic
+    -- // Functions
+    function Aiming.BeizerCurve.Linear(t, StartPoint, EndPoint)
+        local A = StartPoint
+        local B = t * (EndPoint - StartPoint)
 
-        -- // Do the cruve
-        local DataCurve = Data.Curve or function(MousePosition, TargetPosition)
-            return Vector2.new((MousePosition.X + TargetPosition.X) / 2, MousePosition.Y)
-        end
-        Curve = DataCurve(MousePosition, TargetPosition)
+        return A + B
+    end
+    function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, Curve)
+        local t1 = (1 - t)
+
+        local A = t1^2 * StartPoint
+        local B = 2 * t1 * t * Curve
+        local C = t^2 * EndPoint
+
+        return A + B + C
     end
 
-    -- // I have to do it this way because a for loop stops before hand
+    -- // Vars
     local t = 0
-    while (t <= 1) do RenderSteppedWait(RenderStepped)
-        -- // Increment
-        t = t + Smoothness
+    local tThreshold = 0.99995
+    local StartPoint = Vector2new()
+    local EndPoint = Vector2new()
+    local Curve = Vector2new()
+    local IsLinear = false
+    local IsActive = false
+    local Smoothness = 0.0025
 
-        -- // Work out X, Y based upon the curve
-        local X = BeizerCurve(t, MousePosition.X, TargetPosition.X, Curve.X)
-        local Y = BeizerCurve(t, MousePosition.Y, TargetPosition.Y, Curve.Y)
+    -- // AimTo with Beizer Curves
+    function Aiming.BeizerCurve.AimTo(Data)
+        -- // Vars
+        local MousePosition = GetMouseLocation(UserInputService)
+        IsLinear = Data.IsLinear or false
+        StartPoint = MousePosition
+        EndPoint = Data.TargetPosition
+        Smoothness = Data.Smoothness or 0.0025
 
-        -- // Move mouse
-        mousemoveabs(X, Y)
+        -- // Work out curve type
+        if (not IsLinear) then
+            -- // Do the cruve
+            local DataCurve = Data.Curve
+            if (DataCurve) then
+                Curve = DataCurve(MousePosition, EndPoint)
+            end
+        end
+
+        -- // Set Active
+        IsActive = true
     end
+
+    -- //
+    RunService:BindToRenderStep("AimLockBeizer", 0, function()
+        -- // Make sure is active
+        if (t >= tThreshold or not IsActive) then
+            return
+        end
+
+        -- // Vars
+        local BeizerCurve = IsLinear and AimingBeizerCurve.Linear or AimingBeizerCurve.Quadratic
+
+        -- // I have to do it this way because a for loop stops before hand
+        while (t <= 1) do RenderSteppedWait(RenderStepped)
+            -- // Increment
+            t = t + Smoothness
+
+            -- // Make sure is active
+            if (t >= tThreshold or not IsActive) then
+                continue
+            end
+
+            -- // Work out X, Y based upon the curve
+            local X = BeizerCurve(t, StartPoint.X, EndPoint.X, Curve.X)
+            local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, Curve.Y)
+
+            -- // Move mouse
+            mousemoveabs(X, Y)
+        end
+
+        -- // Reset is active
+        IsActive = false
+        t = 0
+    end)
 end
 
 -- // Heartbeat Function
