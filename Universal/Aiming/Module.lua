@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 -- // Vars
 local Heartbeat = RunService.Heartbeat
@@ -32,6 +33,8 @@ local FindFirstChildWhichIsA = Instancenew("Part").FindFirstChildWhichIsA
 local FindFirstChild = Instancenew("Part").FindFirstChild
 local tableremove = table.remove
 local tableinsert = table.insert
+local RenderStepped = RunService.RenderStepped
+local RenderSteppedWait = RenderStepped.Wait
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
@@ -43,7 +46,7 @@ getgenv().Aiming = {
     FOVColour = Color3fromRGB(231, 84, 128),
 
     VisibleCheck = true,
-    
+
     HitChance = 100,
 
     Selected = nil,
@@ -64,7 +67,7 @@ getgenv().Aiming = {
         }
     },
 
-    RaycastIgnore = nil
+    RaycastIgnore = nil,
 }
 local Aiming = getgenv().Aiming
 
@@ -433,6 +436,50 @@ function Aiming.GetClosestPlayerToCursor()
     -- // End
     Aiming.Selected = ClosestPlayer
     Aiming.SelectedPart = TargetPart
+end
+
+-- // Beizer Aim Curves
+Aiming.BeizerCurve = {}
+local AimingBeizerCurve = Aiming.BeizerCurve
+function Aiming.BeizerCurve.Linear(t, StartPoint, EndPoint)
+    local A = StartPoint
+    local B = t * (EndPoint - StartPoint)
+
+    return A + B
+end
+function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, Curve)
+    local t1 = (1 - t)
+
+    local A = t1^2 * StartPoint
+    local B = 2 * t1 * t * Curve
+    local C = t^2 * EndPoint
+
+    return A + B + C
+end
+
+-- // AimTo with Beizer Curves
+function Aiming.BeizerCurve.AimTo(Position, Smoothness, Curve)
+    -- // Work out curve type
+    local BeizerCurve = AimingBeizerCurve.Linear
+    if (Curve) then
+        BeizerCurve = Aiming.BeizerCurve.Quadratic
+    else
+        -- // Just so it doesn't break
+        Curve = Vector2.new()
+    end
+
+    -- //
+    for i = 0, 1, Smoothness do RenderStepped:Wait()
+        -- // Vars
+        local MousePosition = UserInputService:GetMouseLocation()
+
+        -- // Work out X, Y based upon the curve
+        local X = BeizerCurve(i, MousePosition.X, Position.X, Curve.Y)
+        local Y = BeizerCurve(i, MousePosition.Y, Position.Y, Curve.Y)
+
+        -- // Move mouse
+        mousemoveabs(X, Y)
+    end
 end
 
 -- // Heartbeat Function
