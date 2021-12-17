@@ -466,7 +466,7 @@ function Aiming.BeizerCurve.AimTo(Data)
     local Smoothness = Data.Smoothness
 
     -- // Work out curve type
-    local Curve
+    local Curve = Vector2new()
     local BeizerCurve = AimingBeizerCurve.Linear
     if (not Data.IsLinear) then
         -- // Set the Type
@@ -482,7 +482,7 @@ function Aiming.BeizerCurve.AimTo(Data)
     -- //
     for i = 0, 1, Smoothness do RenderSteppedWait(RenderStepped)
         -- // Work out X, Y based upon the curve
-        local X = BeizerCurve(i, MousePosition.X, TargetPosition.X, Curve.Y)
+        local X = BeizerCurve(i, MousePosition.X, TargetPosition.X, Curve.X)
         local Y = BeizerCurve(i, MousePosition.Y, TargetPosition.Y, Curve.Y)
 
         -- // Move mouse
