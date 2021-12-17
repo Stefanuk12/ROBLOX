@@ -466,18 +466,17 @@ function Aiming.BeizerCurve.AimTo(Data)
     local Smoothness = Data.Smoothness
 
     -- // Work out curve type
-    local Curve = Vector2.new((MousePosition.X + TargetPosition.X) / 2, MousePosition.Y)
+    local Curve
     local BeizerCurve = AimingBeizerCurve.Linear
     if (not Data.IsLinear) then
         -- // Set the Type
         BeizerCurve = AimingBeizerCurve.Quadratic
 
-        -- // Check if there is a custom curve
-        local DataCurve = Data.Curve
-        if (DataCurve) then
-            -- // Set
-            Curve = DataCurve(MousePosition, TargetPosition)
+        -- // Do the cruve
+        local DataCurve = Data.Curve or function(MousePosition, TargetPosition)
+            return Vector2.new((MousePosition.X + TargetPosition.X) / 2, MousePosition.Y)
         end
+        Curve = DataCurve(MousePosition, TargetPosition)
     end
 
     -- //
