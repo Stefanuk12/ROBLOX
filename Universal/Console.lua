@@ -12,9 +12,13 @@ local Types = {
 local function OutputManager(Type, ...)
     -- // Vars
     local Colour = Chalk[Types[Type]]
+    local Time = os.date("%H:%M:%S")
 
     -- //
-    local ToPrint = Colour(...)
+    local TimePrefix = Time .. " --"
+    local ToPrint = Colour(TimePrefix, ...)
+
+    -- //
     Chalk.print(ToPrint)
 end
 
