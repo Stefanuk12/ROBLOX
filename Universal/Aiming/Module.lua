@@ -466,34 +466,13 @@ do
 
         return A + B + C + D
     end
-    local function DoControlPoint(StartPoint, EndPoint, ControlPointA, ControlPointB, DebugMode)
+    local function DoControlPoint(StartPoint, EndPoint, ControlPointA, ControlPointB)
         -- //
         local Change = (EndPoint - StartPoint)
 
         -- // Calculate the control points - relative to the start and end points
         local A = StartPoint + (Change * ControlPointA)
         local B = StartPoint + (Change * ControlPointB)
-
-        -- // [Debugging] Draw the control points
-        if (DebugMode) then
-            local Circle = Drawingnew("Circle")
-            Circle.Radius = 5
-            Circle.Color = Color3fromRGB(225, 150, 255)
-            Circle.Visible = true
-            Circle.Position = A
-            task.delay(1, function()
-                Circle:Remove()
-            end)
-
-            local CircleB = Drawingnew("Circle")
-            CircleB.Radius = 5
-            CircleB.Color = Color3fromRGB(225, 150, 255)
-            CircleB.Visible = true
-            CircleB.Position = B
-            task.delay(1, function()
-                CircleB:Remove()
-            end)
-        end
 
         -- //
         return A, B
@@ -552,18 +531,36 @@ do
                 mousemoveabs(New.X, New.Y)
             else
                 -- // Work out X, Y based upon the curve
-                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints), DrawPath)
+                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints))
                 local Position = BeizerCurve(t, StartPoint, EndPoint, A, B)
 
                 -- // Create Circle [Debugging]
                 if (DrawPath) then
-                    local Circle = Drawingnew("Circle")
-                    Circle.Radius = 2
-                    Circle.Color = Color3fromRGB(255, 150, 150)
-                    Circle.Visible = true
-                    Circle.Position = Position
+                    local Path = Drawingnew("Circle")
+                    Path.Radius = 2
+                    Path.Color = Color3fromRGB(255, 150, 150)
+                    Path.Visible = true
+                    Path.Position = Position
                     task.delay(1, function()
-                        Circle:Remove()
+                        Path:Remove()
+                    end)
+
+                    local ControlPointA = Drawingnew("Circle")
+                    ControlPointA.Radius = 5
+                    ControlPointA.Color = Color3fromRGB(225, 150, 255)
+                    ControlPointA.Visible = true
+                    ControlPointA.Position = A
+                    task.delay(1, function()
+                        ControlPointA:Remove()
+                    end)
+
+                    local ControlPointB = Drawingnew("Circle")
+                    ControlPointB.Radius = 5
+                    ControlPointB.Color = Color3fromRGB(225, 150, 255)
+                    ControlPointB.Visible = true
+                    ControlPointB.Position = B
+                    task.delay(1, function()
+                        ControlPointB:Remove()
                     end)
                 end
 
