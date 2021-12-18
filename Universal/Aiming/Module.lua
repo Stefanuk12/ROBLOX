@@ -466,36 +466,34 @@ do
 
         return A + B + C + D
     end
-    local function RoundVector(Vector, Degree)
-        -- // Vars
-        local x = 10 * Degree
-
+    local function DoControlPoint(StartPoint, EndPoint, ControlPointA, ControlPointB, DebugMode)
         -- //
-        return {
-            X = math.floor(Vector.X * x) / x,
-            Y = math.floor(Vector.Y * x) / x,
-        }
-    end
-    local function DoControlPoint(MousePosition, EndPoint, ControlPointA, ControlPointB)
-        -- //
-        local TotalX = (EndPoint.X + MousePosition.X)
-        local TotalY = (EndPoint.Y + MousePosition.Y)
-        local YOffset = CurrentCamera.ViewportSize.Y
+        local Change = (EndPoint - StartPoint)
 
-        -- // Round the control points to eliminate floating point rounding errors
-        ControlPointA = RoundVector(ControlPointA, 2)
-        ControlPointB = RoundVector(ControlPointB, 2)
+        -- // Calculate the control points - relative to the start and end points
+        local A = StartPoint + (Change * ControlPointA)
+        local B = StartPoint + (Change * ControlPointB)
 
-        -- // Calculate the X and Y co-ords
-        local X_1 = TotalX * ControlPointA.X
-        local Y_1 = math.abs((TotalY * ControlPointA.Y) - YOffset)
+        -- // [Debugging] Draw the control points
+        if (DebugMode) then
+            local Circle = Drawingnew("Circle")
+            Circle.Radius = 5
+            Circle.Color = Color3fromRGB(225, 150, 255)
+            Circle.Visible = true
+            Circle.Position = A
+            task.delay(1, function()
+                Circle:Remove()
+            end)
 
-        local X_2 = TotalX * ControlPointB.X
-        local Y_2 = math.abs((TotalY * ControlPointB.Y) - YOffset)
-
-        -- // Convert into vectors
-        local A = Vector2.new(X_1, Y_1)
-        local B = Vector2.new(X_2, Y_2)
+            local CircleB = Drawingnew("Circle")
+            CircleB.Radius = 5
+            CircleB.Color = Color3fromRGB(225, 150, 255)
+            CircleB.Visible = true
+            CircleB.Position = B
+            task.delay(1, function()
+                CircleB:Remove()
+            end)
+        end
 
         -- //
         return A, B
@@ -554,7 +552,7 @@ do
                 mousemoveabs(New.X, New.Y)
             else
                 -- // Work out X, Y based upon the curve
-                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints))
+                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints), DrawPath)
                 local Position = BeizerCurve(t, StartPoint, EndPoint, A, B)
 
                 -- // Create Circle [Debugging]
