@@ -22,8 +22,6 @@ local DaHoodSettings = {
     AimLockKeybind = Enum.KeyCode.E,
     BeizerLock = {
         Enabled = true,
-
-        IsLinear = false,
         Smoothness = 0.05
     }
 }
@@ -92,8 +90,7 @@ while (true) do RenderStepped:Wait()
             -- // Aim
             Aiming.BeizerCurve.AimTo({
                 TargetPosition = Vector2D,
-                Smoothness = BeizerLock.Smoothness,
-                IsLinear = BeizerLock.IsLinear
+                Smoothness = BeizerLock.Smoothness
             })
         else
             -- // Set the camera to face towards the Hit
