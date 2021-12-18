@@ -446,24 +446,49 @@ do
     local AimingBeizerCurve = Aiming.BeizerCurve
 
     -- // Functions
-    function Aiming.BeizerCurve.Linear(t, StartPoint, EndPoint)
-        local A = StartPoint
-        local B = t * (EndPoint - StartPoint)
-
-        return A + B
-    end
-    function Aiming.BeizerCurve.Quadratic(t, StartPoint, EndPoint, ControlPoint)
+    function Aiming.BeizerCurve.Cubic(t, StartPoint, EndPoint, ControlPointA, ControlPointB)
         local t1 = (1 - t)
 
-        local A = t1^2 * StartPoint
-        local B = 2 * t1 * t * ControlPoint
-        local C = t^2 * EndPoint
+        local A = t1^3 * StartPoint
+        local B = 3 * t1^2 * t * ControlPointA
+        local C = 3 * t1 * t^2 * ControlPointB
+        local D = t^3 * EndPoint
 
-        return A + B + C
+        return A + B + C + D
     end
-    local function DefaultControlPoint(MousePosition, EndPoint)
-        local Midpoint = (MousePosition.X + EndPoint.X) / 2
-        return Vector2.new(Midpoint, EndPoint.Y)
+    local function RoundVector(Vector, Degree)
+        -- // Vars
+        local x = 10 * Degree
+
+        -- //
+        return {
+            X = math.floor(Vector.X * x) / x,
+            Y = math.floor(Vector.Y * x) / x,
+        }
+    end
+    local function DoControlPoint(MousePosition, EndPoint, ControlPointA, ControlPointB)
+        -- //
+        local TotalX = (EndPoint.X + MousePosition.X)
+        local TotalY = (EndPoint.Y + MousePosition.Y)
+        local YOffset = CurrentCamera.ViewportSize.Y
+
+        -- // Round the control points to eliminate floating point rounding errors
+        ControlPointA = RoundVector(ControlPointA, 2)
+        ControlPointB = RoundVector(ControlPointB, 2)
+
+        -- // Calculate the X and Y co-ords
+        local X_1 = TotalX * ControlPointA.X
+        local Y_1 = math.abs((TotalY * ControlPointA.Y) - YOffset)
+
+        local X_2 = TotalX * ControlPointB.X
+        local Y_2 = math.abs((TotalY * ControlPointB.Y) - YOffset)
+
+        -- // Convert into vectors
+        local A = Vector2.new(X_1, Y_1)
+        local B = Vector2.new(X_2, Y_2)
+
+        -- //
+        return A, B
     end
 
     -- // Vars
@@ -471,26 +496,23 @@ do
     local tThreshold = 0.99995
     local StartPoint = Vector2new()
     local EndPoint = Vector2new()
-    local ControlPoint = Vector2new()
-    local IsLinear = false
+    local CurvePoints = {
+        Vector2.new(0.83, 0),
+        Vector2.new(0.17, 1)
+    }
     local IsActive = false
     local Smoothness = 0.0025
+    local DrawPath = false
 
     -- // AimTo with Beizer Curves
     function Aiming.BeizerCurve.AimTo(Data)
         -- // Vars
         local MousePosition = GetMouseLocation(UserInputService)
-        IsLinear = Data.IsLinear or false
         StartPoint = MousePosition
         EndPoint = Data.TargetPosition
-        Smoothness = Data.Smoothness or 0.0025
-
-        -- // Work out curve type
-        if (not IsLinear) then
-            -- // Calculate Control Point
-            local DataControlPoint = Data.ControlPoint or DefaultControlPoint
-            ControlPoint = DataControlPoint(MousePosition, EndPoint)
-        end
+        Smoothness = Data.Smoothness or Smoothness
+        CurvePoints = Data.CurvePoints or CurvePoints
+        DrawPath = Data.DrawPath or DrawPath
 
         -- // Set Active
         t = 0
@@ -505,7 +527,7 @@ do
         end
 
         -- // Vars
-        local BeizerCurve = IsLinear and AimingBeizerCurve.Linear or AimingBeizerCurve.Quadratic
+        local BeizerCurve = AimingBeizerCurve.Cubic
 
         -- // I have to do it this way because a for loop stops before hand
         while (t <= 1 and IsActive) do RenderSteppedWait(RenderStepped)
@@ -522,11 +544,23 @@ do
                 mousemoveabs(New.X, New.Y)
             else
                 -- // Work out X, Y based upon the curve
-                local X = BeizerCurve(t, StartPoint.X, EndPoint.X, ControlPoint.X)
-                local Y = BeizerCurve(t, StartPoint.Y, EndPoint.Y, ControlPoint.Y)
+                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints))
+                local Position = BeizerCurve(t, StartPoint, EndPoint, A, B)
+
+                -- // Create Circle [Debugging]
+                if (DrawPath) then
+                    local Circle = Drawingnew("Circle")
+                    Circle.Radius = 2
+                    Circle.Color = Color3fromRGB(255, 150, 150)
+                    Circle.Visible = true
+                    Circle.Position = Position
+                    task.delay(1, function()
+                        Circle:Remove()
+                    end)
+                end
 
                 -- // Move mouse
-                mousemoveabs(X, Y)
+                mousemoveabs(Position.X, Position.Y)
             end
         end
 
