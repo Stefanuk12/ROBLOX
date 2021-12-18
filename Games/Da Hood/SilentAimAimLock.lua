@@ -9,7 +9,6 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 -- // Vars
-local RenderStepped = RunService.RenderStepped
 local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
 
@@ -71,7 +70,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
 end)
 
 -- // Aimlock
-while (true) do RenderStepped:Wait()
+RunService:BindToRenderStep("AimLock", 0, function()
     if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
         -- // Vars
         local SelectedPart = Aiming.SelectedPart
@@ -97,4 +96,4 @@ while (true) do RenderStepped:Wait()
             CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, HitPosition)
         end
     end
-end
+end)
