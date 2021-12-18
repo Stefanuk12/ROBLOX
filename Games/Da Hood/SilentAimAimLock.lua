@@ -21,7 +21,11 @@ local DaHoodSettings = {
     AimLockKeybind = Enum.KeyCode.E,
     BeizerLock = {
         Enabled = true,
-        Smoothness = 0.05
+        Smoothness = 0.05,
+        CurvePoints = {
+            Vector2.new(0.83, 0),
+            Vector2.new(0.17, 1)
+        }
     }
 }
 getgenv().DaHoodSettings = DaHoodSettings
@@ -89,7 +93,8 @@ RunService:BindToRenderStep("AimLock", 0, function()
             -- // Aim
             Aiming.BeizerCurve.AimTo({
                 TargetPosition = Vector2D,
-                Smoothness = BeizerLock.Smoothness
+                Smoothness = BeizerLock.Smoothness,
+                CurvePoints = BeizerLock.CurvePoints
             })
         else
             -- // Set the camera to face towards the Hit
