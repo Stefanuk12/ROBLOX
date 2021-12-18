@@ -38,7 +38,7 @@ local RenderSteppedWait = RenderStepped.Wait
 local GetMouseLocation = UserInputService.GetMouseLocation
 
 -- // Silent Aim Vars
-getgenv().Aiming = {
+local Aiming = {
     Enabled = true,
 
     ShowFOV = true,
@@ -52,6 +52,8 @@ getgenv().Aiming = {
 
     Selected = nil,
     SelectedPart = nil,
+    SelectedPosition = nil,
+    SelectedPositionOnScreen = nil,
 
     TargetPart = {"Head", "HumanoidRootPart"},
 
@@ -70,7 +72,7 @@ getgenv().Aiming = {
 
     RaycastIgnore = nil,
 }
-local Aiming = getgenv().Aiming
+getgenv().Aiming = Aiming
 
 -- // Create circle
 local circle = Drawingnew("Circle")
@@ -397,6 +399,8 @@ function Aiming.GetClosestPlayerToCursor()
     -- // Vars
     local TargetPart = nil
     local ClosestPlayer = nil
+    local PartPosition = nil
+    local PartPositionOnScreen = nil
     local Chance = CalcChance(Aiming.HitChance)
     local ShortestDistance = 1/0
 
@@ -404,6 +408,8 @@ function Aiming.GetClosestPlayerToCursor()
     if (not Chance) then
         Aiming.Selected = LocalPlayer
         Aiming.SelectedPart = nil
+        Aiming.SelectedPosition = nil
+        Aiming.SelectedPositionOnScreen = nil
 
         return LocalPlayer
     end
@@ -416,7 +422,7 @@ function Aiming.GetClosestPlayerToCursor()
         -- // Make sure isn't ignored and Character exists
         if (Aiming.IsIgnored(Player) == false and Character) then
             -- // Vars
-            local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
+            local TargetPartTemp, PartPositionTemp, PartPositionOnScreenTemp, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
             -- // Check if part exists, health and custom
             if (TargetPartTemp and Aiming.CheckHealth(Player) and Aiming.CheckCustom(Player)) then
@@ -429,6 +435,8 @@ function Aiming.GetClosestPlayerToCursor()
                     ClosestPlayer = Player
                     ShortestDistance = Magnitude
                     TargetPart = TargetPartTemp
+                    PartPosition = PartPositionTemp
+                    PartPositionOnScreen = PartPositionOnScreenTemp
                 end
             end
         end
@@ -437,6 +445,8 @@ function Aiming.GetClosestPlayerToCursor()
     -- // End
     Aiming.Selected = ClosestPlayer
     Aiming.SelectedPart = TargetPart
+    Aiming.SelectedPosition = PartPosition
+    Aiming.SelectedPositionOnScreen = PartPositionOnScreen
 end
 
 -- // Beizer Aim Curves
