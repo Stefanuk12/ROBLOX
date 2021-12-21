@@ -11,6 +11,13 @@ local MaxForce = Vector3.new(123123, 123123, 123123)
 local UpFly = Vector3.new(0, 25, 0)
 local Speed = UpFly.Y
 
+local Keys = {
+    [Enum.KeyCode.W] = {"LookVector", false},
+    [Enum.KeyCode.S] = {"LookVector", true},
+    [Enum.KeyCode.A] = {"RightVector", true},
+    [Enum.KeyCode.D] = {"RightVector", false}
+}
+
 -- //
 local BodyVelocity = Instance.new("BodyVelocity")
 syn.protect_gui(BodyVelocity)
@@ -42,32 +49,24 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
         return
     end
 
-    -- //
-    if (input.KeyCode == Enum.KeyCode.W) then
-        startFly(LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector * Speed)
+    -- // Vars
+    local KeyCode = input.KeyCode
+    local MoveData = Keys[KeyCode]
+
+    -- // Check if it is a recognised key
+    if (MoveData) then
+        -- // Vars
+        local Multiplier = MoveData[2] and -1 or 1
+        local Velocity = LocalPlayer.Character.HumanoidRootPart.CFrame[MoveData[1]] * Speed
+
+        -- // Fly
+        startFly(Velocity * Multiplier)
         return
     end
 
-    -- //
-    if (input.KeyCode == Enum.KeyCode.S) then
-        startFly(-(LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector * Speed))
-        return
-    end
-
-    -- //
-    if (input.KeyCode == Enum.KeyCode.A) then
-        startFly(-(LocalPlayer.Character.HumanoidRootPart.CFrame.RightVector * Speed))
-        return
-    end
-
-    -- //
-    if (input.KeyCode == Enum.KeyCode.D) then
-        startFly(LocalPlayer.Character.HumanoidRootPart.CFrame.RightVector * Speed)
-        return
-    end
-
-    -- //
-    if (input.KeyCode == Enum.KeyCode.Space) then
+    -- // Check if it is a recognised key
+    if (KeyCode == Enum.KeyCode.Space) then
+        -- // Fly
         startFly(UpFly)
         return
     end
@@ -80,8 +79,11 @@ UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
         return
     end
 
-    -- //
-    if (input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.A or input.KeyCode == Enum.KeyCode.D or input.KeyCode == Enum.KeyCode.Space) then
+    -- // Vars
+    local KeyCode = input.KeyCode
+
+    -- // Check if it is a recognised key
+    if (Keys[KeyCode] or KeyCode == Enum.KeyCode.Space) then
         stopFly()
     end
 end)
