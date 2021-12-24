@@ -7,14 +7,13 @@ do
         ["table"] = {
             getbodyparts = "Replication",
             updateammo = "HUD",
-        },
-        ["function"] = {}
+        }
     }
 
     -- //
     local function HasIdentifiers(v, IdentifyType)
         -- // Loop through identifiers
-        for Identifier, Name in pairs(ClientManager.Identifiers[IdentifyType]) do
+        for Identifier, Name in pairs(ClientManager.Identifiers[IdentifyType] or {}) do
             -- // Check it has the identifier
             local TableCheck = IdentifyType == "table" and rawget(v, Identifier)
             local FunctionCheck = IdentifyType == "function" and debug.getinfo(v).name == Identifier
