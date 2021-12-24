@@ -10,7 +10,7 @@ local ClientManager = loadstring(game:HttpGet("https://raw.githubusercontent.com
 
 -- //
 local Client = ClientManager.new()
-    
+
 -- // Overwrites // --
 function Aiming.Character(Player)
     return Client.Network:getbodyparts(Player)
@@ -19,3 +19,6 @@ end
 function Aiming.CheckHealth(Player)
     return Client.HUD:getplayerhealth(Player)
 end
+
+-- //
+return Aiming, Client
