@@ -31,6 +31,7 @@ do
 
         -- //
         self:InitialiseIdentifiers()
+        self.Characters = debug.getupvalue(self.Replication, 1)
 
         -- // Return object
         return self
