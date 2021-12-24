@@ -5,7 +5,7 @@ local Format = "https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Unive
 local Success, _ = pcall(loadstring, Format:format(game.PlaceId))
 
 -- // Load default otherwise
-if (Success) then
+if (not Success) then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Module.lua"))()
 end
 
