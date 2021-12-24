@@ -12,11 +12,13 @@ do
     }
 
     -- //
-    local function HasIdentifiers(tbl, IdentifyType)
+    local function HasIdentifiers(v, IdentifyType)
         -- // Loop through identifiers
         for Identifier, Name in pairs(ClientManager.Identifiers[IdentifyType]) do
             -- // Check it has the identifier
-            if (rawget(tbl, Identifier)) then
+            local TableCheck = IdentifyType == "table" and rawget(v, Identifier)
+            local FunctionCheck = IdentifyType == "function" and debug.getinfo(v).name == Identifier
+            if (TableCheck or FunctionCheck) then
                 -- // Return the stuffs
                 return Identifier, Name
             end
