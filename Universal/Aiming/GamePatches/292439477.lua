@@ -14,7 +14,8 @@ local Client = ClientManager.new()
 
 -- // Overwrites // --
 function Aiming.Character(Player)
-    return Client.Characters[Player].torso.Parent
+    local Parts = Client.Characters[Player]
+    return Parts and Parts.torso.Parent or nil
 end
 
 function Aiming.CheckHealth(Player)
