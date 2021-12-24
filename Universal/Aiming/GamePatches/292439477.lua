@@ -9,11 +9,12 @@ local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefan
 local ClientManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Games/Phantom%20Forces/ClientManager.lua"))()
 
 -- //
+Aiming.TargetPart = {"Head", "Torso"}
 local Client = ClientManager.new()
 
 -- // Overwrites // --
 function Aiming.Character(Player)
-    return Client.Characters[Player]
+    return Client.Characters[Player].torso.Parent
 end
 
 function Aiming.CheckHealth(Player)
