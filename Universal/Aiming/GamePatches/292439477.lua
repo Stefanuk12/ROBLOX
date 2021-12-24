@@ -19,7 +19,8 @@ function Aiming.Character(Player)
 end
 
 function Aiming.CheckHealth(Player)
-    return Client.HUD:getplayerhealth(Player)
+    local Health, MaxHealth = Client.HUD:getplayerhealth(Player)
+    return Health > 0
 end
 
 -- //
