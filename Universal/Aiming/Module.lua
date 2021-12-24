@@ -1,5 +1,8 @@
 if getgenv().Aiming then return getgenv().Aiming end
 
+-- // Dependencies
+local SignalManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Manager.lua"))()
+
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -71,8 +74,18 @@ local Aiming = {
     },
 
     RaycastIgnore = nil,
+    Signals = SignalManager.new()
 }
 getgenv().Aiming = Aiming
+
+-- // Create signals
+do
+    local SignalNames = {"TargetPlayerChanged", "TargetPartChanged", "TargetPartPositionChanged", "TargetPartPositionOnScreenChanged"}
+
+    for _, SignalName in ipairs(SignalNames) do
+        Aiming.Signals:Create(SignalName)
+    end
+end
 
 -- // Create circle
 local circle = Drawingnew("Circle")
@@ -440,6 +453,20 @@ function Aiming.GetClosestPlayerToCursor()
                 end
             end
         end
+    end
+
+    -- // Firing changed signals
+    if (Aiming.Selected ~= ClosestPlayer) then
+        Aiming.Signals:Fire("TargetPlayerChanged", ClosestPlayer)
+    end
+    if (Aiming.SelectedPart ~= TargetPart) then
+        Aiming.Signals:Fire("TargetPartChanged", TargetPart)
+    end
+    if (Aiming.SelectedPosition ~= PartPosition) then
+        Aiming.Signals:Fire("TargetPartPositionChanged", PartPosition)
+    end
+    if (Aiming.SelectedPositionOnScreen ~= PartPositionOnScreen) then
+        Aiming.Signals:Fire("TargetPartPositionOnScreenChanged", PartPositionOnScreen)
     end
 
     -- // End
