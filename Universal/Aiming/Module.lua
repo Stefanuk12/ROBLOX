@@ -560,7 +560,6 @@ do
                 -- // Work out X, Y based upon the curve
                 local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints))
                 local CurvePosition = BeizerCurve(t, StartPoint, EndPoint, A, B)
-                local MousePosition = GetMouseLocation(UserInputService)
 
                 -- // Create Circle [Debugging]
                 if (DrawPath) then
@@ -593,8 +592,7 @@ do
                 end
 
                 -- // Move mouse
-                local Position = (CurvePosition - MousePosition)
-                mousemoverel(Position.X, Position.Y)
+                mousemoveabs(CurvePosition.X, CurvePosition.Y)
             end
         end
 
