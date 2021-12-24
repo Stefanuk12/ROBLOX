@@ -13,7 +13,7 @@ local Client = ClientManager.new()
 
 -- // Overwrites // --
 function Aiming.Character(Player)
-    return Client.Network:getbodyparts(Player)
+    return Client.Characters[Player]
 end
 
 function Aiming.CheckHealth(Player)
