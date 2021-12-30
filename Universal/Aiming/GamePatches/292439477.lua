@@ -19,8 +19,17 @@ function Aiming.Character(Player)
 end
 
 function Aiming.CheckHealth(Player)
-    local Health, MaxHealth = Client.HUD:getplayerhealth(Player)
+    local Health, MaxHealth = Client.hud:getplayerhealth(Player)
     return Health > 0
+end
+
+function Aiming.CameraLookAt(Position)
+    local ClientCamera = Client.camera
+
+    local LookAt = CFrame.lookAt(ClientCamera.cframe.Position, Position)
+    local Angles = Vector3.new(LookAt:ToOrientation())
+
+    ClientCamera.angles = Angles
 end
 
 -- //
