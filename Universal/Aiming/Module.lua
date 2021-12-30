@@ -484,6 +484,12 @@ function Aiming.GetClosestPlayerToCursor()
     Aiming.SelectedPositionOnScreen = PartPositionOnScreen
 end
 
+-- //
+function Aiming.CameraLookAt(Position)
+    local LookAt = CFrame.lookAt(CurrentCamera.CFrame.Position, Position)
+    CurrentCamera.CFrame = LookAt
+end
+
 -- // Beizer Aim Curves
 Aiming.BeizerCurve = {}
 do
@@ -500,6 +506,34 @@ do
         local D = t^3 * EndPoint
 
         return A + B + C + D
+    end
+    function Aiming.BeizerCurve.DrawPath(CurvePosition, A, B)
+        local Path = Drawingnew("Circle")
+        Path.Radius = 2
+        Path.Color = Color3fromRGB(255, 150, 150)
+        Path.Visible = true
+        Path.Position = CurvePosition
+        task.delay(1, function()
+            Path:Remove()
+        end)
+
+        local ControlPointA = Drawingnew("Circle")
+        ControlPointA.Radius = 5
+        ControlPointA.Color = Color3fromRGB(225, 150, 255)
+        ControlPointA.Visible = true
+        ControlPointA.Position = A
+        task.delay(1, function()
+            ControlPointA:Remove()
+        end)
+
+        local ControlPointB = Drawingnew("Circle")
+        ControlPointB.Radius = 5
+        ControlPointB.Color = Color3fromRGB(225, 150, 255)
+        ControlPointB.Visible = true
+        ControlPointB.Position = B
+        task.delay(1, function()
+            ControlPointB:Remove()
+        end)
     end
     local function DoControlPoint(StartPoint, EndPoint, ControlPointA, ControlPointB)
         -- //
@@ -571,32 +605,7 @@ do
 
                 -- // Create Circle [Debugging]
                 if (DrawPath) then
-                    local Path = Drawingnew("Circle")
-                    Path.Radius = 2
-                    Path.Color = Color3fromRGB(255, 150, 150)
-                    Path.Visible = true
-                    Path.Position = CurvePosition
-                    task.delay(1, function()
-                        Path:Remove()
-                    end)
-
-                    local ControlPointA = Drawingnew("Circle")
-                    ControlPointA.Radius = 5
-                    ControlPointA.Color = Color3fromRGB(225, 150, 255)
-                    ControlPointA.Visible = true
-                    ControlPointA.Position = A
-                    task.delay(1, function()
-                        ControlPointA:Remove()
-                    end)
-
-                    local ControlPointB = Drawingnew("Circle")
-                    ControlPointB.Radius = 5
-                    ControlPointB.Color = Color3fromRGB(225, 150, 255)
-                    ControlPointB.Visible = true
-                    ControlPointB.Position = B
-                    task.delay(1, function()
-                        ControlPointB:Remove()
-                    end)
+                    AimingBeizerCurve.DrawPath(CurvePosition, A, B)
                 end
 
                 -- // Move mouse
