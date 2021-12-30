@@ -3,27 +3,17 @@ local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefan
 
 -- // Services
 local Workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 -- // Vars
 local Keybind = Enum.KeyCode.E
 local CurrentCamera = Workspace.CurrentCamera
-local LocalPlayer = Players.LocalPlayer
 
 -- //
 local function ShouldUseCamera()
-    -- // Vars
-    local Character = Aiming.Character(LocalPlayer)
-    local Head = Character.Head
-
     -- //
-    local IsFirstPerson = (Head.CFrame.Position - CurrentCamera.CFrame.Position).Magnitude < 1
-    local IsShiftLocked = (UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter)
-
-    -- //
-    return IsFirstPerson or IsShiftLocked
+    return (UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter)
 end
 
 -- // Constantly run
