@@ -102,10 +102,14 @@ function Aiming.UpdateFOV()
         return
     end
 
+    -- // Vars
+    local MousePosition = GetMouseLocation(UserInputService)
+    local GuiInset = GetGuiInset(GuiService)
+
     -- // Set Circle Properties
     circle.Visible = Aiming.ShowFOV
     circle.Radius = (Aiming.FOV * 3)
-    circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
+    circle.Position = MousePosition - GuiInset
     circle.NumSides = Aiming.FOVSides
     circle.Color = Aiming.FOVColour
 
@@ -362,8 +366,13 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
         -- // Get the length between Mouse and Target Part (on screen)
         local PartPos, onScreen = WorldToViewportPoint(CurrentCamera, TargetPart.Position)
+        PartPos = Vector2.new(PartPos.X, PartPos.Y)
+
+        local MousePosition = GetMouseLocation(UserInputService)
         local GuiInset = GetGuiInset(GuiService)
-        local Magnitude = (Vector2new(PartPos.X, PartPos.Y - GuiInset.Y) - Vector2new(Mouse.X, Mouse.Y)).Magnitude
+        local AccountedPos = PartPos - GuiInset
+
+        local Magnitude = (AccountedPos - MousePosition).Magnitude
 
         -- //
         if (Magnitude < ShortestDistance) then
@@ -511,8 +520,8 @@ do
     local StartPoint = Vector2new()
     local EndPoint = Vector2new()
     local CurvePoints = {
-        Vector2.new(0.83, 0),
-        Vector2.new(0.17, 1)
+        Vector2.new(1, 1),
+        Vector2.new(1, 1)
     }
     local IsActive = false
     local Smoothness = 0.0025
