@@ -256,7 +256,7 @@ function Aiming.IsIgnoredTeam(Player)
 
     -- // Check for others
     if (Ignored.IgnoreOtherTeams) then
-        return not (LocalPlayer.Team == Player.Team and LocalPlayer.TeamColor == Player.TeamColor)
+        return (LocalPlayer.Team == Player.Team and LocalPlayer.TeamColor == Player.TeamColor)
     end
 
     -- // Check if team is ignored
