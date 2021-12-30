@@ -67,6 +67,7 @@ local Aiming = {
                 TeamColor = LocalPlayer.TeamColor,
             },
         },
+        IgnoreOtherTeams = true,
         Players = {
             LocalPlayer,
             91318356
@@ -252,6 +253,11 @@ function Aiming.IsIgnoredTeam(Player)
     -- // Vars
     local Ignored = Aiming.Ignored
     local IgnoredTeams = Ignored.Teams
+
+    -- // Check for others
+    if (Ignored.IgnoreOtherTeams) then
+        return not (LocalPlayer.Team == Player.Team and LocalPlayer.TeamColor == Player.TeamColor)
+    end
 
     -- // Check if team is ignored
     for _, IgnoredTeam in ipairs(IgnoredTeams) do
