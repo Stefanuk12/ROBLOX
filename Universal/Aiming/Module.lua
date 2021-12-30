@@ -104,12 +104,11 @@ function Aiming.UpdateFOV()
 
     -- // Vars
     local MousePosition = GetMouseLocation(UserInputService)
-    local GuiInset = GetGuiInset(GuiService)
 
     -- // Set Circle Properties
     circle.Visible = Aiming.ShowFOV
     circle.Radius = (Aiming.FOV * 3)
-    circle.Position = MousePosition - GuiInset
+    circle.Position = MousePosition
     circle.NumSides = Aiming.FOVSides
     circle.Color = Aiming.FOVColour
 
