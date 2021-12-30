@@ -5,8 +5,10 @@ do
     -- // Feel free to add more
     ClientManager.Identifiers = {
         ["table"] = {
-            getbodyparts = "Replication",
-            updateammo = "HUD",
+            getbodyparts = "replication",
+            updateammo = "hud",
+            onmousemove = "input",
+            basecframe = "camera"
         }
     }
 
@@ -31,7 +33,7 @@ do
 
         -- //
         self:InitialiseIdentifiers()
-        self.Characters = debug.getupvalue(self.Replication.getbodyparts, 1)
+        self.Characters = debug.getupvalue(self.replication.getbodyparts, 1)
 
         -- // Return object
         return self
