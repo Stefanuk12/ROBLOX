@@ -12,8 +12,10 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 
 -- // Vars
+local CurrentCamera = Workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local GameStats = Workspace.MapFolder.GameStats
+local MapFolder = Workspace.MapFolder
 
 -- // Team Check
 function Aiming.IsIgnoredTeam(Player)
@@ -24,6 +26,12 @@ function Aiming.IsIgnoredTeam(Player)
 
     -- //
     return (LocalPlayer.PermanentTeam.Value == Player.PermanentTeam.Value)
+end
+
+-- // Ignore
+function Aiming.RaycastIgnore()
+    local Ignored = {LocalPlayer.Character, CurrentCamera, Workspace.RaycastIgnore, Workspace.DroppedWeapons, MapFolder.Map.Ramps, MapFolder.Map.Walls.MapWalls}
+    return Ignored
 end
 
 -- // Return
