@@ -9,6 +9,7 @@ local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefan
 
 -- // Disable Team Check
 Aiming.TeamCheck(false)
+Aiming.IgnoreOtherTeams = false
 
 -- // Downed Check
 function Aiming.CheckCustom(Player)
