@@ -43,4 +43,4 @@ RunService:BindToRenderStep("AimLockAiming", 0, function()
 end)
 
 -- //
-return "AimLockAiming"
+return Aiming
