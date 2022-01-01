@@ -14,6 +14,11 @@ local function ShouldUseCamera()
     return (UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter)
 end
 
+-- // Allows for custom
+function Aiming.AimLockPosition(CameraMode)
+    return CameraMode and Aiming.SelectedPart.Position or Aiming.SelectedPosition
+end
+
 -- // Constantly run
 RunService:BindToRenderStep("AimLockAiming", 0, function()
     -- // Vars
@@ -21,13 +26,17 @@ RunService:BindToRenderStep("AimLockAiming", 0, function()
 
     -- // Make sure key (or mouse button) is down
     if (IsToggled and Aiming.Check()) then
+        -- // Vars
+        local CameraMode = ShouldUseCamera()
+        local Position = Aiming.AimLockPosition(CameraMode)
+
         -- // Aim with camera
-        if (ShouldUseCamera()) then
-            Aiming.CameraLookAt(Aiming.SelectedPart.Position)
+        if (CameraMode) then
+            Aiming.CameraLookAt(Position)
         else
             -- // Aim with mouse
             Aiming.BeizerCurve.AimTo({
-                TargetPosition = Aiming.SelectedPosition
+                TargetPosition = Position
             })
         end
     end
