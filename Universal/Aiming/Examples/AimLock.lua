@@ -16,7 +16,8 @@ end
 
 -- // Allows for custom
 function Aiming.AimLockPosition(CameraMode)
-    return CameraMode and Aiming.SelectedPart.Position or Aiming.SelectedPosition
+    local Position = CameraMode and Aiming.SelectedPart.Position or Aiming.SelectedPosition
+    return Position, {}
 end
 
 -- // Constantly run
@@ -28,16 +29,15 @@ RunService:BindToRenderStep("AimLockAiming", 0, function()
     if (IsToggled and Aiming.Check()) then
         -- // Vars
         local CameraMode = ShouldUseCamera()
-        local Position = Aiming.AimLockPosition(CameraMode)
+        local Position, BeizerData = Aiming.AimLockPosition(CameraMode)
 
         -- // Aim with camera
         if (CameraMode) then
             Aiming.CameraLookAt(Position)
         else
             -- // Aim with mouse
-            Aiming.BeizerCurve.AimTo({
-                TargetPosition = Position
-            })
+            BeizerData.TargetPosition = Position
+            Aiming.BeizerCurve.AimTo(BeizerData)
         end
     end
 end)
