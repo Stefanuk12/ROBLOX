@@ -15,7 +15,7 @@ for _, v in ipairs(getreg()) do
         local constants = debug.getconstants(v)
 
         -- // Check constants
-        if (not is_synapse_function(v) and islclosure(v) and table.find(constants, "HipHeight") and table.find(constants, 3.1)) then
+        if (not is_synapse_function(v) and islclosure(v) and table.find(constants, "HipHeight") and table.find(constants, 1.9) and table.find(constants, 3.1)) then
             -- // Hook
             hookfunction(v, function() end)
         end
