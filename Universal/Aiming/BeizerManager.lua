@@ -110,7 +110,7 @@ do
         if (not self.Active) then
             return
         end
-        print()
+
         -- // Vars
         local BeizerCurve = self.CubicCurve
         local t = self.t
