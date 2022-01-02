@@ -38,8 +38,7 @@ do
     -- // Aim to
     function BeizerManager.ChangeData(self, Data)
         -- // Vars
-        local MousePosition = UserInputService:GetMouseLocation()
-        self.StartPoint = MousePosition
+        self.StartPoint = BeizerManager.GetStartPoint() or Data.StartPoint
         self.EndPoint = Data.TargetPosition
         self.Smoothness = Data.Smoothness or self.Smoothness
         self.CurvePoints = Data.CurvePoints or self.CurvePoints
@@ -146,6 +145,11 @@ do
 
         -- // Reset
         self.Active = false
+    end
+
+    -- // Get Start Point
+    function BeizerManager.GetStartPoint()
+        return UserInputService:GetMouseLocation()
     end
 
     -- // Start
