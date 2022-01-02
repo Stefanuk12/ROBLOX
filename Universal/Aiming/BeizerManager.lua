@@ -1,8 +1,10 @@
 -- // Services
+local Workspace = game:GetService("Workspace")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 -- // Vars
+local CurrentCamera = Workspace.CurrentCamera
 local RenderStepped = RunService.RenderStepped
 
 -- //
@@ -38,8 +40,8 @@ do
     -- // Aim to
     function BeizerManager.ChangeData(self, Data)
         -- // Vars
-        self.StartPoint = BeizerManager.GetStartPoint() or Data.StartPoint
-        self.EndPoint = BeizerManager.ModifyEndPoint(Data.TargetPosition)
+        self.StartPoint = self.GetStartPoint() or Data.StartPoint
+        self.EndPoint = self.ModifyEndPoint(Data.TargetPosition)
         self.Smoothness = Data.Smoothness or self.Smoothness
         self.CurvePoints = Data.CurvePoints or self.CurvePoints
         self.DrawPath = Data.DrawPath or self.DrawPath
@@ -75,7 +77,7 @@ do
     end
 
     -- // Draw path
-    function BeizerManager.DrawPath(CurvePosition, A, B)
+    function BeizerManager.DrawPathFunc(CurvePosition, A, B)
         local Path = Drawing.new("Circle")
         Path.Radius = 2
         Path.Color = Color3.fromRGB(255, 150, 150)
@@ -135,7 +137,7 @@ do
 
                 -- // Create Circle [Debugging]
                 if (self.DrawPath) then
-                    BeizerManager.DrawPath(CurvePosition, A, B)
+                    BeizerManager.DrawPathFunc(CurvePosition, A, B)
                 end
 
                 -- //
@@ -173,6 +175,51 @@ do
     -- // Stop
     function BeizerManager.Stop(self)
         self.Started = false
+    end
+
+    -- // Switch to "Camera" Mode
+    function BeizerManager.CameraMode(self)
+        -- // Override get starting point
+        self.GetStartPoint = function()
+            local Pitch, Yaw, _ = CurrentCamera.CFrame:ToEulerAnglesYXZ()
+            local StartPoint = Vector2.new(Pitch, Yaw)
+            return StartPoint
+        end
+
+        -- // Override modifying the point so it now accepts a vector3
+        self.ModifyEndPoint = function(EndPoint)
+            local LookAtEndPoint = CFrame.lookAt(CurrentCamera.CFrame.Position, EndPoint)
+            local Pitch, Yaw, _ = LookAtEndPoint:ToEulerAnglesYXZ()
+
+            EndPoint = Vector2.new(Pitch, Yaw)
+            return EndPoint
+        end
+
+        -- // Override the camera move function
+        self.Function = function(Pitch, Yaw)
+            local RotationMatrix = CFrame.fromEulerAnglesYXZ(Pitch, Yaw, 0)
+            CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position) * RotationMatrix
+        end
+
+        -- // Override draw path func
+        self.DrawPathFunc = function()
+            local Path = Drawing.new("Circle")
+            Path.Radius = 2
+            Path.Color = Color3.fromRGB(255, 150, 150)
+            Path.Visible = true
+            Path.Position = CurrentCamera.ViewportSize / 2
+            task.delay(1, function()
+                Path:Remove()
+            end)
+        end
+    end
+
+    -- // Switch back to "Mouse" Mode
+    function BeizerManager.MouseMode(self)
+        self.GetStartPoint = BeizerManager.GetStartPoint
+        self.ModifyEndPoint = BeizerManager.ModifyEndPoint
+        self.Function = mousemoveabs
+        self.DrawPathFunc = BeizerManager.DrawPathFunc
     end
 end
 
