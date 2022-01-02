@@ -2,6 +2,7 @@ if getgenv().Aiming then return getgenv().Aiming end
 
 -- // Dependencies
 local SignalManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Signal/main/Manager.lua"))()
+local BeizerManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/BeizerManager.lua"))()
 
 -- // Services
 local Players = game:GetService("Players")
@@ -499,129 +500,33 @@ end
 -- // Beizer Aim Curves
 Aiming.BeizerCurve = {}
 do
+    -- // Information
+    --[[
+        A deals with mouse movements
+        B deals with custom movements, e.g. camera
+    ]]
+
     -- // Vars
-    local AimingBeizerCurve = Aiming.BeizerCurve
+    local ManagerA = BeizerManager.new()
+    local ManagerB = BeizerManager.new()
 
     -- // Functions
-    function Aiming.BeizerCurve.Cubic(t, StartPoint, EndPoint, ControlPointA, ControlPointB)
-        local t1 = (1 - t)
+    Aiming.BeizerCurve.ManagerA = ManagerA
+    Aiming.BeizerCurve.ManagerB = ManagerB
 
-        local A = t1^3 * StartPoint
-        local B = 3 * t1^2 * t * ControlPointA
-        local C = 3 * t1 * t^2 * ControlPointB
-        local D = t^3 * EndPoint
-
-        return A + B + C + D
+    Aiming.BeizerCurve.AimTo = function(...)
+        ManagerA:ChangeData(...)
     end
-    function Aiming.BeizerCurve.DrawPath(CurvePosition, A, B)
-        local Path = Drawingnew("Circle")
-        Path.Radius = 2
-        Path.Color = Color3fromRGB(255, 150, 150)
-        Path.Visible = true
-        Path.Position = CurvePosition
-        task.delay(1, function()
-            Path:Remove()
-        end)
-
-        local ControlPointA = Drawingnew("Circle")
-        ControlPointA.Radius = 5
-        ControlPointA.Color = Color3fromRGB(225, 150, 255)
-        ControlPointA.Visible = true
-        ControlPointA.Position = A
-        task.delay(1, function()
-            ControlPointA:Remove()
-        end)
-
-        local ControlPointB = Drawingnew("Circle")
-        ControlPointB.Radius = 5
-        ControlPointB.Color = Color3fromRGB(225, 150, 255)
-        ControlPointB.Visible = true
-        ControlPointB.Position = B
-        task.delay(1, function()
-            ControlPointB:Remove()
-        end)
-    end
-    local function DoControlPoint(StartPoint, EndPoint, ControlPointA, ControlPointB)
-        -- //
-        local Change = (EndPoint - StartPoint)
-
-        -- // Calculate the control points - relative to the start and end points
-        local A = StartPoint + (Change * ControlPointA)
-        local B = StartPoint + (Change * ControlPointB)
-
-        -- //
-        return A, B
+    Aiming.BeizerCurve.AimToB = function(...)
+        ManagerB:ChangeData(...)
     end
 
-    -- // Vars
-    local t = 0
-    local tThreshold = 0.99995
-    local StartPoint = Vector2new()
-    local EndPoint = Vector2new()
-    local CurvePoints = {
-        Vector2.new(1, 1),
-        Vector2.new(1, 1)
-    }
-    local IsActive = false
-    local Smoothness = 0.0025
-    local DrawPath = false
+    -- // Convert B to Camera Mode
+    ManagerB:CameraMode()
 
-    -- // AimTo with Beizer Curves
-    function Aiming.BeizerCurve.AimTo(Data)
-        -- // Vars
-        local MousePosition = GetMouseLocation(UserInputService)
-        StartPoint = MousePosition
-        EndPoint = Data.TargetPosition
-        Smoothness = Data.Smoothness or Smoothness
-        CurvePoints = Data.CurvePoints or CurvePoints
-        DrawPath = Data.DrawPath or DrawPath
-
-        -- // Set Active
-        t = 0
-        IsActive = true
-    end
-
-    -- //
-    RunService:BindToRenderStep("AimLockBeizer", 0, function()
-        -- // Make sure is active
-        if (not IsActive) then
-            return
-        end
-
-        -- // Vars
-        local BeizerCurve = AimingBeizerCurve.Cubic
-
-        -- // I have to do it this way because a for loop stops before hand
-        while (t <= 1 and IsActive) do RenderSteppedWait(RenderStepped)
-            -- // Increment
-            t = t + Smoothness
-
-            -- // If past threshold, then do regular smoothing
-            if (t >= tThreshold) then
-                -- // Regular smoothing
-                local clampedT = math.clamp(t, 0, 1)
-                local New = StartPoint:Lerp(EndPoint, clampedT)
-
-                -- // Move mouse
-                mousemoveabs(New.X, New.Y)
-            else
-                -- // Work out X, Y based upon the curve
-                local A, B = DoControlPoint(StartPoint, EndPoint, unpack(CurvePoints))
-                local CurvePosition = BeizerCurve(t, StartPoint, EndPoint, A, B)
-
-                -- // Create Circle [Debugging]
-                if (DrawPath) then
-                    AimingBeizerCurve.DrawPath(CurvePosition, A, B)
-                end
-
-                -- // Move mouse
-                mousemoveabs(CurvePosition.X, CurvePosition.Y)
-            end
-        end
-
-        -- // Reset
-        IsActive = false
-    end)
+    -- // Start
+    ManagerA:Start()
+    ManagerB:Start()
 end
 
 -- // Heartbeat Function
