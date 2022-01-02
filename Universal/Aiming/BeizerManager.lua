@@ -166,3 +166,6 @@ do
         self.Started = false
     end
 end
+
+-- // Return
+return BeizerManager
