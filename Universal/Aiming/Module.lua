@@ -529,6 +529,12 @@ do
     -- // Convert B to Camera Mode
     ManagerB:CameraMode()
 
+    -- // Convert function to use Aiming
+    ManagerB.Function = function(Pitch, Yaw)
+        local RotationMatrix = CFrame.fromEulerAnglesYXZ(Pitch, Yaw, 0)
+        Aiming.SetCameraCFrame(CFrame.new(CurrentCamera.CFrame.Position) * RotationMatrix)
+    end
+
     -- // Start
     ManagerA:Start()
     ManagerB:Start()
