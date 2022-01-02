@@ -492,9 +492,14 @@ function Aiming.GetClosestPlayerToCursor()
 end
 
 -- //
+function Aiming.SetCameraCFrame(CFr)
+    CurrentCamera.CFrame = CFr
+end
+
+-- //
 function Aiming.CameraLookAt(Position)
     local LookAt = CFrame.lookAt(CurrentCamera.CFrame.Position, Position)
-    CurrentCamera.CFrame = LookAt
+    Aiming.SetCameraCFrame(LookAt)
 end
 
 -- // Beizer Aim Curves
