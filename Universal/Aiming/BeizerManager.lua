@@ -135,7 +135,7 @@ do
 
                 -- // Create Circle [Debugging]
                 if (self.DrawPath) then
-                    self.DrawPath(CurvePosition, A, B)
+                    BeizerManager.DrawPath(CurvePosition, A, B)
                 end
 
                 -- //
@@ -177,4 +177,5 @@ do
 end
 
 -- // Return
+-- getgenv().BeizerManager = BeizerManager
 return BeizerManager
