@@ -203,14 +203,7 @@ do
 
         -- // Override draw path func
         self.DrawPathFunc = function()
-            local Path = Drawing.new("Circle")
-            Path.Radius = 2
-            Path.Color = Color3.fromRGB(255, 150, 150)
-            Path.Visible = true
-            Path.Position = CurrentCamera.ViewportSize / 2
-            task.delay(1, function()
-                Path:Remove()
-            end)
+            -- // Too complicated to create in camera mode, would have to do what self.Function does then convert to ScreenPort or whatever then draw that. Well, it's not that complicated, I just rather not do it. Also, it might be resource intensive idk.
         end
     end
 
