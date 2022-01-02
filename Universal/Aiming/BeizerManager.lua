@@ -47,7 +47,7 @@ do
 
         -- // Set Active
         self.t = 0
-        self.IsActive = true
+        self.Active = true
     end
 
     -- // Do
@@ -111,7 +111,7 @@ do
         if (not self.Active) then
             return
         end
-
+        print()
         -- // Vars
         local BeizerCurve = self.CubicCurve
         local t = self.t
