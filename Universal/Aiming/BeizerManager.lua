@@ -39,7 +39,7 @@ do
     function BeizerManager.ChangeData(self, Data)
         -- // Vars
         self.StartPoint = BeizerManager.GetStartPoint() or Data.StartPoint
-        self.EndPoint = Data.TargetPosition
+        self.EndPoint = BeizerManager.ModifyEndPoint(Data.TargetPosition)
         self.Smoothness = Data.Smoothness or self.Smoothness
         self.CurvePoints = Data.CurvePoints or self.CurvePoints
         self.DrawPath = Data.DrawPath or self.DrawPath
@@ -150,6 +150,11 @@ do
     -- // Get Start Point
     function BeizerManager.GetStartPoint()
         return UserInputService:GetMouseLocation()
+    end
+
+    -- // Modify end point
+    function BeizerManager.ModifyEndPoint(EndPoint)
+        return EndPoint
     end
 
     -- // Start
