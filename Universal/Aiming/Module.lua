@@ -15,12 +15,10 @@ local UserInputService = game:GetService("UserInputService")
 local Heartbeat = RunService.Heartbeat
 local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
-local Mouse = LocalPlayer:GetMouse()
 
 -- // Optimisation Vars (ugly)
 local Drawingnew = Drawing.new
 local Color3fromRGB = Color3.fromRGB
-local Vector2new = Vector2.new
 local GetGuiInset = GuiService.GetGuiInset
 local Randomnew = Random.new
 local mathfloor = math.floor
@@ -38,7 +36,6 @@ local FindFirstChild = Instancenew("Part").FindFirstChild
 local tableremove = table.remove
 local tableinsert = table.insert
 local RenderStepped = RunService.RenderStepped
-local RenderSteppedWait = RenderStepped.Wait
 local GetMouseLocation = UserInputService.GetMouseLocation
 
 -- // Silent Aim Vars
@@ -51,6 +48,7 @@ local Aiming = {
     FOVColour = Color3fromRGB(231, 84, 128),
 
     VisibleCheck = true,
+    ShowCredits = true,
 
     HitChance = 100,
 
@@ -545,6 +543,11 @@ Heartbeat:Connect(function()
     Aiming.UpdateFOV()
     Aiming.GetClosestPlayerToCursor()
 end)
+
+-- // Credits (by disabling this and not including your own way of crediting within the script, e.g. credits tab, is violating the license agreement. Beware!)
+if (Aiming.ShowCredits) then
+    messagebox("Thanks to Stefanuk12 for their Aiming Module (v1).\n\nNote: This module is outdated, please see github.com/Stefanuk12/Aiming for the updated version!", "Credits", 0)
+end
 
 -- //
 return Aiming
