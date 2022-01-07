@@ -1,5 +1,7 @@
 -- // Dependencies
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/ROBLOX/master/Universal/Aiming/Examples/AimLock.lua"))()
+local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Aiming/main/Examples/AimLock.lua"))()
+local AimingChecks = Aiming.Checks
+local AimingSelected = Aiming.Selected
 local AimLockSettings = Aiming.AimLock
 
 -- // Services
@@ -15,7 +17,6 @@ local DaHoodSettings = {
 
     AimLock = AimLockSettings,
     BeizerLock = {
-        Enabled = true,
         Smoothness = 0.05,
         CurvePoints = {
             Vector2.new(0.83, 0),
@@ -34,9 +35,9 @@ end
 local __index
 __index = hookmetamethod(game, "__index", function(t, k)
     -- // Check if it trying to get our mouse's hit or target and see if we can use it
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check() and DaHoodSettings.SilentAim) then
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and AimingChecks.IsAvailable() and DaHoodSettings.SilentAim) then
         -- // Vars
-        local SelectedPart = Aiming.SelectedPart
+        local SelectedPart = AimingSelected.Part
         local Hit = ApplyPredictionFormula(SelectedPart)
 
         -- // Return modded val
@@ -54,7 +55,7 @@ function AimLockSettings.AimLockPosition(CameraMode)
     local BeizerData = {}
 
     -- // Hit to account prediction
-    local Hit = ApplyPredictionFormula(Aiming.SelectedPart)
+    local Hit = ApplyPredictionFormula(AimingSelected.Part)
     local HitPosition = Hit.Position
 
     -- //
