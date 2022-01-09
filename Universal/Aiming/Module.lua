@@ -545,9 +545,11 @@ Heartbeat:Connect(function()
 end)
 
 -- // Credits (by disabling this and not including your own way of crediting within the script, e.g. credits tab, is violating the license agreement. Beware!)
-if (Aiming.ShowCredits) then
-    messagebox("Thanks to Stefanuk12 for their Aiming Module (v1).\n\nNote: This module is outdated, please see github.com/Stefanuk12/Aiming for the updated version!", "Credits", 0)
-end
+task.delay(1, function()
+    if (Aiming.ShowCredits) then
+        messagebox("Thanks to Stefanuk12 for their Aiming Module (v1).\n\nNote: This module is outdated, please see github.com/Stefanuk12/Aiming for the updated version!", "Credits", 0)
+    end
+end)
 
 -- //
 return Aiming
