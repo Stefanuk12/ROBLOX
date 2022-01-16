@@ -1,3 +1,5 @@
+-- // NOTICE: They have a new anti cheat that is obfuscated and one that has no bytecode. In other words, I'm not bothered to bypass that.
+
 -- // Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
