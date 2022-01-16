@@ -30,11 +30,19 @@ local __index
 __index = hookmetamethod(game, "__index", function(t, k)
     -- // Make sure it is the shoot function trying to get the camera's cframe
     if (not checkcaller() and t == CurrentCamera and k == "CFrame" and AimingChecks.IsAvailable() and debug.validlevel(3) and #debug.getupvalues(3) == 12) then
-        local Origin = __index(t, k).Position
-        local Destination = AimingSelected.Part.Position
+        -- // Vars
+        local callingscript = getcallingscript()
 
-        local Modified = CFramelookAt(Origin, Destination)
-        return Modified
+        -- // Make sure is not anti cheat
+        if (callingscript.Parent ~= nil) then
+            -- // Vars
+            local Origin = __index(t, k).Position
+            local Destination = AimingSelected.Part.Position
+
+            -- // Return modified
+            local Modified = CFramelookAt(Origin, Destination)
+            return Modified
+        end
     end
 
     -- // Return old
