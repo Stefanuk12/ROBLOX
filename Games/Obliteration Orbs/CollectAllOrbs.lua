@@ -1,10 +1,14 @@
+-- // Information
+--[[
+    You can increase the speed, just head to line 137. The 100 is the speed (in studs/second)
+]]
+
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 
 -- // Vars
-local CurrentCamera = Workspace.CurrentCamera
 local OrbLocation = Workspace
 local Orbs = {}
 local LocalPlayer = Players.LocalPlayer
