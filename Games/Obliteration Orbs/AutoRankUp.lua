@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
 
-local KillsNeeded = LocalPlayer.PlayerGui["Kils Required GUI"].Frame.Kills
+local KillsNeeded = LocalPlayer.PlayerGui["Kills Required GUI"].Frame.Kills
 local Kills = LocalPlayer.leaderstats.Kills
 local Events = ReplicatedStorage.Events
 
