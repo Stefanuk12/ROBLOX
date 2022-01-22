@@ -33,11 +33,10 @@ local function IsValidOrb(Orb)
         return false
     end
 
-    -- // Team Check !! THIS DOES NOT WORK FULLY YET, NEED TO FIX
-    local OrbPosition = Orb.Position - Vector3.new(0, 0, 1)
-    local CameraPosition = CurrentCamera.CFrame.Position
-    local Result = Workspace:Raycast(CameraPosition, (CameraPosition - OrbPosition))
-    if (Result and Result.Instance == Wall) then
+    -- // Team Check
+    local OrbPosition = Orb.Position
+    local WallPosition = Wall.Position
+    if (Team == "TeamLeft" and OrbPosition.Z < WallPosition.Z) or (Team == "TeamRight" and OrbPosition.Z > WallPosition.Z) then
         return false
     end
 
