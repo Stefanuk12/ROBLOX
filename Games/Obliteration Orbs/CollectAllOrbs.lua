@@ -134,7 +134,7 @@ local function CollectOrb()
     end
 
     -- // Teleport
-    Teleport(50, Orb.Position)
+    Teleport(25, Orb.Position)
 
     -- // Wait until orb is gone
     repeat
