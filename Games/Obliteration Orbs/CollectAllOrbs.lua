@@ -9,7 +9,7 @@ local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 
 -- // Vars
-local OrbLocation = Workspace
+local OrbLocation = Workspace:WaitForChild("OrbFolder")
 local Orbs = {}
 local LocalPlayer = Players.LocalPlayer
 local Team = LocalPlayer.Team.Name
@@ -134,7 +134,7 @@ local function CollectOrb()
     end
 
     -- // Teleport
-    Teleport(100, Orb.Position)
+    Teleport(16, Orb.Position)
 
     -- // Wait until orb is gone
     repeat
