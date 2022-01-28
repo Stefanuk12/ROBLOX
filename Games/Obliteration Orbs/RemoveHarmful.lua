@@ -3,43 +3,17 @@ local Workspace = game:GetService("Workspace")
 
 -- // Vars
 local HarmfulNames = {
-    "Fireball",
-    "Meteor",
-    "Black Hole"
+    "FireballFolder",
+    "MeteorFolder",
+    "BlackHoleFolder"
 }
 
--- //
-local function IsHarmful(Orb)
-    -- // Make sure is a part
-    if (not Orb:IsA("BasePart")) then
-        return
-    end
-
-    -- // Checks
-    local NameCheck = table.find(HarmfulNames, Orb.Name) ~= nil
-
-    -- // Return
-    return NameCheck
-end
-
--- // Remove all current harmful
-for _, child in ipairs(Workspace:GetChildren()) do
-    -- // Check
-    if (IsHarmful(child)) then
+-- // Remove
+for _, Name in ipairs(HarmfulNames) do
+    -- // Make sure exists
+    local Harmful = Workspace:FindFirstChild(Name)
+    if (Harmful) then
         -- // Remove
-        child:Destroy()
+        Harmful:Destroy()
     end
 end
-
--- // Remove new
-Workspace.ChildAdded:Connect(function(child)
-    -- // Check
-    if (IsHarmful(child)) then
-        -- // Wait for it to be added
-        child.Parent:WaitForChild(child.Name)
-        task.wait(0.05)
-
-        -- // Remove
-        child:Destroy()
-    end
-end)
