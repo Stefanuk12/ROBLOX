@@ -116,6 +116,11 @@ end
 
 -- // Improves it all
 local function Improve(Input)
+    -- // Check if it is just empty space
+    if (Input:match("^%s*$")) then
+        return Input
+    end
+
     -- // Vars
     local Output = Input:split(" ")
 
