@@ -9,7 +9,7 @@
 -- // Configuration
 local Configuration = {
     UseReplaceMethod = true,
-    WordsPerMinute = 80 -- // This is used for the "replace method",
+    ReplaceDelay = 1 -- // (seconds) This is used for the "replace method",
 }
 
 -- // Services
@@ -158,7 +158,7 @@ local function InitialiseReplace(ChatScript)
         -- // Constant loop
         while (true) do wait()
             -- // See if it has been since
-            if not (tick() - LastChangedText >= Configuration.WordsPerMinute / 60) then
+            if not (tick() - LastChangedText >= Configuration.ReplaceDelay) then
                 continue
             end
 
