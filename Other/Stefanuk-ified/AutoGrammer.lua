@@ -6,6 +6,15 @@
     Note: I know that the iterations of Output can be combined but for the sake of seperating stuff out and such, I did it the way I did.
 ]]
 
+-- // Configuration
+local Configuration = {
+    UseReplaceMethod = true,
+    WordsPerMinute = 80 -- // This is used for the "replace method",
+}
+
+-- // Services
+local Players = game:GetService("Players")
+
 -- // Vars
 local CapitaliseI = true
 local ReplaceDictionary = {
@@ -131,8 +140,40 @@ local function ReplaceHook(Old, ReplaceI, ...)
     return Old(unpack(args))
 end
 
--- // Initialises this script - this could probably be improved
-local function Initialise()
+-- // Initialises this script by using "replace method" - replaces the textbox text
+local function InitialiseReplace(ChatScript)
+    -- // Vars
+    local ChatMain = require(ChatScript:WaitForChild("ChatMain"))
+    local ChatBar = debug.getupvalue(ChatMain.FocusChatBar, 1)
+    local TextBox = ChatBar:GetTextBox()
+    local LastChangedText = tick()
+
+    -- // See whenever the text changes
+    TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+        LastChangedText = tick()
+    end)
+
+    -- //
+    local Checker = coroutine.create(function()
+        -- // Constant loop
+        while (true) do wait()
+            -- // See if it has been since
+            if not (tick() - LastChangedText >= Configuration.WordsPerMinute / 60) then
+                continue
+            end
+
+            -- // Improve text
+            TextBox.Text = Improve(TextBox.Text)
+        end
+    end)
+    coroutine.resume(Checker)
+
+    -- // Return
+    return Checker
+end
+
+-- // Initialises this script by using "hook method" - intercepts text when being sent
+local function InitialiseHook()
     -- // Loop through GC
     for _, v in ipairs(getgc(true)) do
         -- // Make sure it is the table we are looking for
@@ -146,6 +187,10 @@ local function Initialise()
     end
 end
 
--- // End
-Initialise()
-return Improve
+
+-- // Initialises for current spawn
+if (Configuration.UseReplaceMethod) then
+    InitialiseReplace(Players.LocalPlayer.PlayerScripts.ChatScript)
+else
+    InitialiseHook()
+end
