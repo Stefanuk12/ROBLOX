@@ -2,11 +2,9 @@
 --[[
     Original by: eos (https://v3rmillion.net/showthread.php?tid=1156181)
     Edited by: Stefanuk12
-]]
 
--- // Services
-local Players = game:GetService("Players")
-local StarterPlayer = game:GetService("StarterPlayer")
+    Note: I know that the iterations of Output can be combined but for the sake of seperating stuff out and such, I did it the way I did.
+]]
 
 -- // Vars
 local CapitaliseI = true
