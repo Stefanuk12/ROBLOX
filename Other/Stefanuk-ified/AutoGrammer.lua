@@ -156,7 +156,7 @@ local function InitialiseReplace(ChatScript)
     -- //
     local Checker = coroutine.create(function()
         -- // Constant loop
-        while (true) do wait()
+        while (Configuration.UseReplaceMethod) do wait()
             -- // See if it has been since
             if not (tick() - LastChangedText >= Configuration.ReplaceDelay) then
                 continue
