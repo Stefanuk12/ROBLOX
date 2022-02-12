@@ -1,6 +1,10 @@
 -- // Services
+local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
+
+-- // Vars
+local LocalPlayer = Players.LocalPlayer
 
 -- // Hop Manager
 local HopManager = {}
@@ -75,9 +79,10 @@ do
     end
 
     -- // Server hop
-    function HopManager.Hop(self, PlaceId)
+    function HopManager.Hop(self, PlaceId, KickBeforeTeleport)
         -- // Default
         PlaceId = PlaceId or tostring(game.PlaceId)
+        KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
 
         -- // Vars
         local Servers = HttpService:JSONDecode(game:HttpGet(self.ServerFormat:format(PlaceId)))
@@ -88,6 +93,11 @@ do
             if (Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
                 -- // Set and save
                 self:Set(Server.id)
+
+                -- // Kick
+                if (KickBeforeTeleport) then
+                    LocalPlayer:Kick("Teleporting...")
+                end
 
                 -- // Teleport
                 TeleportService:TeleportToPlaceInstance(PlaceId, Server.id)
