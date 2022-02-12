@@ -78,6 +78,33 @@ do
         return false
     end
 
+    -- // Failsafe hop
+    function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime)
+        -- // Default
+        RetryTime = RetryTime or 1
+
+        -- // See whenever the teleport failed
+        local Connection
+        Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage)
+            -- // Make sure we failed to teleport
+            if (Player == LocalPlayer) then
+                print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
+
+                -- // Check the TeleportResult to ensure it is appropriate to retry
+                if (TeleportResult == Enum.TeleportResult.Failiure or TeleportResult == Enum.TeleportResult.Flooded) then
+                    -- // Disconnect
+                    Connection:Disconnect()
+
+                    -- // Retry in RetryTime seconds
+                    delay(RetryTime, function()
+                        print("Reattempting teleport")
+                        TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
+                    end)
+                end
+            end
+        end)
+    end
+
     -- // Server hop
     function HopManager.Hop(self, PlaceId, KickBeforeTeleport)
         -- // Default
@@ -91,8 +118,11 @@ do
         for _, Server in ipairs(Servers.data) do
             -- // Make sure isn't full and the same place and that we have not hopped to that place recently
             if (Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
+                -- // Vars
+                local JobId = Server.id
+
                 -- // Set and save
-                self:Set(Server.id)
+                self:Set(JobId)
 
                 -- // Kick
                 if (KickBeforeTeleport) then
@@ -100,9 +130,10 @@ do
                 end
 
                 -- // Teleport
-                local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, Server.id)
+                self:FailsafeHop(PlaceId, JobId)
+                local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
                 while (Error ~= nil) do
-                    Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, Server.id)
+                    Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
                     wait(0.1)
                 end
 
