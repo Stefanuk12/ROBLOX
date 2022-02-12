@@ -100,7 +100,11 @@ do
                 end
 
                 -- // Teleport
-                TeleportService:TeleportToPlaceInstance(PlaceId, Server.id)
+                local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, Server.id)
+                while (Error ~= nil) do
+                    Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, Server.id)
+                    wait(0.1)
+                end
 
                 -- // Stop
                 break
