@@ -91,6 +91,9 @@ do
 
                 -- // Teleport
                 TeleportService:TeleportToPlaceInstance(PlaceId, Server.id)
+
+                -- // Stop
+                break
             end
         end
     end
