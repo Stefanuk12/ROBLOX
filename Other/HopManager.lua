@@ -191,9 +191,5 @@ do
     end
 end
 
--- //
-local m = HopManager.new()
-m:Hop()
-
 -- // Return
 return HopManager
