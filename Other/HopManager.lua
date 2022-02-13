@@ -22,8 +22,8 @@ do
         self.SaveLocation = Data.SaveLocation or "recenthops.json"
         self.HopInterval = Data.HopInterval or 300
         self.RecentHops = Data.RecentHops or {}
-        self.ServerFormat = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100"
-        self.ServerFormatCursor = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s"
+        self.ServerFormat = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s"
+
         -- // Load
         self:LoadFromFile()
 
@@ -135,7 +135,7 @@ do
         -- // Get all the servers until we found good servers
         repeat
             -- // Get the servers
-            local ServerData = HttpService:JSONDecode(game:HttpGet(self.ServerFormatCursor:format(PlaceId, Cursor)))
+            local ServerData = HttpService:JSONDecode(game:HttpGet(self.ServerFormat:format(PlaceId, Cursor)))
             local _FoundGoodB = false
 
             -- // Add to server list
