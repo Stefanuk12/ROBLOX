@@ -118,7 +118,7 @@ do
                 -- // Retry in RetryTime seconds
                 delay(RetryTime, function()
                     print("Reattempting teleport")
-                    TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Servers[I + 1])
+                    TeleportService:TeleportToPlaceInstance(PlaceId, Servers[I + 1].id)
                 end)
             end
         end)
