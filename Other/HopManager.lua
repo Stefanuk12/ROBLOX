@@ -186,8 +186,8 @@ do
         end
 
         -- // Teleport
-        self:FailsafeHop(PlaceId, JobId)
-        TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Servers)
+        self:FailsafeHop(PlaceId, JobId, Servers)
+        TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
     end
 end
 
