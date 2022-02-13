@@ -79,7 +79,7 @@ do
     end
 
     -- // Failsafe hop
-    function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime)
+    function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime, Servers, I)
         -- // Default
         RetryTime = RetryTime or 1
 
@@ -87,26 +87,45 @@ do
         local Connection
         Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage)
             -- // Make sure we failed to teleport
-            if (Player == LocalPlayer) then
-                print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
+            if (Player ~= LocalPlayer) then
+                return
+            end
 
-                -- // Check the TeleportResult to ensure it is appropriate to retry
-                if (TeleportResult == Enum.TeleportResult.Failiure or TeleportResult == Enum.TeleportResult.Flooded) then
-                    -- // Disconnect
-                    Connection:Disconnect()
+            -- //
+            print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
 
-                    -- // Retry in RetryTime seconds
-                    delay(RetryTime, function()
-                        print("Reattempting teleport")
-                        TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
-                    end)
-                end
+            -- // Check the TeleportResult to ensure it is appropriate to retry
+            if (TeleportResult == Enum.TeleportResult.Failure or TeleportResult == Enum.TeleportResult.Flooded) then
+                -- // Disconnect
+                Connection:Disconnect()
+
+                -- // Retry in RetryTime seconds
+                delay(RetryTime, function()
+                    print("Reattempting teleport")
+                    TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
+                end)
+            end
+
+            -- // Check if server was full
+            if (TeleportResult == Enum.TeleportResult.GameFull) then
+                -- // Disconnect
+                Connection:Disconnect()
+
+                -- // Default
+                Servers = Servers or self:GetServerList(PlaceId)
+                I = I or 1
+
+                -- // Retry in RetryTime seconds
+                delay(RetryTime, function()
+                    print("Reattempting teleport")
+                    TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Servers[I + 1])
+                end)
             end
         end)
     end
 
     -- // Get Server List - idk how to explain foundgood a and b but its to make sure we get joinable servers
-    function HopManager.GetServerList(self, PlaceId, StopOnceFoundGood)
+    function HopManager.GetServerList(self, PlaceId)
         -- // Vars
         local Cursor = ""
         local Servers = {}
@@ -152,7 +171,8 @@ do
         KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
 
         -- // Vars
-        local Server = self:GetServerList(PlaceId)[1]
+        local Servers = self:GetServerList(PlaceId)
+        local Server = Servers[1]
 
         -- // Vars
         local JobId = Server.id
@@ -167,11 +187,7 @@ do
 
         -- // Teleport
         self:FailsafeHop(PlaceId, JobId)
-        local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
-        while (Error ~= nil) do
-            Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
-            wait(0.1)
-        end
+        TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Servers)
     end
 end
 
