@@ -23,7 +23,7 @@ do
         self.HopInterval = Data.HopInterval or 300
         self.RecentHops = Data.RecentHops or {}
         self.ServerFormat = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100"
-
+        self.ServerFormatCursor = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s"
         -- // Load
         self:LoadFromFile()
 
@@ -70,7 +70,7 @@ do
         end
 
         -- // Check if it has been the interval since
-        if (HopData > self.HopInterval) then
+        if ((tick() - HopData) > self.HopInterval) then
             return self:Set(JobId)
         end
 
@@ -105,6 +105,46 @@ do
         end)
     end
 
+    -- // Get Server List - idk how to explain foundgood a and b but its to make sure we get joinable servers
+    function HopManager.GetServerList(self, PlaceId, StopOnceFoundGood)
+        -- // Vars
+        local Cursor = ""
+        local Servers = {}
+        local FoundGoodA = false
+        local FoundGoodB = false
+
+        -- // Get all the servers until we found good servers
+        repeat
+            -- // Get the servers
+            local ServerData = HttpService:JSONDecode(game:HttpGet(self.ServerFormatCursor:format(PlaceId, Cursor)))
+            local _FoundGoodB = false
+
+            -- // Add to server list
+            for _, Server in ipairs(ServerData.data) do
+                -- // Check if server is eligable
+                if (Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
+                    if (FoundGoodA) then
+                        _FoundGoodB = true
+                    end
+                    FoundGoodA = true
+
+                    table.insert(Servers, Server)
+                end
+            end
+
+            -- //
+            if (_FoundGoodB) then
+                FoundGoodB = true
+            end
+
+            -- // Set cursor for next iteration
+            Cursor = ServerData.nextPageCursor
+        until not Cursor or FoundGoodB
+
+        -- // Return all the servers
+        return Servers
+    end
+
     -- // Server hop
     function HopManager.Hop(self, PlaceId, KickBeforeTeleport)
         -- // Default
@@ -112,37 +152,32 @@ do
         KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
 
         -- // Vars
-        local Servers = HttpService:JSONDecode(game:HttpGet(self.ServerFormat:format(PlaceId)))
+        local Server = self:GetServerList(PlaceId)[1]
 
-        -- // Loop through each server
-        for _, Server in ipairs(Servers.data) do
-            -- // Make sure isn't full and the same place and that we have not hopped to that place recently
-            if (Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
-                -- // Vars
-                local JobId = Server.id
+        -- // Vars
+        local JobId = Server.id
 
-                -- // Set and save
-                self:Set(JobId)
+        -- // Set and save
+        self:Set(JobId)
 
-                -- // Kick
-                if (KickBeforeTeleport) then
-                    LocalPlayer:Kick("Teleporting...")
-                end
+        -- // Kick
+        if (KickBeforeTeleport) then
+            LocalPlayer:Kick("Teleporting...")
+        end
 
-                -- // Teleport
-                self:FailsafeHop(PlaceId, JobId)
-                local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
-                while (Error ~= nil) do
-                    Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
-                    wait(0.1)
-                end
-
-                -- // Stop
-                break
-            end
+        -- // Teleport
+        self:FailsafeHop(PlaceId, JobId)
+        local Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
+        while (Error ~= nil) do
+            Success, Error = pcall(TeleportService.TeleportToPlaceInstance, TeleportService, PlaceId, JobId)
+            wait(0.1)
         end
     end
 end
+
+-- //
+local m = HopManager.new()
+m:Hop()
 
 -- // Return
 return HopManager
