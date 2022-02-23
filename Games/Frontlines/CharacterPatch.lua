@@ -4,6 +4,8 @@ local ModelInstances = Globals.gbl_sol_state.r15_models
 local CLIPlayers = Globals.cli_plrs
 local CLITeams = Globals.cli_teams
 
+local Teams = {}
+
 -- //
 local __index
 __index = hookmetamethod(game, "__index", function(t, k)
@@ -25,21 +27,28 @@ __index = hookmetamethod(game, "__index", function(t, k)
             end
 
             -- // Return their team
-            if (k == "Team") then
-                -- // Create the team
+            if (k == "Team" or k == "TeamColor") then
+                -- // Vars
                 local PlayerTeam = CLITeams[PlayerId]
-                local Team = Instance.new("Team")
-                Team.TeamColor = BrickColor.new(PlayerTeam)
-                Team.Name = tostring(PlayerTeam)
 
-                -- // Return it
-                return Team
-            end
+                -- // Check if the team exists
+                if (not Teams[PlayerTeam]) then
+                    -- // Create a new team
+                    local Team = Instance.new("Team")
+                    Team.TeamColor = BrickColor.new(PlayerTeam)
+                    Team.Name = PlayerTeam
 
-            -- // Return their team color
-            if (k == "TeamColor") then
-                local PlayerTeam = CLITeams[PlayerId]
-                return BrickColor.new(PlayerTeam)
+                    -- // Add it
+                    Teams[PlayerTeam] = Team
+                end
+
+                -- // Return team
+                local ResolvedTeam = Teams[PlayerTeam]
+                if (k == "Team") then
+                    return ResolvedTeam
+                else
+                    return ResolvedTeam.TeamColor
+                end
             end
         end
     end
