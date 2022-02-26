@@ -17,6 +17,7 @@ Connection = Events.ChatAlert.OnClientEvent:Connect(function(Tipper, Reciever, A
     -- // Convert tipper/reciever
     Tipper = Players:FindFirstChild("Tipper")
     Reciever = Players:FindFirstChild("Reciever")
+    Amount = tonumber(Amount)
 
     -- // Check that we were donated to
     if (Reciever == LocalPlayer) then
