@@ -148,3 +148,6 @@ do
         self:StartAutomatedMessages()
     end
 end
+
+-- // Return
+return DonateManager
