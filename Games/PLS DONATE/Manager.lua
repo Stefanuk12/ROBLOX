@@ -25,9 +25,9 @@ do
         self.AutomatedMessages = Data.AutomatedMessages or {
             Enabled = false,
             KillSwitch = false,
-            Messages = "Hello",
+            Messages = {"Hello", "This is an automated message", "How are you today?"},
             Random = false,
-            Delay = 5, -- // seconds
+            Delay = 10, -- // seconds
             RefreshDelay = 1 -- // seconds
         }
 
@@ -72,7 +72,7 @@ do
     -- // Starts the connection
     function DonateManager.StartDonateListener(self)
         -- // See whenever we get a purchase
-        self.DonateListener = Signals:Connect("Purchased", function(Tipper, Amount)
+        self.DonateListener = Signals:Connect("Purchase", function(Tipper, Amount)
             -- // Check if we have a task
             local TaskFunction = self.AutomatedTasks[Amount]
             if (not TaskFunction) then
@@ -106,7 +106,7 @@ do
                 end
 
                 -- // Check if delay has been reached
-                if (not TimeElapsed >= Data.Delay) then
+                if not (TimeElapsed >= Data.Delay) then
                     continue
                 end
 
@@ -126,12 +126,18 @@ do
                     else
                         Message = Data.Messages[MessagePointer]
                         MessagePointer = MessagePointer + 1
+
+                        -- // Check if pointer has reached the end
+                        if (MessagePointer == #Data.Messages) then
+                            -- // Reset
+                            MessagePointer = 0
+                        end
                     end
                 end
 
                 -- // Say the message, if it is not empty and reset time
                 if (Message ~= "") then
-                    self:SayMessage(Message)
+                    self.SayMessage(Message)
                     TimeElapsed = 0
                 end
             end
