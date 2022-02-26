@@ -25,7 +25,7 @@ do
         self.AutomatedMessages = Data.AutomatedMessages or {
             Enabled = false,
             KillSwitch = false,
-            Messages = {"Hello", "This is an automated message", "How are you today?"},
+            Messages = {"Hello", "This is an automated message", "How are you today?", "Created by Stefanuk12"},
             Random = false,
             Delay = 10, -- // seconds
             RefreshDelay = 1 -- // seconds
