@@ -122,16 +122,20 @@ do
                 if (typeof(Data.Messages) == "table") then
                     -- // See whether we want a random message
                     if (Data.Random) then
+                        -- // Set message
                         Message = Data.Messages[math.random(1, #Data.Messages)]
                     else
+                        -- // Set message
                         Message = Data.Messages[MessagePointer]
-                        MessagePointer = MessagePointer + 1
 
                         -- // Check if pointer has reached the end
                         if (MessagePointer == #Data.Messages) then
                             -- // Reset
                             MessagePointer = 0
                         end
+
+                        -- // Add to pointer
+                        MessagePointer = MessagePointer + 1
                     end
                 end
 
