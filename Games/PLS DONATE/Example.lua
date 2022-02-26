@@ -9,6 +9,7 @@ local BoothManager = Manager.BoothManager
 Manager.AutomatedMessages.Messages = {
     "Hello",
     "This is an automated message",
+    "Donate for an automated response!",
     "How are you today?",
     "Created by Stefanuk12"
 }

@@ -350,7 +350,7 @@ do
     -- // Constructor
     function ChatMessageManager.__init__(self, Data)
         -- // Set default
-        self.DefaultData.Messages = {"Hello", "This is an automated message", "How are you today?", "Created by Stefanuk12"}
+        self.DefaultData.Messages = {"Hello", "This is an automated message", "Donate for an automated response!", "How are you today?", "Created by Stefanuk12"}
         self:LoadDefaults(Data)
     end
 
