@@ -30,7 +30,9 @@ do
             Delay = 5, -- // seconds
             RefreshDelay = 1 -- // seconds
         }
-        self:StartDonateListener()
+
+        -- // Start
+        self:Start()
 
         -- // Return object
         return self
@@ -138,5 +140,11 @@ do
 
         -- // Return the thread
         return thread
+    end
+
+    -- // Starts everything
+    function DonateManager.Start(self)
+        self:StartDonateListener()
+        self:StartAutomatedMessages()
     end
 end
