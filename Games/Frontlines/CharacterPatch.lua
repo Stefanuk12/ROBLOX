@@ -7,6 +7,18 @@ local CLITeams = Globals.cli_teams
 local Teams = {}
 
 -- //
+local function GrabPlayerId(Player)
+    -- // Loop through all the players
+    for i, v in pairs(CLIPlayers) do
+        -- // See if the players match
+        if (v == Player) then
+            -- // Return their player id
+            return i
+        end
+    end
+end
+
+-- //
 local __index
 __index = hookmetamethod(game, "__index", function(t, k)
     -- // Make sure the game cannot access this
@@ -14,7 +26,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
         -- // Check if we are trying to get a player's character, team, or teamcolor
         if (t:IsA("Player") and (k == "Character" or k == "Team" or k == "TeamColor")) then
             -- // Vars
-            local PlayerId = table.find(CLIPlayers, t)
+            local PlayerId = GrabPlayerId(t)
 
             -- // Make sure we got the id
             if (not PlayerId) then
