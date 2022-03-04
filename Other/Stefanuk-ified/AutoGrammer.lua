@@ -8,12 +8,14 @@
 
 -- // Configuration
 local Configuration = {
+    Method = "Quill", -- // Chose between Quill and Script
     UseReplaceMethod = true,
     ReplaceDelay = 1 -- // (seconds) This is used for the "replace method",
 }
 
 -- // Services
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 
 -- // Vars
 local CapitaliseI = true
@@ -115,7 +117,7 @@ local function Punctuate(Output)
 end
 
 -- // Improves it all
-local function Improve(Input)
+local function ImproveScript(Input)
     -- // Check if it is just empty space
     if (Input:match("^%s*$")) then
         return Input
@@ -131,6 +133,65 @@ local function Improve(Input)
 
     -- // Return
     return table.concat(Output, " ")
+end
+
+-- // Get QuillBot Cookie
+local function GetQuillBotCookie()
+    -- // Send
+    local Response = syn.request({
+        Url = "https://rest.quillbot.com/api/tracking",
+        Method = "POST"
+    })
+
+    -- // Get the cookie
+    local Cookie = Response.Headers["set-cookie"]
+
+    -- // Authenticate us
+    syn.request({
+        Url = "https://rest.quillbot.com/api/auth/spam-check",
+        Method = "GET",
+        Headers = {
+            Cookie = Cookie
+        }
+    })
+
+    -- // Return the cookie
+    return Cookie:sub(1, Cookie:find(";"))
+end
+
+-- // Improve by using QuillBot
+local function ImproveQuillBot(Input)
+    -- // Send
+    local UrlFormat = "https://rest.quillbot.com/api/paraphraser/single-paraphrase/2?text=%s&strength=2&autoflip=false&wikify=false&fthresh=-1&inputLang=en&quoteIndex=-1"
+    local Response = syn.request({
+        Url = UrlFormat:format(HttpService:UrlEncode(Input)),
+        Method = "GET",
+        Headers = {
+            Cookie = GetQuillBotCookie()
+        }
+    })
+
+    -- // Make sure it did not error
+    if (not Response.Success) then
+        return Input
+    end
+
+    -- //
+    local Body = HttpService:JSONDecode(Response.Body)
+    local Improved = Body.data[1].paras_3
+    local ImprovedInput = Improved[1].alt
+
+    -- // Return
+    return ImprovedInput
+end
+
+-- // Improve
+local function Improve(Input)
+    -- // Get which mode we want to use
+    local ImproveFunction = Configuration.Method == "Quill" and ImproveQuillBot or ImproveScript
+
+    -- // Return
+    return ImproveFunction(Input)
 end
 
 -- // This handles the hook process
@@ -152,6 +213,7 @@ local function InitialiseReplace(ChatScript)
     local ChatBar = debug.getupvalue(ChatMain.FocusChatBar, 1)
     local TextBox = ChatBar:GetTextBox()
     local LastChangedText = tick()
+    local PreviousText = ""
 
     -- // See whenever the text changes
     TextBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -163,12 +225,14 @@ local function InitialiseReplace(ChatScript)
         -- // Constant loop
         while (Configuration.UseReplaceMethod) do wait()
             -- // See if it has been since
-            if not (tick() - LastChangedText >= Configuration.ReplaceDelay) then
+            if (not (tick() - LastChangedText >= Configuration.ReplaceDelay)) or (TextBox.Text == PreviousText) then
                 continue
             end
 
             -- // Improve text
-            TextBox.Text = Improve(TextBox.Text)
+            local ImprovedText = Improve(TextBox.Text)
+            TextBox.Text = ImprovedText
+            PreviousText = ImprovedText
         end
     end)
     coroutine.resume(Checker)
