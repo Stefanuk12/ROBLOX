@@ -13,7 +13,7 @@ local Events = ReplicatedStorage.Events
 
 -- //
 local Connection
-Connection = Events.ChatAlert.OnClientEvent:Connect(function(Tipper, Reciever, Amount)
+Connection = Events.NotifyDonationParticipants.OnClientEvent:Connect(function(Tipper, Reciever, Amount)
     -- // Convert tipper/reciever
     Tipper = Players:FindFirstChild("Tipper")
     Reciever = Players:FindFirstChild("Reciever")
