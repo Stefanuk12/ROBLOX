@@ -3,154 +3,191 @@ local Manager, Base = loadstring(game:HttpGet("https://raw.githubusercontent.com
 
 -- // Services
 local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 
 -- // Vars
+local CurrentCamera = Workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local Managers = {}
 
 -- // Create a manager
-local PlayerManager = Manager.new()
-PlayerManager.__index = PlayerManager
+local PlayerManager = Manager:Clone()
+do
+    -- // Override
+    function PlayerManager.__init__(self, Data)
+        -- // Default
+        Data = Data or {}
 
--- // Override
-function PlayerManager.new(Data)
-    -- // Default
-    Data = Data or {}
+        -- // Set Vars
+        self.Filter = Data.Filter or function() return true end
+        self.UpdateObjectManage = Data.UpdateObjectManage or function(self, ESPObject)
+            -- // Vars
+            local Character = self:GetCharacter(ESPObject.Player)
+            local Part = Character.PrimaryPart or Character:FindFirstChild("HumanoidRootPart")
+            local IsVisible = self:IsVisible(Part, Character)
 
-    -- // Initialise
-    local self = setmetatable({}, PlayerManager)
+            -- // Data
+            local _Data = {
+                Object = Character
+            }
+            local DrawingData = {}
 
-    -- // Set Vars
-    self.Filter = Data.Filter or function() return true end
-    self.UpdateObjectManage = Data.UpdateObjectManage or function(self, ESPObject)
-        -- // Vars
-        local Character = self:GetCharacter(ESPObject.Player)
+            -- // Visible Check
+            local Settings = self.Settings
+            local VisibleCheck = Settings.VisibleCheck
+            if (VisibleCheck.Enabled) then
+                DrawingData.Color = IsVisible and VisibleCheck.VisibleColour or VisibleCheck.NotVisibleColour          
+            end
 
-        -- // Update
-        ESPObject:Update({Object = Character})
+            -- // Update
+            ESPObject:Update(_Data, DrawingData)
+        end
+        self.Descendants = Data.Descendants or false
+
+        self.ESPObjects = {}
+        self.ConnectionAdded = nil
+        self.ConnectionRemoved = nil
+
+        self.Settings = {
+            VisibleCheck = {
+                Enabled = true,
+                VisibleColour = Color3.fromRGB(152, 251, 152),
+                NotVisibleColour = Color3.fromRGB(255, 127, 127)
+            }
+        }
     end
-    self.Descendants = Data.Descendants or false
 
-    self.ESPObjects = {}
-    self.ConnectionAdded = nil
-    self.ConnectionRemoved = nil
+    -- // Check if a part is visible
+    function PlayerManager.IsVisible(self, Part, Descendant)
+        -- // Vars
+        local Origin = CurrentCamera.CFrame.Position
+        local Destination = Part.Position
+        local Direction = (Destination - Origin)
 
-    -- // Return
-    return self
-end
+        -- // Raycast
+        local RaycastParameters = RaycastParams.new()
+        RaycastParameters.FilterDescendantsInstances = {CurrentCamera}
+        local RaycastResult = Workspace:Raycast(Origin, Direction, RaycastParameters)
 
--- // Get character
-function PlayerManager.GetCharacter(self, Player)
-    return Player.Character
-end
+        -- // Make sure we got a result
+        if (RaycastResult) then
+            return Descendant and RaycastResult.Instance:IsDescendantOf(Descendant) or RaycastResult.Instance == Part
+        end
 
--- // Start for a specific player
-function PlayerManager.StartPlayer(self, Player)
-    -- // Vars
-    local Character = self:GetCharacter(Player)
+        -- //
+        return false
+    end
 
-    -- // Create ESP
-    local ESPObject = self:AddObject(Character, nil, function(ESPObject)
-        -- // Add Player
-        ESPObject.Player = Player
+    -- // Get character
+    function PlayerManager.GetCharacter(self, Player)
+        return Player.Character
+    end
+
+    -- // Start for a specific player
+    function PlayerManager.StartPlayer(self, Player)
+        -- // Vars
+        local Character = self:GetCharacter(Player)
+
+        -- // Create ESP
+        local ESPObject = self:AddObject(Character, nil, function(ESPObject)
+            -- // Add Player
+            ESPObject.Player = Player
+
+            -- // Return
+            return ESPObject
+        end)
 
         -- // Return
         return ESPObject
-    end)
+    end
 
-    -- // Return
-    return ESPObject
-end
+    -- // Stop a specific player's ESP
+    function PlayerManager.StopPlayer(self, Player)
+        -- // Loop through each Object
+        for i = #self.ESPObjects, 1, -1 do
+            local ESPObject = self.ESPObjects[i]
 
--- // Stop a specific player's ESP
-function PlayerManager.StopPlayer(self, Player)
-    -- // Loop through each Object
-    for i = #self.ESPObjects, 1, -1 do
-        local ESPObject = self.ESPObjects[i]
+            -- // Make sure player matches
+            if (Player ~= ESPObject.Player) then
+                continue
+            end
 
-        -- // Make sure player matches
-        if (Player ~= ESPObject.Player) then
-            continue
+            -- // Loop through each Drawing
+            for _, Drawing in ipairs(ESPObject.Drawings) do
+                -- // Remove the drawing
+                Drawing:Remove()
+            end
+
+            -- // Remove object from table
+            table.remove(self.ESPObjects, i)
+        end
+    end
+
+    -- // Override
+    function PlayerManager.Start(self, Data)
+        Data = Data or {}
+
+        -- // Vars
+        local AlreadyStarted = table.find(Managers, self)
+
+        -- // Make sure hasn't already started
+        if (AlreadyStarted) then
+            return false
         end
 
-        -- // Loop through each Drawing
-        for _, Drawing in ipairs(ESPObject.Drawings) do
-            -- // Remove the drawing
-            Drawing:Remove()
+        -- // Initialise all current players
+        for _, Player in ipairs(Players:GetPlayers()) do
+            -- // Make sure isn't Local Player
+            if (Player == LocalPlayer) then
+                continue
+            end
+
+            -- // Initialise
+            self:StartPlayer(Player)
         end
 
-        -- // Remove object from table
-        table.remove(self.ESPObjects, i)
+        -- // Initialise all new players
+        self.PlayerAdded = Players.PlayerAdded:Connect(function(Player)
+            self:StartPlayer(Player)
+        end)
+
+        -- // Deinitialise old players
+        self.PlayerRemoving = Players.PlayerRemoving:Connect(function(Player)
+            self:StopPlayer(Player)
+        end)
+
+        -- // Add to Managers
+        table.insert(Managers, self)
+
+        -- // Return
+        return true
     end
-end
 
--- // Override
-function PlayerManager.Start(self, Data)
-    Data = Data or {}
+    -- // Override
+    function PlayerManager.Stop(self)
+        -- // Vars
+        local AlreadyStarted = table.find(Managers, self)
 
-    -- // Vars
-    local AlreadyStarted = table.find(Managers, self)
-
-    -- // Make sure hasn't already started
-    if (AlreadyStarted) then
-        return false
-    end
-
-    -- // Initialise all current players
-    for _, Player in ipairs(Players:GetPlayers()) do
-        -- // Make sure isn't Local Player
-        if (Player == LocalPlayer) then
-            continue
+        -- // Make sure hasn't already started
+        if (not AlreadyStarted) then
+            return false
         end
 
-        -- // Initialise
-        self:StartPlayer(Player)
+        -- // Disable Connections
+        self.PlayerAdded:Disconnect()
+        self.PlayerRemoving:Disconnect()
+
+        -- // Remove from Managers
+        table.remove(Managers, AlreadyStarted)
+
+        -- // Return
+        return true
     end
 
-    -- // Initialise all new players
-    self.PlayerAdded = Players.PlayerAdded:Connect(function(Player)
-        self:StartPlayer(Player)
-    end)
-
-    -- // Deinitialise old players
-    self.PlayerRemoving = Players.PlayerRemoving:Connect(function(Player)
-        self:StopPlayer(Player)
-    end)
-
-    -- // Add to Managers
-    table.insert(Managers, self)
-
-    -- // Return
-    return true
-end
-
--- // Override
-function PlayerManager.Stop(self)
-    -- // Vars
-    local AlreadyStarted = table.find(Managers, self)
-
-    -- // Make sure hasn't already started
-    if (not AlreadyStarted) then
-        return false
-    end
-
-    -- // Disable Connections
-    self.PlayerAdded:Disconnect()
-    self.PlayerRemoving:Disconnect()
-
-    -- // Remove from Managers
-    table.remove(Managers, AlreadyStarted)
-
-    -- // Return
-    return true
-end
-
--- // Override
-function PlayerManager.UpdateAllObjects(self)
-    -- // Loop through each Object
-    for _, ESPObject in ipairs(self.ESPObjects) do
-        self:UpdateObjectManage(ESPObject)
+    -- // Override
+    function PlayerManager.UpdateObject(self, Object)
+        self:UpdateObjectManage(Object)
     end
 end
 
