@@ -248,7 +248,7 @@ do
         -- // Loop through each Object
         for _, ESPObject in ipairs(self.ESPObjects) do
             -- // Update
-            self:Update(ESPObject)
+            self:UpdateObject(ESPObject)
         end
     end
 
