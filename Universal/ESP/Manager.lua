@@ -12,6 +12,39 @@ local RunService = game:GetService("RunService")
 -- // Vars
 local Managers = {}
 
+-- // Class stuff
+local function InheritClass(_Base)
+    -- //
+    local Class = {}
+    local Class_MT = {
+        __index = Class
+    }
+
+    -- // Constructor
+    function Class.new(...)
+        -- // Create object
+        local self = setmetatable({}, Class_MT)
+
+        -- // Initialise
+        if (Class.__init__) then
+            Class.__init__(self, ...)
+        end
+
+        -- // Return object
+        return self
+    end
+
+    -- //
+    if (_Base ~= nil) then
+        setmetatable(Class, {
+            __index = _Base
+        })
+    end
+
+    -- //
+    return Class
+end
+
 -- // Manager Class
 local Manager = {}
 Manager.__index = Manager
@@ -35,6 +68,11 @@ do
 
         -- // Return
         return self
+    end
+
+    -- // Clone
+    function Manager.Clone(self)
+        return InheritClass(self)
     end
 
     -- // Add Object
