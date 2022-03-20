@@ -200,12 +200,17 @@ do
         end
     end
 
+    -- // Update a object
+    function Manager.UpdateObject(self, Object)
+        Object:Update()
+    end
+
     -- // Update all object
     function Manager.UpdateAllObjects(self)
         -- // Loop through each Object
         for _, ESPObject in ipairs(self.ESPObjects) do
             -- // Update
-            ESPObject:Update()
+            self:Update(ESPObject)
         end
     end
 
