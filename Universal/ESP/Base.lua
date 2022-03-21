@@ -288,7 +288,7 @@ do
         Color = Color3.fromRGB(255, 150, 150),
 
         Text = nil,
-        Size = 14,
+        Size = 18,
         Center = true,
         Outline = true,
         OutlineColor = Color3.fromRGB(255, 255, 255),
@@ -297,7 +297,10 @@ do
     Header.IdealData = {
         Enabled = true,
         Object = nil,
-        Offset = nil,
+        Offset = function(Position, Points, Points2D)
+            -- // Return
+            return Position * CFrame.new(0, -1.5, 0)
+        end,
 
         RenderDistance = 1/0,
 
@@ -348,11 +351,11 @@ do
         end
 
         -- // Get the points
-        local Points = Utilities.CalculateCornersBox(Object, false, true, Data.RenderDistance, self.GlobalLookAtCamera)
-        DrawingObject.Visible = not not Points
+        local Points, Points2D = Utilities.CalculateCornersBox(Object, true, true, Data.RenderDistance, self.GlobalLookAtCamera)
+        DrawingObject.Visible = not not Points2D
 
         -- // Make sure we have them
-        if (not DrawingObject.Visible) then
+        if (not DrawingObject.Visible or not Points2D) then
             return
         end
 
@@ -369,7 +372,7 @@ do
 
         -- // Dynamic Offset
         if (OffsetType == "function") then
-            Position = Offset(Position, Points)
+            Position = Offset(Position, Points, Points2D)
         -- // Static Offset
         elseif (OffsetType == "number") then
             Position = Position * Offset
@@ -390,16 +393,23 @@ do
         end
 
         -- // Convert Position
-        local Position, OnScreen = CurrentCamera:WorldToViewportPoint(Position.Position)
+        local PositionType = typeof(Position)
+        if (PositionType == "CFrame" or PositionType == "Vector3") then
+            -- // Convert
+            local _Position, OnScreen = CurrentCamera:WorldToViewportPoint(PositionType == "CFrame" and Position.Position or Position)
 
-        -- // Onscreen check, just in case
-        if (not OnScreen) then
-            DrawingObject.Visible = false
-            return
+            -- // Onscreen check, just in case
+            if (not OnScreen) then
+                DrawingObject.Visible = false
+                return
+            end
+
+            -- // Convert position
+            _Position = Vector2.new(_Position.X, _Position.Y)
+            Position = _Position
         end
 
-        -- // Convert position
-        Position = Vector2.new(Position.X, Position.Y)
+        Position = Position - Vector2.new(0, DrawingObject.TextBounds.Y)
 
         -- // Configuring the drawing
         DrawingObject.Text = Data.Text or Object.Name or "nil"
