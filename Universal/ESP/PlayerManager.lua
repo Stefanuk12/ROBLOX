@@ -22,22 +22,35 @@ do
         -- // Set Vars
         self.Filter = Data.Filter or function() return true end
         self.UpdateObjectManage = Data.UpdateObjectManage or function(self, ESPObject)
+            -- // Data
+            local _Data = {}
+            local DrawingData = {}
+
             -- // Vars
             local Character = self:GetCharacter(ESPObject.Player)
+            if (not Character) then
+                return ESPObject:Update(_Data, DrawingData)
+            end
             local Part = Character.PrimaryPart or Character:FindFirstChild("HumanoidRootPart")
             local IsVisible = self:IsVisible(Part, Character)
 
             -- // Data
-            local _Data = {
-                Object = Character
-            }
-            local DrawingData = {}
+            _Data.Object = Character
 
             -- // Visible Check
             local Settings = self.Settings
             local VisibleCheck = Settings.VisibleCheck
             if (VisibleCheck.Enabled) then
+                -- // Vars
+                local Distance = (CurrentCamera.CFrame.Position - Part.Position).Magnitude
+
+                -- // All
                 DrawingData.Color = IsVisible and VisibleCheck.VisibleColour or VisibleCheck.NotVisibleColour          
+
+                -- // Tracer only
+                if (ESPObject.__type == "Tracer") then
+                    DrawingData.Transparency = math.clamp(Distance / 200, 0.45, 0.8)
+                end
             end
 
             -- // Update
