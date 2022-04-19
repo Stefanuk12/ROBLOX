@@ -1,3 +1,9 @@
+--[[
+    Information:
+    - This lets you spy on what the game does when you shoot (use this to reverse engineer and bypass AC)
+    - GetFullName is somehow detected so act fast before u get kicked
+]]
+
 -- // Services
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -10,7 +16,22 @@ local Output = ""
 local SaveOutput = Enum.KeyCode.Q
 local AutoSaveOutput = true
 local EnableSpy = false
-local TargetScript = LocalPlayer.PlayerGui:WaitForChild("Main").MainScript
+local TargetScript = nil--LocalPlayer.PlayerGui:WaitForChild("Main").MainScript
+
+-- // safe (ish) tostring (ty simplespy)
+local function safetostring(v: any)
+	if typeof(v) == "userdata" or type(v) == "table" then
+		local mt = getrawmetatable(v)
+		local badtostring = mt and rawget(mt, "__tostring")
+		if mt and badtostring then
+			rawset(mt, "__tostring", nil)
+			local out = tostring(v)
+			rawset(mt, "__tostring", badtostring)
+			return out
+		end
+	end
+	return tostring(v)
+end
 
 -- // Convert table to string (table.concat doesn't play nice so I had to make this.)
 local function ArrayToString(t, sep)
@@ -20,7 +41,7 @@ local function ArrayToString(t, sep)
 
     -- //
     for _, v in pairs(t) do
-        String = string.format(StringFormat, String, tostring(v), sep)
+        String = string.format(StringFormat, String, safetostring(v), sep)
     end
 
     -- //
@@ -63,7 +84,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     -- // Make sure the spy is enabled
     if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
-        local tName = t:GetFullName()
+        local tName = t:GetFullName(t)
         Output = Output .. __indexFormat:format(tName, k)
     end
 
@@ -81,8 +102,9 @@ __newindex = hookmetamethod(game, "__index", function(t, k, v)
     -- // Make sure the spy is enabled
     if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
-        local stringv = tostring(v)
-        Output = Output .. __newindexFormat:format(t:GetFullName(), k, stringv)
+        local tName = t:GetFullName()
+        local stringv = safetostring(v)
+        Output = Output .. __newindexFormat:format(tName, k, stringv)
     end
 
     -- //
