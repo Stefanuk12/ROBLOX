@@ -38,7 +38,7 @@ __namecall = hookmetamethod(game, "__namecall", function(...)
     local callingscript = getcallingscript()
 
     -- // Make sure the spy is enabled
-    if (not EnableSpy and callingscript == TargetScript) then
+    if (not EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Remove self from args
         local args2 = {...}
         table.remove(args2, 1)
@@ -61,7 +61,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     local callingscript = getcallingscript()
 
     -- // Make sure the spy is enabled
-    if (EnableSpy and callingscript == TargetScript) then
+    if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
         local tName = t:GetFullName()
         Output = Output .. __indexFormat:format(tName, k)
@@ -79,7 +79,7 @@ __newindex = hookmetamethod(game, "__index", function(t, k, v)
     local callingscript = getcallingscript()
 
     -- // Make sure the spy is enabled
-    if (EnableSpy and callingscript == TargetScript) then
+    if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
         local stringv = tostring(v)
         Output = Output .. __newindexFormat:format(t:GetFullName(), k, stringv)
