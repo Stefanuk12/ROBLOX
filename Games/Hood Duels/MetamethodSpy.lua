@@ -54,7 +54,7 @@ __namecall = hookmetamethod(game, "__namecall", function(...)
 end)
 
 -- // __index hook
-local __indexFormat = "__index    -> self = %s\n              k    = %s\n"
+local __indexFormat = "__index    -> self   = %s\n              k      = %s\n"
 local __index
 __index = hookmetamethod(game, "__index", function(t, k)
     -- // Vars
@@ -72,7 +72,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
 end)
 
 -- // __newindex hook
-local __newindexFormat = "__newindex -> self = %s\n              k    = %s\n              v    = %s\n"
+local __newindexFormat = "__newindex -> self   = %s\n              k      = %s\n              v      = %s\n"
 local __newindex
 __newindex = hookmetamethod(game, "__index", function(t, k, v)
     -- // Vars
