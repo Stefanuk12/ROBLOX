@@ -1,10 +1,18 @@
 -- // Vars
-local Globals = getrenv()._G.globals
-local ModelInstances = Globals.gbl_sol_state.r15_models
-local CLIPlayerNames = Globals.cli_names
-local CLITeams = Globals.cli_teams
+local ModelInstances;
+local CLIPlayerNames;
+local CLITeams;
 
 local Teams = {}
+
+-- // Grab data from GC.
+for i,v in next, getgc(true) do 
+    if typeof(v) == "table" and rawget(v,"cli_names") then 
+        CLIPlayerNames = v.cli_names;
+        CLITeams = v.cli_teams;
+        ModelInstances = v.gbl_sol_state.r15_models;
+    end
+end
 
 -- //
 local function GrabPlayerId(Player)
