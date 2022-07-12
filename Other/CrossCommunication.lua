@@ -25,6 +25,7 @@ local AllChatType = Enum.PlayerChatType.All
 -- // Create signals
 Manager:Add("ExploiterJoined")
 Manager:Add("ExploiterLeaving")
+Manager:Add("ExploiterChatted")
 
 -- // See when people chat
 local ChatConnection
@@ -53,6 +54,16 @@ PlayerConnection = Players.PlayerRemoving:Connect(function(Player)
 
         -- // Fire
         Manager:Fire("ExploiterLeaving", Player)
+    end
+end)
+
+-- // See when an exploiter chats
+local ChattedConnection
+ChattedConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
+    -- // Check if the player is cached
+    if (table.find(Comrades, Player)) then
+        -- // Fire
+        Manager:Fire("ExploiterChatted", ChatType, Player, Message, TargetPlayer)
     end
 end)
 
