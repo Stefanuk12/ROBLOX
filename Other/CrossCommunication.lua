@@ -13,13 +13,16 @@ local SignalManager = loadstring(game:HttpGet("https://raw.githubusercontent.com
 local Manager = SignalManager.new()
 
 -- // Configuration
-local Secret = "hello comrade"
+local Configuration = {
+    Secret = "hello comrade",
+    Exploiters = {},
+    Connections = {}
+}
 
 -- // Services
 local Players = game:GetService("Players")
 
 -- // Vars
-local Comrades = {}
 local AllChatType = Enum.PlayerChatType.All
 
 -- // Create signals
@@ -28,15 +31,14 @@ Manager:Add("ExploiterLeaving")
 Manager:Add("ExploiterChatted")
 
 -- // See when people chat
-local ChatConnection
-ChatConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
+Configuration.Connections.ChatConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
     -- // Make sure message matches and we have not already gotten the user
-    if (Message == Secret and ChatType == AllChatType and TargetPlayer == nil and not table.find(Comrades, Player)) then
+    if (Message == Configuration.Secret and ChatType == AllChatType and TargetPlayer == nil and not table.find(Configuration.Exploiters, Player)) then
         -- // Add the the player
-        table.insert(Comrades, Player)
+        table.insert(Configuration.Exploiters, Player)
 
         -- // Chat
-        Players:Chat(Secret)
+        Players:Chat(Configuration.Secret)
 
         -- // Fire
         Manager:Fire("ExploiterJoined", Player)
@@ -44,13 +46,12 @@ ChatConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Messag
 end)
 
 -- // See when people leave
-local PlayerConnection
-PlayerConnection = Players.PlayerRemoving:Connect(function(Player)
+Configuration.Connections.PlayerConnection = Players.PlayerRemoving:Connect(function(Player)
     -- // Check if found
-    local i = table.find(Comrades, Player)
+    local i = table.find(Configuration.Exploiters, Player)
     if (i) then
         -- // Remove
-        table.remove(Comrades, i)
+        table.remove(Configuration.Exploiters, i)
 
         -- // Fire
         Manager:Fire("ExploiterLeaving", Player)
@@ -58,23 +59,16 @@ PlayerConnection = Players.PlayerRemoving:Connect(function(Player)
 end)
 
 -- // See when an exploiter chats
-local ChattedConnection
-ChattedConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
+Configuration.Connections.ChattedConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
     -- // Check if the player is cached
-    if (table.find(Comrades, Player)) then
+    if (table.find(Configuration.Exploiters, Player)) then
         -- // Fire
         Manager:Fire("ExploiterChatted", ChatType, Player, Message, TargetPlayer)
     end
 end)
 
--- // Connect to signals
-Manager:Connect("ExploiterJoined", function(Player)
-    print("Hello fellow comrade: " .. Player.Name)
-end)
-
-Manager:Connect("ExploiterLeaving", function(Player)
-    print("Goodbye fellow comrade: " .. Player.Name .. " :(")
-end)
-
 -- // Chat the secret
-Players:Chat(Secret)
+Players:Chat(Configuration.Secret)
+
+-- // Return
+return Configuration
