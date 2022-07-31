@@ -25,6 +25,7 @@ do
         self.Signals:Add("ItemRemoved")
         self.Signals:Add("ItemAdded")
         self.Signals:Add("StepCompleted")
+        self.Signals:Add("QueueCleared")
 
         -- // Return object
         return self
@@ -92,6 +93,11 @@ do
         table.remove(self.Queue, 1)
         self.Signals:Fire("ItemRemoved", Item, 1)
         self.Signals:Fire("StepCompleted", Item)
+
+        -- // Check if queue is empty
+        if (#self.Queue == 0) then
+            self.Signals:Fire("QueueCleared")
+        end
     end
 
     -- // Automatically runs the queue
