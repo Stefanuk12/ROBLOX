@@ -49,6 +49,7 @@ local function ArrayToString(t, sep)
 end
 
 -- // __namecall hook
+local GetFullName = game.GetFullName
 local __namecallFormat = "__namecall -> self   = %s\n              method = %s\n              args   = %s\n"
 local __namecall
 __namecall = hookmetamethod(game, "__namecall", function(...)
@@ -65,7 +66,7 @@ __namecall = hookmetamethod(game, "__namecall", function(...)
         table.remove(args2, 1)
 
         -- // Add to output
-        local selfName = self.GetFullName(self)
+        local selfName = GetFullName(self)
         local ParsedArgs = ArrayToString(args2, ", ")
         Output = Output .. __namecallFormat.format(__namecallFormat, selfName, method, ParsedArgs)
     end
@@ -84,7 +85,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     -- // Make sure the spy is enabled
     if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
-        local tName = t:GetFullName(t)
+        local tName = GetFullName(t)
         Output = Output .. __indexFormat:format(tName, k)
     end
 
@@ -102,7 +103,7 @@ __newindex = hookmetamethod(game, "__index", function(t, k, v)
     -- // Make sure the spy is enabled
     if (EnableSpy and (callingscript == TargetScript or not TargetScript)) then
         -- // Add to output
-        local tName = t:GetFullName()
+        local tName = GetFullName(t)
         local stringv = safetostring(v)
         Output = Output .. __newindexFormat:format(tName, k, stringv)
     end
