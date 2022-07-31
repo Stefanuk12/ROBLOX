@@ -34,8 +34,9 @@ do
     -- // Adds an item to the queue
     function QueueManager.Add(self, Item)
         -- // Create the object
+        local Id = HttpService:GenerateGUID(false)
         local Object = {
-            Id = HttpService:GenerateGUID(false),
+            Id = Id,
             Item = Item
         }
 
@@ -44,6 +45,9 @@ do
 
         -- // Fire signal
         self.Signals:Fire("ItemAdded", Object)
+
+        -- // Return Id
+        return Id
     end
 
     -- // Gets an item from the queue
