@@ -5,6 +5,7 @@ local TeleportService = game:GetService("TeleportService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
+local queue_on_teleport = syn.queue_on_teleport or queue_on_teleport
 
 -- // Hop Manager
 local HopManager = {}
@@ -78,7 +79,7 @@ do
         return false
     end
 
-    -- // Failsafe hop
+    -- // Failsafe hop (generally don't use this)
     function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime, Servers, I)
         -- // Default
         RetryTime = RetryTime or 1
@@ -165,7 +166,7 @@ do
     end
 
     -- // Server hop
-    function HopManager.Hop(self, PlaceId, KickBeforeTeleport)
+    function HopManager.Hop(self, PlaceId, KickBeforeTeleport, Script)
         -- // Default
         PlaceId = PlaceId or tostring(game.PlaceId)
         KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
@@ -179,6 +180,11 @@ do
 
         -- // Set and save
         self:Set(JobId)
+
+        -- // Executes the script before teleporting
+        if (typeof(Script) == "string") then
+            queue_on_teleport(Script)
+        end
 
         -- // Kick
         if (KickBeforeTeleport) then
