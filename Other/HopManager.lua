@@ -166,13 +166,16 @@ do
     end
 
     -- // Server hop
-    function HopManager.Hop(self, PlaceId, KickBeforeTeleport, Script)
+    function HopManager.Hop(self, PlaceId, KickBeforeTeleport, Script, SortFunc)
         -- // Default
         PlaceId = PlaceId or tostring(game.PlaceId)
         KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
 
         -- // Vars
         local Servers = self:GetServerList(PlaceId)
+        if (SortFunc) then
+            table.sort(Servers, SortFunc)
+        end
         local Server = Servers[1]
 
         -- // Vars
