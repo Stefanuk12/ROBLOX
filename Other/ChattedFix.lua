@@ -2,6 +2,7 @@
     Information:
 
     Fixes old .Chatted scripts by firing it when OnMessageDoneFiltering is called instead.
+    Also works for PlayerChatted but some things are nil
 
     Simply put in autoexec.
 ]]
@@ -27,4 +28,5 @@ ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEve
 
     -- // Fire
     firesignal(Player.Chatted, Message, Channel)
+    firesignal(Players.PlayerChatted, nil, Player, Message, nil)
 end)
