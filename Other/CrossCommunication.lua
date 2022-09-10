@@ -15,6 +15,7 @@ local Manager = SignalManager.new()
 -- // Configuration
 local Configuration = {
     Secret = "hello comrade",
+    Signals = Manager,
     Exploiters = {},
     Connections = {}
 }
