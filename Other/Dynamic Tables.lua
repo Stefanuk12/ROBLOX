@@ -18,14 +18,7 @@ end
 local function tableHandler(targetTable, onUA)
     local onUA = onUA or function() end
 	return setmetatable({}, {
-		__index = targetTable,
-		__newindex = function(self, index, value)
-		    local updateTable = {}
-		    table.insert(updateTable, {index, value, targetTable[index]})
-			targetTable[index] = value
-			table.insert(updateTable, {index, value, targetTable[index]})
-			onUA(updateTable)
-		end
+		__mode = "s"
 	})
 end
 
