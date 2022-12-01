@@ -27,8 +27,8 @@ local DaHoodSettings = {
 getgenv().DaHoodSettings = DaHoodSettings
 
 -- //
-local function ApplyPredictionFormula(SelectedPart)
-    return SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+function DaHoodSettings.ApplyPredictionFormula(SelectedPart, Velocity)
+    return SelectedPart.CFrame + (Velocity or SelectedPart.Velocity * DaHoodSettings.Prediction)
 end
 
 -- // Hook
@@ -38,7 +38,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and AimingChecks.IsAvailable() and DaHoodSettings.SilentAim) then
         -- // Vars
         local SelectedPart = AimingSelected.Part
-        local Hit = ApplyPredictionFormula(SelectedPart)
+        local Hit = DaHoodSettings.ApplyPredictionFormula(SelectedPart)
 
         -- // Return modded val
         return (k == "Hit" and Hit or SelectedPart)
@@ -55,7 +55,7 @@ function AimLockSettings.AimLockPosition(CameraMode)
     local BeizerData = {}
 
     -- // Hit to account prediction
-    local Hit = ApplyPredictionFormula(AimingSelected.Part)
+    local Hit = DaHoodSettings.ApplyPredictionFormula(AimingSelected.Part)
     local HitPosition = Hit.Position
 
     -- //
@@ -80,3 +80,6 @@ function AimLockSettings.AimLockPosition(CameraMode)
     -- // Return
     return Position, BeizerData
 end
+
+-- // Return
+return DaHoodSettings
