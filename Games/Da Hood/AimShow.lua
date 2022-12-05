@@ -42,7 +42,7 @@ local function CreateBeam(Character: Model)
 
     -- // Set important properties
     Beam.Attachment0 = Character:WaitForChild("Head"):WaitForChild("FaceCenterAttachment")
-    Beam.Enabled = Character:FindFirstDescendant("GunScript") ~= nil
+    Beam.Enabled = Character:FindFirstChild("GunScript", true) ~= nil
 
     -- // Set visual properties
     Beam.Width0 = 0.1
