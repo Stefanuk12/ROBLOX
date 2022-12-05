@@ -1,3 +1,10 @@
+--[[
+    Information:
+
+    - This shows you where people are aiming.
+    - By default: red = aiming at you = danger, green = aiming away from you = safe
+]]
+
 -- // Services
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -12,27 +19,33 @@ local Colours = {
     Away = ColorSequence.new(Color3.new(0, 1, 0), Color3.new(0, 1, 0))
 }
 
--- // Checks if the beam is hitting our character
-local function IsBeamHit(Beam: Beam)
+-- // Checks if the beam is hitting our character and can't go through walls
+local function IsBeamHit(Beam: Beam, MousePos: Vector3)
     -- // Get our character
     local Character = LocalPlayer.Character
-    if (not Character) then
-        return false
-    end
+    local Attachment = Beam.Attachment1
 
     -- // Workout the direction
     local Origin = Beam.Attachment0.WorldPosition
-    local Destination = Beam.Attachment1.WorldPosition
-    local Direction = Destination - Origin
+    local Direction = MousePos - Origin
 
     -- // Fire the ray, making sure it hits something (should unless aiming at sky?)
-    local RaycastResult = Workspace:Raycast(Origin, Direction * 2) -- // Multiplied by 2 as ray might fall too short
+    local raycastParms = RaycastParams.new()
+    raycastParms.FilterDescendantsInstances = {Character, Workspace.CurrentCamera}
+    local RaycastResult = Workspace:Raycast(Origin, Direction * 2, raycastParms) -- // Multiplied by 2 as ray might fall too short
     if (not RaycastResult) then
-        return false
+        Beam.Color = Colours.Away
+        Attachment.WorldPosition = MousePos
+        return
     end
 
-    -- // Check if the part hit is parent of us
-    return RaycastResult.Instance:IsDescendantOf(Character)
+    -- // Set the colour based upon if aiming at us or not
+    if (Character) then
+        Beam.Color = RaycastResult.Instance:IsDescendantOf(Character) and Colours.At or Colours.Away
+    end
+
+    -- // Set the position so the beam can't go through walls
+    Attachment.WorldPosition = RaycastResult.Position
 end
 
 -- // Creates a beam with the default properties
@@ -73,11 +86,9 @@ local function OnCharacter(Character: Model | nil)
     Beam.Attachment1 = Attachment
 
     -- // Constantly update when MousePos updates
-    Attachment.WorldPosition = MousePos.Value
-    Beam.Color = IsBeamHit(Beam) and Colours.At or Colours.Away
+    IsBeamHit(Beam, MousePos.Value)
     MousePos.Changed:Connect(function()
-        Attachment.WorldPosition = MousePos.Value
-        Beam.Color = IsBeamHit(Beam) and Colours.At or Colours.Away
+        IsBeamHit(Beam, MousePos.Value)
     end)
 
     -- // See whenever they equip a gun
