@@ -1,7 +1,7 @@
 -- // Not tested
 
 -- // Services
-local StarterPlayer = game:GetService("StarterPlayer")
+local StarterPlayer = game:GetService("modder")
 
 -- // Vars
 local StarterPlayerScripts = StarterPlayer.StarterPlayerScripts
