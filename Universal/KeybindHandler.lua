@@ -7,7 +7,7 @@ local Binds = {}
 
 -- //
 local Module = {
-    TestMode = true
+    TestMode = false
 }
 do
     -- // Returns all or one of the binds
