@@ -38,16 +38,20 @@ do
     end
 
     -- // Creates a bind
-    function Module.CreateBind(Keybind, Callback, ProcessedCheck, State, Hold)
+    local ValidInputItems = {"KeyCode", "UserInputType"}
+    function Module.CreateBind(Data)
+        -- // Make sure we gave a keybind
+        assert(typeof(Data.Keybind) == "EnumItem" and table.find(ValidInputItems, tostring(Data.Keybind.EnumType)), "Invalid keybind")
+
         -- // Add to binds
         local Id = HttpService:GenerateGUID()
         table.insert(Binds, {
             Id = Id,
-            Keybind = Keybind,
-            Callback = Callback,
-            ProcessedCheck = ProcessedCheck,
-            Hold = Hold,
-            State = State
+            Keybind = Data.Keybind,
+            Callback = Data.Callback or function(State, Bind) end,
+            ProcessedCheck = Data.ProcessedCheck,
+            Hold = Data.Hold,
+            State = Data.State
         })
 
         -- // Return the Id
@@ -163,17 +167,31 @@ Module.CreateConnection()
 
 -- // Test + Example usage
 if (Module.TestMode) then
-    Module.CreateBind(Enum.KeyCode.X, function(State, Bind)
-        print(Bind.Keybind.Name, "was pressed with state", State)
-    end, true)
+    Module.CreateBind({
+        Keybind = Enum.KeyCode.X,
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
+        end
+    })
+    Module.CreateBind({
+        Keybind = Enum.UserInputType.MouseButton2,
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
+        end
+    })
 
-    Module.CreateBind(Enum.UserInputType.MouseButton1, function(State, Bind)
-        print(Bind.Keybind.Name, "was pressed with state", State)
-    end, true)
 
-    Module.CreateBind(Enum.UserInputType.MouseButton2, function(State, Bind)
-        print(Bind.Keybind.Name, State and "is being" or "is not being", "held down")
-    end, true, true)
+    Module.CreateBind({
+        Keybind = Enum.UserInputType.MouseButton2,
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            local Action = State and "pressed" or "released"
+            print(Bind.Keybind.Name .. " was " .. Action)
+        end,
+        Hold = true
+    })
 end
 
 -- // Return
