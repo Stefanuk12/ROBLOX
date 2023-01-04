@@ -38,7 +38,7 @@ do
     end
 
     -- // Creates a bind
-    function Module.CreateBind(Keybind, Callback, ProcessedCheck, State)
+    function Module.CreateBind(Keybind, Callback, ProcessedCheck, State, Hold)
         -- // Add to binds
         local Id = HttpService:GenerateGUID()
         table.insert(Binds, {
@@ -46,7 +46,8 @@ do
             Keybind = Keybind,
             Callback = Callback,
             ProcessedCheck = ProcessedCheck,
-            State = false
+            Hold = Hold,
+            State = State
         })
 
         -- // Return the Id
@@ -94,7 +95,6 @@ do
     function Module.CreateConnection()
         -- // Connects to whenever we make an input
         Module.InputBeganConnection = UserInputService.InputBegan:Connect(function(Input, gameProcessedEvent)
-            print(gameProcessedEvent)
             -- // Loop through all binds
             for _, Bind in ipairs(Binds) do
                 -- // Check
@@ -105,7 +105,34 @@ do
                 end
 
                 -- // Fire
-                Bind.State = not Bind.State
+                if (Bind.Hold) then
+                    Bind.State = true
+                else
+                    Bind.State = not Bind.State
+                end
+
+                Bind.Callback(Bind.State, Bind)
+            end
+        end)
+
+        -- // See whenever we lift up
+        Module.InputEndedConnection = UserInputService.InputEnded:Connect(function(Input, gameProcessedEvent)
+            -- // Loop through all binds
+            for _, Bind in ipairs(Binds) do
+                -- // Make sure is a hold
+                if (not Bind.Hold) then
+                    continue
+                end
+
+                -- // Check
+                local Keybind = Bind.Keybind
+                local Property = tostring(Keybind.EnumType)
+                if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
+                    continue
+                end
+
+                -- // Fire
+                Bind.State = false
                 Bind.Callback(Bind.State, Bind)
             end
         end)
@@ -114,8 +141,16 @@ do
     -- // Completely destroys everything
     function Module.Destroy(KeepConnection)
         -- // Destroy connection
-        if (not KeepConnection and Module.InputBeganConnection) then
-            Module.InputBeganConnection:Disconnect()
+        if (not KeepConnection) then
+            if (Module.InputBeganConnection) then
+                Module.InputBeganConnection:Disconnect()
+                Module.InputBeganConnection = nil
+            end
+
+            if (Module.InputEndedConnection) then
+                Module.InputEndedConnection:Disconnect()
+                Module.InputEndedConnection = nil
+            end
         end
 
         -- // Empty binds
@@ -135,6 +170,10 @@ if (Module.TestMode) then
     Module.CreateBind(Enum.UserInputType.MouseButton1, function(State, Bind)
         print(Bind.Keybind.Name, "was pressed with state", State)
     end, true)
+
+    Module.CreateBind(Enum.UserInputType.MouseButton2, function(State, Bind)
+        print(Bind.Keybind.Name, State and "is being" or "is not being", "held down")
+    end, true, true)
 end
 
 -- // Return
