@@ -49,9 +49,9 @@ do
             Id = Id,
             Keybind = Data.Keybind,
             Callback = Data.Callback or function(State, Bind) end,
-            ProcessedCheck = Data.ProcessedCheck,
-            Hold = Data.Hold,
-            State = Data.State
+            ProcessedCheck = Data.ProcessedCheck or false,
+            Hold = Data.Hold or false,
+            State = Data.State or false
         })
 
         -- // Return the Id
