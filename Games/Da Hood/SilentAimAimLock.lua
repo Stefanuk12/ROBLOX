@@ -28,7 +28,7 @@ getgenv().DaHoodSettings = DaHoodSettings
 
 -- //
 function DaHoodSettings.ApplyPredictionFormula(SelectedPart, Velocity)
-    return SelectedPart.CFrame + (Velocity or SelectedPart.Velocity * DaHoodSettings.Prediction)
+    return SelectedPart.CFrame + (Velocity * DaHoodSettings.Prediction)
 end
 
 -- // Hook
@@ -38,7 +38,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and AimingChecks.IsAvailable() and DaHoodSettings.SilentAim) then
         -- // Vars
         local SelectedPart = AimingSelected.Part
-        local Hit = DaHoodSettings.ApplyPredictionFormula(SelectedPart)
+        local Hit = DaHoodSettings.ApplyPredictionFormula(SelectedPart, AimingSelected.Velocity * Vector3.new(1, 0.1, 1))
 
         -- // Return modded val
         return (k == "Hit" and Hit or SelectedPart)
