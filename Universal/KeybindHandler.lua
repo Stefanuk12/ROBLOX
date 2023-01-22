@@ -41,7 +41,8 @@ do
     local ValidInputItems = {"KeyCode", "UserInputType"}
     function Module.CreateBind(Data)
         -- // Make sure we gave a keybind
-        assert(typeof(Data.Keybind) == "EnumItem" and table.find(ValidInputItems, tostring(Data.Keybind.EnumType)), "Invalid keybind")
+        local Keybind = typeof(Data.Keybind) == "function" and Data.Keybind() or Data.Keybind
+        assert(typeof(Keybind) == "EnumItem" and table.find(ValidInputItems, tostring(Keybind.EnumType)), "Invalid keybind")
 
         -- // Add to binds
         local Id = HttpService:GenerateGUID()
