@@ -103,6 +103,7 @@ do
             for _, Bind in ipairs(Binds) do
                 -- // Check
                 local Keybind = Bind.Keybind
+                Keybind = typeof(Keybind) == "function" and Keybind() or Keybind
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
@@ -130,6 +131,7 @@ do
 
                 -- // Check
                 local Keybind = Bind.Keybind
+                Keybind = typeof(Keybind) == "function" and Keybind() or Keybind
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
