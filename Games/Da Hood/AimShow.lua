@@ -20,7 +20,7 @@ local Colours = {
 }
 
 -- // Checks if the beam is hitting our character and can't go through walls
-local function IsBeamHit(Beam: Beam, MousePos: Vector3)
+local function IsBeamHit(Beam, MousePos)
     -- // Get our character
     local Character = LocalPlayer.Character
     local Attachment = Beam.Attachment1
@@ -49,7 +49,7 @@ local function IsBeamHit(Beam: Beam, MousePos: Vector3)
 end
 
 -- // Creates a beam with the default properties
-local function CreateBeam(Character: Model)
+local function CreateBeam(Character)
     -- // Create beam
     local Beam = Instance.new("Beam", Character)
 
@@ -69,7 +69,7 @@ local function CreateBeam(Character: Model)
 end
 
 -- // Apply whenever we get a new character
-local function OnCharacter(Character: Model | nil)
+local function OnCharacter(Character)
     -- // Make sure character exists
     if (not Character) then
         return
@@ -109,7 +109,7 @@ local function OnCharacter(Character: Model | nil)
 end
 
 -- // Apply on each player
-local function OnPlayer(Player: Player)
+local function OnPlayer(Player)
     OnCharacter(Player.Character)
     Player.CharacterAdded:Connect(OnCharacter)
 end
