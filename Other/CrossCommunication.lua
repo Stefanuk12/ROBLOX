@@ -24,6 +24,7 @@ local Configuration = {
 local Players = game:GetService("Players")
 
 -- // Vars
+local LocalPlayer = Players.LocalPlayer
 local AllChatType = Enum.PlayerChatType.All
 
 -- // Create signals
@@ -34,7 +35,7 @@ Manager:Add("ExploiterChatted")
 -- // See when people chat
 Configuration.Connections.ChatConnection = Players.PlayerChatted:Connect(function(ChatType, Player, Message, TargetPlayer)
     -- // Make sure message matches and we have not already gotten the user
-    if (Message == Configuration.Secret and ChatType == AllChatType and TargetPlayer == nil and not table.find(Configuration.Exploiters, Player)) then
+    if (Player ~= LocalPlayer and Message == Configuration.Secret and ChatType == AllChatType and TargetPlayer == nil and not table.find(Configuration.Exploiters, Player)) then
         -- // Add the the player
         table.insert(Configuration.Exploiters, Player)
 
