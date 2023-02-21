@@ -83,7 +83,15 @@ do
     function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime, Servers, I)
         -- // Default
         RetryTime = RetryTime or 1
-
+        local RetrySame = {
+            Enum.TeleportResult.Failure,
+            Enum.TeleportResult.Flooded
+        }
+        local RetryDifferent = {
+            Enum.TeleportResult.Unauthorized,
+            Enum.TeleportResult.GameFull,
+            Enum.TeleportResult.Failure
+        }
         -- // See whenever the teleport failed
         local Connection
         Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage)
@@ -96,7 +104,7 @@ do
             print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
 
             -- // Check the TeleportResult to ensure it is appropriate to retry
-            if (TeleportResult == Enum.TeleportResult.Failure or TeleportResult == Enum.TeleportResult.Flooded) then
+            if (table.find(RetrySame, TeleportResult)) then
                 -- // Disconnect
                 Connection:Disconnect()
 
@@ -107,8 +115,8 @@ do
                 end)
             end
 
-            -- // Check if server was full
-            if (TeleportResult == Enum.TeleportResult.GameFull) then
+            -- // Check if server was full or something
+            if (table.find(RetryDifferent, TeleportResult)) then
                 -- // Disconnect
                 Connection:Disconnect()
 
