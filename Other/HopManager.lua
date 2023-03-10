@@ -21,6 +21,7 @@ do
 
         -- // Set vars
         self.SaveLocation = Data.SaveLocation or "recenthops.json"
+        self.MinimumPlayers = Data.MinimumPlayers or 1
         self.HopInterval = Data.HopInterval or 300
         self.RecentHops = Data.RecentHops or {}
         self.ServerFormat = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s"
@@ -150,7 +151,7 @@ do
             -- // Add to server list
             for _, Server in ipairs(ServerData.data) do
                 -- // Check if server is eligable
-                if (Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
+                if (Server.playing and Server.playing >= self.MinimumPlayers and Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
                     if (FoundGoodA) then
                         _FoundGoodB = true
                     end
