@@ -8,66 +8,138 @@ local TeleportService = game:GetService("TeleportService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
-local queue_on_teleport = syn.queue_on_teleport or queue_on_teleport
+local queue_on_teleport = syn.queue_on_teleport or queue_on_teleport or function(Script) end
+
+-- // Utilities
+local Utilities = {}
+do
+    -- // Combine two tables
+    function Utilities.CombineTables(Base, ToAdd)
+        -- // Default
+        Base = Base or {}
+        ToAdd = ToAdd or {}
+
+        -- // Loop through data we want to add
+        for i, v in pairs(ToAdd) do
+            -- // Recursive
+            local BaseValue = Base[i] or false
+            if (typeof(v) == "table" and typeof(BaseValue) == "table") then
+                Utilities.CombineTables(BaseValue, v)
+                continue
+            end
+
+            -- // Set
+            Base[i] = v
+        end
+
+        -- // Return
+        return Base
+    end
+
+    -- // Deep copying
+    function Utilities.DeepCopy(Original)
+        -- // Assert
+        assert(typeof(Original) == "table", "invalid type for Original (expected table)")
+
+        -- // Vars
+        local Copy = {}
+
+        -- // Loop through original
+        for i, v in pairs(Original) do
+            -- // Recursion if table
+            if (typeof(v) == "table") then
+                v = Utilities.DeepCopy(v)
+            end
+
+            -- // Set
+            Copy[i] = v
+        end
+
+        -- // Return the copy
+        return Copy
+    end
+end
 
 -- // Hop Manager
 local HopManager = {}
 HopManager.__index = HopManager
+HopManager.__type = "HopManager"
 do
+    -- // Default data
+    HopManager.DefaultData = {
+        KickBeforeTeleport = true,
+        MinimumPlayers = 1,
+        MaximumPlayers = 1/0,
+        HopInterval = 300,
+        RetryDelay = 1,
+        SaveLocation = "recenthops.json",
+        ServerFormat = "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&cursor=%s",
+        RecentHops = {},
+        RetrySame = {
+            Enum.TeleportResult.Flooded
+        }
+    }
+
     -- // Constructor
     function HopManager.new(Data)
-        -- // Default
+        -- // Default and assert
         Data = Data or {}
+        assert(typeof(Data) == "table", "invalid type for Data (expected table)")
 
-        -- // Create object
+        -- // Create the object
         local self = setmetatable({}, HopManager)
 
-        -- // Set vars
-        self.SaveLocation = Data.SaveLocation or "recenthops.json"
-        self.MinimumPlayers = Data.MinimumPlayers or 1
-        self.HopInterval = Data.HopInterval or 300
-        self.RecentHops = Data.RecentHops or {}
-        self.ServerFormat = Data.ServerFormat or "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100&cursor=%s"
+        -- // Load the defaults
+        self.Data = Utilities.CombineTables(Utilities.DeepCopy(HopManager.DefaultData), Data)
 
-        -- // Load
+        -- // Load the recent hops
         self:LoadFromFile()
 
-        -- // Return object
+        -- // Return the object
         return self
     end
 
     -- // Load hop data
-    function HopManager.LoadFromFile(self)
+    function HopManager:LoadFromFile()
         -- // Get the data
-        local RecentHopData = isfile(self.SaveLocation) and readfile(self.SaveLocation) or '{}'
+        local Data = self.Data
+        local RecentHopData = isfile(Data.SaveLocation) and readfile(Data.SaveLocation) or "{}"
 
         -- // Decode it
         local RecentHops = HttpService:JSONDecode(RecentHopData)
-        self.RecentHops = RecentHops
+        Data.RecentHops = RecentHops
 
         -- // Return it
         return RecentHops
     end
 
-    -- // Save hop data
-    function HopManager.Save(self)
-        writefile(self.SaveLocation, HttpService:JSONEncode(self.RecentHops))
+    -- // Saves the hop data to to a file
+    function HopManager:Save()
+        local Data = self.Data
+        writefile(Data.SaveLocation, HttpService:JSONEncode(Data.RecentHops))
     end
 
     -- // Set hop data
-    function HopManager.Set(self, JobId)
+    function HopManager:SaveJobId(JobId)
+        -- // Assert
+        assert(typeof(JobId) == "string", "invalid type for JobId (expected string)")
+
         -- // Add it and save
-        self.RecentHops[JobId] = tick()
+        self.Data.RecentHops[JobId] = tick()
         self:Save()
 
         -- // Return
         return true
     end
 
-    -- // Check hop data
-    function HopManager.CheckData(self, JobId)
+    -- // Ensures it's a valid job id
+    function HopManager:CheckJobId(JobId)
+        -- // Assert
+        assert(typeof(JobId) == "string", "invalid type for JobId (expected string)")
+
         -- // Vars
-        local HopData = self.RecentHops[JobId]
+        local Data = self.Data
+        local HopData = Data.RecentHops[JobId]
 
         -- // Make sure we have the data
         if (not HopData) then
@@ -75,7 +147,7 @@ do
         end
 
         -- // Check if it has been the interval since
-        if ((tick() - HopData) > self.HopInterval) then
+        if ((tick() - HopData) > Data.HopInterval) then
             return self:Set(JobId)
         end
 
@@ -83,129 +155,125 @@ do
         return false
     end
 
-    -- // Failsafe hop (generally don't use this)
-    function HopManager.FailsafeHop(self, PlaceId, JobId, RetryTime, Servers, I)
-        -- // Default
-        RetryTime = RetryTime or 1
-        local RetrySame = {
-            Enum.TeleportResult.Flooded
-        }
+    -- // Gets a server list of valid servers
+    function HopManager:GetServerList(PlaceId)
+        -- // Default and assert
+        PlaceId = PlaceId or game.PlaceId
+        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
+
+        -- // Vars
+        local Data = self.Data
+        local Cursor = ""
+        local Servers = {}
+
+        -- // Constant loop
+        while (true) do
+            -- // Get the servers
+            local ServersURL = Data.ServerFormat:format(PlaceId, Cursor)
+            local ServerData = HttpService:JSONDecode(game:HttpGet(ServersURL))
+
+            -- // Loop through the server list
+            for _, Server in ipairs(ServerData.data) do
+                --- // Vars
+                local PlayerCount = Server.playing
+                local ServerJobId = Server.id
+
+                -- // Check the server is not the current server
+                if (game.JobId == ServerJobId) then
+                    continue
+                end
+
+                -- // Validate player count
+                if not (PlayerCount and PlayerCount >= self.MinimumPlayers and PlayerCount <= Server.maxPlayers and PlayerCount <= self.MaximumPlayers) then
+                    continue
+                end
+
+                -- // Validate the server's id
+                if (not self:CheckJobId(ServerJobId)) then
+                    continue
+                end
+
+                -- // Add server
+                table.insert(Servers, Server)
+            end
+
+            -- // Ensure we have enough servers
+            if (#Servers > 0) then
+                break
+            end
+
+            -- // Increment cursor
+            Cursor = ServerData.nextPageCursor
+        end
+
+        -- // Return all of the servers
+        return Servers
+    end
+
+    -- // Retries teleport (additional args passed to :Hop)
+    function HopManager:FailsafeHop(...)
+        -- // Vars
+        local ExtraArgs = {...}
+        local Data = self.Data
 
         -- // See whenever the teleport failed
         local Connection
-        Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage)
+        Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage, PlaceId, TeleportOptions)
             -- // Make sure we failed to teleport
             if (Player ~= LocalPlayer) then
                 return
             end
 
-            -- //
+            -- // Set the JobId to hop to
+            local JobId = table.find(Data.RetrySame) and TeleportOptions.ServerInstanceId
+
+            -- // Notify then disconnect
             print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
+            Connection:Disconnect()
 
-            -- // Check the TeleportResult to ensure it is appropriate to retry
-            if (table.find(RetrySame, TeleportResult)) then
-                -- // Disconnect
-                -- Connection:Disconnect()
-
-                -- // Retry in RetryTime seconds
-                delay(RetryTime, function()
-                    print("Reattempting teleport")
-                    TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
-                end)
-
-                -- // Done
-                return
-            end
-
-            -- // Disconnect
-            -- Connection:Disconnect()
-
-            -- // Default
-            Servers = Servers or self:GetServerList(PlaceId)
-            I = I or 1
-
-            -- // Retry in RetryTime seconds
-            delay(RetryTime, function()
+            -- // Retry teleport in time
+            task.delay(Data.RetryDelay, function()
                 print("Reattempting teleport")
-                TeleportService:TeleportToPlaceInstance(PlaceId, Servers[I + 1].id)
+                self:Hop(PlaceId, JobId, unpack(ExtraArgs))
             end)
         end)
+
+        -- // Return
+        return Connection
     end
 
-    -- // Get Server List - idk how to explain foundgood a and b but its to make sure we get joinable servers
-    function HopManager.GetServerList(self, PlaceId)
-        -- // Vars
-        local Cursor = ""
-        local Servers = {}
-        local FoundGoodA = false
-        local FoundGoodB = false
+    -- // Hop servers
+    function HopManager:Hop(PlaceId, JobId, Script)
+        -- // Default and assert
+        PlaceId = PlaceId or game.PlaceId
+        Script = Script or ""
+        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
+        assert(typeof(JobId) == "string" or JobId == nil, "invalid type for JobId (expected string or nil)")
+        assert(typeof(Script) == "string", "invalid type for Script (expected string)")
 
-        -- // Get all the servers until we found good servers
-        repeat
-            -- // Get the servers
-            local ServerData = HttpService:JSONDecode(game:HttpGet(self.ServerFormat:format(PlaceId, Cursor)))
-            local _FoundGoodB = false
-
-            -- // Add to server list
-            for _, Server in ipairs(ServerData.data) do
-                -- // Check if server is eligable
-                if (Server.playing and Server.playing >= self.MinimumPlayers and Server.playing ~= Server.maxPlayers and Server.id ~= game.JobId and self:CheckData(Server.id)) then
-                    if (FoundGoodA) then
-                        _FoundGoodB = true
-                    end
-                    FoundGoodA = true
-
-                    table.insert(Servers, Server)
-                end
-            end
-
-            -- //
-            if (_FoundGoodB) then
-                FoundGoodB = true
-            end
-
-            -- // Set cursor for next iteration
-            Cursor = ServerData.nextPageCursor
-        until not Cursor or FoundGoodB
-
-        -- // Return all the servers
-        return Servers
-    end
-
-    -- // Server hop
-    function HopManager.Hop(self, PlaceId, KickBeforeTeleport, Script, SortFunc)
-        -- // Default
-        PlaceId = PlaceId or tostring(game.PlaceId)
-        KickBeforeTeleport = (KickBeforeTeleport == nil and true or KickBeforeTeleport)
-
-        -- // Vars
-        local Servers = self:GetServerList(PlaceId)
-        if (SortFunc) then
-            table.sort(Servers, SortFunc)
-        end
-        local Server = Servers[1]
-
-        -- // Vars
-        local JobId = Server.id
-
-        -- // Set and save
-        self:Set(JobId)
-
-        -- // Executes the script before teleporting
-        if (typeof(Script) == "string") then
-            queue_on_teleport(Script)
+        -- // Grab the server if we're not given one
+        if (not JobId) then
+            local Servers = self:GetServerList(PlaceId)
+            local TargetServer = Servers[1]
+            JobId = TargetServer.JobId
         end
 
-        -- // Kick
-        if (KickBeforeTeleport) then
+        -- // Save the Id so we don't come back to it
+        self:SaveJobId(JobId)
+
+        -- // Execute script
+        queue_on_teleport(Script)
+
+        -- // Kicking
+        if (self.KickBeforeTeleport) then
             LocalPlayer:Kick("Teleporting...")
         end
 
-        -- // Teleport
-        self:FailsafeHop(PlaceId, JobId, Servers)
+        -- // Teleport to the server
+        self:FailsafeHop(Script)
         TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
     end
 end
 
 -- // Return
-return HopManager
+return HopManager, Utilities
