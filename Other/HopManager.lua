@@ -1,3 +1,6 @@
+-- // Wait until the game is loaded
+repeat task.wait() until game:IsLoaded()
+
 -- // Services
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
