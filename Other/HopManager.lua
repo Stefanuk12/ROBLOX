@@ -88,14 +88,9 @@ do
         -- // Default
         RetryTime = RetryTime or 1
         local RetrySame = {
-            Enum.TeleportResult.Failure,
             Enum.TeleportResult.Flooded
         }
-        local RetryDifferent = {
-            Enum.TeleportResult.Unauthorized,
-            Enum.TeleportResult.GameFull,
-            Enum.TeleportResult.Failure
-        }
+
         -- // See whenever the teleport failed
         local Connection
         Connection = TeleportService.TeleportInitFailed:Connect(function(Player, TeleportResult, ErrorMessage)
@@ -110,30 +105,30 @@ do
             -- // Check the TeleportResult to ensure it is appropriate to retry
             if (table.find(RetrySame, TeleportResult)) then
                 -- // Disconnect
-                Connection:Disconnect()
+                -- Connection:Disconnect()
 
                 -- // Retry in RetryTime seconds
                 delay(RetryTime, function()
                     print("Reattempting teleport")
                     TeleportService:TeleportToPlaceInstance(PlaceId, JobId)
                 end)
+
+                -- // Done
+                return
             end
 
-            -- // Check if server was full or something
-            if (table.find(RetryDifferent, TeleportResult)) then
-                -- // Disconnect
-                Connection:Disconnect()
+            -- // Disconnect
+            -- Connection:Disconnect()
 
-                -- // Default
-                Servers = Servers or self:GetServerList(PlaceId)
-                I = I or 1
+            -- // Default
+            Servers = Servers or self:GetServerList(PlaceId)
+            I = I or 1
 
-                -- // Retry in RetryTime seconds
-                delay(RetryTime, function()
-                    print("Reattempting teleport")
-                    TeleportService:TeleportToPlaceInstance(PlaceId, Servers[I + 1].id)
-                end)
-            end
+            -- // Retry in RetryTime seconds
+            delay(RetryTime, function()
+                print("Reattempting teleport")
+                TeleportService:TeleportToPlaceInstance(PlaceId, Servers[I + 1].id)
+            end)
         end)
     end
 
