@@ -226,7 +226,7 @@ do
             end
 
             -- // Set the JobId to hop to
-            local JobId = table.find(Data.RetrySame) and TeleportOptions.ServerInstanceId
+            local JobId = table.find(Data.RetrySame, TeleportResult) and TeleportOptions.ServerInstanceId
 
             -- // Notify then disconnect
             print("Teleport failed, TeleportResult: " .. TeleportResult.Name)
