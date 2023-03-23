@@ -175,7 +175,8 @@ do
             -- // Loop through the server list
             for _, Server in ipairs(ServerData.data) do
                 --- // Vars
-                local PlayerCount = Server.playing
+                local PlayerCount = Server.playing or 0
+                local MaxPlayers = Server.maxPlayers or 1/0
                 local ServerJobId = Server.id
 
                 -- // Check the server is not the current server
@@ -184,7 +185,7 @@ do
                 end
 
                 -- // Validate player count
-                if not (PlayerCount and PlayerCount >= self.MinimumPlayers and PlayerCount <= Server.maxPlayers and PlayerCount <= self.MaximumPlayers) then
+                if not (PlayerCount >= Data.MinimumPlayers and PlayerCount <= MaxPlayers and PlayerCount <= Data.MaximumPlayers) then
                     continue
                 end
 
