@@ -256,7 +256,7 @@ do
         if (not JobId) then
             local Servers = self:GetServerList(PlaceId)
             local TargetServer = Servers[1]
-            JobId = TargetServer.JobId
+            JobId = TargetServer.id
         end
 
         -- // Save the Id so we don't come back to it
@@ -266,7 +266,7 @@ do
         queue_on_teleport(Script)
 
         -- // Kicking
-        if (self.KickBeforeTeleport) then
+        if (self.Data.KickBeforeTeleport) then
             LocalPlayer:Kick("Teleporting...")
         end
 
