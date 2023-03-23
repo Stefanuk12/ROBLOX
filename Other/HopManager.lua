@@ -143,12 +143,12 @@ do
 
         -- // Make sure we have the data
         if (not HopData) then
-            return self:Set(JobId)
+            return self:SaveJobId(JobId)
         end
 
         -- // Check if it has been the interval since
         if ((tick() - HopData) > Data.HopInterval) then
-            return self:Set(JobId)
+            return self:SaveJobId(JobId)
         end
 
         -- // Return false
