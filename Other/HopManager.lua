@@ -73,7 +73,7 @@ do
         HopInterval = 300,
         RetryDelay = 1,
         SaveLocation = "recenthops.json",
-        ServerFormat = "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&cursor=%s",
+        ServerFormat = "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true&cursor=%s",
         RecentHops = {},
         RetrySame = {
             Enum.TeleportResult.Flooded
