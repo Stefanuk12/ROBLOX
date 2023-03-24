@@ -67,6 +67,7 @@ HopManager.__type = "HopManager"
 do
     -- // Default data
     HopManager.DefaultData = {
+        HopMode = "Random", -- // if a number, that index will be selected. options: (number), Random, Middle
         KickBeforeTeleport = true,
         MinimumPlayers = 1,
         MaximumPlayers = 1/0,
@@ -306,8 +307,23 @@ do
         local sPlaceId = tostring(PlaceId)
         local Servers
         if (not JobId) then
+            -- // Get the list
+            local HopMode = self.Data.HopMode
             Servers = self:GetServerList(PlaceId)
-            local TargetServer = Servers[sPlaceId][1]
+            local PlaceServers = Servers[sPlaceId]
+
+            -- // Find which server we want
+            local i = HopMode
+            if (typeof(HopMode) == "string") then
+                if (HopMode == "Random") then
+                    i = math.random(1, #PlaceServers)
+                elseif (HopMode == "Middle") then
+                    i = math.round(#PlaceServers / 2)
+                end
+            end
+            local TargetServer = PlaceServers[i]
+
+            -- // Set
             JobId = TargetServer.id
         end
 
