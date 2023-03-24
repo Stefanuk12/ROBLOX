@@ -268,6 +268,7 @@ do
         -- // Kicking
         if (self.Data.KickBeforeTeleport) then
             LocalPlayer:Kick("Teleporting...")
+            task.wait()
         end
 
         -- // Teleport to the server
