@@ -106,11 +106,11 @@ do
         local RecentHopData = isfile(Data.SaveLocation) and readfile(Data.SaveLocation) or "{}"
 
         -- // Decode it
-        local RecentHops = HttpService:JSONDecode(RecentHopData)
-        Data.RecentHops = RecentHops
+        local _, RecentHops = pcall(HttpService.JSONDecode, HttpService, RecentHopData)
+        Data.RecentHops = RecentHops or {}
 
         -- // Return it
-        return RecentHops
+        return Data.RecentHops
     end
 
     -- // Saves the hop data to to a file
