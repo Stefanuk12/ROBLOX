@@ -75,6 +75,14 @@ do
         SaveLocation = "recenthops.json",
         ServerFormat = "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true&cursor=%s",
         RecentHops = {},
+        MassServerList = {
+            Enabled = false,
+            RemoveAfterTeleport = false,
+            Refresh = 300,
+            Amount = 500,
+            MinimumServers = 100,
+            SaveLocation = "massserver.json",
+        },
         RetrySame = {
             Enum.TeleportResult.Flooded
         }
@@ -155,26 +163,38 @@ do
         return false
     end
 
-    -- // Gets a server list of valid servers
-    function HopManager:GetServerList(PlaceId)
-        -- // Default and assert
-        PlaceId = PlaceId or game.PlaceId
-        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
-
+    -- // Mass server list function
+    function HopManager:GetMassServerListCreate(PlaceId, Count)
         -- // Vars
         local Data = self.Data
-        local Cursor = ""
-        local Servers = {}
+        Count = Count or Data.MassServerList.Amount
+        PlaceId = PlaceId or game.PlaceId
+        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
+        assert(typeof(Count) == "number", "invalid type for Count (expected number)")
 
-        -- // Constant loop
+        -- // Vars
+        local ServerListPlaceId = {}
+
+        -- // Infinite loop
+        local Cursor = ""
         while (true) do
+            -- // Check if big enough
+            if (not Cursor or #ServerListPlaceId >= Count) then
+                break
+            end
+
             -- // Get the servers
             local ServersURL = Data.ServerFormat:format(PlaceId, Cursor)
             local ServerData = HttpService:JSONDecode(game:HttpGet(ServersURL))
 
             -- // Loop through the server list
             for _, Server in ipairs(ServerData.data) do
-                --- // Vars
+                -- // Check we got enough
+                if (#ServerListPlaceId >= Count) then
+                    break
+                end
+
+                -- // Vars
                 local PlayerCount = Server.playing or 0
                 local MaxPlayers = Server.maxPlayers or 1/0
                 local ServerJobId = Server.id
@@ -189,26 +209,56 @@ do
                     continue
                 end
 
-                -- // Validate the server's id
-                if (not self:CheckJobId(ServerJobId)) then
-                    continue
-                end
-
                 -- // Add server
-                table.insert(Servers, Server)
-            end
-
-            -- // Ensure we have enough servers
-            if (#Servers > 0) then
-                break
+                table.insert(ServerListPlaceId, Server)
             end
 
             -- // Increment cursor
             Cursor = ServerData.nextPageCursor
         end
 
+        -- // Return
+        return ServerListPlaceId
+    end
+    function HopManager:GetMassServerList(PlaceId)
+        -- // Default and assert
+        PlaceId = PlaceId or game.PlaceId
+        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
+        local sPlaceId = tostring(PlaceId)
+
+        -- // Check the file already exist
+        local ConfigData = self.Data.MassServerList
+        if (not isfile(ConfigData.SaveLocation)) then
+            writefile(ConfigData.SaveLocation, "{}")
+        end
+
+        -- // Get the file
+        local Now = DateTime.now().UnixTimestamp
+
+        local _, ServerList = pcall(HttpService.JSONDecode, HttpService, readfile(ConfigData.SaveLocation))
+        ServerList = ServerList or {}
+        ServerList.Time = ServerList.Time or Now
+        ServerList[sPlaceId] = ServerList[sPlaceId] or {}
+
+        -- // Check the place id length / Check time
+        if (#ServerList[sPlaceId] <= ConfigData.MinimumServers) or (Now - ServerList.Time > ConfigData.Refresh)  then
+            ServerList[sPlaceId] = self:GetMassServerListCreate(PlaceId)
+            ServerList.Time = Now
+            writefile(ConfigData.SaveLocation, HttpService:JSONEncode(ServerList))
+        end
+
+        -- // Return
+        return ServerList
+    end
+
+    -- // Gets a server list of valid servers
+    function HopManager:GetServerList(PlaceId)
+        -- // Default and assert
+        PlaceId = PlaceId or game.PlaceId
+        assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
+
         -- // Return all of the servers
-        return Servers
+        return self.Data.MassServerList.Enabled and self:GetMassServerList(PlaceId) or self:GetMassServerListCreate(PlaceId, 100)
     end
 
     -- // Retries teleport (additional args passed to :Hop)
@@ -253,9 +303,11 @@ do
         assert(typeof(Script) == "string", "invalid type for Script (expected string)")
 
         -- // Grab the server if we're not given one
+        local sPlaceId = tostring(PlaceId)
+        local Servers
         if (not JobId) then
-            local Servers = self:GetServerList(PlaceId)
-            local TargetServer = Servers[1]
+            Servers = self:GetServerList(PlaceId)
+            local TargetServer = Servers[sPlaceId][1]
             JobId = TargetServer.id
         end
 
@@ -269,6 +321,13 @@ do
         if (self.Data.KickBeforeTeleport) then
             LocalPlayer:Kick("Teleporting...")
             task.wait()
+        end
+
+        -- // Remove server
+        local MassServerList = self.Data.MassServerList
+        if (Servers and MassServerList.Enabled and MassServerList.RemoveAfterTeleport) then
+            table.remove(Servers[sPlaceId], 1)
+            writefile(MassServerList.SaveLocation, HttpService:JSONEncode(Servers))
         end
 
         -- // Teleport to the server
