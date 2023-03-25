@@ -134,34 +134,40 @@ do
         assert(typeof(JobId) == "string", "invalid type for JobId (expected string)")
 
         -- // Add it and save
-        self.Data.RecentHops[JobId] = tick()
+        self.Data.RecentHops[JobId] = DateTime.now().UnixTimestamp
         self:Save()
 
         -- // Return
         return true
     end
 
-    -- // Ensures it's a valid job id
-    function HopManager:CheckJobId(JobId)
-        -- // Assert
-        assert(typeof(JobId) == "string", "invalid type for JobId (expected string)")
-
+    -- // Check if valid server
+    function HopManager:ValidateServer(Server)
         -- // Vars
         local Data = self.Data
-        local HopData = Data.RecentHops[JobId]
+        local PlayerCount = Server.playing or 0
+        local MaxPlayers = Server.maxPlayers or 1/0
+        local ServerJobId = Server.id
 
-        -- // Make sure we have the data
-        if (not HopData) then
-            return self:SaveJobId(JobId)
+        -- // Check the server is not the current server
+        if (game.JobId == ServerJobId) then
+            return false
         end
 
-        -- // Check if it has been the interval since
-        if ((tick() - HopData) > Data.HopInterval) then
-            return self:SaveJobId(JobId)
+        -- // Validate player count
+        if not (PlayerCount >= Data.MinimumPlayers and PlayerCount <= MaxPlayers and PlayerCount <= Data.MaximumPlayers) then
+            return false
         end
 
-        -- // Return false
-        return false
+        -- // Check against recent hops
+        local Now = DateTime.now().UnixTimestamp
+        local HopData = Data.RecentHops[ServerJobId]
+        if (HopData and (Now - HopData) > Data.HopInterval) then
+            return false
+        end
+
+        -- // Success
+        return true
     end
 
     -- // Mass server list function
@@ -195,18 +201,8 @@ do
                     break
                 end
 
-                -- // Vars
-                local PlayerCount = Server.playing or 0
-                local MaxPlayers = Server.maxPlayers or 1/0
-                local ServerJobId = Server.id
-
-                -- // Check the server is not the current server
-                if (game.JobId == ServerJobId) then
-                    continue
-                end
-
-                -- // Validate player count
-                if not (PlayerCount >= Data.MinimumPlayers and PlayerCount <= MaxPlayers and PlayerCount <= Data.MaximumPlayers) then
+                -- // Check
+                if (not self:ValidateServer(Server)) then
                     continue
                 end
 
@@ -259,7 +255,10 @@ do
         assert(typeof(PlaceId) == "number", "invalid type for PlaceId (expected number)")
 
         -- // Return all of the servers
-        return self.Data.MassServerList.Enabled and self:GetMassServerList(PlaceId) or self:GetMassServerListCreate(PlaceId, 100)
+        return self.Data.MassServerList.Enabled and self:GetMassServerList(PlaceId) or {
+            Time = DateTime.now().UnixTimestamp,
+            [tostring(PlaceId)] = self:GetMassServerListCreate(PlaceId, 100)
+        }
     end
 
     -- // Retries teleport (additional args passed to :Hop)
@@ -311,6 +310,7 @@ do
             local HopMode = self.Data.HopMode
             Servers = self:GetServerList(PlaceId)
             local PlaceServers = Servers[sPlaceId]
+            assert(PlaceServers, "unable to get PlaceServers")
 
             -- // Find which server we want
             local i = HopMode
