@@ -8,7 +8,7 @@ local TeleportService = game:GetService("TeleportService")
 
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
-local queue_on_teleport = syn.queue_on_teleport or queue_on_teleport or function(Script) end
+local queue_on_teleport = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport) or queue_on_teleport or function(Script) end
 
 -- // Utilities
 local Utilities = {}
