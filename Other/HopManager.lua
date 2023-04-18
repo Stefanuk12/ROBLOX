@@ -184,6 +184,11 @@ do
                 Data = HttpService:JSONDecode(game:HttpGet(Url))
             end)
 
+            -- // Break if we got data
+            if (Data) then
+                break
+            end
+
             -- // Log
             local Delay = self.Data.DataRetryDelay
             print("GetServerDataURL errored, retrying in", Delay, "seconds")
