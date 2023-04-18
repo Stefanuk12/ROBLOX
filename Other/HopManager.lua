@@ -74,6 +74,7 @@ do
         MaximumPlayers = 1/0,
         HopInterval = 300,
         RetryDelay = 1,
+        DataRetryDelay = 1,
         SaveLocation = "recenthops.json",
         ServerFormat = "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true&cursor=%s",
         RecentHops = {},
@@ -171,6 +172,30 @@ do
         return true
     end
 
+    -- // Grabs server data from URL, automatically retries if error
+    function HopManager:GetServerDataURL(Url)
+        -- // Vars
+        local Data
+
+        -- // Keep on getting data
+        while (not Data) do
+            -- // To avoid errors
+            pcall(function()
+                Data = HttpService:JSONDecode(game:HttpGet(Url))
+            end)
+
+            -- // Log
+            local Delay = self.Data.DataRetryDelay
+            print("GetServerDataURL errored, retrying in", Delay, "seconds")
+
+            -- // So we don't crash
+            task.wait(Delay)
+        end
+
+        -- // Return the data
+        return Data
+    end
+
     -- // Mass server list function
     function HopManager:GetMassServerListCreate(PlaceId, Count)
         -- // Vars
@@ -193,7 +218,7 @@ do
 
             -- // Get the servers
             local ServersURL = Data.ServerFormat:format(PlaceId, Cursor)
-            local ServerData = HttpService:JSONDecode(game:HttpGet(ServersURL))
+            local ServerData = self:GetServerDataURL(ServersURL)
 
             -- // Loop through the server list
             for _, Server in ipairs(ServerData.data) do
