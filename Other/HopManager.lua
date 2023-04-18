@@ -69,6 +69,7 @@ do
     HopManager.DefaultData = {
         HopMode = "Random", -- // if a number, that index will be selected. options: (number), Random, Middle
         KickBeforeTeleport = true,
+        KickMessage = "Teleporting...",
         MinimumPlayers = 1,
         MaximumPlayers = 1/0,
         HopInterval = 300,
@@ -335,7 +336,7 @@ do
 
         -- // Kicking
         if (self.Data.KickBeforeTeleport) then
-            LocalPlayer:Kick("Teleporting...")
+            LocalPlayer:Kick(self.Data.KickMessage)
             task.wait()
         end
 
