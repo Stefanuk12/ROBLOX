@@ -343,6 +343,13 @@ do
             local PlaceServers = Servers[sPlaceId]
             assert(PlaceServers, "unable to get PlaceServers")
 
+            -- // Check the amount of servers
+            if (#PlaceServers == 0) then
+                -- // Recursion
+                print("Got 0 servers, trying again...")
+                return self:Hop(PlaceId, JobId, Script)
+            end
+
             -- // Find which server we want
             local i = HopMode
             if (typeof(HopMode) == "string") then
