@@ -119,7 +119,10 @@ do
             Callback = Data.Callback or function(State, Bind) end,
             ProcessedCheck = Data.ProcessedCheck or false,
             Hold = Data.Hold or false,
-            State = Data.State or false
+            State = Data.State or false,
+
+            InternalKeybind = nil,
+            InternalHold = nil
         })
 
         -- // Return the Id
@@ -168,24 +171,28 @@ do
         Module.InputBeganConnection = UserInputService.InputBegan:Connect(function(Input, gameProcessedEvent)
             -- // Loop through all binds
             for _, Bind in ipairs(Binds) do
-                -- // Check
+                -- // Setting internal stuff
                 local Keybind = Module.CharacterToKeyCode(Bind.Keybind, true)
+                Bind.InternalKeybind = Keybind
+                local BindHold = Bind.Hold
+                if (typeof(BindHold) == "function") then
+                    BindHold = BindHold()
+                end
+                Bind.InternalHold = BindHold
+
+                -- // Check
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
                 end
 
-                -- // Fire
-                if (Bind.Hold) then
-                    Bind.State = true
-                else
-                    Bind.State = not Bind.State
-                end
-
                 -- // Check if was a function
+                Bind = DeepCopy(Bind)
                 if (typeof(Bind.Keybind) == "function") then
-                    Bind = DeepCopy(Bind)
                     Bind.Keybind = Keybind
+                end
+                if (typeof(Bind.Hold) == "function") then
+                    Bind.Hold = BindHold
                 end
 
                 -- // Call
@@ -197,16 +204,27 @@ do
         Module.InputEndedConnection = UserInputService.InputEnded:Connect(function(Input, gameProcessedEvent)
             -- // Loop through all binds
             for _, Bind in ipairs(Binds) do
+                local BindHold = Bind.InternalHold
+
                 -- // Make sure is a hold
-                if (not Bind.Hold) then
+                if (not BindHold) then
                     continue
                 end
 
                 -- // Check
-                local Keybind = Module.CharacterToKeyCode(Bind.Keybind, true)
+                local Keybind = Bind.InternalKeybind
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
+                end
+
+                -- // Check if was a function
+                Bind = DeepCopy(Bind)
+                if (typeof(Bind.Keybind) == "function") then
+                    Bind.Keybind = Keybind
+                end
+                if (typeof(Bind.Hold) == "function") then
+                    Bind.Hold = BindHold
                 end
 
                 -- // Fire
@@ -285,6 +303,22 @@ if (Module.TestMode) then
             print(Bind.Keybind.Name .. " was " .. Action)
         end,
         Hold = true
+    })
+    Module.CreateBind({
+        Keybind = "l",
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " has state " .. tostring(State) .. ". Hold = " .. tostring(Bind.Hold))
+        end,
+        Hold = function() return math.random() < 0.5 end
+    })
+    Module.CreateBind({
+        Keybind = function() return math.random() < 0.5 and "r" or "t" end,
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " has state " .. tostring(State) .. ". Hold = " .. tostring(Bind.Hold))
+        end,
+        Hold = function() return math.random() < 0.5 end
     })
 end
 
