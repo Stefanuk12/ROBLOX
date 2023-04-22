@@ -5,6 +5,29 @@ local UserInputService = game:GetService("UserInputService")
 -- // Vars
 local Binds = {}
 
+-- // Deep copying
+local function DeepCopy(Original)
+    -- // Assert
+    assert(typeof(Original) == "table", "invalid type for Original (expected table)")
+
+    -- // Vars
+    local Copy = {}
+
+    -- // Loop through original
+    for i, v in pairs(Original) do
+        -- // Recursion if table
+        if (typeof(v) == "table") then
+            v = DeepCopy(v)
+        end
+
+        -- // Set
+        Copy[i] = v
+    end
+
+    -- // Return the copy
+    return Copy
+end
+
 -- //
 local Module = {
     TestMode = false
@@ -37,12 +60,56 @@ do
         return Binds[FoundI], FoundI
     end
 
+    -- // Convert a character to KeyCode
+    function Module.CharacterToKeyCode(Character, ErrorInvalid)
+        -- // Check if function
+        local CharacterType = typeof(Character)
+        if (CharacterType == "function") then
+            return Module.CharacterToKeyCode(Character(), ErrorInvalid)
+        end
+
+        -- // Make sure is string
+        if (typeof(Character) ~= "string") then
+            return Character
+        end
+
+        -- // Converting mb1, mb2, mb3
+        Character = Character:lower()
+        if (Character:match("mb%d")) then
+            return Enum.UserInputType["MouseButton" .. Character:gsub("mb", "")]
+        end
+
+        -- // Check length
+        if (ErrorInvalid and #Character ~= 1) then
+            error("invalid character")
+        end
+
+        -- // Loop through all keycodes
+        for _, Keycode in pairs(Enum.KeyCode:GetEnumItems()) do
+            -- // Return if matches
+            if Keycode.Value == Character:byte() then
+                return Keycode
+            end
+        end
+
+        -- // uh oh
+        if (ErrorInvalid) then
+            error("cannot find character")
+        end
+    end
+
     -- // Creates a bind
     local ValidInputItems = {"KeyCode", "UserInputType"}
     function Module.CreateBind(Data)
+        -- // Change bind if not function
+        local TypeBind = typeof(Data.Keybind)
+        local TestBind = Module.CharacterToKeyCode(Data.Keybind, true)
+        if (TypeBind == "string") then
+            Data.Keybind = TestBind
+        end
+
         -- // Make sure we gave a keybind
-        local Keybind = typeof(Data.Keybind) == "function" and Data.Keybind() or Data.Keybind
-        assert(typeof(Keybind) == "EnumItem" and table.find(ValidInputItems, tostring(Keybind.EnumType)), "Invalid keybind")
+        assert(typeof(TestBind) == "EnumItem" and table.find(ValidInputItems, tostring(TestBind.EnumType)), "Invalid keybind")
 
         -- // Add to binds
         local Id = HttpService:GenerateGUID()
@@ -82,7 +149,6 @@ do
         return Module.Update(Id, "Callback", NewCallback)
     end
 
-
     -- // Removes a bind
     function Module.RemoveBind(Id)
         -- // Get the bind
@@ -103,8 +169,7 @@ do
             -- // Loop through all binds
             for _, Bind in ipairs(Binds) do
                 -- // Check
-                local Keybind = Bind.Keybind
-                Keybind = typeof(Keybind) == "function" and Keybind() or Keybind
+                local Keybind = Module.CharacterToKeyCode(Bind.Keybind, true)
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
@@ -117,6 +182,13 @@ do
                     Bind.State = not Bind.State
                 end
 
+                -- // Check if was a function
+                if (typeof(Bind.Keybind) == "function") then
+                    Bind = DeepCopy(Bind)
+                    Bind.Keybind = Keybind
+                end
+
+                -- // Call
                 Bind.Callback(Bind.State, Bind)
             end
         end)
@@ -131,8 +203,7 @@ do
                 end
 
                 -- // Check
-                local Keybind = Bind.Keybind
-                Keybind = typeof(Keybind) == "function" and Keybind() or Keybind
+                local Keybind = Module.CharacterToKeyCode(Bind.Keybind, true)
                 local Property = tostring(Keybind.EnumType)
                 if (Input[Property] ~= Keybind) or (Bind.ProcessedCheck and gameProcessedEvent) then
                     continue
@@ -178,13 +249,33 @@ if (Module.TestMode) then
         end
     })
     Module.CreateBind({
+        Keybind = "y",
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
+        end
+    })
+    Module.CreateBind({
+        Keybind = function() return math.random() < 0.5 and "Z" or "J" end,
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
+        end
+    })
+    Module.CreateBind({
+        Keybind = "MB1",
+        ProcessedCheck = true,
+        Callback = function(State, Bind)
+            print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
+        end
+    })
+    Module.CreateBind({
         Keybind = Enum.UserInputType.MouseButton2,
         ProcessedCheck = true,
         Callback = function(State, Bind)
             print(Bind.Keybind.Name .. " was pressed with state " .. tostring(State))
         end
     })
-
 
     Module.CreateBind({
         Keybind = Enum.UserInputType.MouseButton2,
