@@ -186,6 +186,13 @@ do
                     continue
                 end
 
+                -- // Set
+                if (BindHold) then
+                    Bind.State = true
+                else
+                    Bind.State = not Bind.State
+                end
+
                 -- // Check if was a function
                 Bind = DeepCopy(Bind)
                 if (typeof(Bind.Keybind) == "function") then
@@ -218,6 +225,9 @@ do
                     continue
                 end
 
+                -- // Set
+                Bind.State = false
+
                 -- // Check if was a function
                 Bind = DeepCopy(Bind)
                 if (typeof(Bind.Keybind) == "function") then
@@ -228,7 +238,6 @@ do
                 end
 
                 -- // Fire
-                Bind.State = false
                 Bind.Callback(Bind.State, Bind)
             end
         end)
