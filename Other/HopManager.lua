@@ -118,7 +118,7 @@ do
 
         -- // Decode it
         local _, RecentHops = pcall(HttpService.JSONDecode, HttpService, RecentHopData)
-        Data.RecentHops = RecentHops or {}
+        Data.RecentHops = typeof(RecentHops) == "table" and RecentHops or {}
 
         -- // Return it
         return Data.RecentHops
