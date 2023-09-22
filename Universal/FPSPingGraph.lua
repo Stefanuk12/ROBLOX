@@ -404,7 +404,7 @@ end
 
 -- // Adds an item into an array, removes the first item if the array is too long
 local function AddItemToArray(Array, Item)
-	if (#Array > MaxDataPoints) then
+	if (#Array >= MaxDataPoints) then
 		table.remove(Array, 1)
 	end
 
